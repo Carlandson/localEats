@@ -1,0 +1,33 @@
+{% extends "restaurant/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="text-center">
+    {% if form.errors %}
+    {% for field in form %}
+    {% for error in field.errors %}
+    <div class="alert alert-danger">
+        <strong> {{ error|escape }}</strong>
+    </div>
+    {% endfor %}
+    {% endfor %}
+    {% endif %}
+    <form action="{% url 'create' %}" method="POST">
+    {% csrf_token %}
+        <div>
+            <ul>
+                {% for field in create %}
+                <li>{{field.name}}</li>
+                <li>{{field}}</li>
+                {% endfor %}
+            </ul>
+            <button action="submit" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-full inline">Create Restaurant?</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% block script %}
+<script async
+    
+</script>
+{% endblock %}

@@ -1,0 +1,14 @@
+#pip3 install django-star-ratings
+
+#pip3 install geopy
+
+#pip3 install django-google-maps
+
+#pip3 install django-countries
+
+#Added to settings.py -
+#GOOGLE_MAPS_API_KEY = 'your_key_here'
+
+#Added to INSTALLED_APPS
+#'django_google_maps',
+#'star_ratings',
