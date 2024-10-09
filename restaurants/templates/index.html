@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body%}
+<!-- <div id="searchResults" class="inline sm:w-screen md:w-1/4 text-center mt-3"style="min-height: 100vh; float:left; height:100%;">
+    <button id="geolocate" class="text-2xl bg-yellow-200 hover:bg-yellow-100 font-bold py-2 px-4 rounded">Find a restaurant near me</button>
+    <form action="get" id="findRestaurants">
+        <select id="distance">
+            <option id="walk">Walk</option>
+            <option id="bike">Bike</option>
+            <option id="drive">Drive</option>
+        </select>
+    </form>
+    <div id="restaurantSearchList" class="p-2">
+    </div>
+</div> -->
+<div class="w-full text-center bg-orange-200">
+    <h1 class="text-4xl"> Check out new kitchens! </h1>
+        <input type="text" placeholder="by city" id="city">
+        <button id="citySearch">Submit</button>
+    <ul id="filterQuery">
+    {% for kitchen in kitchen_list %}
+        <li class="p-4">
+            <ul>
+                <a href="{% url 'eatery' kitchen.restaurant_name %}">
+                    <h1 class="text-xl font-bold">{{kitchen.restaurant_name}}</h1>
+                <li>
+                    <span>{{kitchen.city}}, {{kitchen.state}}</span>
+                </li>
+                <li>
+                    <span>{{kitchen.cuisine}} cuisine</span>
+                </li>
+                <li>
+                    <i>opened {{kitchen.created}}</i>
+                </li>
+                </a>
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+{% block script %}
+<script src="{% static 'index.js' %}"></script>
+{% endblock %}

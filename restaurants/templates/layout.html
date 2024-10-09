@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Restaurant Website{% endblock %}</title>
+        <link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% block script %}
+        {% endblock %}
+    </head>
+    <body>
+        <nav class="bg-slate-100 sm:py-10 py-1 relative">
+            <div class="container mx-auto">
+                <!--About Us-->
+                <div class="absolute left-2 top-1/2 transform -translate-y-1/2">
+                    <a class="hover:text-white hover:no-underline" href="{% url 'about' %}">About Us</a>
+                </div>
+                <!--Local Eats-->
+                <div class="text-center">
+                    <a class="font-semibold text-xl bg-inherit tracking-tight" href="{% url 'index' %}">Local Eats</a>
+                </div>
+                <!--Login/Register/Index-->
+                <div class="absolute right-2 top-1/2 transform -translate-y-1/2">
+                    <div class="hidden lg:flex items-center">
+                        {% if user.is_authenticated %}
+                            <a class="mr-4 hover:text-white no-underline" href="{% url 'profile' user.username %}">{{user.username}}'s Profile</a>
+                            <a class="hover:text-white no-underline" href="{% url 'logout' %}">Log Out</a>
+                        {% else %}
+                            <a class="mr-4 hover:text-white no-underline" href="{% url 'login' %}">Log in</a>
+                            <a class="hover:text-white no-underline" href="{% url 'register' %}">Register</a>
+                        {% endif %}
+                    </div>
+                    <button class="mobile-menu-button lg:hidden">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <!-- Mobile menu (hidden by default) -->
+        <div id="mobile-menu" class="lg:hidden hidden bg-slate-200">
+            <a class="block py-2 px-4 text-sm hover:bg-slate-300" href="{% url 'index' %}">Home</a>
+            <a class="block py-2 px-4 text-sm hover:bg-slate-300" href="{% url 'about' %}">About Us</a>
+            {% if user.is_authenticated %}
+                <a class="block py-2 px-4 text-sm hover:bg-slate-300" href="{% url 'profile' user.username %}">{{user.username}}'s Profile</a>
+                <a class="block py-2 px-4 text-sm hover:bg-slate-300" href="{% url 'logout' %}">Log Out</a>
+            {% else %}
+                <a class="block py-2 px-4 text-sm hover:bg-slate-300" href="{% url 'login' %}">Log in</a>
+                <a class="block py-2 px-4 text-sm hover:bg-slate-300" href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </div>
+        <div class="container" style="margin:auto;">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </body>
+</html>
