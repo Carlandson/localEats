@@ -1,0 +1,13 @@
+{% if page_obj.has_previous %}
+    <a href="?page=1" class="page-link px-3 py-2 bg-gray-200 text-gray-700 rounded-l-md">&laquo; first</a>
+    <a href="?page={{ page_obj.previous_page_number }}" class="page-link px-3 py-2 bg-gray-200 text-gray-700">previous</a>
+{% endif %}
+
+<span class="px-3 py-2 bg-gray-300 text-gray-700">
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+</span>
+
+{% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="page-link px-3 py-2 bg-gray-200 text-gray-700">next</a>
+    <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link px-3 py-2 bg-gray-200 text-gray-700 rounded-r-md">last &raquo;</a>
+{% endif %}

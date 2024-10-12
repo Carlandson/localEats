@@ -1,44 +1,44 @@
 {% extends "layout.html" %}
 {% load static %}
 {% block body%}
-<!-- <div id="searchResults" class="inline sm:w-screen md:w-1/4 text-center mt-3"style="min-height: 100vh; float:left; height:100%;">
-    <button id="geolocate" class="text-2xl bg-yellow-200 hover:bg-yellow-100 font-bold py-2 px-4 rounded">Find a restaurant near me</button>
-    <form action="get" id="findRestaurants">
-        <select id="distance">
-            <option id="walk">Walk</option>
-            <option id="bike">Bike</option>
-            <option id="drive">Drive</option>
-        </select>
-    </form>
-    <div id="restaurantSearchList" class="p-2">
+<div class="relative w-full max-w-6xl mx-auto">
+    <!-- Slider Images -->
+    <div id="slider" class="overflow-hidden relative">
+        <div class="grid grid-cols-1 grid-rows-1 h-full">
+            <div class="mySlides fade col-start-1 row-start-1 transition-opacity duration-1000 ease-in-out">
+                <div class="numbertext">1 / 3</div>
+                <img src="{% static 'images/test1.jpg' %}" alt="Banner Image 1" class="w-full h-[300px] overflow-hidden object-cover object-center" />
+                <div class="text"></div>
+            </div>
+            <div class="mySlides fade col-start-1 row-start-1 transition-opacity duration-1000 ease-in-out">
+                <div class="numbertext">2 / 3</div>
+                <img src="{% static 'images/test2.jpg' %}" alt="Banner Image 2" class="w-full h-[300px] overflow-hidden object-cover object-center" />
+                <div class="text"></div>
+            </div>
+            <div class="mySlides fade col-start-1 row-start-1 transition-opacity duration-1000 ease-in-out">
+                <div class="numbertext">3 / 3</div>
+                <img src="{% static 'images/test3.jpg' %}" alt="Banner Image 3" class="w-full h-[300px] overflow-hidden object-cover object-center" />
+                <div class="text"></div>
+            </div>
+        </div>
     </div>
-</div> -->
-<div class="w-full text-center bg-orange-200">
-    <h1 class="text-4xl"> Check out new kitchens! </h1>
-        <input type="text" placeholder="by city" id="city">
-        <button id="citySearch">Submit</button>
-    <ul id="filterQuery">
-    {% for kitchen in kitchen_list %}
-        <li class="p-4">
-            <ul>
-                <a href="{% url 'eatery' kitchen.restaurant_name %}">
-                    <h1 class="text-xl font-bold">{{kitchen.restaurant_name}}</h1>
-                <li>
-                    <span>{{kitchen.city}}, {{kitchen.state}}</span>
-                </li>
-                <li>
-                    <span>{{kitchen.cuisine}} cuisine</span>
-                </li>
-                <li>
-                    <i>opened {{kitchen.created}}</i>
-                </li>
-                </a>
-            </ul>
-        </li>
-    {% endfor %}
-    </ul>
+    <a class="prev">&#10094;</a>
+    <a class="next">&#10095;</a>
+</div>
+<br>
+<div class="container mx-auto">
+<div class="w-full text-center">
+    <h1 class="text-4xl mb-2"> Check out the Local Eats family!</h1>
+    <div id="kitchen-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% include 'kitchen_list.html' %}
+    </div>
+    
+    <!-- Pagination -->
+    <div id="pagination" class="mt-8 flex justify-center">
+        {% include 'pagination.html' %}
+    </div>
 </div>
 {% endblock %}
 {% block script %}
-<script src="{% static 'index.js' %}"></script>
+<script src="{% static 'paginate.js' %}"></script>
 {% endblock %}

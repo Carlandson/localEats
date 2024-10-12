@@ -1,0 +1,12 @@
+{% for kitchen in page_obj %}
+    <div class="p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+        <a href="{% url 'eatery' kitchen.restaurant_name %}" class="block">
+            <h2 class="text-xl font-bold mb-2">{{kitchen.restaurant_name}}</h2>
+            <p class="text-gray-600">{{kitchen.city}}, {{kitchen.state}}</p>
+            <p class="text-gray-600">{{kitchen.cuisine}} cuisine</p>
+            <p class="text-gray-500 italic mt-2">opened {{kitchen.created|date:"F j, Y"}}</p>
+        </a>
+    </div>
+{% empty %}
+    <p class="col-span-full text-center text-gray-500">No restaurants found.</p>
+{% endfor %}

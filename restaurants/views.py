@@ -14,13 +14,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.forms import TextInput, NumberInput, ModelForm, Textarea
 from geopy.geocoders import Nominatim
-from .models import User, kitchen, menu_course, dish
+from .models import User, Kitchen, MenuCourse, Dish, CuisineCategory
+from django.core.paginator import Paginator
+from django.shortcuts import render
 
 
 
 class restaurant_create(ModelForm):
     class Meta:
-        model = kitchen
+        model = Kitchen
         fields = ['restaurant_name', 'phone_number', 'cuisine', 'address', 'city', 'state', 'country', 'description']
         widgets = {
             'restaurant_name': TextInput(attrs={
@@ -51,7 +53,7 @@ class restaurant_create(ModelForm):
 
 class dish_submit(ModelForm):
     class Meta:
-        model = dish
+        model = Dish
         fields = ['name', 'course','price', 'image_url', 'description']
 
 # def index(request):
@@ -65,20 +67,44 @@ class dish_submit(ModelForm):
 #         return HttpResponseRedirect(reverse("login"))
 
 def index(request): 
-    if request.method != "GET":
-        return JsonResponse({"error" : "GET request required."}, status=400)
-    collection = []
-    kitchen_list = kitchen.objects.all().order_by('-created')
-    return render(request, "index.html", {"recently_rated": collection, "kitchen_list": kitchen_list})
+    kitchen_list = Kitchen.objects.all().order_by('-created')
+    paginator = Paginator(kitchen_list, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        data = {
+            'kitchens': [
+                {
+                    'name': kitchen.restaurant_name,
+                    'city': kitchen.city,
+                    'state': kitchen.state,
+                    'cuisine': str(kitchen.cuisine),
+                    'created': kitchen.created.strftime('%B %d, %Y'),
+                    'url': reverse('eatery', args=[kitchen.restaurant_name])
+                } for kitchen in page_obj
+            ],
+            'has_next': page_obj.has_next(),
+            'has_previous': page_obj.has_previous(),
+            'num_pages': paginator.num_pages,
+            'current_page': page_obj.number
+        }
+        return JsonResponse(data)
+
+    return render(request, 'index.html', {'page_obj': page_obj})
 
 def login_view(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
+        remember_me = request.POST.get('remember_me', False)
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            if remember_me:
+                request.session.set_expiry(1209600)
+            else:
+                request.session.set_expiry(0)
+            return HttpResponseRedirect('/')
         else:
             return render(request, "login.html", {
                 "message": "Invalid username and/or password."
@@ -113,7 +139,7 @@ def register(request):
         return render(request, "register.html")
 
 def profile(request, profile):
-    restaurant_list = kitchen.objects.all()
+    restaurant_list = Kitchen.objects.all()
     owners_restaurants = []
     owner_check = False
     for restaurant in restaurant_list:
@@ -147,14 +173,14 @@ def create(request):
             return render(request, "create.html", {"create" : restaurant_create()})
         location = geolocator.geocode(address + " " + city)
         coordinates = f"{location.latitude},{location.longitude}"
-        new_restaurant = kitchen(owner=usern, phone_number=phone_number, city=city, restaurant_name=restaurant_name, address=address, description=description, state=state, country=country, cuisine=cuisine, geolocation=coordinates)
+        new_restaurant = Kitchen(owner=usern, phone_number=phone_number, city=city, restaurant_name=restaurant_name, address=address, description=description, state=state, country=country, cuisine=cuisine, geolocation=coordinates)
         new_restaurant.save()
         return HttpResponseRedirect(reverse('eatery', kwargs={'eatery' : new_restaurant.restaurant_name}))
 
 def eatery(request, eatery):
-    course_list = menu_course.objects.all()
-    restaurant_get = kitchen.objects.get(restaurant_name=eatery)
-    dishes = dish.objects.filter(recipe_owner=restaurant_get)
+    course_list = MenuCourse.objects.all()
+    restaurant_get = Kitchen.objects.get(restaurant_name=eatery)
+    dishes = Dish.objects.filter(recipe_owner=restaurant_get)
     courses = restaurant_get.courses.all()
     #rating = Rating.objects.all().order_by("-average")
     #top_ratings = []
@@ -179,7 +205,7 @@ def new_dish(request, kitchen_name):
     if request.method == "GET":
         return render(request, "newdish.html", {"new_dish" : dish_submit()})
     if request.method == "POST":
-        form = dish(request.POST)
+        form = Dish(request.POST)
         user = request.user
         if form.is_valid():
             name = form.cleaned_data["name"]
@@ -191,7 +217,7 @@ def new_dish(request, kitchen_name):
         else:
             print(form.errors)
             return render(request, "newdish.html", {"new_dish" : dish_submit()})
-        new = dish(name=name, price=price, image_url=image_url, course=course, description=description, recipe_owner=recipe_owner)
+        new = Dish(name=name, price=price, image_url=image_url, course=course, description=description, recipe_owner=recipe_owner)
         new.save()
         messages.add_message(request, messages.INFO, f"'{name}' successfully added to menu")
         return HttpResponseRedirect(reverse('eatery', kwargs={"eatery": kitchen_name}))
@@ -199,10 +225,10 @@ def new_dish(request, kitchen_name):
 @csrf_exempt
 @login_required
 def add_course(request, dishData, eatery):
-    course_add = menu_course.objects.get(course_list=dishData)
+    course_add = MenuCourse.objects.get(course_list=dishData)
     try:
-        current_restaurant = kitchen.objects.get(restaurant_name = eatery)
-    except kitchen.DoesNotExist:
+        current_restaurant = Kitchen.objects.get(restaurant_name = eatery)
+    except Kitchen.DoesNotExist:
         return JsonResponse({"error": "kitchen does not exist."}, status=404)
     if request.method == "POST":
         current_restaurant.courses.add(course_add)
@@ -223,9 +249,9 @@ def add_dish(request, eatery):
     price = data.get("price", "")
     image_url = data.get("image_url", "")
     course = data.get("course", "")
-    dish_course = menu_course.objects.get(course_list=course)
-    eatery = kitchen.objects.get(restaurant_name=eatery)
-    new_dish = dish(
+    dish_course = MenuCourse.objects.get(course_list=course)
+    eatery = Kitchen.objects.get(restaurant_name=eatery)
+    new_dish = Dish(
         recipe_owner = eatery,
         name = name,
         description = description,
@@ -256,7 +282,7 @@ def search(request, position, distance):
     distance_minus_lat = latitude - distance_lat
     distance_plus_lon = longitude + distance_lon
     distance_minus_lon = longitude - distance_lon
-    kitchen_list = kitchen.objects.all()
+    kitchen_list = Kitchen.objects.all()
     kitchens_nearby = []
     test_dict = []
     for eatery in kitchen_list:
@@ -282,15 +308,15 @@ def search(request, position, distance):
 def filter(request, place):
     if request.method != "GET":
         return JsonResponse({"error" : "GET request required."}, status=400)
-    location_kitchens = kitchen.objects.filter(city__icontains = place)
+    location_kitchens = Kitchen.objects.filter(city__icontains = place)
     return JsonResponse([localEatery.serialize() for localEatery in location_kitchens], safe=False)
 
 @csrf_exempt
 @login_required
 def edit_dish(request, dishid):
     try:
-        item = dish.objects.get(id = dishid)
-    except dish.DoesNotExist:
+        item = Dish.objects.get(id = dishid)
+    except Dish.DoesNotExist:
         return JsonResponse({"error": "dish does not exist."}, status=404)
     if request.method == "GET":
         return JsonResponse(item.serialize())
@@ -313,8 +339,8 @@ def edit_dish(request, dishid):
 @login_required
 def delete_dish(request, dishid):
     try:
-        item = dish.objects.get(id = dishid)
-    except dish.DoesNotExist:
+        item = Dish.objects.get(id = dishid)
+    except Dish.DoesNotExist:
         return JsonResponse({"error": "dish does not exist."}, status=404)
     if request.method != "GET":
         return JsonResponse({"error" : "GET request required."}, status=400)
@@ -326,7 +352,26 @@ def delete_dish(request, dishid):
 def delete_course(request, eatery, course):
     if request.method != "GET":
         return JsonResponse({"error" : "GET request required."}, status=400)
-    current_course = menu_course.objects.get(course_list = course)
-    current_kitchen = kitchen.objects.get(restaurant_name = eatery, owner = request.user)
+    current_course = MenuCourse.objects.get(course_list = course)
+    current_kitchen = Kitchen.objects.get(restaurant_name = eatery, owner = request.user)
     current_kitchen.courses.remove(current_course)
     return JsonResponse({"message": "course deleted"}, status=201)
+
+
+def get_kitchen(request, kitchen_id):
+    try:
+        kitchen_obj = Kitchen.objects.get(id=kitchen_id)
+        return JsonResponse(kitchen_obj.serialize())
+    except Kitchen.DoesNotExist:
+        return JsonResponse({"error": "Kitchen not found"}, status=404)
+
+def get_dish(request, dish_id):
+    try:
+        dish_obj = Dish.objects.get(id=dish_id)
+        return JsonResponse(dish_obj.serialize())
+    except Dish.DoesNotExist:
+        return JsonResponse({"error": "Dish not found"}, status=404)
+
+def get_cuisine_categories(request):
+    categories = CuisineCategory.objects.all()
+    return JsonResponse([category.serialize() for category in categories], safe=False)
