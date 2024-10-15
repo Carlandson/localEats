@@ -3,7 +3,7 @@ import geopy.distance
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.http import JsonResponse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -16,7 +16,9 @@ from django.forms import TextInput, NumberInput, ModelForm, Textarea
 from geopy.geocoders import Nominatim
 from .models import User, Kitchen, MenuCourse, Dish, CuisineCategory
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+import requests
+from requests.exceptions import Timeout
 
 
 
@@ -116,6 +118,7 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
+@transaction.atomic
 def register(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -127,18 +130,20 @@ def register(request):
                 "message": "Passwords must match."
             })
         try:
-            user = User.objects.create_user(username, email, password)
-            user.save()
+            with transaction.atomic():
+                user = User.objects.create_user(username, email, password)
+                user.save()
+                login(request, user)
+            # Use reverse() to generate the URL, then pass it to redirect()
+            return redirect('my_profile')
         except IntegrityError:
             return render(request, "register.html", {
                 "message": "Name already taken."
             })
-        login(request, user)
-        return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "register.html")
 
-def profile(request, profile):
+def profile(request):
     restaurant_list = Kitchen.objects.all()
     owners_restaurants = []
     owner_check = False
@@ -175,7 +180,8 @@ def create(request):
         coordinates = f"{location.latitude},{location.longitude}"
         new_restaurant = Kitchen(owner=usern, phone_number=phone_number, city=city, restaurant_name=restaurant_name, address=address, description=description, state=state, country=country, cuisine=cuisine, geolocation=coordinates)
         new_restaurant.save()
-        return HttpResponseRedirect(reverse('eatery', kwargs={'eatery' : new_restaurant.restaurant_name}))
+        return redirect(reverse('eatery', kwargs={'eatery': new_restaurant.restaurant_name}))
+        # return HttpResponseRedirect(reverse('eatery', kwargs={'eatery' : new_restaurant.restaurant_name}))
 
 def eatery(request, eatery):
     course_list = MenuCourse.objects.all()

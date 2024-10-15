@@ -1,17 +1,21 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h1 class="text-center text-2xl mt-7">Thank You for being here</h1>
-<div class="p6 m-10">
-    <p class="text-center text-lg p-6">
-    Here at Local Eats we believe in supporting restaurants not tied to any chains, because
-    we believe the best food money can buy comes from the love of locals and locally sourced food.
-    That's why we've created a place for restaurants and patron to share their passion with the world.
-    </p>
-    <p class="text-center text-lg p-6">
-    It's often difficult for smaller restaurants to reach potential customers due to financial burdens,
-    so we've created Local Eats to help restaurants and hungry patron connect, whether its a night out
-    or you're on vacation, our website will find exactly the culinary experience you're looking for.
-    </p>
+<div class="flex items-center justify-center min-h-[calc(100vh-theme('spacing.32')-theme('spacing.16'))]">
+    <div class="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 my-16">
+        <h1 class="text-center text-3xl font-bold mb-8">Thank You for Being Here</h1>
+        <div class="bg-white shadow-md rounded-lg p-6 sm:p-10">
+            <p class="text-center text-lg mb-6">
+                Here at Local Eats, we believe in supporting restaurants not tied to any chains, because
+                we believe the best food money can buy comes from the love of locals and locally sourced food.
+                That's why we've created a place for restaurants to share their passion with the world.
+            </p>
+            <p class="text-center text-lg">
+                It's often difficult for smaller restaurants to reach potential customers due to financial burdens,
+                so we've created Local Eats to help restaurants and hungry patrons connect. Whether it's a night out
+                or you're on vacation, our website will find exactly the culinary experience you're looking for.
+            </p>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -8,10 +8,11 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
     path("register/", views.register, name="register"),
-    path("profile/<str:profile>/", views.profile, name="profile"),
+    path("profile/", views.profile, name="profile"),
     path("about/", views.about, name="about"),
     path("create/", views.create, name="create"),
-    path("eatery/<str:eatery>/", views.eatery, name="eatery"),
+    # test remove eatery
+    path("<str:eatery>/", views.eatery, name="eatery"),
     path("add_course/<str:dishData>/<str:eatery>", views.add_course, name="add_course"),
     path("add_dish/<str:eatery>", views.add_dish, name="add_dish"),
     path("search/<str:position>/<str:distance>/", views.search, name="search"),

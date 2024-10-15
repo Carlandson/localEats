@@ -69,9 +69,10 @@ function search(position) {
         .then(localKitchen => {
             localKitchen.forEach(kitchen => {
                 let eateryDiv = document.createElement('div');
+                // Test remove eatery
                 eateryDiv.innerHTML = `
                 <ul class="p-4">
-                    <a href="/eatery/${kitchen["name"]}/">
+                    <a href="/${kitchen["name"]}/">
                     <li>
                         <h1 class="text-xl font-bold">${kitchen["name"]}</h1>
                     </li>
@@ -104,7 +105,7 @@ function filter() {
                 newDiv.innerHTML = `
                 <li class="p-4>
                     <ul>
-                    <a href="/eatery/${eatery["name"]}/">${eatery["name"]}
+                    <a href="/${eatery["name"]}/">${eatery["name"]}
                         <li>
                             <i>${eatery["cuisine"]} cuisine</i>
                         </li>
