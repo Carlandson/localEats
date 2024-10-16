@@ -5,7 +5,6 @@ from django_google_maps import fields as map_fields
 from .models import User, Kitchen, MenuCourse, Dish, CuisineCategory
 
 admin.site.register(Kitchen)
-admin.site.register(User)
 admin.site.register(MenuCourse)
 admin.site.register(Dish)
 admin.site.register(CuisineCategory)

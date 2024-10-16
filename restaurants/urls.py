@@ -1,13 +1,13 @@
 from django.urls import path
 from django.conf.urls import include
-
+from .views import custom_signup
 from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("login/", views.login_view, name="login"),
-    path("logout/", views.logout_view, name="logout"),
-    path("register/", views.register, name="register"),
+    # path("login/", views.login_view, name="login"),
+    # path("logout/", views.logout_view, name="logout"),
+    # path("register/", views.register, name="register"),
     path("profile/", views.profile, name="profile"),
     path("about/", views.about, name="about"),
     path("create/", views.create, name="create"),
@@ -21,4 +21,5 @@ urlpatterns = [
     path("delete_dish/<int:dishid>", views.delete_dish, name="delete"),
     path("delete_course/<str:eatery>/<str:course>", views.delete_course, name="delete_course"),
     path('accounts/', include('allauth.urls')),
+    path('accounts/signup/', custom_signup, name='account_signup'),
 ]

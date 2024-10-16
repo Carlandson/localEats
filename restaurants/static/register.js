@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function togglePasswordVisibility() {
-    var x = document.getElementById("password");
+    var x = document.getElementById("id_password1");
     if (x.type === "password") {
       x.type = "text";
     } else {
@@ -21,7 +21,7 @@ function togglePasswordVisibility() {
   }
 
   function toggleConfVisibility() {
-    var x = document.getElementById("confirmation");
+    var x = document.getElementById("id_password2");
     if (x.type === "password") {
       x.type = "text";
     } else {

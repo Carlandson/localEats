@@ -30,7 +30,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'restaurants.User'
 
 ACCOUNT_TEMPLATE_DIR = os.path.join(BASE_DIR, 'restaurants', 'templates', 'account')
 # Application definition
@@ -114,11 +113,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'localeats.wsgi.application'
 
 # AllAuth settings
+ACCOUNT_FORMS = {'signup': 'restaurants.forms.CustomSignupForm'}
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/accounts/login/'
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_SUBJECT_PREFIX = '[LocalEats] '
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
+ACCOUNT_RATE_LIMITS = {
+    'confirm_email': '3/h',  # 3 per hour
+}
 
 # Login/out URLs
 LOGIN_REDIRECT_URL = '/'

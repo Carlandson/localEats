@@ -4,23 +4,30 @@ import geopy.distance
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
-from django.http import JsonResponse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
-from django.forms import TextInput, NumberInput, ModelForm, Textarea
+from django.forms import TextInput, ModelForm, Textarea
 from geopy.geocoders import Nominatim
 from .models import User, Kitchen, MenuCourse, Dish, CuisineCategory
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
-import requests
-from requests.exceptions import Timeout
+from django.contrib.auth import get_user_model
+from allauth.account.utils import perform_login
+from allauth.account.models import EmailAddress
+from allauth.account.utils import perform_login
+from allauth.account.forms import LoginForm
+from django.contrib.auth import logout as auth_logout
+from allauth.account.views import SignupView
+from .forms import CustomSignupForm
+from django.core.mail import send_mail
+from django.conf import settings
 
-
+User = get_user_model()
 
 class restaurant_create(ModelForm):
     class Meta:
@@ -58,6 +65,25 @@ class dish_submit(ModelForm):
         model = Dish
         fields = ['name', 'course','price', 'image_url', 'description']
 
+class CustomSignupView(SignupView):
+    form_class = CustomSignupForm
+
+    def form_invalid(self, form):
+        print("Form is invalid")
+        print("Form errors:", form.errors)
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        print("Form is valid")
+        response = super().form_valid(form)
+        print("Response:", response)
+        return response
+    
+    def post(self, request, *args, **kwargs):
+        print("POST data:", request.POST)  # Debug print
+        return super().post(request, *args, **kwargs)
+
+custom_signup = CustomSignupView.as_view()
 # def index(request):
 #     if request.user.is_authenticated:
 #         if request.method != "GET":
@@ -67,6 +93,15 @@ class dish_submit(ModelForm):
 #         return render(request, "restaurant/index.html", {"recently_rated": collection, "kitchen_list": kitchen_list})
 #     else:
 #         return HttpResponseRedirect(reverse("login"))
+
+def some_view(request):
+       send_mail(
+           'Test Subject',
+           'Test message.',
+           settings.DEFAULT_FROM_EMAIL,
+           ['to@example.com'],
+           fail_silently=False,
+       )
 
 def index(request): 
     kitchen_list = Kitchen.objects.all().order_by('-created')
@@ -94,54 +129,58 @@ def index(request):
 
     return render(request, 'index.html', {'page_obj': page_obj})
 
-def login_view(request):
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        remember_me = request.POST.get('remember_me', False)
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            if remember_me:
-                request.session.set_expiry(1209600)
-            else:
-                request.session.set_expiry(0)
-            return HttpResponseRedirect('/')
-        else:
-            return render(request, "login.html", {
-                "message": "Invalid username and/or password."
-            })
-    else:
-        return render(request, "login.html")
+# def login_view(request):
+#     if request.method == "POST":
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             user = form.user
+#             remember_me = form.cleaned_data.get('remember', False)
+#             if user is not None:
+#                 perform_login(request, user, remember=remember_me)
+#                 messages.success(request, "Successfully logged in.")
+#                 return redirect('/')
+#         else:
+#             messages.error(request, "Invalid username and/or password.")
+#     else:
+#         form = LoginForm()
+    
+#     return render(request, "account/login.html", {'form': form})
 
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect(reverse("index"))
+# def logout_view(request):
+#     auth_logout(request)
+#     messages.success(request, "You have been logged out.")
+#     return redirect(reverse("index"))
 
-@transaction.atomic
-def register(request):
-    if request.method == "POST":
-        username = request.POST["username"]
-        email = request.POST["email"]
-        password = request.POST["password"]
-        confirmation = request.POST["confirmation"]
-        if password != confirmation:
-            return render(request, "register.html", {
-                "message": "Passwords must match."
-            })
-        try:
-            with transaction.atomic():
-                user = User.objects.create_user(username, email, password)
-                user.save()
-                login(request, user)
-            # Use reverse() to generate the URL, then pass it to redirect()
-            return redirect('my_profile')
-        except IntegrityError:
-            return render(request, "register.html", {
-                "message": "Name already taken."
-            })
-    else:
-        return render(request, "register.html")
+# @transaction.atomic
+# def register(request):
+#     if request.method == "POST":
+#         username = request.POST["username"]
+#         email = request.POST["email"]
+#         password = request.POST["password"]
+#         confirmation = request.POST["confirmation"]
+#         if password != confirmation:
+#             return render(request, "account/signup.html", {
+#                 "message": "Passwords must match."
+#             })
+#         try:
+#             with transaction.atomic():
+#                 user = User.objects.create_user(username, email, password)
+#                 user.save()
+                
+#                 # Create EmailAddress instance for allauth
+#                 EmailAddress.objects.create(user=user, email=email, primary=True, verified=False)
+                
+#                 # Use allauth's perform_login
+#                 perform_login(request, user, email_verification='optional')
+            
+#             # Use reverse() to generate the URL, then pass it to redirect()
+#             return redirect(reverse('my_profile'))
+#         except IntegrityError:
+#             return render(request, "account/signup.html", {
+#                 "message": "Username or email already taken."
+#             })
+#     else:
+#         return render(request, "account/signup.html")
 
 def profile(request):
     restaurant_list = Kitchen.objects.all()

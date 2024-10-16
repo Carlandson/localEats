@@ -3,9 +3,57 @@ from django.db import models
 from django_google_maps import fields as map_fields
 from django_countries.fields import CountryField
 from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.auth import get_user_model
+from django.utils.text import slugify
 
-class User(AbstractUser):
-    pass
+
+User = get_user_model()
+
+class CustomUser(AbstractUser):
+    username = None  # Remove username field
+    email = models.EmailField('email address', unique=True)
+    display_name = models.CharField(max_length=50, blank=True)
+    slug = models.SlugField(unique=True, blank=True)
+
+    # Add custom related_name arguments
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name='groups',
+        blank=True,
+        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+        related_name='customuser_set',
+        related_query_name='customuser',
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        verbose_name='user permissions',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        related_name='customuser_set',
+        related_query_name='customuser',
+    )
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+
+    def get_display_name(self):
+        return self.display_name or f"{self.first_name} {self.last_name}"
+
+    def save(self, *args, **kwargs):
+        if not self.display_name:
+            self.display_name = f"{self.first_name} {self.last_name}"
+        if not self.slug:
+            self.slug = self._generate_unique_slug()
+        super().save(*args, **kwargs)
+
+    def _generate_unique_slug(self):
+        base_slug = slugify(self.get_display_name())
+        unique_slug = base_slug
+        num = 1
+        while CustomUser.objects.filter(slug=unique_slug).exists():
+            unique_slug = f"{base_slug}-{num}"
+            num += 1
+        return unique_slug
 
 class CuisineCategory(models.Model):
     cuisine = models.CharField(max_length=64)
