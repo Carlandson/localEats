@@ -24,7 +24,7 @@
                                 <a class="mr-4 hover:text-gray-600 no-underline" href="{% url 'profile' %}">{{user.username}}'s Profile</a>
                                 <a class="hover:text-gray-600 no-underline" href="{% url 'logout' %}">Log Out</a>
                             {% else %}
-                                <a class="mr-4 hover:text-gray-600 no-underline" href="{% url 'login' %}">Log in</a>
+                                <a class="mr-4 hover:text-gray-600 no-underline" href="{% url 'account_login' %}">Log in</a>
                                 <a class="hover:text-gray-600 no-underline" href="{% url 'register' %}">Register</a>
                             {% endif %}
                         </div>

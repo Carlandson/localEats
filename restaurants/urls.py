@@ -19,5 +19,6 @@ urlpatterns = [
     path("filter/<str:place>", views.filter, name="filter"),
     path("edit_dish/<int:dishid>", views.edit_dish, name="edit"),
     path("delete_dish/<int:dishid>", views.delete_dish, name="delete"),
-    path("delete_course/<str:eatery>/<str:course>", views.delete_course, name="delete_course")
+    path("delete_course/<str:eatery>/<str:course>", views.delete_course, name="delete_course"),
+    path('accounts/', include('allauth.urls')),
 ]
