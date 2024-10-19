@@ -77,6 +77,13 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+# adapters for username
+
+ACCOUNT_ADAPTER = 'restaurants.adapters.CustomAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'restaurants.adapters.CustomSocialAccountAdapter'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -86,7 +93,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "allauth.account.middleware.AccountMiddleware",
+    'restaurants.middleware.ClearMessagesMiddleware', 
 ]
+
 
 ROOT_URLCONF = 'localeats.urls'
 
@@ -105,6 +114,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'restaurants.context_processors.user_data'
             ],
         },
     },
@@ -129,7 +139,20 @@ ACCOUNT_RATE_LIMITS = {
     'confirm_email': '3/h',  # 3 per hour
 }
 
+# Mailpit
+if DEBUG and not os.environ.get('USE_MAILGUN'):
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = '127.0.0.1'
+    EMAIL_PORT = 1025
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_USE_TLS = False
+else:
+    EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+    MAILGUN_ACCESS_KEY = os.environ.get('MAILGUN_ACCESS_KEY')
+    MAILGUN_SERVER_NAME = os.environ.get('MAILGUN_SERVER_NAME')
 # Login/out URLs
+
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 

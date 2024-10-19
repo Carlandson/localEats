@@ -85,6 +85,9 @@
                     </button>
                 </div>
             </form>
+
+            {% include 'GoogleSignUp.html' %}
+            
             <p class="mt-4 text-center text-sm text-gray-600">
                 {% translate "Already have an account?" %}
                 <a href="{% url 'account_login' %}" class="font-medium text-indigo-600 hover:text-indigo-500">

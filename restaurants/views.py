@@ -129,58 +129,10 @@ def index(request):
 
     return render(request, 'index.html', {'page_obj': page_obj})
 
-# def login_view(request):
-#     if request.method == "POST":
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             user = form.user
-#             remember_me = form.cleaned_data.get('remember', False)
-#             if user is not None:
-#                 perform_login(request, user, remember=remember_me)
-#                 messages.success(request, "Successfully logged in.")
-#                 return redirect('/')
-#         else:
-#             messages.error(request, "Invalid username and/or password.")
-#     else:
-#         form = LoginForm()
-    
-#     return render(request, "account/login.html", {'form': form})
+def custom_logout(request):
+    logout(request)
+    return JsonResponse({'success': True})
 
-# def logout_view(request):
-#     auth_logout(request)
-#     messages.success(request, "You have been logged out.")
-#     return redirect(reverse("index"))
-
-# @transaction.atomic
-# def register(request):
-#     if request.method == "POST":
-#         username = request.POST["username"]
-#         email = request.POST["email"]
-#         password = request.POST["password"]
-#         confirmation = request.POST["confirmation"]
-#         if password != confirmation:
-#             return render(request, "account/signup.html", {
-#                 "message": "Passwords must match."
-#             })
-#         try:
-#             with transaction.atomic():
-#                 user = User.objects.create_user(username, email, password)
-#                 user.save()
-                
-#                 # Create EmailAddress instance for allauth
-#                 EmailAddress.objects.create(user=user, email=email, primary=True, verified=False)
-                
-#                 # Use allauth's perform_login
-#                 perform_login(request, user, email_verification='optional')
-            
-#             # Use reverse() to generate the URL, then pass it to redirect()
-#             return redirect(reverse('my_profile'))
-#         except IntegrityError:
-#             return render(request, "account/signup.html", {
-#                 "message": "Username or email already taken."
-#             })
-#     else:
-#         return render(request, "account/signup.html")
 
 def profile(request):
     restaurant_list = Kitchen.objects.all()
