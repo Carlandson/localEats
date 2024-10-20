@@ -163,10 +163,23 @@ ACCOUNT_TEMPLATE_EXTENSION = 'html'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+
+# SQLITE3
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'localeats',
+        'USER': 'postgres',
+        'PASSWORD': '123',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
