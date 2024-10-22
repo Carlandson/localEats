@@ -1,0 +1,52 @@
+.cuisine-select {
+    position: relative;
+    width: 300px;
+    margin: 0 auto;
+}
+
+#cuisine-input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#cuisine-suggestions {
+    position: absolute;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background-color: white;
+    z-index: 1000;
+}
+
+#cuisine-suggestions div {
+    padding: 5px;
+    cursor: pointer;
+}
+
+#cuisine-suggestions div:hover {
+    background-color: #f0f0f0;
+}
+
+#selected-cuisines {
+    margin-top: 5px;
+}
+
+.cuisine-tag {
+    display: inline-block;
+    background-color: #e0e0e0;
+    padding: 2px 5px;
+    margin: 2px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.cuisine-tag button {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    margin-left: 5px;
+}

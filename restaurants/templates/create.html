@@ -1,31 +1,60 @@
 {% extends "layout.html" %}
 {% load static %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/cuisines.css' %}">
+{% endblock %}
+
 {% block body %}
 <div class="text-center">
     {% if form.errors %}
-    {% for field in form %}
-    {% for error in field.errors %}
-    <div class="alert alert-danger">
-        <strong> {{ error|escape }}</strong>
-    </div>
-    {% endfor %}
-    {% endfor %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
     {% endif %}
     <form action="{% url 'create' %}" method="POST">
-    {% csrf_token %}
+        {% csrf_token %}
         <div>
             <ul>
                 {% for field in create %}
-                <li>{{field.name}}</li>
-                <li>{{field}}</li>
+                    {% if field.name == 'cuisine' %}
+                        <li>{{ field.label }}</li>
+                        <li>
+                            <div class="cuisine-select">
+                                <input type="text" id="cuisine-input" placeholder="Type to search cuisines...">
+                                <div id="cuisine-suggestions"></div>
+                                <div id="selected-cuisines"></div>
+                                <input type="hidden" name="cuisine" id="cuisine-hidden">
+                            </div>
+                        </li>
+                    {% elif field.name == 'address' %}
+                        <li>{{ field.label }}</li>
+                        <li>
+                            {{ field }}
+                            <button type="button" id="validate-address" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Validate Address</button>
+                        </li>
+                    {% else %}
+                        <li>{{ field.name }}</li>
+                        <li>{{ field }}</li>
+                    {% endif %}
                 {% endfor %}
             </ul>
-            <button action="submit" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-full inline">Create Restaurant?</button>
+            <button type="submit" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-full inline">Create Restaurant?</button>
         </div>
     </form>
 </div>
 {% endblock %}
-{% block script %}
 
+{% block script %}
+    {{ block.super }}
+    <script>
+        console.log('API Key:', '{{ google_maps_api_key }}');
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
+    <script src="{% static 'cuisineSelect.js' %}"></script>
+    <script src="{% static 'addressValidate.js' %}"></script>
 {% endblock %}

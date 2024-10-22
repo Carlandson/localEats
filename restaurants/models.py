@@ -42,6 +42,8 @@ class Kitchen(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user_favorite = models.ManyToManyField(User, blank=True, related_name="regular")
     phone_number = models.IntegerField(blank=True)
+    is_verified = models.BooleanField(default=False)
+    
     def __str__(self):
         return f"{self.restaurant_name}"
 

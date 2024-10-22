@@ -19,3 +19,11 @@ class kitchenAdmin(admin.ModelAdmin):
         })
     },
 }
+    
+class KitchenAdmin(admin.ModelAdmin):
+    list_display = ['restaurant_name', 'owner', 'is_verified']
+    actions = ['verify_restaurants']
+
+    def verify_restaurants(self, request, queryset):
+        queryset.update(is_verified=True)
+    verify_restaurants.short_description = "Verify selected restaurants"

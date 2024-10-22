@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
 from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django import forms
 from django.contrib import messages
@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.forms import TextInput, ModelForm, Textarea
 from geopy.geocoders import Nominatim
-from .models import User, Kitchen, MenuCourse, Dish, CuisineCategory
+from .models import Kitchen, MenuCourse, Dish, CuisineCategory
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
@@ -26,73 +26,12 @@ from allauth.account.views import SignupView
 from .forms import CustomSignupForm
 from django.core.mail import send_mail
 from django.conf import settings
+from .forms import RestaurantCreateForm, DishSubmit, CustomSignupForm, CustomSignupView
+import googlemaps
 
 User = get_user_model()
 
-class restaurant_create(ModelForm):
-    class Meta:
-        model = Kitchen
-        fields = ['restaurant_name', 'phone_number', 'cuisine', 'address', 'city', 'state', 'country', 'description']
-        widgets = {
-            'restaurant_name': TextInput(attrs={
-                'class': 'mb-3',
-                'style': 'max-width: 300px;',
-                'placeholder': 'name of restaurant',
-                'style': 'border: solid 1px black',
-            }),
-            'phone_number': TextInput(attrs={
-                'style': 'border: solid 1px black',
-            }),
-            'address': Textarea(attrs={
-                'class':'mb-3',
-                'rows':'2',
-                'style': 'border: solid 1px black; width: 300px',
-            }),
-            'description': Textarea(attrs={
-                'class': 'mb-3',
-                'style': 'border: solid 1px black; width: 200px',
-            }),
-            'city': TextInput(attrs={
-                'style': 'border: solid 1px black',
-            }),
-            'state': TextInput(attrs={
-                'style': 'border: solid 1px black',
-            }),
-        }
-
-class dish_submit(ModelForm):
-    class Meta:
-        model = Dish
-        fields = ['name', 'course','price', 'image_url', 'description']
-
-class CustomSignupView(SignupView):
-    form_class = CustomSignupForm
-
-    def form_invalid(self, form):
-        print("Form is invalid")
-        print("Form errors:", form.errors)
-        return super().form_invalid(form)
-
-    def form_valid(self, form):
-        print("Form is valid")
-        response = super().form_valid(form)
-        print("Response:", response)
-        return response
-    
-    def post(self, request, *args, **kwargs):
-        print("POST data:", request.POST)  # Debug print
-        return super().post(request, *args, **kwargs)
-
 custom_signup = CustomSignupView.as_view()
-# def index(request):
-#     if request.user.is_authenticated:
-#         if request.method != "GET":
-#             return JsonResponse({"error" : "GET request required."}, status=400)
-#         collection = []
-#         kitchen_list = kitchen.objects.all().order_by('-created')
-#         return render(request, "restaurant/index.html", {"recently_rated": collection, "kitchen_list": kitchen_list})
-#     else:
-#         return HttpResponseRedirect(reverse("login"))
 
 def some_view(request):
        send_mail(
@@ -149,12 +88,19 @@ def about(request):
 
 @login_required
 def create(request):
-    usern = request.user
-    geolocator = Nominatim(user_agent="restaurants")
+    user = request.user
+    gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
+
     if request.method == "GET":
-        return render(request, "create.html", {"owner": usern, "create": restaurant_create()})
+        context = {
+            "create": RestaurantCreateForm(),
+            "owner": user,
+            "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
+        }
+        return render(request, "create.html", context)
+
     if request.method == "POST":
-        form = restaurant_create(request.POST)
+        form = RestaurantCreateForm(request.POST)
         if form.is_valid():
             restaurant_name = form.cleaned_data['restaurant_name']
             address = form.cleaned_data['address']
@@ -164,43 +110,76 @@ def create(request):
             country = form.cleaned_data['country']
             city = form.cleaned_data['city']
             phone_number = form.cleaned_data['phone_number']
+
+            # Combine address components for geocoding
+            full_address = f"{address}, {city}, {state}, {country}"
+
+            try:
+                # Geocode the address
+                geocode_result = gmaps.geocode(full_address)
+
+                if geocode_result:
+                    location = geocode_result[0]['geometry']['location']
+                    formatted_address = geocode_result[0]['formatted_address']
+                    coordinates = f"{location['lat']},{location['lng']}"
+
+                    new_restaurant = Kitchen(
+                        owner=user,
+                        phone_number=phone_number,
+                        city=city,
+                        restaurant_name=restaurant_name,
+                        address=formatted_address,
+                        description=description,
+                        state=state,
+                        country=country,
+                        cuisine=cuisine,
+                        geolocation=coordinates
+                    )
+                    new_restaurant.save()
+
+                    messages.success(request, 'Restaurant created successfully!')
+                    return redirect(reverse('eatery', kwargs={'eatery': new_restaurant.restaurant_name}))
+                else:
+                    messages.error(request, 'Unable to validate the address. Please check and try again.')
+            except Exception as e:
+                messages.error(request, f'An error occurred: {str(e)}')
         else:
-            print(form.errors)
-            return render(request, "create.html", {"create" : restaurant_create()})
-        location = geolocator.geocode(address + " " + city)
-        coordinates = f"{location.latitude},{location.longitude}"
-        new_restaurant = Kitchen(owner=usern, phone_number=phone_number, city=city, restaurant_name=restaurant_name, address=address, description=description, state=state, country=country, cuisine=cuisine, geolocation=coordinates)
-        new_restaurant.save()
-        return redirect(reverse('eatery', kwargs={'eatery': new_restaurant.restaurant_name}))
-        # return HttpResponseRedirect(reverse('eatery', kwargs={'eatery' : new_restaurant.restaurant_name}))
+            messages.error(request, 'Please correct the errors in the form.')
+        context = {
+            "create": form,
+            "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
+        }
+        return render(request, "create.html", context)
 
 def eatery(request, eatery):
-    course_list = MenuCourse.objects.all()
-    restaurant_get = Kitchen.objects.get(restaurant_name=eatery)
-    dishes = Dish.objects.filter(recipe_owner=restaurant_get)
-    courses = restaurant_get.courses.all()
-    #rating = Rating.objects.all().order_by("-average")
-    #top_ratings = []
-    #for item in rating:
-        #if item.average > 3:
-            #for i in dishes:
-                #if item.object_id == i.id:
-                    #top_ratings.append(i)
-    if restaurant_get.owner == request.user:
-        owner = True
-        if request.method == "GET":
-            return render(request, "eatery.html", {"eatery": eatery, "restaurant_details": restaurant_get, "owner":owner, "courses":courses, "dishes":dishes, "course_list":course_list})
-    else:
-        owner = False
-        if request.method != "GET":
-            return JsonResponse({"error" : "GET request required."}, status=400)
-        if request.method == "GET":
-            return render(request, "eatery.html", {"eatery": eatery, "restaurant_details": restaurant_get, "owner":owner, "courses":courses, "dishes":dishes, "course_list":course_list})
+    restaurant = get_object_or_404(Kitchen, restaurant_name=eatery)
+    courses = MenuCourse.objects.all()
+    dishes = Dish.objects.filter(recipe_owner=restaurant)
+    restaurant_courses = restaurant.courses.all()
+
+    context = {
+        "eatery": eatery,
+        "restaurant_details": restaurant,
+        "courses": restaurant_courses,
+        "dishes": dishes,
+        "course_list": courses,
+        "owner": request.user == restaurant.owner,
+        "is_verified": restaurant.is_verified,
+    }
+
+    if request.method != "GET":
+        return JsonResponse({"error": "GET request required."}, status=400)
+
+    if not restaurant.is_verified and request.user != restaurant.owner:
+        return render(request, "restaurant_under_construction.html", context)
+
+    return render(request, "eatery.html", context)
+
 
 @login_required
 def new_dish(request, kitchen_name):
     if request.method == "GET":
-        return render(request, "newdish.html", {"new_dish" : dish_submit()})
+        return render(request, "newdish.html", {"new_dish" : DishSubmit()})
     if request.method == "POST":
         form = Dish(request.POST)
         user = request.user
@@ -213,7 +192,7 @@ def new_dish(request, kitchen_name):
             description = form.cleaned_data["description"]
         else:
             print(form.errors)
-            return render(request, "newdish.html", {"new_dish" : dish_submit()})
+            return render(request, "newdish.html", {"new_dish" : DishSubmit()})
         new = Dish(name=name, price=price, image_url=image_url, course=course, description=description, recipe_owner=recipe_owner)
         new.save()
         messages.add_message(request, messages.INFO, f"'{name}' successfully added to menu")

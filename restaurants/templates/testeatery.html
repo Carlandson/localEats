@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block body %}
+{{ eatery|json_script:"kitchen" }}
+
+<main class="flex flex-row">
+    <section class="w-full text-center float-left mb-5 md:w-8/12">
+        <header class="container">
+            <h1 class="p-2 text-4xl">{{ eatery }}</h1>
+            <address>
+                <p>{{ restaurant_details.address }}</p>
+                <p>{{ restaurant_details.city }} {{ restaurant_details.state }}, {{ restaurant_details.country }}</p>
+                <p><i>{{ restaurant_details.description }}</i></p>
+                <p><i>call {{ restaurant_details.phone_number }}</i></p>
+            </address>
+        </header>
+
+        {% if owner %}
+        <div class="p-3">
+            <form method="post" action="{% url 'add_course' eatery %}">
+                {% csrf_token %}
+                <label for="addCourse">Add a Course?</label>
+                <select id="addCourse" name="course">
+                    {% for course in course_list %}
+                        <option value="{{ course }}">{{ course }}</option>
+                    {% endfor %}
+                </select>
+                <button id="add" class="bg-red-200 hover:bg-red-400 font-bold py-1 px-4 rounded">Add</button>
+            </form>
+        </div>
+        {% endif %}
+
+        <section class="accordion w-full" id="courses">
+            {% for course in courses %}
+            <article class="accordion-item w-full" data-target="courses">
+                <h2 class="accordion-header" id="header-{{ forloop.counter }}">
+                    <button class="accordion-button bg-white" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse-{{ forloop.counter }}">
+                        <span class="text-black">{{ course }}</span>
+                    </button>
+                </h2>
+                <div id="collapse-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="header-{{ forloop.counter }}">
+                    <div class="accordion-body">
+                        {% for dish in dishes %}
+                            {% if dish.course == course %}
+                                <article id="dish-{{ dish.id }}" data-target="collapse-{{ forloop.parentloop.counter }}" class="border-solid border-4 border-yellow-300 p-4 mb-2 inline grid md:grid-cols-3 place-items-stretch">
+                                    <div class="text-center">
+                                        <h3 class="text-xl text-center text-bold">{{ dish.name }}</h3>
+                                        <img src="{{ dish.image_url }}" class="object-contain h-40 w-40" alt="{{ dish.name }}">
+                                        <p>Price: ${{ dish.price }}</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <h4>Description:</h4>
+                                        <p>{{ dish.description }}</p>
+                                    </div>
+                                    {% if owner %}
+                                    <div class="md:text-right">
+                                        <button class="editDish text-center w-screen md:w-6 bg-green-300 rounded m-2 p-1" id="edit-{{ dish.id }}">Edit</button>
+                                        <button class="deleteDish bg-red-600 rounded m-2 p-1" id="delete-{{ dish.id }}">Delete</button>
+                                    </div>
+                                    {% endif %}
+                                </article>
+                            {% endif %}
+                        {% empty %}
+                            <p>No dishes available for this course.</p>
+                        {% endfor %}
+
+                        {% if owner %}
+                            <div class="text-center">
+                                <button id="add-{{ course }}" class="submitDish text-center w-60 rounded m-2 bg-emerald-300 md:w-96">Add a dish to {{ course }}</button>
+                                <button id="delete-{{ course }}" class="deleteCourse text-center w-60 rounded m-2 bg-red-300 md:w-96">Delete Course?</button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+                <p>No courses available.</p>
+            {% endfor %}
+        </section>
+    </section>
+</main>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'menubuilder.js' %}"></script>
+{% endblock %}
