@@ -1,39 +1,48 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM fully loaded');
     const addressInput = document.getElementById('id_address');
-    const validateButton = document.getElementById('validate-address');
+    const cityInput = document.getElementById('id_city');
+    const stateInput = document.getElementById('id_state');
+    const zipInput = document.getElementById('id_zip_code');
 
-    if (!addressInput) {
-        console.error('Address input not found');
-    }
-    if (!validateButton) {
-        console.error('Validate button not found');
-    }
-
-    validateButton.addEventListener('click', function() {
-        console.log('Validate button clicked');
-        const address = addressInput.value;
-        validateAddress(address);
+    // Initialize Google Places Autocomplete
+    const autocomplete = new google.maps.places.Autocomplete(addressInput, {
+        types: ['address'],
+        componentRestrictions: { country: 'us' } // Restrict to US addresses
     });
 
-    function validateAddress(address) {
-        console.log('Validating address:', address);
-        if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
-            console.error('Google Maps API not loaded');
-            return;
-        }
-        const geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ address: address }, function(results, status) {
-            console.log('Geocode result:', status);
-            if (status === google.maps.GeocoderStatus.OK) {
-                const formattedAddress = results[0].formatted_address;
-                addressInput.value = formattedAddress;
-                console.log('Address validated:', formattedAddress);
-                alert('Address validated and formatted: ' + formattedAddress);
-            } else {
-                console.error('Geocode failed:', status);
-                alert('Unable to validate address. Please check and try again.');
+    // Listen for place selection
+    autocomplete.addListener('place_changed', fillInAddress);
+
+    function fillInAddress() {
+        const place = autocomplete.getPlace();
+        
+        // Clear existing values
+        addressInput.value = '';
+        cityInput.value = '';
+        stateInput.value = '';
+        zipInput.value = '';
+
+        // Fill in the address fields
+        for (const component of place.address_components) {
+            const componentType = component.types[0];
+
+            switch (componentType) {
+                case 'street_number':
+                    addressInput.value = `${component.long_name} `;
+                    break;
+                case 'route':
+                    addressInput.value += component.long_name;
+                    break;
+                case 'locality':
+                    cityInput.value = component.long_name;
+                    break;
+                case 'administrative_area_level_1':
+                    stateInput.value = component.short_name;
+                    break;
+                case 'postal_code':
+                    zipInput.value = component.long_name;
+                    break;
             }
-        });
+        }
     }
 });

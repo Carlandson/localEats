@@ -7,11 +7,11 @@
         <ul class="p-4 inline-block">
     {% for restaurant in owners_restaurants %}
             <li class="p-3 border-solid rounded-sm bg-orange-300 p-3 w-30 content-center">
-                <a href="{% url 'eatery' restaurant.restaurant_name %}">{{restaurant.restaurant_name}}</a>
+                <a href="{% url 'eatery' restaurant.subdirectory %}">{{restaurant.restaurant_name}}</a>
             </li>
     {% endfor %}
             <li class="p-3 text-center">
-                <a class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-full" href="{% url 'create' %}">Create a Restaurant!</a>
+                <a class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-full" href="{% url 'create' %}">Register your Restaurant</a>
             </li>
     </ul>
 </div>

@@ -5,11 +5,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const hiddenInput = document.getElementById('cuisine-hidden');
 
     const cuisineList = [
-        'Italian', 'Chinese', 'Japanese', 'Mexican', 'Indian', 'French', 'Thai', 
-        'Spanish', 'Greek', 'Lebanese', 'Turkish', 'Vietnamese', 'Korean', 
-        'American', 'Brazilian', 'Peruvian', 'Moroccan', 'Ethiopian', 'Russian',
-        // Add more cuisines as needed
-    ];
+        'Afghan', 'Algerian', 'American', 'Armenian', 'Argentinian', 'Australian', 
+        'Bangladeshi', 'BBQ', 'Belgian', 'Brazilian', 'Cajun', 'Cambodian', 
+        'Caribbean', 'Chilean', 'Chinese', 'Colombian', 'Creole', 'Cuban', 
+        'Dutch', 'Egyptian', 'Emirati', 'Ethiopian', 'Filipino', 'French', 
+        'Georgian', 'German', 'Greek', 'Hawaiian', 'Hawaiian', 
+        'Hungarian', 'Indian', 'Indonesian', 'Israeli', 'Italian', 'Jamaican', 
+        'Japanese', 'Kazakh', 'Korean', 'Lebanese', 'Malaysian', 'Midwestern', 
+        'Mexican', 'Mongolian', 'Moroccan', 'Nepalese', 'New England', 
+        'New Zealand', 'Pacific Northwest', 'Pakistani', 'Peruvian', 'Persian', 
+        'Polish', 'Portuguese', 'Russian', 'Saudi', 'Singaporean', 'Somali', 
+        'Soul Food', 'Southern', 'Spanish', 'Sri Lankan', 'Sudanese', 
+        'Swedish', 'Swiss', 'Syrian', 'Tex-Mex', 'Thai', 'Tibetan', 
+        'Turkish', 'Tunisian', 'Ukrainian', 'Uzbek', 'Vietnamese'
+    ];    
 
     let selectedCuisineSet = new Set();
 
@@ -20,15 +29,23 @@ document.addEventListener('DOMContentLoaded', function() {
         );
 
         cuisineSuggestions.innerHTML = '';
-        filteredCuisines.forEach(cuisine => {
-            const div = document.createElement('div');
-            div.textContent = cuisine;
-            div.addEventListener('click', () => addCuisine(cuisine));
-            cuisineSuggestions.appendChild(div);
-        });
+        if (filteredCuisines.length > 0 && inputValue.length > 0) {
+            filteredCuisines.forEach(cuisine => {
+                const div = document.createElement('div');
+                div.textContent = cuisine;
+                div.addEventListener('click', (event) => addCuisine(cuisine, event));
+                cuisineSuggestions.appendChild(div);
+            });
+            cuisineSuggestions.classList.add('active');
+        } else {
+            cuisineSuggestions.classList.remove('active');
+        }
     });
 
-    function addCuisine(cuisine) {
+    function addCuisine(cuisine, event) {
+        if (event) {
+            event.stopPropagation();
+        }
         if (!selectedCuisineSet.has(cuisine)) {
             selectedCuisineSet.add(cuisine);
             updateSelectedCuisines();
@@ -36,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         cuisineInput.value = '';
         cuisineSuggestions.innerHTML = '';
+        cuisineSuggestions.classList.remove('active');
     }
 
     window.removeCuisine = function(cuisine) {
@@ -49,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedCuisineSet.forEach(cuisine => {
             const cuisineTag = document.createElement('span');
             cuisineTag.className = 'cuisine-tag';
-            cuisineTag.innerHTML = `${cuisine} <button onclick="removeCuisine('${cuisine}')">&times;</button>`;
+            cuisineTag.innerHTML = `${cuisine} <button onclick="removeCuisine('${cuisine}')"><span class="remove-cuisine">&times;</span></button>`;
             selectedCuisines.appendChild(cuisineTag);
         });
         cuisineInput.placeholder = selectedCuisineSet.size > 0 ? '' : 'Type to search cuisines...';
@@ -58,4 +76,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateHiddenInput() {
         hiddenInput.value = Array.from(selectedCuisineSet).join(',');
     }
+
+    document.addEventListener('click', function(event) {
+        if (cuisineSuggestions.classList.contains('active') && 
+            !cuisineInput.contains(event.target) && 
+            !cuisineSuggestions.contains(event.target)) {
+            cuisineSuggestions.classList.remove('active');
+        }
+    });
+
+    cuisineInput.addEventListener('focus', function() {
+        if (this.value.length > 0) {
+            cuisineSuggestions.classList.add('active');
+        }
+    });
 });
+

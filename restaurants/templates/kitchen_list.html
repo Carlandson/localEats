@@ -1,7 +1,7 @@
 {% for kitchen in page_obj %}
     <div class="p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
         <!-- test remove eatery -->
-        <a href="{% url 'eatery' kitchen.restaurant_name %}" class="block">
+        <a href="{% url 'eatery' kitchen.subdirectory %}" class="block">
             <h2 class="text-xl font-bold mb-2">{{kitchen.restaurant_name}}</h2>
             <p class="text-gray-600">{{kitchen.city}}, {{kitchen.state}}</p>
             <p class="text-gray-600">{{kitchen.cuisine}} cuisine</p>

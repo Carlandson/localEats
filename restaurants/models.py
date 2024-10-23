@@ -5,6 +5,8 @@ from django_countries.fields import CountryField
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
+from phonenumber_field.modelfields import PhoneNumberField
+from django.core.exceptions import ValidationError
 
 
 User = get_user_model()
@@ -36,20 +38,40 @@ class Kitchen(models.Model):
     geolocation = map_fields.GeoLocationField(max_length=200, blank=True)
     city = models.CharField(max_length=64)
     state = models.CharField(max_length=64)
+    zip_code = models.CharField(max_length=20)
     courses = models.ManyToManyField(MenuCourse, blank=True, related_name="kitchen_courses")
-    country = CountryField()
     description = models.TextField(max_length=200, default="")
     created = models.DateTimeField(auto_now_add=True)
     user_favorite = models.ManyToManyField(User, blank=True, related_name="regular")
-    phone_number = models.IntegerField(blank=True)
+    phone_number = PhoneNumberField()
     is_verified = models.BooleanField(default=False)
+    subdirectory = models.SlugField(max_length=64, unique=True)
+
+    def clean(self):
+        if Kitchen.objects.filter(subdirectory=self.subdirectory).exclude(pk=self.pk).exists():
+            raise ValidationError({'subdirectory': 'This subdirectory is already in use. Please choose a different one.'})
+
+    def save(self, *args, **kwargs):
+        if not self.subdirectory:
+            self.subdirectory = slugify(self.restaurant_name)
+        self.full_clean()
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return f"{self.restaurant_name}"
 
     def regular_count(self):
         return self.user_favorite.count()
+    
+    @classmethod
+    def verified_business_exists(cls, address):
+        return cls.objects.filter(address=address, is_verified=True).exists()
 
+    def clean(self):
+        super().clean()
+        if not self.pk and Kitchen.verified_business_exists(self.address):
+            raise ValidationError("A verified business already exists at this address.")
+        
     def serialize(self):
         return {
             "cuisine": self.cuisine.serialize(),

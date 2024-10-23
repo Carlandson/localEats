@@ -1,35 +1,34 @@
 import json
 import geopy.distance
-
+import logging
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django import forms
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
-from django.forms import TextInput, ModelForm, Textarea
-from geopy.geocoders import Nominatim
 from .models import Kitchen, MenuCourse, Dish, CuisineCategory
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
-from allauth.account.utils import perform_login
-from allauth.account.models import EmailAddress
-from allauth.account.utils import perform_login
-from allauth.account.forms import LoginForm
-from django.contrib.auth import logout as auth_logout
-from allauth.account.views import SignupView
-from .forms import CustomSignupForm
+from django.core.exceptions import ValidationError
+from google.auth.exceptions import RefreshError
+from googleapiclient.errors import HttpError
+from googleapiclient.discovery import build
+import google_auth_httplib2
+import httplib2
+from allauth.socialaccount.models import SocialAccount
+from google.oauth2.credentials import Credentials
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import RestaurantCreateForm, DishSubmit, CustomSignupForm, CustomSignupView
+from .forms import RestaurantCreateForm, DishSubmit, CustomSignupView
 import googlemaps
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 custom_signup = CustomSignupView.as_view()
 
@@ -41,6 +40,100 @@ def some_view(request):
            ['to@example.com'],
            fail_silently=False,
        )
+
+import logging
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from google.auth.exceptions import RefreshError
+import google_auth_httplib2
+import httplib2
+import json
+
+logger = logging.getLogger(__name__)
+
+@login_required
+def fetch_business_info(request):
+    try:
+        social_account = SocialAccount.objects.get(user=request.user, provider='google')
+        social_token = social_account.socialtoken_set.first()
+        
+        if not social_token:
+            logger.warning("No Google token found for user %s", request.user.username)
+            messages.error(request, 'No Google token found. Please reconnect your account.')
+            return redirect('some_google_auth_view')
+        
+        access_token = social_token.token
+        credentials = Credentials(token=access_token)
+        
+        # Create an authorized HTTP object
+        http = google_auth_httplib2.AuthorizedHttp(credentials, http=httplib2.Http())
+        
+        try:
+            logger.info("Attempting to build Google My Business API service...")
+            service = build('mybusinessaccountmanagement', 'v1', http=http, cache_discovery=False)
+            logger.info("Successfully built Google My Business API service")
+       
+            try:
+                # You need to list accounts first
+                accounts = service.accounts().list().execute()
+                logger.debug("Accounts response: %s", json.dumps(accounts, indent=2))
+                
+                if 'accounts' in accounts and accounts['accounts']:
+                    account = accounts['accounts'][0]
+                    account_name = account['name']  # This will be 'accounts/{account_id}'
+                    
+                    # Use the account_name to list all locations for the account
+                    service = build('mybusinessbusinessinformation', 'v1', http=http, cache_discovery=False)
+                    locations = service.accounts().locations().list(parent=account_name).execute()
+                    logger.debug("Locations response: %s", json.dumps(locations, indent=2))
+                    
+                    if 'locations' in locations and locations['locations']:
+                        location = locations['locations'][0]
+                        # Fetch detailed information for the first location
+                        location_name = location['name']
+                        location_details = service.accounts().locations().get(name=location_name).execute()
+                        logger.debug("Location details: %s", json.dumps(location_details, indent=2))
+                        
+                        return render(request, 'create.html', {'business_info': location_details})
+                    else:
+                        logger.warning("No business locations found for user %s", request.user.username)
+                        messages.warning(request, 'No business locations found for this Google account. You may need to create a Google My Business listing first.')
+                        return redirect('create')  # or wherever you want to redirect
+                
+                else:
+                    logger.warning("No Google My Business accounts found for user %s", request.user.username)
+                    messages.warning(request, 'No Google My Business accounts found for this user.')
+                    return redirect('create')
+            
+            except HttpError as api_error:
+                if api_error.resp.status == 403:
+                    logger.warning("Permission denied. The user might not have any business listings. User: %s", request.user.username)
+                    messages.warning(request, 'Unable to access business information. You may not have any Google My Business listings, or you may need to grant additional permissions.')
+                else:
+                    logger.error("API error: %s", api_error, exc_info=True)
+                    messages.error(request, f'Error fetching business info: {api_error.reason}')
+            
+        except HttpError as error:
+            logger.error("An HTTP error occurred: %s", error, exc_info=True)
+            messages.error(request, f'Error accessing Google My Business API: {error}')
+        except RefreshError as refresh_error:
+            logger.error("Token refresh error: %s", refresh_error, exc_info=True)
+            messages.error(request, 'Your Google token has expired. Please reconnect your account.')
+            return redirect('some_google_auth_view')
+        except Exception as e:
+            logger.error("Error building API service: %s", str(e), exc_info=True)
+            messages.error(request, f'Error accessing Google My Business API: {str(e)}')
+    
+    except SocialAccount.DoesNotExist:
+        logger.error("SocialAccount does not exist for user %s", request.user.username)
+        messages.error(request, 'Google account not connected.')
+    except Exception as e:
+        logger.error("Unexpected error: %s", str(e), exc_info=True)
+        messages.error(request, f'Error fetching business info: {str(e)}')
+    
+    return redirect('create')
+
 
 def index(request): 
     kitchen_list = Kitchen.objects.all().order_by('-created')
@@ -102,17 +195,11 @@ def create(request):
     if request.method == "POST":
         form = RestaurantCreateForm(request.POST)
         if form.is_valid():
-            restaurant_name = form.cleaned_data['restaurant_name']
-            address = form.cleaned_data['address']
-            description = form.cleaned_data['description']
-            state = form.cleaned_data['state']
-            cuisine = form.cleaned_data['cuisine']
-            country = form.cleaned_data['country']
-            city = form.cleaned_data['city']
-            phone_number = form.cleaned_data['phone_number']
+            new_restaurant = form.save(commit=False)
+            new_restaurant.owner = user
 
             # Combine address components for geocoding
-            full_address = f"{address}, {city}, {state}, {country}"
+            full_address = f"{new_restaurant.address}, {new_restaurant.city}, {new_restaurant.state} {new_restaurant.zip_code}"
 
             try:
                 # Geocode the address
@@ -123,28 +210,26 @@ def create(request):
                     formatted_address = geocode_result[0]['formatted_address']
                     coordinates = f"{location['lat']},{location['lng']}"
 
-                    new_restaurant = Kitchen(
-                        owner=user,
-                        phone_number=phone_number,
-                        city=city,
-                        restaurant_name=restaurant_name,
-                        address=formatted_address,
-                        description=description,
-                        state=state,
-                        country=country,
-                        cuisine=cuisine,
-                        geolocation=coordinates
-                    )
+                    if Kitchen.verified_business_exists(formatted_address):
+                        raise ValidationError("A verified business already exists at this address.")
+                    
+                    new_restaurant.address = formatted_address
+
                     new_restaurant.save()
 
                     messages.success(request, 'Restaurant created successfully!')
-                    return redirect(reverse('eatery', kwargs={'eatery': new_restaurant.restaurant_name}))
+                    return redirect(reverse('eatery', kwargs={'eatery': new_restaurant.subdirectory}))
                 else:
                     messages.error(request, 'Unable to validate the address. Please check and try again.')
             except Exception as e:
+                logger.error(f"Error creating restaurant: {str(e)}", exc_info=True)
                 messages.error(request, f'An error occurred: {str(e)}')
         else:
-            messages.error(request, 'Please correct the errors in the form.')
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"Error in {field}: {error}")
+            logger.error(f"Form validation errors: {form.errors}")
+
         context = {
             "create": form,
             "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
@@ -152,7 +237,7 @@ def create(request):
         return render(request, "create.html", context)
 
 def eatery(request, eatery):
-    restaurant = get_object_or_404(Kitchen, restaurant_name=eatery)
+    restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
     courses = MenuCourse.objects.all()
     dishes = Dish.objects.filter(recipe_owner=restaurant)
     restaurant_courses = restaurant.courses.all()

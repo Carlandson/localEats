@@ -8,7 +8,17 @@ module.exports = {
     './static/**/*.html',
   ],
   theme: {
-    extend: {},
+    extend: {
+      boxShadow: {
+        'input-focus': '0 0 0 3px rgba(147, 197, 253, 0.5)'
+
+      }
+    },
+  },
+  variants: {
+    extend: {
+      boxShadow: ['focus'],
+    }
   },
   plugins: [],
   safelist: [
