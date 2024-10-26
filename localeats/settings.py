@@ -92,6 +92,9 @@ MIDDLEWARE = [
     'restaurants.middleware.ClearMessagesMiddleware', 
 ]
 
+# WebP settings
+WEBP_CONVERT_MEDIA = True
+WEBP_QUALITY = 80
 
 ROOT_URLCONF = 'localeats.urls'
 

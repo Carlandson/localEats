@@ -1,0 +1,17 @@
+{% extends layout_template %}
+
+{% block title %}{{ kitchen.restaurant_name }}{% endblock %}
+
+{% block content %}
+    {% if is_owner %}
+        <!-- Owner view content -->
+    {% elif kitchen.is_verified %}
+        <!-- Verified kitchen content for non-owners -->
+    {% else %}
+        <!-- Unverified kitchen content -->
+    {% endif %}
+    
+    <!-- Common content -->
+    <h1>{{ kitchen.restaurant_name }}</h1>
+    <!-- ... other restaurant details ... -->
+{% endblock %}

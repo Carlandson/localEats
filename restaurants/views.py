@@ -4,15 +4,13 @@ import logging
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
-from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
-from .models import Kitchen, MenuCourse, Dish, CuisineCategory
-from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
+from .models import Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Kitchen, CuisineCategory
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from google.auth.exceptions import RefreshError
@@ -24,11 +22,11 @@ from allauth.socialaccount.models import SocialAccount
 from google.oauth2.credentials import Credentials
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import RestaurantCreateForm, DishSubmit, CustomSignupView
+from .forms import RestaurantCreateForm, DishSubmit, CustomSignupView, ImageUploadForm
+from django.contrib.contenttypes.models import ContentType
 import googlemaps
 
 User = get_user_model()
-logger = logging.getLogger(__name__)
 
 custom_signup = CustomSignupView.as_view()
 
@@ -41,14 +39,7 @@ def some_view(request):
            fail_silently=False,
        )
 
-import logging
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from google.auth.exceptions import RefreshError
-import google_auth_httplib2
-import httplib2
-import json
+
 
 logger = logging.getLogger(__name__)
 
@@ -238,7 +229,32 @@ def create(request):
 
 def eatery(request, eatery):
     restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
-    courses = MenuCourse.objects.all()
+    subpages = SubPage.objects.filter(kitchen=restaurant)
+
+    context = {
+        "eatery": eatery,
+        "restaurant_details": restaurant,
+        "owner": request.user == restaurant.owner,
+        "is_verified": restaurant.is_verified,
+        "pages": subpages,
+    }
+
+    if request.method != "GET":
+        return JsonResponse({"error": "GET request required."}, status=400)
+
+    if not restaurant.is_verified and request.user != restaurant.owner:
+        return render(request, "restaurant_under_construction.html", context)
+    
+    if context["owner"]:
+        template_name = "eatery_owner.html"
+    else:
+        template_name = "eatery_visitor.html"
+
+    return render(request, template_name, context)
+
+def menu(request, eatery):
+    restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+    courses = Course.objects.all()
     dishes = Dish.objects.filter(recipe_owner=restaurant)
     restaurant_courses = restaurant.courses.all()
 
@@ -257,8 +273,6 @@ def eatery(request, eatery):
 
     if not restaurant.is_verified and request.user != restaurant.owner:
         return render(request, "restaurant_under_construction.html", context)
-
-    return render(request, "eatery.html", context)
 
 
 @login_required
@@ -286,7 +300,7 @@ def new_dish(request, kitchen_name):
 @csrf_exempt
 @login_required
 def add_course(request, dishData, eatery):
-    course_add = MenuCourse.objects.get(course_list=dishData)
+    course_add = Course.objects.get(course_list=dishData)
     try:
         current_restaurant = Kitchen.objects.get(restaurant_name = eatery)
     except Kitchen.DoesNotExist:
@@ -310,7 +324,7 @@ def add_dish(request, eatery):
     price = data.get("price", "")
     image_url = data.get("image_url", "")
     course = data.get("course", "")
-    dish_course = MenuCourse.objects.get(course_list=course)
+    dish_course = Course.objects.get(course_list=course)
     eatery = Kitchen.objects.get(restaurant_name=eatery)
     new_dish = Dish(
         recipe_owner = eatery,
@@ -413,7 +427,7 @@ def delete_dish(request, dishid):
 def delete_course(request, eatery, course):
     if request.method != "GET":
         return JsonResponse({"error" : "GET request required."}, status=400)
-    current_course = MenuCourse.objects.get(course_list = course)
+    current_course = Course.objects.get(course_list = course)
     current_kitchen = Kitchen.objects.get(restaurant_name = eatery, owner = request.user)
     current_kitchen.courses.remove(current_course)
     return JsonResponse({"message": "course deleted"}, status=201)
@@ -436,3 +450,25 @@ def get_dish(request, dish_id):
 def get_cuisine_categories(request):
     categories = CuisineCategory.objects.all()
     return JsonResponse([category.serialize() for category in categories], safe=False)
+
+@login_required
+def upload_image(request, model_name, object_id):
+    if model_name not in ['kitchen', 'dish']:
+        return HttpResponseBadRequest("Invalid model type")
+
+    model = Kitchen if model_name == 'kitchen' else Dish
+    obj = get_object_or_404(model, id=object_id)
+
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.uploaded_by = request.user
+            image.content_type = ContentType.objects.get_for_model(obj)
+            image.object_id = obj.id
+            image.save()
+            return redirect('object_detail', model_name=model_name, object_id=object_id)
+    else:
+        form = ImageUploadForm()
+
+    return render(request, 'upload_image.html', {'form': form, 'object': obj})

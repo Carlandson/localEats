@@ -44,11 +44,22 @@ document.addEventListener('DOMContentLoaded', function() {
     deleteCourseList.forEach(k => {
         document.querySelector("#delete"+k).addEventListener('click', () => deleteCourse(k));
     });
+
+    const courseList = [
+        "Appetizers",
+        "Lunch",
+        "Entrees",
+        "Salads",
+        "Desserts",
+        "Drinks",
+        "Specials"  
+    ]
 });
 
 function addCourse(dishData){
     let currentKitchen = JSON.parse(document.getElementById('kitchen').textContent)
-    fetch("/add_course/" + dishData + "/" + currentKitchen, {method: "POST"})
+    console.log(currentKitchen);
+    fetch(currentKitchen + "/add_course/" + dishData, {method: "POST"})
         .then(response => response.json())
         .then(result => {
             location.reload();
