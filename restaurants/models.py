@@ -167,6 +167,7 @@ class Course(models.Model):
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name="courses")
     name = models.CharField(max_length=64)
     order = models.PositiveIntegerField(default=0)
+    description = models.TextField(blank=True)
 
     class Meta:
         ordering = ['order']

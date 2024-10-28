@@ -1,18 +1,42 @@
-{% extends "layout.html" %}
+{% extends "owner_layout.html" %}
 
 {% block body %}
-<div class="text-center">
-    <h1 class="p-2 text-4xl">{{request.user}}'s portal!</h1>
-    <div id="user_favorites"></div>
-        <ul class="p-4 inline-block">
-    {% for restaurant in owners_restaurants %}
-            <li class="p-3 border-solid rounded-sm bg-orange-300 p-3 w-30 content-center">
-                <a href="{% url 'eatery' restaurant.subdirectory %}">{{restaurant.restaurant_name}}</a>
-            </li>
-    {% endfor %}
-            <li class="p-3 text-center">
-                <a class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-full" href="{% url 'create' %}">Register your Restaurant</a>
-            </li>
-    </ul>
+<div class="min-h-screen bg-gray-100 py-12">
+    <div class="container mx-auto px-4">
+        <h1 class="text-center p-2 text-4xl mb-8">{{user_display_name}}'s Dashboard</h1>
+        <div class="grid md:grid-cols-3 gap-4 grid-cols-1">
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold mb-4 -mt-1">Manage your Restaurants</h2>
+                <ul class="p-4 inline-block space-y-4 w-full max-w-md">
+                    {% for restaurant in owners_restaurants %}
+                        <li class="p-4 border rounded-lg bg-orange-300 hover:bg-orange-400 transition-colors duration-200">
+                            <a href="{% url 'eatery' restaurant.subdirectory %}" class="block text-lg font-semibold">
+                                {{restaurant.restaurant_name}}
+                            </a>
+                        </li>
+                    </ul>
+                    {% endfor %}
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold mb-4 -mt-1">Register Restaurant</h2>
+                <a href="{% url 'create' %}" 
+                class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
+                    Register your Restaurant
+                </a>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 min-h-[300px]">
+                <h2 class="text-xl font-semibold mb-4 -mt-1">SEO</h2>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 min-h-[300px]">
+                <h2 class="text-xl font-semibold mb-4 -mt-1">Advertising</h2>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold mb-4 -mt-1">Settings</h2>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-semibold mb-4 -mt-1">Contact Us</h2>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

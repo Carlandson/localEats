@@ -167,8 +167,8 @@ def profile(request):
             owner_check = True
     return render(request, "profile.html", {"profile": profile, "owner_check" : owner_check, "owners_restaurants" : owners_restaurants})
 
-def about(request):
-    return render(request, "about.html")
+def aboutus(request):
+    return render(request, "aboutus.html")
 
 @login_required
 def create(request):
@@ -229,14 +229,22 @@ def create(request):
 
 def eatery(request, eatery):
     restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
-    subpages = SubPage.objects.filter(kitchen=restaurant)
+    
+    # Check for existence of each subpage
+    menu_page = SubPage.objects.filter(kitchen=restaurant, page_type='menu').exists()
+    about_page = SubPage.objects.filter(kitchen=restaurant, page_type='about').exists()
+    events_page = SubPage.objects.filter(kitchen=restaurant, page_type='events').exists()
+    specials_page = SubPage.objects.filter(kitchen=restaurant, page_type='specials').exists()
 
     context = {
         "eatery": eatery,
         "restaurant_details": restaurant,
         "owner": request.user == restaurant.owner,
         "is_verified": restaurant.is_verified,
-        "pages": subpages,
+        "menu_page": menu_page,
+        "about_page": about_page,
+        "events_page": events_page,
+        "specials_page": specials_page,
     }
 
     if request.method != "GET":
@@ -244,24 +252,69 @@ def eatery(request, eatery):
 
     if not restaurant.is_verified and request.user != restaurant.owner:
         return render(request, "restaurant_under_construction.html", context)
-    
-    if context["owner"]:
-        template_name = "eatery_owner.html"
-    else:
-        template_name = "eatery_visitor.html"
 
-    return render(request, template_name, context)
+    if request.user == restaurant.owner:
+        return render(request, "eatery_owner.html", context)
+    else:
+        return render(request, "eatery.html", context)
+
+def create_subpage(request, eatery, page_type):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+    restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+    
+    # Check if user is owner
+    if request.user != restaurant.owner:
+        return JsonResponse({"error": "Unauthorized"}, status=403)
+
+    # Create the subpage
+    subpage = SubPage.objects.create(
+        kitchen=restaurant,
+        page_type=page_type,
+        title=f"{restaurant.restaurant_name} {page_type.title()}",
+        slug=f"{restaurant.subdirectory}-{page_type}",
+        is_published=True
+    )
+
+    # Create the corresponding page content based on type
+    if page_type == 'menu':
+        Menu.objects.create(
+            kitchen=restaurant,
+            name=f"{restaurant.restaurant_name} Menu",
+            subpage=subpage
+        )
+    elif page_type == 'about':
+        AboutUsPage.objects.create(
+            subpage=subpage,
+            content=""
+        )
+    elif page_type == 'events':
+        EventsPage.objects.create(
+            subpage=subpage
+        )
+    elif page_type == 'specials':
+        SpecialsPage.objects.create(
+            subpage=subpage
+        )
+
+    # Redirect to the appropriate page
+    return redirect(reverse(page_type, kwargs={'eatery': eatery}))
 
 def menu(request, eatery):
     restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
-    courses = Course.objects.all()
-    dishes = Dish.objects.filter(recipe_owner=restaurant)
-    restaurant_courses = restaurant.courses.all()
+    menu_subpage = get_object_or_404(SubPage, kitchen=restaurant, page_type='menu')
+    # Get the menu associated with this subpage
+    menu = get_object_or_404(Menu, subpage=menu_subpage)
+    # Get all courses for this menu
+    courses = Course.objects.filter(menu=menu).order_by('order')
+    # Get all dishes for this menu
+    dishes = Dish.objects.filter(menu=menu)
 
     context = {
         "eatery": eatery,
         "restaurant_details": restaurant,
-        "courses": restaurant_courses,
+        "courses": courses,
         "dishes": dishes,
         "course_list": courses,
         "owner": request.user == restaurant.owner,
@@ -273,7 +326,35 @@ def menu(request, eatery):
 
     if not restaurant.is_verified and request.user != restaurant.owner:
         return render(request, "restaurant_under_construction.html", context)
+    return render(request, "kitchen_subpages/menu.html", context)
 
+
+def about(request, eatery):
+    restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+    about_page = AboutUsPage.objects.filter(kitchen=restaurant)
+    context = {
+        "about_page": about_page,
+        "owner": request.user == restaurant.owner,
+    }
+    return render(request, "about.html", context)
+
+def specials(request, eatery):
+    restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+    specials_page = SpecialsPage.objects.filter(kitchen=restaurant)
+    context = {
+        "specials_page": specials_page,
+        "owner": request.user == restaurant.owner,
+    }
+    return render(request, "specials.html", context)
+
+def events(request, eatery):
+    restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+    events_page = EventsPage.objects.filter(kitchen=restaurant)
+    context = {
+        "events_page": events_page,
+        "owner": request.user == restaurant.owner,
+    }
+    return render(request, "events.html", context)
 
 @login_required
 def new_dish(request, kitchen_name):

@@ -2029,3 +2029,842 @@ INFO 2024-10-26 16:06:13,407 autoreload 31852 5716 C:\Users\Jx1\Documents\GitHub
 INFO 2024-10-26 16:06:14,208 autoreload 28800 38752 Watching for file changes with StatReloader
 INFO 2024-10-26 16:06:32,324 basehttp 28800 43732 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12234
 INFO 2024-10-26 16:06:32,545 basehttp 28800 43732 - Broken pipe from ('127.0.0.1', 60234)
+INFO 2024-10-28 10:58:21,095 autoreload 37760 17232 Watching for file changes with StatReloader
+INFO 2024-10-28 10:58:47,193 basehttp 37760 42684 "GET / HTTP/1.1" 200 13315
+INFO 2024-10-28 10:58:47,286 basehttp 37760 19736 "GET /static/css/tailwind.css HTTP/1.1" 304 0
+INFO 2024-10-28 10:58:47,289 basehttp 37760 19736 "GET /static/index.js HTTP/1.1" 304 0
+INFO 2024-10-28 10:58:47,295 basehttp 37760 17712 "GET /static/logout.js HTTP/1.1" 304 0
+INFO 2024-10-28 10:58:47,324 basehttp 37760 19736 "GET /static/paginate.js HTTP/1.1" 304 0
+INFO 2024-10-28 10:58:47,430 basehttp 37760 42684 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2024-10-28 10:58:47,433 basehttp 37760 17712 "GET /static/images/test3.jpg HTTP/1.1" 304 0
+INFO 2024-10-28 10:58:47,433 basehttp 37760 19736 "GET /static/images/test2.jpg HTTP/1.1" 304 0
+INFO 2024-10-28 10:58:47,434 basehttp 37760 40204 "GET /static/images/test1.jpg HTTP/1.1" 304 0
+INFO 2024-10-28 10:58:47,439 basehttp 37760 42684 "GET /static/images/brandbw.png HTTP/1.1" 200 31357
+INFO 2024-10-28 10:58:47,602 basehttp 37760 42684 - Broken pipe from ('127.0.0.1', 64672)
+INFO 2024-10-28 10:58:47,665 basehttp 37760 41340 "GET /static/images/favicon.ico HTTP/1.1" 304 0
+INFO 2024-10-28 10:58:50,120 basehttp 37760 19736 "GET /profile/ HTTP/1.1" 200 11565
+INFO 2024-10-28 11:17:28,705 basehttp 37760 43176 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12234
+INFO 2024-10-28 11:17:28,844 basehttp 37760 43176 - Broken pipe from ('127.0.0.1', 56602)
+INFO 2024-10-28 11:18:02,812 autoreload 37760 17232 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 11:18:03,714 autoreload 19200 25252 Watching for file changes with StatReloader
+INFO 2024-10-28 11:18:07,124 autoreload 19200 25252 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 11:18:07,924 autoreload 20684 20624 Watching for file changes with StatReloader
+INFO 2024-10-28 11:18:10,251 autoreload 20684 20624 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 11:18:11,203 autoreload 23728 6904 Watching for file changes with StatReloader
+INFO 2024-10-28 11:18:14,589 autoreload 23728 6904 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 11:18:15,382 autoreload 25052 27640 Watching for file changes with StatReloader
+INFO 2024-10-28 11:18:17,682 autoreload 25052 27640 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 11:18:18,495 autoreload 8348 39332 Watching for file changes with StatReloader
+INFO 2024-10-28 11:18:21,830 autoreload 8348 39332 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 11:18:22,707 autoreload 37644 37180 Watching for file changes with StatReloader
+INFO 2024-10-28 11:18:26,022 autoreload 37644 37180 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 11:18:26,842 autoreload 26596 14956 Watching for file changes with StatReloader
+INFO 2024-10-28 11:18:29,121 autoreload 26596 14956 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 11:18:29,888 autoreload 29880 31528 Watching for file changes with StatReloader
+INFO 2024-10-28 11:22:47,115 basehttp 29880 42568 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12234
+INFO 2024-10-28 11:22:50,332 basehttp 29880 42568 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12234
+INFO 2024-10-28 11:22:51,356 basehttp 29880 42568 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12234
+INFO 2024-10-28 11:22:51,537 basehttp 29880 42568 - Broken pipe from ('127.0.0.1', 64951)
+INFO 2024-10-28 11:23:42,067 basehttp 29880 16748 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12234
+INFO 2024-10-28 11:23:42,184 basehttp 29880 16748 - Broken pipe from ('127.0.0.1', 53857)
+INFO 2024-10-28 11:25:15,526 basehttp 29880 37784 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11423
+INFO 2024-10-28 11:25:55,662 basehttp 29880 37784 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11423
+INFO 2024-10-28 11:25:55,796 basehttp 29880 37784 - Broken pipe from ('127.0.0.1', 60745)
+INFO 2024-10-28 11:25:57,446 basehttp 29880 37020 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11477
+INFO 2024-10-28 11:25:59,945 basehttp 29880 37020 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11477
+INFO 2024-10-28 11:26:00,040 basehttp 29880 37020 - Broken pipe from ('127.0.0.1', 57630)
+INFO 2024-10-28 11:26:41,268 basehttp 29880 34224 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11423
+INFO 2024-10-28 11:26:41,377 basehttp 29880 34224 - Broken pipe from ('127.0.0.1', 55893)
+INFO 2024-10-28 11:26:54,909 basehttp 29880 33344 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11204
+INFO 2024-10-28 11:26:55,100 basehttp 29880 33344 - Broken pipe from ('127.0.0.1', 55961)
+INFO 2024-10-28 11:27:04,457 basehttp 29880 12660 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11381
+INFO 2024-10-28 11:27:04,552 basehttp 29880 12660 - Broken pipe from ('127.0.0.1', 56039)
+INFO 2024-10-28 11:27:12,746 basehttp 29880 44028 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11379
+INFO 2024-10-28 11:27:12,860 basehttp 29880 44028 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-10-28 11:29:38,522 basehttp 29880 18312 "GET / HTTP/1.1" 200 13341
+INFO 2024-10-28 11:29:38,569 basehttp 29880 18312 - Broken pipe from ('127.0.0.1', 50603)
+INFO 2024-10-28 11:29:38,597 basehttp 29880 41220 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2024-10-28 11:29:57,438 basehttp 29880 41220 "GET / HTTP/1.1" 200 13341
+INFO 2024-10-28 11:30:11,338 basehttp 29880 41220 "GET /profile/ HTTP/1.1" 200 11591
+INFO 2024-10-28 11:30:11,460 basehttp 29880 41220 - Broken pipe from ('127.0.0.1', 50609)
+INFO 2024-10-28 11:30:15,081 basehttp 29880 36924 "GET / HTTP/1.1" 200 13341
+INFO 2024-10-28 11:30:15,189 basehttp 29880 36924 - Broken pipe from ('127.0.0.1', 50733)
+INFO 2024-10-28 11:30:36,334 basehttp 29880 32784 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11405
+INFO 2024-10-28 11:30:52,985 basehttp 29880 32784 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11405
+INFO 2024-10-28 11:30:53,089 basehttp 29880 32784 - Broken pipe from ('127.0.0.1', 54863)
+INFO 2024-10-28 11:30:54,226 basehttp 29880 2108 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11400
+INFO 2024-10-28 11:30:54,789 basehttp 29880 2108 - Broken pipe from ('127.0.0.1', 54953)
+INFO 2024-10-28 11:31:01,132 basehttp 29880 15928 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11405
+INFO 2024-10-28 11:31:01,287 basehttp 29880 15928 - Broken pipe from ('127.0.0.1', 55008)
+INFO 2024-10-28 11:31:12,033 basehttp 29880 33408 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2024-10-28 11:31:12,182 basehttp 29880 6796 "GET /broadwaybarandgrill/ HTTP/1.1" 200 8725
+INFO 2024-10-28 11:31:37,101 basehttp 29880 33408 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11417
+INFO 2024-10-28 11:32:21,447 basehttp 29880 33408 - Broken pipe from ('127.0.0.1', 55044)
+INFO 2024-10-28 11:32:58,837 basehttp 29880 19060 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11412
+INFO 2024-10-28 11:32:59,183 basehttp 29880 19060 - Broken pipe from ('127.0.0.1', 63879)
+INFO 2024-10-28 11:36:20,596 basehttp 29880 39604 "GET /profile/ HTTP/1.1" 200 11591
+INFO 2024-10-28 11:36:20,761 basehttp 29880 39604 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-10-28 11:36:56,423 basehttp 29880 39604 "GET /profile/ HTTP/1.1" 200 10743
+INFO 2024-10-28 11:36:56,595 basehttp 29880 39604 - Broken pipe from ('127.0.0.1', 54925)
+INFO 2024-10-28 11:37:24,233 basehttp 29880 32188 "GET /profile/ HTTP/1.1" 200 10728
+INFO 2024-10-28 11:37:24,365 basehttp 29880 32188 - Broken pipe from ('127.0.0.1', 63126)
+INFO 2024-10-28 11:37:47,217 basehttp 29880 9268 "GET /profile/ HTTP/1.1" 200 10730
+INFO 2024-10-28 11:37:47,349 basehttp 29880 9268 - Broken pipe from ('127.0.0.1', 63227)
+INFO 2024-10-28 11:39:02,478 basehttp 29880 45548 "GET /profile/ HTTP/1.1" 200 11077
+INFO 2024-10-28 11:39:02,664 basehttp 29880 45548 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-10-28 11:40:43,556 basehttp 29880 45548 "GET /profile/ HTTP/1.1" 200 11099
+INFO 2024-10-28 11:40:43,681 basehttp 29880 45548 - Broken pipe from ('127.0.0.1', 63986)
+INFO 2024-10-28 11:41:21,666 basehttp 29880 39688 "GET /profile/ HTTP/1.1" 200 11209
+INFO 2024-10-28 11:41:21,801 basehttp 29880 39688 - Broken pipe from ('127.0.0.1', 62230)
+INFO 2024-10-28 11:42:17,555 basehttp 29880 29660 "GET /profile/ HTTP/1.1" 200 11326
+INFO 2024-10-28 11:42:17,696 basehttp 29880 29660 - Broken pipe from ('127.0.0.1', 62459)
+INFO 2024-10-28 11:42:49,183 basehttp 29880 35780 "GET /profile/ HTTP/1.1" 200 11220
+INFO 2024-10-28 11:42:49,299 basehttp 29880 35780 - Broken pipe from ('127.0.0.1', 63523)
+INFO 2024-10-28 11:43:27,775 basehttp 29880 13932 "GET /profile/ HTTP/1.1" 200 11262
+INFO 2024-10-28 11:43:27,915 basehttp 29880 13932 - Broken pipe from ('127.0.0.1', 62854)
+INFO 2024-10-28 11:44:03,164 basehttp 29880 42780 "GET /profile/ HTTP/1.1" 200 11279
+INFO 2024-10-28 11:44:03,306 basehttp 29880 42780 - Broken pipe from ('127.0.0.1', 63056)
+INFO 2024-10-28 11:44:22,516 basehttp 29880 15192 "GET /profile/ HTTP/1.1" 200 11392
+INFO 2024-10-28 11:44:22,653 basehttp 29880 15192 - Broken pipe from ('127.0.0.1', 64078)
+INFO 2024-10-28 11:44:39,791 basehttp 29880 30876 "GET /profile/ HTTP/1.1" 200 11492
+INFO 2024-10-28 11:44:39,944 basehttp 29880 30876 - Broken pipe from ('127.0.0.1', 64170)
+INFO 2024-10-28 11:44:54,464 basehttp 29880 32256 "GET /profile/ HTTP/1.1" 200 11692
+INFO 2024-10-28 11:44:54,562 basehttp 29880 32256 - Broken pipe from ('127.0.0.1', 64279)
+INFO 2024-10-28 11:45:49,115 basehttp 29880 28300 "GET /profile/ HTTP/1.1" 200 12309
+INFO 2024-10-28 11:46:07,481 basehttp 29880 28300 "GET /profile/ HTTP/1.1" 200 11692
+INFO 2024-10-28 11:46:07,609 basehttp 29880 28300 - Broken pipe from ('127.0.0.1', 56027)
+INFO 2024-10-28 11:46:18,265 basehttp 29880 3628 "GET /profile/ HTTP/1.1" 200 11680
+INFO 2024-10-28 11:46:18,384 basehttp 29880 3628 - Broken pipe from ('127.0.0.1', 56168)
+INFO 2024-10-28 11:46:36,968 basehttp 29880 45472 "GET /profile/ HTTP/1.1" 200 11692
+INFO 2024-10-28 11:46:37,079 basehttp 29880 45472 - Broken pipe from ('127.0.0.1', 52490)
+INFO 2024-10-28 11:47:48,493 basehttp 29880 20968 "GET /profile/ HTTP/1.1" 200 11704
+INFO 2024-10-28 11:47:48,596 basehttp 29880 20968 - Broken pipe from ('127.0.0.1', 56956)
+INFO 2024-10-28 11:48:15,472 basehttp 29880 5508 "GET /profile/ HTTP/1.1" 200 11810
+INFO 2024-10-28 11:48:15,571 basehttp 29880 5508 - Broken pipe from ('127.0.0.1', 57090)
+INFO 2024-10-28 11:49:46,613 basehttp 29880 15532 "GET /profile/ HTTP/1.1" 200 11810
+INFO 2024-10-28 11:49:46,746 basehttp 29880 15532 - Broken pipe from ('127.0.0.1', 61648)
+INFO 2024-10-28 11:50:17,787 basehttp 29880 43004 "GET /profile/ HTTP/1.1" 200 11781
+INFO 2024-10-28 11:50:17,907 basehttp 29880 43004 - Broken pipe from ('127.0.0.1', 61819)
+INFO 2024-10-28 11:50:34,003 basehttp 29880 41888 "GET /profile/ HTTP/1.1" 200 11694
+INFO 2024-10-28 11:50:34,136 basehttp 29880 41888 - Broken pipe from ('127.0.0.1', 61137)
+INFO 2024-10-28 11:50:53,799 basehttp 29880 33432 "GET /profile/ HTTP/1.1" 200 11689
+INFO 2024-10-28 11:50:53,917 basehttp 29880 33432 - Broken pipe from ('127.0.0.1', 61221)
+INFO 2024-10-28 11:51:03,570 basehttp 29880 20204 "GET /profile/ HTTP/1.1" 200 11674
+INFO 2024-10-28 11:51:03,673 basehttp 29880 20204 - Broken pipe from ('127.0.0.1', 61297)
+INFO 2024-10-28 11:51:05,309 basehttp 29880 42108 "GET /profile/ HTTP/1.1" 200 11674
+INFO 2024-10-28 11:51:05,460 basehttp 29880 42108 - Broken pipe from ('127.0.0.1', 61307)
+INFO 2024-10-28 11:51:31,225 basehttp 29880 43680 "GET /profile/ HTTP/1.1" 200 11658
+INFO 2024-10-28 11:51:31,342 basehttp 29880 43680 - Broken pipe from ('127.0.0.1', 54039)
+INFO 2024-10-28 11:51:47,053 basehttp 29880 22632 "GET /profile/ HTTP/1.1" 200 11640
+INFO 2024-10-28 11:51:47,164 basehttp 29880 22632 - Broken pipe from ('127.0.0.1', 54109)
+INFO 2024-10-28 11:51:55,833 basehttp 29880 42756 "GET /profile/ HTTP/1.1" 200 11606
+INFO 2024-10-28 11:51:55,931 basehttp 29880 42756 - Broken pipe from ('127.0.0.1', 54160)
+INFO 2024-10-28 11:52:26,405 basehttp 29880 18772 "GET /profile/ HTTP/1.1" 200 11636
+INFO 2024-10-28 11:52:26,554 basehttp 29880 18772 - Broken pipe from ('127.0.0.1', 56051)
+INFO 2024-10-28 11:52:31,828 basehttp 29880 7564 "GET /profile/ HTTP/1.1" 200 11606
+INFO 2024-10-28 11:52:31,938 basehttp 29880 7564 - Broken pipe from ('127.0.0.1', 56088)
+INFO 2024-10-28 11:52:52,567 basehttp 29880 36084 "GET /profile/ HTTP/1.1" 200 11609
+INFO 2024-10-28 11:52:52,703 basehttp 29880 36084 - Broken pipe from ('127.0.0.1', 56180)
+INFO 2024-10-28 11:53:06,706 basehttp 29880 23820 "GET /profile/ HTTP/1.1" 200 11621
+INFO 2024-10-28 11:53:06,795 basehttp 29880 23820 - Broken pipe from ('127.0.0.1', 56259)
+INFO 2024-10-28 11:54:16,855 basehttp 29880 33644 "GET /profile/ HTTP/1.1" 200 11659
+INFO 2024-10-28 11:54:16,975 basehttp 29880 33644 - Broken pipe from ('127.0.0.1', 63256)
+INFO 2024-10-28 11:54:25,224 basehttp 29880 33516 "GET /profile/ HTTP/1.1" 200 8733
+INFO 2024-10-28 11:55:24,075 basehttp 29880 37760 "GET /profile/ HTTP/1.1" 200 11694
+INFO 2024-10-28 11:55:24,364 basehttp 29880 37760 - Broken pipe from ('127.0.0.1', 54824)
+INFO 2024-10-28 11:55:24,620 basehttp 29880 12660 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2024-10-28 11:56:14,620 basehttp 29880 12660 "GET /profile/ HTTP/1.1" 200 11695
+INFO 2024-10-28 11:56:14,822 basehttp 29880 12660 - Broken pipe from ('127.0.0.1', 54852)
+INFO 2024-10-28 11:56:15,145 basehttp 29880 42940 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2024-10-28 11:56:15,610 basehttp 29880 42940 "GET /profile/ HTTP/1.1" 200 11695
+INFO 2024-10-28 11:56:34,232 basehttp 29880 42940 "GET /profile/ HTTP/1.1" 200 11695
+INFO 2024-10-28 11:56:34,745 basehttp 29880 42940 - Broken pipe from ('127.0.0.1', 55054)
+INFO 2024-10-28 11:56:50,251 basehttp 29880 33460 "GET /profile/ HTTP/1.1" 200 11695
+INFO 2024-10-28 11:57:14,047 basehttp 29880 33460 "GET /profile/ HTTP/1.1" 200 11709
+INFO 2024-10-28 11:57:15,220 basehttp 29880 33460 "GET /profile/ HTTP/1.1" 200 11709
+INFO 2024-10-28 11:57:17,578 basehttp 29880 33460 "GET /profile/ HTTP/1.1" 200 11709
+INFO 2024-10-28 11:57:30,109 basehttp 29880 33460 "GET /profile/ HTTP/1.1" 200 11709
+INFO 2024-10-28 11:57:30,509 basehttp 29880 33460 - Broken pipe from ('127.0.0.1', 56928)
+INFO 2024-10-28 11:57:31,923 basehttp 29880 44716 "GET /profile/ HTTP/1.1" 200 11723
+INFO 2024-10-28 11:57:43,876 basehttp 29880 44716 "GET /profile/ HTTP/1.1" 200 11730
+INFO 2024-10-28 11:57:45,093 basehttp 29880 44716 "GET /profile/ HTTP/1.1" 200 11730
+INFO 2024-10-28 11:59:16,006 basehttp 29880 44716 "GET /profile/ HTTP/1.1" 200 12075
+INFO 2024-10-28 11:59:16,112 basehttp 29880 44716 - Broken pipe from ('127.0.0.1', 65061)
+INFO 2024-10-28 11:59:31,375 basehttp 29880 40220 "GET /profile/ HTTP/1.1" 200 12116
+INFO 2024-10-28 11:59:31,501 basehttp 29880 40220 - Broken pipe from ('127.0.0.1', 53775)
+INFO 2024-10-28 11:59:39,465 basehttp 29880 24552 "GET /create/ HTTP/1.1" 200 29519
+INFO 2024-10-28 11:59:39,553 basehttp 29880 24552 "GET /static/css/cuisines.css HTTP/1.1" 200 1809
+INFO 2024-10-28 11:59:39,554 basehttp 29880 19200 "GET /static/cuisineSelect.js HTTP/1.1" 200 4044
+INFO 2024-10-28 11:59:39,554 basehttp 29880 37196 "GET /static/addressValidate.js HTTP/1.1" 200 1783
+INFO 2024-10-28 11:59:39,598 basehttp 29880 24552 "GET /static/images/createimage.jpg HTTP/1.1" 200 3223147
+INFO 2024-10-28 11:59:50,085 basehttp 29880 24552 "GET /profile/ HTTP/1.1" 200 12116
+INFO 2024-10-28 11:59:50,188 basehttp 29880 24552 - Broken pipe from ('127.0.0.1', 53804)
+INFO 2024-10-28 11:59:59,653 basehttp 29880 19200 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11412
+INFO 2024-10-28 11:59:59,785 basehttp 29880 19200 - Broken pipe from ('127.0.0.1', 53806)
+INFO 2024-10-28 12:08:16,974 autoreload 29880 31528 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\urls.py changed, reloading.
+INFO 2024-10-28 12:08:17,961 autoreload 16388 17676 Watching for file changes with StatReloader
+INFO 2024-10-28 12:08:29,457 autoreload 16388 17676 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\urls.py changed, reloading.
+INFO 2024-10-28 12:08:30,298 autoreload 40988 2924 Watching for file changes with StatReloader
+INFO 2024-10-28 12:14:48,196 autoreload 34400 34420 Watching for file changes with StatReloader
+ERROR 2024-10-28 12:14:51,158 log 34400 16796 Internal Server Error: /broadwaybarandgrill/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 255, in eatery
+    return render(request, template_name, context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'about' with no arguments not found. 1 pattern(s) tried: ['(?P<eatery>[-a-zA-Z0-9_]+)/about/\\Z']
+ERROR 2024-10-28 12:14:51,163 basehttp 34400 16796 "GET /broadwaybarandgrill/ HTTP/1.1" 500 167220
+WARNING 2024-10-28 12:14:51,328 log 34400 16796 Not Found: /favicon.ico
+INFO 2024-10-28 12:14:51,328 basehttp 34400 16796 - Broken pipe from ('127.0.0.1', 52759)
+INFO 2024-10-28 12:15:21,428 basehttp 34400 13052 "GET /broadwaybarandgrill/ HTTP/1.1" 200 10858
+ERROR 2024-10-28 12:15:55,314 log 34400 13052 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 153, in index
+    return render(request, 'index.html', {'page_obj': page_obj})
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'about' with no arguments not found. 1 pattern(s) tried: ['(?P<eatery>[-a-zA-Z0-9_]+)/about/\\Z']
+ERROR 2024-10-28 12:15:55,324 basehttp 34400 13052 "GET / HTTP/1.1" 500 164086
+WARNING 2024-10-28 12:15:55,499 log 34400 13052 Not Found: /favicon.ico
+WARNING 2024-10-28 12:15:55,500 basehttp 34400 13052 "GET /favicon.ico HTTP/1.1" 404 5851
+INFO 2024-10-28 12:16:08,998 basehttp 34400 13052 "GET / HTTP/1.1" 200 13345
+INFO 2024-10-28 12:16:09,253 basehttp 34400 13052 - Broken pipe from ('127.0.0.1', 62587)
+ERROR 2024-10-28 12:16:21,181 log 34400 36700 Internal Server Error: /aboutus/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 171, in aboutus
+    return render(request, "aboutus.html")
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: aboutus.html
+ERROR 2024-10-28 12:16:21,183 basehttp 34400 36700 "GET /aboutus/ HTTP/1.1" 500 98344
+WARNING 2024-10-28 12:16:21,328 log 34400 36700 Not Found: /favicon.ico
+INFO 2024-10-28 12:16:21,329 basehttp 34400 36700 - Broken pipe from ('127.0.0.1', 50281)
+ERROR 2024-10-28 12:16:35,023 log 34400 15152 Internal Server Error: /aboutus/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 171, in aboutus
+    return render(request, "aboutus.html")
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: aboutus.html
+ERROR 2024-10-28 12:16:35,025 basehttp 34400 15152 "GET /aboutus/ HTTP/1.1" 500 98344
+WARNING 2024-10-28 12:16:35,159 log 34400 15152 Not Found: /favicon.ico
+INFO 2024-10-28 12:16:35,159 basehttp 34400 15152 - Broken pipe from ('127.0.0.1', 50351)
+ERROR 2024-10-28 12:16:47,959 log 34400 43056 Internal Server Error: /aboutus/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 171, in aboutus
+    return render(request, "aboutus.html")
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: aboutus.html
+ERROR 2024-10-28 12:16:47,962 basehttp 34400 43056 "GET /aboutus/ HTTP/1.1" 500 98344
+WARNING 2024-10-28 12:16:48,079 log 34400 43056 Not Found: /favicon.ico
+INFO 2024-10-28 12:16:48,079 basehttp 34400 43056 - Broken pipe from ('127.0.0.1', 50404)
+ERROR 2024-10-28 12:16:56,513 log 34400 12492 Internal Server Error: /aboutus/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 171, in aboutus
+    return render(request, "aboutus.html")
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: aboutus.html
+ERROR 2024-10-28 12:16:56,515 basehttp 34400 12492 "GET /aboutus/ HTTP/1.1" 500 98344
+WARNING 2024-10-28 12:16:56,687 log 34400 12492 Not Found: /favicon.ico
+WARNING 2024-10-28 12:16:56,687 basehttp 34400 12492 "GET /favicon.ico HTTP/1.1" 404 5851
+ERROR 2024-10-28 12:17:32,003 log 34400 12492 Internal Server Error: /aboutus/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 171, in aboutus
+    return render(request, "aboutus.html")
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: aboutus.html
+ERROR 2024-10-28 12:17:32,005 basehttp 34400 12492 "GET /aboutus/ HTTP/1.1" 500 98344
+WARNING 2024-10-28 12:17:32,135 log 34400 12492 Not Found: /favicon.ico
+INFO 2024-10-28 12:17:32,135 basehttp 34400 12492 - Broken pipe from ('127.0.0.1', 50432)
+INFO 2024-10-28 12:17:56,415 basehttp 34400 44452 "GET / HTTP/1.1" 200 13345
+INFO 2024-10-28 12:17:56,461 basehttp 34400 26300 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2024-10-28 12:17:56,462 basehttp 34400 43044 "GET /static/index.js HTTP/1.1" 200 4271
+INFO 2024-10-28 12:17:56,464 basehttp 34400 9604 "GET /static/paginate.js HTTP/1.1" 200 2626
+INFO 2024-10-28 12:17:56,464 basehttp 34400 26300 "GET /static/logout.js HTTP/1.1" 200 2449
+INFO 2024-10-28 12:17:56,466 basehttp 34400 44452 "GET /static/css/tailwind.css HTTP/1.1" 200 641212
+INFO 2024-10-28 12:17:56,566 basehttp 34400 44452 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2024-10-28 12:17:56,577 basehttp 34400 43044 "GET /static/images/test1.jpg HTTP/1.1" 200 1800794
+INFO 2024-10-28 12:17:56,579 basehttp 34400 9604 "GET /static/images/test2.jpg HTTP/1.1" 200 2206722
+INFO 2024-10-28 12:17:56,583 basehttp 34400 26300 "GET /static/images/test3.jpg HTTP/1.1" 200 3262750
+INFO 2024-10-28 12:17:56,646 basehttp 34400 26300 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-10-28 12:17:58,503 basehttp 34400 26300 "GET /profile/ HTTP/1.1" 200 12118
+INFO 2024-10-28 12:18:01,741 basehttp 34400 26300 "GET / HTTP/1.1" 200 13345
+INFO 2024-10-28 12:18:01,870 basehttp 34400 26300 - Broken pipe from ('127.0.0.1', 63931)
+ERROR 2024-10-28 12:18:03,510 log 34400 9604 Internal Server Error: /aboutus/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 171, in aboutus
+    return render(request, "aboutus.html")
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: aboutus.html
+ERROR 2024-10-28 12:18:03,512 basehttp 34400 9604 "GET /aboutus/ HTTP/1.1" 500 98344
+WARNING 2024-10-28 12:18:03,694 log 34400 9604 Not Found: /favicon.ico
+INFO 2024-10-28 12:18:03,694 basehttp 34400 9604 - Broken pipe from ('127.0.0.1', 63933)
+INFO 2024-10-28 12:18:19,449 autoreload 34400 34420 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\urls.py changed, reloading.
+INFO 2024-10-28 12:18:20,371 autoreload 11120 35928 Watching for file changes with StatReloader
+INFO 2024-10-28 12:19:16,729 autoreload 31204 11068 Watching for file changes with StatReloader
+INFO 2024-10-28 12:19:18,444 basehttp 31204 24116 "GET /aboutus/ HTTP/1.1" 200 12160
+INFO 2024-10-28 12:19:18,621 basehttp 31204 24116 - Broken pipe from ('127.0.0.1', 55287)
+INFO 2024-10-28 12:19:21,416 basehttp 31204 38696 "GET / HTTP/1.1" 200 13345
+INFO 2024-10-28 12:19:21,508 basehttp 31204 38696 - Broken pipe from ('127.0.0.1', 55873)
+INFO 2024-10-28 12:19:42,299 basehttp 31204 33120 "GET /broadwaybarandgrill/ HTTP/1.1" 200 10858
+INFO 2024-10-28 12:19:42,363 basehttp 31204 33120 "GET /static/menubuilder.js HTTP/1.1" 200 6850
+INFO 2024-10-28 12:23:31,928 basehttp 31204 37180 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12560
+INFO 2024-10-28 12:23:52,590 basehttp 31204 37180 "GET /broadwaybarandgrill/ HTTP/1.1" 200 11988
+INFO 2024-10-28 12:23:52,648 basehttp 31204 37180 - Broken pipe from ('127.0.0.1', 64006)
+INFO 2024-10-28 12:24:04,801 basehttp 31204 6356 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12397
+INFO 2024-10-28 12:24:04,917 basehttp 31204 6356 - Broken pipe from ('127.0.0.1', 64163)
+INFO 2024-10-28 12:25:12,502 basehttp 31204 40944 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12600
+INFO 2024-10-28 12:25:12,640 basehttp 31204 40944 - Broken pipe from ('127.0.0.1', 54843)
+ERROR 2024-10-28 12:25:21,472 log 31204 20660 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 260, in menu
+    dishes = Dish.objects.filter(recipe_owner=restaurant)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\sql\query.py", line 1534, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\sql\query.py", line 1565, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\sql\query.py", line 1415, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\sql\query.py", line 1225, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\sql\query.py", line 1713, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'recipe_owner' into field. Choices are: course, course_id, date_added, description, favorites, id, image_url, is_special, menu, menu_id, name, price
+ERROR 2024-10-28 12:25:21,476 basehttp 31204 20660 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 126135
+WARNING 2024-10-28 12:25:21,596 log 31204 20660 Not Found: /favicon.ico
+INFO 2024-10-28 12:25:21,597 basehttp 31204 20660 - Broken pipe from ('127.0.0.1', 50116)
+INFO 2024-10-28 12:26:33,168 basehttp 31204 15036 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12603
+INFO 2024-10-28 12:26:33,309 basehttp 31204 15036 - Broken pipe from ('127.0.0.1', 49434)
+INFO 2024-10-28 12:28:00,776 basehttp 31204 42616 "GET /broadwaybarandgrill/ HTTP/1.1" 200 13415
+INFO 2024-10-28 12:28:00,949 basehttp 31204 42616 - Broken pipe from ('127.0.0.1', 63451)
+INFO 2024-10-28 12:28:11,508 basehttp 31204 5140 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12621
+INFO 2024-10-28 12:28:11,623 basehttp 31204 5140 - Broken pipe from ('127.0.0.1', 63519)
+INFO 2024-10-28 12:28:34,122 basehttp 31204 8348 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12575
+INFO 2024-10-28 12:28:34,255 basehttp 31204 8348 - Broken pipe from ('127.0.0.1', 57414)
+INFO 2024-10-28 12:28:45,505 basehttp 31204 30228 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12519
+INFO 2024-10-28 12:28:45,610 basehttp 31204 30228 - Broken pipe from ('127.0.0.1', 57463)
+INFO 2024-10-28 12:40:34,094 autoreload 31204 11068 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models.py changed, reloading.
+INFO 2024-10-28 12:40:34,961 autoreload 620 36460 Watching for file changes with StatReloader
+INFO 2024-10-28 12:40:47,987 autoreload 43776 16176 Watching for file changes with StatReloader
+INFO 2024-10-28 12:40:50,232 basehttp 43776 36604 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12527
+INFO 2024-10-28 12:40:52,029 basehttp 43776 36604 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12527
+ERROR 2024-10-28 12:40:53,841 log 43776 36604 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 260, in menu
+    dishes = Dish.objects.filter(recipe_owner=restaurant)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\sql\query.py", line 1534, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\sql\query.py", line 1565, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\sql\query.py", line 1415, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\sql\query.py", line 1225, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\db\models\sql\query.py", line 1713, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'recipe_owner' into field. Choices are: course, course_id, date_added, description, favorites, id, image_url, is_special, menu, menu_id, name, price
+ERROR 2024-10-28 12:40:53,845 basehttp 43776 36604 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 126135
+WARNING 2024-10-28 12:40:54,020 log 43776 36604 Not Found: /favicon.ico
+INFO 2024-10-28 12:40:54,020 basehttp 43776 36604 - Broken pipe from ('127.0.0.1', 52963)
+INFO 2024-10-28 12:41:43,768 autoreload 43776 16176 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:41:44,611 autoreload 30776 20192 Watching for file changes with StatReloader
+INFO 2024-10-28 12:41:46,866 autoreload 30776 20192 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:41:47,673 autoreload 3328 34072 Watching for file changes with StatReloader
+ERROR 2024-10-28 12:41:49,289 log 3328 45760 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 261, in menu
+    restaurant_courses = restaurant.courses.all()
+AttributeError: 'Kitchen' object has no attribute 'courses'
+ERROR 2024-10-28 12:41:49,290 basehttp 3328 45760 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 81247
+WARNING 2024-10-28 12:41:49,440 log 3328 45760 Not Found: /favicon.ico
+INFO 2024-10-28 12:41:49,441 basehttp 3328 45760 - Broken pipe from ('127.0.0.1', 52130)
+INFO 2024-10-28 12:42:01,153 autoreload 3328 34072 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:42:02,030 autoreload 15636 9992 Watching for file changes with StatReloader
+INFO 2024-10-28 12:42:07,686 autoreload 15636 9992 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:42:08,493 autoreload 32832 24856 Watching for file changes with StatReloader
+INFO 2024-10-28 12:42:09,944 autoreload 32832 24856 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:42:10,733 autoreload 21052 20660 Watching for file changes with StatReloader
+ERROR 2024-10-28 12:42:13,968 log 21052 35204 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 262, in menu
+    restaurant_courses = menu.courses.all()
+AttributeError: 'QuerySet' object has no attribute 'courses'
+ERROR 2024-10-28 12:42:13,970 basehttp 21052 35204 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 81460
+WARNING 2024-10-28 12:42:14,121 log 21052 35204 Not Found: /favicon.ico
+INFO 2024-10-28 12:42:14,122 basehttp 21052 35204 - Broken pipe from ('127.0.0.1', 52290)
+INFO 2024-10-28 12:45:37,825 autoreload 21052 20660 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:45:38,770 autoreload 42208 5140 Watching for file changes with StatReloader
+INFO 2024-10-28 12:45:44,161 autoreload 42208 5140 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:45:44,954 autoreload 3484 45428 Watching for file changes with StatReloader
+ERROR 2024-10-28 12:45:46,299 log 3484 18412 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 262, in menu
+    restaurant_courses = menu.courses.all()
+AttributeError: 'QuerySet' object has no attribute 'courses'
+ERROR 2024-10-28 12:45:46,301 basehttp 3484 18412 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 81460
+WARNING 2024-10-28 12:45:46,505 log 3484 18412 Not Found: /favicon.ico
+INFO 2024-10-28 12:45:46,506 basehttp 3484 18412 - Broken pipe from ('127.0.0.1', 53685)
+INFO 2024-10-28 12:47:09,178 autoreload 3484 45428 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:47:10,060 autoreload 30632 32364 Watching for file changes with StatReloader
+WARNING 2024-10-28 12:47:11,037 log 30632 5684 Not Found: /broadwaybarandgrill/menu/
+WARNING 2024-10-28 12:47:11,037 basehttp 30632 5684 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 404 3550
+WARNING 2024-10-28 12:47:11,186 log 30632 5684 Not Found: /favicon.ico
+INFO 2024-10-28 12:47:11,186 basehttp 30632 5684 - Broken pipe from ('127.0.0.1', 49559)
+WARNING 2024-10-28 12:47:13,459 log 30632 41484 Not Found: /broadwaybarandgrill/menu/
+WARNING 2024-10-28 12:47:13,460 basehttp 30632 41484 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 404 3550
+WARNING 2024-10-28 12:47:13,576 log 30632 41484 Not Found: /favicon.ico
+INFO 2024-10-28 12:47:13,577 basehttp 30632 41484 - Broken pipe from ('127.0.0.1', 49561)
+INFO 2024-10-28 12:47:19,127 autoreload 30632 32364 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:47:19,907 autoreload 34400 39332 Watching for file changes with StatReloader
+INFO 2024-10-28 12:47:25,593 autoreload 34400 39332 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:47:26,365 autoreload 40820 18312 Watching for file changes with StatReloader
+INFO 2024-10-28 12:47:28,731 autoreload 40820 18312 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:47:29,664 autoreload 38580 38500 Watching for file changes with StatReloader
+ERROR 2024-10-28 12:47:30,796 log 38580 536 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 262, in menu
+    restaurant_courses = menu.courses.all()
+AttributeError: 'QuerySet' object has no attribute 'courses'
+ERROR 2024-10-28 12:47:30,797 basehttp 38580 536 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 81460
+WARNING 2024-10-28 12:47:30,934 log 38580 536 Not Found: /favicon.ico
+INFO 2024-10-28 12:47:30,935 basehttp 38580 536 - Broken pipe from ('127.0.0.1', 49689)
+INFO 2024-10-28 12:47:35,335 autoreload 38580 38500 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:47:36,124 autoreload 37684 32596 Watching for file changes with StatReloader
+INFO 2024-10-28 12:52:31,698 autoreload 37684 32596 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:52:32,532 autoreload 44052 23084 Watching for file changes with StatReloader
+INFO 2024-10-28 12:52:37,132 autoreload 44052 23084 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:52:38,006 autoreload 15592 15792 Watching for file changes with StatReloader
+WARNING 2024-10-28 12:52:38,998 log 15592 42892 Not Found: /broadwaybarandgrill/menu/
+WARNING 2024-10-28 12:52:38,999 basehttp 15592 42892 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 404 3550
+WARNING 2024-10-28 12:52:39,103 log 15592 42892 Not Found: /favicon.ico
+INFO 2024-10-28 12:52:39,104 basehttp 15592 42892 - Broken pipe from ('127.0.0.1', 62138)
+INFO 2024-10-28 12:53:14,964 autoreload 15592 15792 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\urls.py changed, reloading.
+INFO 2024-10-28 12:53:15,798 autoreload 11136 22856 Watching for file changes with StatReloader
+WARNING 2024-10-28 12:53:16,719 log 11136 18624 Not Found: /broadwaybarandgrill/menu/
+WARNING 2024-10-28 12:53:16,720 basehttp 11136 18624 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 404 5873
+WARNING 2024-10-28 12:53:16,814 log 11136 18624 Not Found: /favicon.ico
+INFO 2024-10-28 12:53:16,814 basehttp 11136 18624 - Broken pipe from ('127.0.0.1', 62289)
+INFO 2024-10-28 12:53:21,459 autoreload 11136 22856 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\urls.py changed, reloading.
+INFO 2024-10-28 12:53:22,282 autoreload 45464 39596 Watching for file changes with StatReloader
+WARNING 2024-10-28 12:53:23,321 log 45464 24188 Not Found: /broadwaybarandgrill/menu/
+WARNING 2024-10-28 12:53:23,321 basehttp 45464 24188 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 404 3550
+WARNING 2024-10-28 12:53:23,422 log 45464 24188 Not Found: /favicon.ico
+INFO 2024-10-28 12:53:23,422 basehttp 45464 24188 - Broken pipe from ('127.0.0.1', 61971)
+INFO 2024-10-28 12:53:40,134 basehttp 45464 28820 "GET /broadwaybarandgrill HTTP/1.1" 301 0
+INFO 2024-10-28 12:53:40,204 basehttp 45464 30580 "GET /broadwaybarandgrill/ HTTP/1.1" 200 12527
+INFO 2024-10-28 12:56:59,559 basehttp 45464 10896 "GET /broadwaybarandgrill/ HTTP/1.1" 200 13522
+INFO 2024-10-28 12:56:59,772 basehttp 45464 10896 - Broken pipe from ('127.0.0.1', 54024)
+WARNING 2024-10-28 12:57:03,152 log 45464 33740 Not Found: /broadwaybarandgrill/menu/
+WARNING 2024-10-28 12:57:03,153 basehttp 45464 33740 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 404 3550
+WARNING 2024-10-28 12:57:03,300 log 45464 33740 Not Found: /favicon.ico
+INFO 2024-10-28 12:57:03,300 basehttp 45464 33740 - Broken pipe from ('127.0.0.1', 54047)
+INFO 2024-10-28 12:57:30,448 autoreload 45464 39596 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:57:31,325 autoreload 7000 12736 Watching for file changes with StatReloader
+INFO 2024-10-28 12:57:32,425 basehttp 7000 43052 "GET /broadwaybarandgrill/ HTTP/1.1" 200 13522
+INFO 2024-10-28 12:57:32,595 basehttp 7000 43052 - Broken pipe from ('127.0.0.1', 64829)
+WARNING 2024-10-28 12:57:34,820 log 7000 29236 Not Found: /broadwaybarandgrill/menu/
+WARNING 2024-10-28 12:57:34,821 basehttp 7000 29236 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 404 3550
+WARNING 2024-10-28 12:57:34,978 log 7000 29236 Not Found: /favicon.ico
+INFO 2024-10-28 12:57:34,979 basehttp 7000 29236 - Broken pipe from ('127.0.0.1', 64831)
+INFO 2024-10-28 12:59:30,922 autoreload 7000 12736 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 12:59:31,754 autoreload 1776 14652 Watching for file changes with StatReloader
+INFO 2024-10-28 12:59:41,958 autoreload 1776 14652 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\urls.py changed, reloading.
+INFO 2024-10-28 12:59:42,733 autoreload 33652 39824 Watching for file changes with StatReloader
+INFO 2024-10-28 12:59:57,717 basehttp 33652 33648 "GET /broadwaybarandgrill/ HTTP/1.1" 200 13684
+INFO 2024-10-28 13:00:21,807 basehttp 33652 33648 "GET /broadwaybarandgrill/ HTTP/1.1" 200 14457
+INFO 2024-10-28 13:00:22,012 basehttp 33652 33648 - Broken pipe from ('127.0.0.1', 57943)
+INFO 2024-10-28 13:00:24,451 basehttp 33652 32412 "POST /broadwaybarandgrill/create/menu/ HTTP/1.1" 302 0
+ERROR 2024-10-28 13:00:24,530 log 33652 32412 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 329, in menu
+    return render(request, "menu.html", context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: menu.html
+ERROR 2024-10-28 13:00:24,533 basehttp 33652 32412 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 100770
+WARNING 2024-10-28 13:00:24,675 log 33652 32412 Not Found: /favicon.ico
+INFO 2024-10-28 13:00:24,676 basehttp 33652 32412 - Broken pipe from ('127.0.0.1', 49194)
+ERROR 2024-10-28 13:00:33,431 log 33652 44612 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 329, in menu
+    return render(request, "menu.html", context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: menu.html
+ERROR 2024-10-28 13:00:33,433 basehttp 33652 44612 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 100770
+WARNING 2024-10-28 13:00:33,552 log 33652 44612 Not Found: /favicon.ico
+INFO 2024-10-28 13:00:33,553 basehttp 33652 44612 - Broken pipe from ('127.0.0.1', 49231)
+ERROR 2024-10-28 13:00:34,716 log 33652 37760 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 329, in menu
+    return render(request, "menu.html", context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: menu.html
+ERROR 2024-10-28 13:00:34,718 basehttp 33652 37760 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 100770
+ERROR 2024-10-28 13:00:35,841 log 33652 37760 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 329, in menu
+    return render(request, "menu.html", context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: menu.html
+ERROR 2024-10-28 13:00:35,843 basehttp 33652 37760 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 100770
+INFO 2024-10-28 13:02:01,980 basehttp 33652 37760 "GET /broadwaybarandgrill/ HTTP/1.1" 200 14151
+INFO 2024-10-28 13:02:02,123 basehttp 33652 37760 - Broken pipe from ('127.0.0.1', 49240)
+ERROR 2024-10-28 13:02:03,808 log 33652 32780 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 329, in menu
+    return render(request, "menu.html", context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: menu.html
+ERROR 2024-10-28 13:02:03,810 basehttp 33652 32780 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 100770
+WARNING 2024-10-28 13:02:03,953 log 33652 32780 Not Found: /favicon.ico
+INFO 2024-10-28 13:02:03,953 basehttp 33652 32780 - Broken pipe from ('127.0.0.1', 55785)
+INFO 2024-10-28 13:03:02,016 autoreload 33652 39824 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 13:03:02,850 autoreload 28696 33892 Watching for file changes with StatReloader
+INFO 2024-10-28 13:03:06,325 autoreload 28696 33892 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-28 13:03:07,143 autoreload 36260 39432 Watching for file changes with StatReloader
+INFO 2024-10-28 13:03:08,885 basehttp 36260 21564 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 14830
+INFO 2024-10-28 13:03:09,061 basehttp 36260 37768 "GET /static/cuisineSelect.js HTTP/1.1" 200 4044
+INFO 2024-10-28 13:03:09,108 basehttp 36260 28120 "GET /static/addressValidate.js HTTP/1.1" 200 1783
+INFO 2024-10-28 13:03:09,116 basehttp 36260 21564 "GET /static/css/cuisines.css HTTP/1.1" 200 1809
+INFO 2024-10-28 13:03:09,285 basehttp 36260 21564 "GET /static/images/createimage.jpg HTTP/1.1" 200 3223147
+INFO 2024-10-28 13:03:09,326 basehttp 36260 21564 - Broken pipe from ('127.0.0.1', 57417)
+INFO 2024-10-28 13:04:08,829 basehttp 36260 37768 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 14830
+INFO 2024-10-28 13:04:08,882 basehttp 36260 37768 "GET /static/cuisineSelect.js HTTP/1.1" 200 4044
+INFO 2024-10-28 13:04:08,884 basehttp 36260 37768 - Broken pipe from ('127.0.0.1', 57419)
+INFO 2024-10-28 13:04:10,817 basehttp 36260 28120 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 14830
+ERROR 2024-10-28 13:04:20,597 log 36260 28120 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 329, in menu
+    return render(request, "kitchen_subpages/menu.html", context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'add_course' with arguments '('broadwaybarandgrill',)' not found. 1 pattern(s) tried: ['(?P<eatery>[-a-zA-Z0-9_]+)/add_course/(?P<dishData>[^/]+)/\\Z']
+ERROR 2024-10-28 13:04:20,604 basehttp 36260 28120 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 210334
+WARNING 2024-10-28 13:04:20,773 log 36260 28120 Not Found: /favicon.ico
+INFO 2024-10-28 13:04:20,774 basehttp 36260 28120 - Broken pipe from ('127.0.0.1', 57420)
+INFO 2024-10-28 13:05:52,183 autoreload 36260 39432 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\urls.py changed, reloading.
+INFO 2024-10-28 13:05:53,058 autoreload 35452 23376 Watching for file changes with StatReloader
+ERROR 2024-10-28 13:06:02,212 log 35452 33692 Internal Server Error: /broadwaybarandgrill/menu/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 329, in menu
+    return render(request, "kitchen_subpages/menu.html", context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'add_course' with arguments '('broadwaybarandgrill',)' not found. 1 pattern(s) tried: ['(?P<eatery>[-a-zA-Z0-9_]+)/menu\\./add_course/(?P<dishData>[^/]+)/\\Z']
+ERROR 2024-10-28 13:06:02,220 basehttp 35452 33692 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 500 210306
+WARNING 2024-10-28 13:06:02,379 log 35452 33692 Not Found: /favicon.ico
+INFO 2024-10-28 13:06:02,380 basehttp 35452 33692 - Broken pipe from ('127.0.0.1', 58440)
+INFO 2024-10-28 13:06:19,343 autoreload 35452 23376 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\urls.py changed, reloading.
+INFO 2024-10-28 13:06:20,166 autoreload 25256 14896 Watching for file changes with StatReloader
+INFO 2024-10-28 13:06:21,852 basehttp 25256 28920 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 11465
+INFO 2024-10-28 13:06:22,039 basehttp 25256 28920 - Broken pipe from ('127.0.0.1', 53226)
+WARNING 2024-10-28 13:06:27,635 log 25256 12424 Not Found: /broadwaybarandgrill/menu/broadwaybarandgrill/add_course/
+WARNING 2024-10-28 13:06:27,635 basehttp 25256 12424 "POST /broadwaybarandgrill/menu/broadwaybarandgrill/add_course/ HTTP/1.1" 404 6190
+INFO 2024-10-28 13:06:59,912 basehttp 25256 12424 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 11468
+INFO 2024-10-28 13:07:00,025 basehttp 25256 12424 - Broken pipe from ('127.0.0.1', 53245)
+INFO 2024-10-28 13:07:08,771 basehttp 25256 41468 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 11480
+INFO 2024-10-28 13:07:08,859 basehttp 25256 41468 - Broken pipe from ('127.0.0.1', 53472)
