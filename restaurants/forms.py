@@ -128,7 +128,13 @@ class RestaurantCreateForm(forms.ModelForm):
 class DishSubmit(ModelForm):
     class Meta:
         model = Dish
-        fields = ['name', 'course','price', 'image_url', 'description']
+        fields = ['name', 'description', 'price', 'image']  # Changed from image_url to image
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),  # Changed from URLInput to FileInput
+        }
 
 class KitchenEditForm(forms.ModelForm):
     class Meta:

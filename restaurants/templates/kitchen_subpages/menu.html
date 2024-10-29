@@ -2,12 +2,12 @@
 {% load static %}
 
 {% block body %}
-{{ eatery|json_script:"kitchen" }}
+{{ restaurant_details.subdirectory|json_script:"kitchen" }}
 
-<main class="flex flex-row">
-    <section class="w-full text-center float-left mb-5 md:w-8/12">
+<main class="text-center">
+    <section class="mb-5">
         <header class="container">
-            <h1 class="p-2 text-4xl">{{ restaurant_details.restaurant_name }} Menu Editor</h1>
+            <h1 class="text-4xl">{{ restaurant_details.restaurant_name }} Menu Editor</h1>
             <address>
                 <p>{{ restaurant_details.address }}</p>
                 <p>{{ restaurant_details.city }} {{ restaurant_details.state }}, {{ restaurant_details.country }}</p>
@@ -18,68 +18,93 @@
 
         {% if owner %}
         <div class="p-3">
-            <form method="post" action="{% url 'add_course' eatery %}">
+            <form id="courseForm" class="inline-flex items-center space-x-2">
                 {% csrf_token %}
                 <label for="addCourse">Add a Course?</label>
-                <select id="addCourse" name="course">
-                    {% for course in course_list %}
+                <select id="addCourse" name="course" class="rounded border p-2">
+                    {% for course in course_options %}
                         <option value="{{ course }}">{{ course }}</option>
                     {% endfor %}
                 </select>
-                <button id="add" class="bg-red-200 hover:bg-red-400 font-bold py-1 px-4 rounded">Add</button>
+                <button id="add" type="button" class="bg-red-200 hover:bg-red-400 font-bold py-2 px-4 rounded">
+                    Add
+                </button>
             </form>
         </div>
         {% endif %}
 
-        <section class="accordion w-full" id="courses">
+        <div class="w-full" id="menuAccordion">
             {% for course in courses %}
-            <article class="accordion-item w-full" data-target="courses">
-                <h2 class="accordion-header" id="header-{{ forloop.counter }}">
-                    <button class="accordion-button bg-white" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapse-{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse-{{ forloop.counter }}">
-                        <span class="text-black">{{ course }}</span>
-                    </button>
-                </h2>
-                <div id="collapse-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="header-{{ forloop.counter }}">
-                    <div class="accordion-body">
-                        {% for dish in dishes %}
-                            {% if dish.course == course %}
-                                <article id="dish-{{ dish.id }}" data-target="collapse-{{ forloop.parentloop.counter }}" class="border-solid border-4 border-yellow-300 p-4 mb-2 inline grid md:grid-cols-3 place-items-stretch">
-                                    <div class="text-center">
-                                        <h3 class="text-xl text-center text-bold">{{ dish.name }}</h3>
-                                        <img src="{{ dish.image_url }}" class="object-contain h-40 w-40" alt="{{ dish.name }}">
-                                        <p>Price: ${{ dish.price }}</p>
-                                    </div>
-                                    <div class="text-center">
-                                        <h4>Description:</h4>
-                                        <p>{{ dish.description }}</p>
-                                    </div>
-                                    {% if owner %}
-                                    <div class="md:text-right">
-                                        <button class="editDish text-center w-screen md:w-6 bg-green-300 rounded m-2 p-1" id="edit-{{ dish.id }}">Edit</button>
-                                        <button class="deleteDish bg-red-600 rounded m-2 p-1" id="delete-{{ dish.id }}">Delete</button>
-                                    </div>
+            <div class="mb-4 border rounded-lg">
+                <button class="accordion-trigger w-full px-4 py-3 flex justify-between items-center bg-white hover:bg-gray-50 transition-colors duration-200"
+                        data-target="panel{{ forloop.counter }}">
+                    <h2 class="text-lg font-semibold">{{ course.name }}</h2>
+                    <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                
+                
+                <div id="panel{{ forloop.counter }}" class="hidden px-4 py-3 bg-white">
+                    {% for dish in dishes %}
+                        {% if dish.course == course %}
+                            <article id="o{{ dish.id }}" class="border rounded-lg p-4 mb-4 grid md:grid-cols-3 gap-4">
+                                <div class="text-center">
+                                    <h3 class="text-xl font-bold mb-2">{{ dish.name }}</h3>
+                                    <!-- <img src="{{ dish.image_url }}" class="mx-auto object-contain h-40 w-40" alt="{{ dish.name }}"> -->
+                                    {% if dish.image %}
+                                        <img src="{{ dish.image.url }}" class="mx-auto object-contain h-40 w-40" alt="{{ dish.name }}">
+                                    {% else %}
+                                        <div class="h-40 w-40 mx-auto flex items-center justify-center bg-gray-100 rounded-lg border-2 border-dashed border-gray-300">
+                                            <span class="text-gray-400">No Image</span>
+                                        </div>
                                     {% endif %}
-                                </article>
-                            {% endif %}
-                        {% empty %}
-                            <p>No dishes available for this course.</p>
-                        {% endfor %}
-
-                        {% if owner %}
-                            <div class="text-center">
-                                <button id="add-{{ course }}" class="submitDish text-center w-60 rounded m-2 bg-emerald-300 md:w-96">Add a dish to {{ course }}</button>
-                                <button id="delete-{{ course }}" class="deleteCourse text-center w-60 rounded m-2 bg-red-300 md:w-96">Delete Course?</button>
-                            </div>
+                                    <p class="mt-2 font-semibold">Price: ${{ dish.price }}</p>
+                                </div>
+                                <div class="text-center">
+                                    <h4 class="font-semibold mb-2">Description:</h4>
+                                    <p>{{ dish.description }}</p>
+                                </div>
+                                {% if owner %}
+                                <div class="md:text-right flex md:justify-end items-center space-x-2">
+                                    <button class="editDish px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200" 
+                                            id="e{{ dish.id }}">
+                                        Edit
+                                    </button>
+                                    <button class="deleteDish px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded transition-colors duration-200" 
+                                            id="d{{ dish.id }}">
+                                        Delete
+                                    </button>
+                                </div>
+                                {% endif %}
+                            </article>
                         {% endif %}
-                    </div>
+                    {% empty %}
+                        <p class="text-gray-500 text-center py-4">No dishes available for this course.</p>
+                    {% endfor %}
+        
+                    {% if owner %}
+                        <div class="text-center space-y-2 mt-4">
+                            <button id="submit{{ course.name }}" 
+                                    class="submitDish w-full md:w-96 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200">
+                                Add a dish to {{ course.name }}
+                            </button>
+                            <button id="delete{{ course.id }}" 
+                            class="deleteCourse inline-flex items-center justify-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors duration-200"
+                            data-course-id="{{ course.id }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Delete Course
+                    </button>
+                        </div>
+                    {% endif %}
                 </div>
-            </article>
+            </div>
             {% empty %}
-                <p>No courses available.</p>
+                <p class="text-gray-500 text-center py-4">No courses available.</p>
             {% endfor %}
-        </section>
-    </section>
+        </div>
 </main>
 {% endblock %}
 

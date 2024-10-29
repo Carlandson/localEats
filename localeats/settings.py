@@ -229,12 +229,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_FROM_EMAIL = 'your-email@example.com'
 ADMIN_EMAIL = 'admin@example.com'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Near the end of your settings.py file
 
-# Set LOGGING_CONFIG to the default Django logging configuration function
-
-# Your logging configuration
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

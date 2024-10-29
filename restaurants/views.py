@@ -15,6 +15,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from google.auth.exceptions import RefreshError
 from googleapiclient.errors import HttpError
+from django.views.decorators.csrf import ensure_csrf_cookie
 from googleapiclient.discovery import build
 import google_auth_httplib2
 import httplib2
@@ -24,6 +25,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .forms import RestaurantCreateForm, DishSubmit, CustomSignupView, ImageUploadForm
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Max
+from django.core.files.base import ContentFile
+import base64, uuid
 import googlemaps
 
 User = get_user_model()
@@ -304,19 +308,37 @@ def create_subpage(request, eatery, page_type):
 def menu(request, eatery):
     restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
     menu_subpage = get_object_or_404(SubPage, kitchen=restaurant, page_type='menu')
-    # Get the menu associated with this subpage
     menu = get_object_or_404(Menu, subpage=menu_subpage)
-    # Get all courses for this menu
     courses = Course.objects.filter(menu=menu).order_by('order')
-    # Get all dishes for this menu
     dishes = Dish.objects.filter(menu=menu)
-
+    course_options = [
+        'Appetizers',
+        'Lunch',
+        'Entrees',
+        'Main Courses',
+        'Soup and Salad',
+        'Salads',
+        'Desserts',
+        'Drinks',
+        'Specials',
+        'Dinner',
+        'Breakfast',
+        'Brunch',
+        'Kids Menu',
+        'Beverages',
+        'Vegan',
+        'Gluten Free',
+        'Dairy Free',
+        'Nut Free',
+        'Halal',
+        'Kosher'
+    ]
     context = {
         "eatery": eatery,
         "restaurant_details": restaurant,
         "courses": courses,
         "dishes": dishes,
-        "course_list": courses,
+        "course_options": course_options,
         "owner": request.user == restaurant.owner,
         "is_verified": restaurant.is_verified,
     }
@@ -378,45 +400,116 @@ def new_dish(request, kitchen_name):
         messages.add_message(request, messages.INFO, f"'{name}' successfully added to menu")
         return HttpResponseRedirect(reverse('eatery', kwargs={"eatery": kitchen_name}))
 
-@csrf_exempt
-@login_required
-def add_course(request, dishData, eatery):
-    course_add = Course.objects.get(course_list=dishData)
+@ensure_csrf_cookie
+def add_course(request, eatery):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+    
+    # Check if user is owner
+    if request.user != restaurant.owner:
+        return JsonResponse({"error": "Unauthorized"}, status=403)
+
     try:
-        current_restaurant = Kitchen.objects.get(restaurant_name = eatery)
-    except Kitchen.DoesNotExist:
-        return JsonResponse({"error": "kitchen does not exist."}, status=404)
-    if request.method == "POST":
-        current_restaurant.courses.add(course_add)
-        current_restaurant.save()
-        return JsonResponse({"message": "course added"},status=201)
-    else:
-        return JsonResponse({"error": "GET request required."}, status=400)
+        data = json.loads(request.body)
+        course_name = data.get('course_name')
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+    if not course_name:
+        return JsonResponse({"error": "Course name is required"}, status=400)
+
+    # Get the menu
+    menu_subpage = get_object_or_404(SubPage, kitchen=restaurant, page_type='menu')
+    menu = get_object_or_404(Menu, subpage=menu_subpage)
+
+    # Create new course
+    highest_order = Course.objects.filter(menu=menu).aggregate(Max('order'))['order__max'] or 0
+    course = Course.objects.create(
+        menu=menu,
+        name=course_name,
+        order=highest_order + 1
+    )
+
+    return JsonResponse({
+        "message": "Course added successfully",
+        "course_id": course.id
+    })
 
 @csrf_exempt
 @login_required
 def add_dish(request, eatery):
     if request.method != "POST":
-        return JsonResponse({"error" : "POST request required."}, status=400)
-    data = json.loads(request.body)
-    user = request.user
-    name = data.get("name", "")
-    description = data.get("description", "")
-    price = data.get("price", "")
-    image_url = data.get("image_url", "")
-    course = data.get("course", "")
-    dish_course = Course.objects.get(course_list=course)
-    eatery = Kitchen.objects.get(restaurant_name=eatery)
-    new_dish = Dish(
-        recipe_owner = eatery,
-        name = name,
-        description = description,
-        price = price,
-        image_url = image_url,
-        course = dish_course,
-    )
-    new_dish.save()
-    return JsonResponse({"message": "Dish added"}, status=201)
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    try:
+        data = json.loads(request.body)
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        
+        # Check if user is owner
+        if request.user != restaurant.owner:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
+
+        # Get the menu
+        menu_subpage = get_object_or_404(SubPage, kitchen=restaurant, page_type='menu')
+        menu = get_object_or_404(Menu, subpage=menu_subpage)
+
+        # Get or create the course
+        course_name = data.get("course", "")
+        course = Course.objects.get(menu=menu, name=course_name)
+
+        dish_name = data.get("name", "").strip()
+        if Dish.objects.filter(course=course, name__iexact=dish_name).exists():
+            return JsonResponse({
+                "error": f"A dish with the name '{dish_name}' already exists in the {course_name} course."
+            }, status=400)
+        
+        image_data = data.get('image')
+        image = None
+        if image_data and 'base64,' in image_data:
+            # Split the base64 string
+            format, imgstr = image_data.split('base64,')
+            # Get the file extension
+            ext = format.split('/')[-1].split(';')[0]
+            # Generate filename
+            filename = f"{restaurant.subdirectory}_{data.get('name')}_{uuid.uuid4().hex[:6]}.{ext}"
+            
+            # Create ContentFile from base64 data
+            image = ContentFile(base64.b64decode(imgstr), name=filename)
+
+        # Create new dish
+        new_dish = Dish.objects.create(
+            menu=menu,
+            name=data.get("name", ""),
+            description=data.get("description", ""),
+            price=data.get("price", ""),
+            image=image,
+            course=course
+        )
+
+        return JsonResponse({
+            "message": "Dish added successfully",
+            "dish_id": new_dish.id,
+            "image_url": new_dish.image.url if new_dish.image else ""
+        }, status=201)
+
+    except Course.DoesNotExist:
+        return JsonResponse({
+            "error": f"Course '{course_name}' not found"
+        }, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({
+            "error": "Invalid JSON"
+        }, status=400)
+    except IntegrityError:
+        return JsonResponse({
+            "error": "A dish with this name already exists in your menu."
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            "error": str(e)
+        }, status=400)
 
 def search(request, position, distance):
     if request.method != "GET":
@@ -469,49 +562,118 @@ def filter(request, place):
 
 @csrf_exempt
 @login_required
-def edit_dish(request, dishid):
+def edit_dish(request, eatery, dishid):
+    if request.method != "PUT":
+        return JsonResponse({"error": "PUT request required."}, status=400)
+    
     try:
-        item = Dish.objects.get(id = dishid)
-    except Dish.DoesNotExist:
-        return JsonResponse({"error": "dish does not exist."}, status=404)
-    if request.method == "GET":
-        return JsonResponse(item.serialize())
-    if request.method == "POST":
+        dish = Dish.objects.get(id=dishid)
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        
+        # Verify owner
+        if request.user != restaurant.owner:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
+            
         data = json.loads(request.body)
-        description = data.get("description", "")
-        name = data.get("name", "")
-        price = data.get("price", "")
-        image = data.get("image", "")
-        item.description = description
-        item.name = name
-        item.price = price
-        item.image_url = image
-        item.save()
-        return JsonResponse({"message": "post successfully edited!"}, status=201)
-    else:
-        return JsonResponse({"error": "GET or POST request required."}, status=400)
+        new_name = data.get('name', '').strip()
+
+        # Check if new name already exists in this course (excluding current dish)
+        if new_name.lower() != dish.name.lower() and \
+           Dish.objects.filter(course=dish.course, name__iexact=new_name).exists():
+            return JsonResponse({
+                "error": f"A dish with the name '{new_name}' already exists in the {dish.course.name} course."
+            }, status=400)
+                
+        # Update dish fields
+        dish.name = data.get('name', dish.name)
+        dish.price = data.get('price', dish.price)
+        dish.description = data.get('description', dish.description)
+
+        # Handle image data
+        image_data = data.get('image')
+        if image_data and 'base64,' in image_data:
+            # Split the base64 string
+            format, imgstr = image_data.split('base64,')
+            # Get the file extension
+            ext = format.split('/')[-1].split(';')[0]
+            # Generate filename
+            filename = f"{restaurant.subdirectory}_{dish.name}_{uuid.uuid4().hex[:6]}.{ext}"
+            
+            # Create ContentFile from base64 data
+            image = ContentFile(base64.b64decode(imgstr), name=filename)
+            dish.image = image
+
+        dish.save()
+        
+        return JsonResponse({
+            "message": "Dish updated successfully",
+            "dish_id": dishid,
+            "image_url": dish.image.url if dish.image else ""
+        }, status=200)
+        
+    except Dish.DoesNotExist:
+        return JsonResponse({"error": "Dish does not exist."}, status=404)
+    except IntegrityError:
+        return JsonResponse({
+            "error": "A dish with this name already exists in your menu."
+        }, status=400)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
 
 @csrf_exempt
 @login_required
 def delete_dish(request, dishid):
     try:
-        item = Dish.objects.get(id = dishid)
+        dish = Dish.objects.get(id=dishid)
+        
+        # Add owner verification
+        if request.user != dish.menu.subpage.kitchen.owner:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
+            
+        if request.method != "DELETE":  # Changed to DELETE method
+            return JsonResponse({"error": "DELETE request required."}, status=400)
+            
+        dish.delete()
+        return JsonResponse({
+            "message": "Dish deleted successfully",
+            "dish_id": dishid
+        }, status=200)
+        
     except Dish.DoesNotExist:
-        return JsonResponse({"error": "dish does not exist."}, status=404)
-    if request.method != "GET":
-        return JsonResponse({"error" : "GET request required."}, status=400)
-    item.delete()
-    return JsonResponse({"message": "dish deleted"}, status=201)
+        return JsonResponse({"error": "Dish does not exist."}, status=404)
 
 @csrf_exempt
 @login_required
-def delete_course(request, eatery, course):
-    if request.method != "GET":
-        return JsonResponse({"error" : "GET request required."}, status=400)
-    current_course = Course.objects.get(course_list = course)
-    current_kitchen = Kitchen.objects.get(restaurant_name = eatery, owner = request.user)
-    current_kitchen.courses.remove(current_course)
-    return JsonResponse({"message": "course deleted"}, status=201)
+def delete_course(request, eatery, courseid):
+    if request.method != "DELETE":
+        return JsonResponse({"error": "DELETE request required."}, status=400)
+    
+    try:
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        
+        # Check if user is owner
+        if request.user != restaurant.owner:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
+
+        course = get_object_or_404(Course, id=courseid)
+        
+        # Verify the course belongs to this restaurant's menu
+        if course.menu.subpage.kitchen != restaurant:
+            return JsonResponse({"error": "Course not found."}, status=404)
+
+        # Delete the course (this will cascade delete all associated dishes)
+        course.delete()
+
+        return JsonResponse({
+            "message": "Course and all associated dishes deleted successfully"
+        }, status=200)
+
+    except Exception as e:
+        return JsonResponse({
+            "error": str(e)
+        }, status=400)
 
 
 def get_kitchen(request, kitchen_id):

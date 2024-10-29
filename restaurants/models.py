@@ -172,6 +172,9 @@ class Course(models.Model):
     class Meta:
         ordering = ['order']
 
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+
     def __str__(self):
         return f"{self.menu.name} - {self.name}"
 
@@ -179,12 +182,14 @@ class Dish(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     name = models.CharField(max_length=64)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name="dishes")
-    image_url = models.ImageField(upload_to='images')
+    image = models.ImageField(upload_to='dishes/', null=True, blank=True) 
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="dishes")
     description = models.TextField(max_length=200, default="")
     date_added = models.DateField(auto_now=True)
     favorites = models.ManyToManyField(User, blank=True, related_name="user_favorite")
     is_special = models.BooleanField(default=False)
+    class Meta:
+        unique_together = ['course', 'name']
     def __str__(self):
         return f"{self.name}"
 
