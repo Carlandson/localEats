@@ -3899,3 +3899,111 @@ INFO 2024-10-29 14:27:15,356 basehttp 35144 38544 "POST /broadwaybarandgrill/men
 INFO 2024-10-29 14:27:16,278 basehttp 35144 38544 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 19233
 INFO 2024-10-29 14:27:16,326 basehttp 35144 38544 - Broken pipe from ('127.0.0.1', 55678)
 INFO 2024-10-29 14:27:20,117 basehttp 35144 5448 "DELETE /delete_dish/25 HTTP/1.1" 200 55
+INFO 2024-10-29 20:45:15,099 autoreload 30336 13436 Watching for file changes with StatReloader
+INFO 2024-10-29 20:45:28,979 basehttp 30336 43352 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 17444
+INFO 2024-10-29 20:45:29,109 basehttp 30336 43352 "GET /static/menubuilder.js HTTP/1.1" 200 20857
+INFO 2024-10-29 20:45:29,119 basehttp 30336 43352 - Broken pipe from ('127.0.0.1', 59311)
+INFO 2024-10-29 20:45:46,891 basehttp 30336 33608 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:45:54,532 basehttp 30336 33608 "PUT /broadwaybarandgrill/menu/edit_dish/26/ HTTP/1.1" 200 72
+INFO 2024-10-29 20:46:02,200 basehttp 30336 23448 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 8729
+INFO 2024-10-29 20:49:38,970 basehttp 30336 16080 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 19246
+INFO 2024-10-29 20:49:39,033 basehttp 30336 16080 - Broken pipe from ('127.0.0.1', 65036)
+INFO 2024-10-29 20:49:42,118 basehttp 30336 4760 "DELETE /delete_dish/26 HTTP/1.1" 200 55
+INFO 2024-10-29 20:49:47,646 basehttp 30336 4760 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:50:18,030 basehttp 30336 4760 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 19231
+INFO 2024-10-29 20:50:21,607 basehttp 30336 4760 "PUT /broadwaybarandgrill/menu/edit_dish/27/ HTTP/1.1" 200 72
+INFO 2024-10-29 20:50:23,695 basehttp 30336 4760 "DELETE /delete_dish/27 HTTP/1.1" 200 55
+WARNING 2024-10-29 20:50:25,050 log 30336 4760 Not Found: /delete_dish/27
+WARNING 2024-10-29 20:50:25,051 basehttp 30336 4760 "DELETE /delete_dish/27 HTTP/1.1" 404 33
+INFO 2024-10-29 20:50:31,554 basehttp 30336 4760 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:50:33,391 basehttp 30336 4760 "DELETE /delete_dish/28 HTTP/1.1" 200 55
+WARNING 2024-10-29 20:50:36,004 log 30336 4760 Not Found: /delete_dish/28
+WARNING 2024-10-29 20:50:36,005 basehttp 30336 4760 "DELETE /delete_dish/28 HTTP/1.1" 404 33
+INFO 2024-10-29 20:51:15,922 basehttp 30336 4760 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 17444
+INFO 2024-10-29 20:51:19,303 basehttp 30336 4760 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:51:20,742 basehttp 30336 4760 "DELETE /delete_dish/29 HTTP/1.1" 200 55
+WARNING 2024-10-29 20:51:21,328 log 30336 4760 Not Found: /delete_dish/29
+WARNING 2024-10-29 20:51:21,328 basehttp 30336 4760 "DELETE /delete_dish/29 HTTP/1.1" 404 33
+INFO 2024-10-29 20:51:24,249 basehttp 30336 4760 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 17444
+INFO 2024-10-29 20:51:32,810 basehttp 30336 4760 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 17444
+INFO 2024-10-29 20:51:32,989 basehttp 30336 29660 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2024-10-29 20:51:32,991 basehttp 30336 29992 "GET /static/index.js HTTP/1.1" 200 4271
+INFO 2024-10-29 20:51:32,991 basehttp 30336 29660 "GET /static/logout.js HTTP/1.1" 200 2449
+INFO 2024-10-29 20:51:32,992 basehttp 30336 4760 "GET /static/css/tailwind.css HTTP/1.1" 200 641212
+INFO 2024-10-29 20:51:32,993 basehttp 30336 4760 "GET /static/menubuilder.js HTTP/1.1" 200 20734
+INFO 2024-10-29 20:51:33,075 basehttp 30336 4760 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2024-10-29 20:51:33,191 basehttp 30336 4760 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-10-29 20:51:36,255 basehttp 30336 4760 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:51:38,562 basehttp 30336 4760 "PUT /broadwaybarandgrill/menu/edit_dish/30/ HTTP/1.1" 200 72
+INFO 2024-10-29 20:51:40,354 basehttp 30336 4760 "DELETE /delete_dish/30 HTTP/1.1" 200 55
+INFO 2024-10-29 20:51:44,280 basehttp 30336 4760 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:51:45,625 basehttp 30336 4760 "DELETE /delete_dish/31 HTTP/1.1" 200 55
+INFO 2024-10-29 20:51:49,032 basehttp 30336 4760 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:51:52,874 basehttp 30336 4760 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:51:58,707 basehttp 30336 4760 "PUT /broadwaybarandgrill/menu/edit_dish/33/ HTTP/1.1" 200 72
+INFO 2024-10-29 20:52:00,119 basehttp 30336 4760 "DELETE /delete_dish/33 HTTP/1.1" 200 55
+INFO 2024-10-29 20:52:02,882 basehttp 30336 4760 "DELETE /delete_dish/32 HTTP/1.1" 200 55
+INFO 2024-10-29 20:53:04,014 basehttp 30336 4760 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 17444
+INFO 2024-10-29 20:53:04,151 basehttp 30336 4760 - Broken pipe from ('127.0.0.1', 65058)
+INFO 2024-10-29 20:53:04,151 basehttp 30336 29992 - Broken pipe from ('127.0.0.1', 62528)
+INFO 2024-10-29 20:53:04,159 basehttp 30336 29660 "GET /static/menubuilder.js HTTP/1.1" 200 20031
+INFO 2024-10-29 20:53:04,278 basehttp 30336 29660 - Broken pipe from ('127.0.0.1', 62527)
+INFO 2024-10-29 20:53:07,215 basehttp 30336 24808 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:53:12,285 basehttp 30336 24808 "PUT /broadwaybarandgrill/menu/edit_dish/34/ HTTP/1.1" 200 72
+INFO 2024-10-29 20:53:17,425 basehttp 30336 24808 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 19246
+INFO 2024-10-29 20:53:17,533 basehttp 30336 24808 "GET /static/menubuilder.js HTTP/1.1" 304 0
+INFO 2024-10-29 20:53:18,137 basehttp 30336 24808 - Broken pipe from ('127.0.0.1', 63940)
+WARNING 2024-10-29 20:53:21,165 log 30336 29956 Bad Request: /broadwaybarandgrill/menu/add_dish/
+WARNING 2024-10-29 20:53:21,166 basehttp 30336 29956 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 400 82
+INFO 2024-10-29 20:53:25,532 basehttp 30336 29956 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:54:06,690 basehttp 30336 29956 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 21288
+INFO 2024-10-29 20:54:06,743 basehttp 30336 29956 - Broken pipe from ('127.0.0.1', 53086)
+INFO 2024-10-29 20:54:06,745 basehttp 30336 16448 "GET /static/menubuilder.js HTTP/1.1" 200 20781
+INFO 2024-10-29 20:54:06,829 basehttp 30336 16448 - Broken pipe from ('127.0.0.1', 53303)
+INFO 2024-10-29 20:54:07,167 basehttp 30336 22832 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2024-10-29 20:54:10,961 basehttp 30336 22832 "DELETE /delete_dish/34 HTTP/1.1" 200 55
+INFO 2024-10-29 20:54:14,505 basehttp 30336 22832 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:54:20,181 basehttp 30336 22832 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:54:35,938 basehttp 30336 22832 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 23324
+INFO 2024-10-29 20:54:36,006 basehttp 30336 22832 "GET /static/menubuilder.js HTTP/1.1" 304 0
+WARNING 2024-10-29 20:54:40,686 log 30336 22832 Bad Request: /broadwaybarandgrill/menu/add_dish/
+WARNING 2024-10-29 20:54:40,687 basehttp 30336 22832 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 400 82
+INFO 2024-10-29 20:54:43,137 basehttp 30336 22832 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:54:57,894 basehttp 30336 22832 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 25372
+INFO 2024-10-29 20:54:57,955 basehttp 30336 22832 "GET /static/menubuilder.js HTTP/1.1" 200 20736
+INFO 2024-10-29 20:54:58,036 basehttp 30336 22832 - Broken pipe from ('127.0.0.1', 53306)
+INFO 2024-10-29 20:55:01,905 basehttp 30336 12328 "PUT /broadwaybarandgrill/menu/edit_dish/35/ HTTP/1.1" 200 72
+WARNING 2024-10-29 20:55:05,670 log 30336 12328 Bad Request: /broadwaybarandgrill/menu/add_dish/
+WARNING 2024-10-29 20:55:05,670 basehttp 30336 12328 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 400 82
+INFO 2024-10-29 20:55:08,122 basehttp 30336 12328 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:55:21,385 basehttp 30336 12328 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 27440
+INFO 2024-10-29 20:55:21,467 basehttp 30336 12328 "GET /static/menubuilder.js HTTP/1.1" 200 20681
+INFO 2024-10-29 20:55:21,582 basehttp 30336 12328 - Broken pipe from ('127.0.0.1', 62086)
+INFO 2024-10-29 20:55:22,168 basehttp 30336 12836 - Broken pipe from ('127.0.0.1', 49831)
+INFO 2024-10-29 20:55:24,737 basehttp 30336 45584 "DELETE /delete_dish/36 HTTP/1.1" 200 55
+INFO 2024-10-29 20:55:27,355 basehttp 30336 45584 "DELETE /delete_dish/37 HTTP/1.1" 200 55
+INFO 2024-10-29 20:55:29,234 basehttp 30336 45584 "DELETE /delete_dish/38 HTTP/1.1" 200 55
+INFO 2024-10-29 20:55:30,873 basehttp 30336 45584 "DELETE /delete_dish/35 HTTP/1.1" 200 55
+INFO 2024-10-29 20:55:33,021 basehttp 30336 45584 "DELETE /delete_dish/39 HTTP/1.1" 200 55
+INFO 2024-10-29 20:55:36,868 basehttp 30336 45584 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:55:41,124 basehttp 30336 45584 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-29 20:55:44,692 basehttp 30336 45584 "DELETE /delete_dish/41 HTTP/1.1" 200 55
+INFO 2024-10-29 21:50:03,011 basehttp 30336 8356 "POST /broadwaybarandgrill/menu/add_course/ HTTP/1.1" 200 57
+INFO 2024-10-29 21:50:03,155 basehttp 30336 8356 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 21275
+INFO 2024-10-29 21:50:03,227 basehttp 30336 8356 "GET /static/menubuilder.js HTTP/1.1" 304 0
+INFO 2024-10-29 21:56:08,085 basehttp 30336 28396 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 117
+INFO 2024-10-29 21:56:08,107 basehttp 30336 28396 "GET /media/dishes/broadwaybarandgrill_r_1a612f.jpeg HTTP/1.1" 200 30982
+INFO 2024-10-29 21:56:18,641 basehttp 30336 28396 "DELETE /delete_dish/42 HTTP/1.1" 200 55
+INFO 2024-10-29 21:56:39,125 basehttp 30336 28396 "GET /profile/ HTTP/1.1" 200 12118
+INFO 2024-10-29 21:56:45,564 basehttp 30336 28396 "GET /broadwaybarandgrill/ HTTP/1.1" 200 13845
+INFO 2024-10-29 21:56:45,651 basehttp 30336 28396 "GET /static/menubuilder.js HTTP/1.1" 200 20681
+INFO 2024-10-29 21:56:45,700 basehttp 30336 28396 - Broken pipe from ('127.0.0.1', 52649)
+INFO 2024-10-29 22:12:14,925 basehttp 30336 1152 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 21275
+INFO 2024-10-29 22:12:15,022 basehttp 30336 1152 "GET /static/menubuilder.js HTTP/1.1" 304 0
+WARNING 2024-10-29 22:12:54,039 log 30336 1152 Not Found: /favicon.ico
+WARNING 2024-10-29 22:12:54,040 basehttp 30336 1152 "GET /favicon.ico HTTP/1.1" 404 6273
+INFO 2024-10-29 22:12:54,076 basehttp 30336 1152 - Broken pipe from ('127.0.0.1', 52442)
+INFO 2024-10-29 22:12:55,104 basehttp 30336 35664 "GET /broadwaybarandgrill/ HTTP/1.1" 200 14404
+INFO 2024-10-29 22:12:55,143 basehttp 30336 35664 - Broken pipe from ('127.0.0.1', 49685)
+INFO 2024-10-29 22:13:40,559 basehttp 30336 12084 "GET /broadwaybarandgrill/ HTTP/1.1" 200 14391
+INFO 2024-10-29 22:13:40,723 basehttp 30336 12084 - Broken pipe from ('127.0.0.1', 51362)

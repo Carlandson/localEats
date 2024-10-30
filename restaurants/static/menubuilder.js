@@ -262,10 +262,13 @@ function addDish(course) {
             formDiv.remove();
 
             // Add event listeners to new buttons
-            const newEditBtn = newDishArticle.querySelector('.editDish');
-            const newDeleteBtn = newDishArticle.querySelector('.deleteDish');
-            newEditBtn.addEventListener('click', () => editDish(result.dish_id));
-            newDeleteBtn.addEventListener('click', () => deleteDish(result.dish_id));
+            // const newEditBtn = newDishArticle.querySelector('.editDish');
+            // const newDeleteBtn = newDishArticle.querySelector('.deleteDish');
+            // newEditBtn.addEventListener('click', () => editDish(result.dish_id));
+            // newDeleteBtn.addEventListener('click', () => deleteDish(result.dish_id));
+            buttonContainer.insertAdjacentElement('beforebegin', newDishArticle);
+            buttonContainer.appendChild(addButton);
+            formDiv.remove();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -377,12 +380,6 @@ function editDish(dishId) {
 
             // Replace form with updated dish
             editDiv.replaceWith(updatedDish);
-
-            // Add event listeners to new buttons
-            const newEditBtn = updatedDish.querySelector('.editDish');
-            const newDeleteBtn = updatedDish.querySelector('.deleteDish');
-            newEditBtn.addEventListener('click', () => editDish(dishId));
-            newDeleteBtn.addEventListener('click', () => deleteDish(dishId));
         })
         .catch(error => {
             console.error('Error:', error);
