@@ -168,6 +168,8 @@ class Course(models.Model):
     name = models.CharField(max_length=64)
     order = models.PositiveIntegerField(default=0)
     description = models.TextField(blank=True)
+    # gluten free options, vegan options, etc.
+    note = models.TextField(blank=True, null=True)  
 
     class Meta:
         ordering = ['order']
@@ -188,6 +190,7 @@ class Dish(models.Model):
     date_added = models.DateField(auto_now=True)
     favorites = models.ManyToManyField(User, blank=True, related_name="user_favorite")
     is_special = models.BooleanField(default=False)
+    included_sides = models.IntegerField(default=0)
     class Meta:
         unique_together = ['course', 'name']
     def __str__(self):
@@ -202,7 +205,15 @@ class Dish(models.Model):
             "description": self.description,
             "image_url": self.image_url.url if self.image_url else None
         }
-    
+
+class SideOption(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='side_options')
+    name = models.CharField(max_length=64)
+    description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, default=0)  # Price for premium sides
+    is_premium = models.BooleanField(default=False)  # If True, this side costs extra
+    available = models.BooleanField(default=True)
+
 class AboutUsPage(models.Model):
     subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='about_us_content')
     content = models.TextField()

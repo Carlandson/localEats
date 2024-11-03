@@ -36,6 +36,7 @@
         <div class="w-full" id="menuAccordion">
             {% for course in courses %}
             <div class="mb-4 border rounded-lg">
+                
                 <button class="accordion-trigger w-full px-4 py-3 flex justify-between items-center bg-white hover:bg-gray-50 transition-colors duration-200"
                         data-target="panel{{ forloop.counter }}">
                     <h2 class="text-lg font-semibold">{{ course.name }}</h2>
@@ -46,12 +47,136 @@
                 
                 
                 <div id="panel{{ forloop.counter }}" class="hidden px-4 py-3 bg-white">
+                    <!-- Course Options Section -->
+                    <div class="mb-6 border-b pb-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <!-- Course Details -->
+                            <div class="space-y-4">
+                                <!-- Course Description Section -->
+                                <div class="mb-4">
+                                    <div class="flex justify-between items-start">
+                                        <h3 class="font-medium">Course Description:</h3>
+                                    </div>
+                                    
+                                    {% if course.description %}
+                                        <!-- Display Description -->
+                                    <div id="descriptionDisplay{{ course.id }}" class="mt-2">
+                                        <div class="flex justify-between items-start gap-4">
+                                            <p class="text-gray-600">{{ course.description }}</p>
+                                            <button class="editDescription text-blue-500 hover:text-blue-700 flex-shrink-0"
+                                                    data-course-id="{{ course.id }}">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <!-- Edit Description Form (hidden if description exists) -->
+                                    <div id="descriptionForm{{ course.id }}" class="mt-2 {% if course.description %}hidden{% endif %}">
+                                        <textarea id="courseDescription{{ course.id }}" 
+                                                class="w-full p-2 border rounded"
+                                                rows="3"
+                                                placeholder="Add a description for this course">{{ course.description|default:"" }}</textarea>
+                                        <button class="saveDescription mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors duration-200"
+                                                data-course-id="{{ course.id }}">
+                                            Save Description
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Note Section -->
+                                <div class="mb-4">
+                                    <div class="flex justify-between items-start">
+                                        <h3 class="font-medium">Course Note:</h3>
+                                    </div>
+                                    
+                                    {% if course.note %}
+                                        <!-- Display Note -->
+                                        <div id="noteDisplay{{ course.id }}" class="mt-2">
+                                            <div class="flex justify-between items-start gap-4">
+                                                <p class="text-gray-600">{{ course.note }}</p>
+                                                <button class="editNote text-blue-500 hover:text-blue-700 flex-shrink-0"
+                                                        data-course-id="{{ course.id }}">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <!-- Edit Note Form (hidden if note exists) -->
+                                    <div id="noteForm{{ course.id }}" class="mt-2 {% if course.note %}hidden{% endif %}">
+                                        <textarea id="courseNote{{ course.id }}" 
+                                                class="w-full p-2 border rounded"
+                                                rows="3"
+                                                placeholder="Add a note for this course">{{ course.note|default:"" }}</textarea>
+                                        <button class="saveNote mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors duration-200"
+                                                data-course-id="{{ course.id }}">
+                                            Save Note
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Side Options -->
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <label class="font-medium">Side Options:</label>
+                                    <button class="addSideOption text-sm px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded"
+                                            data-course-id="{{ course.id }}">
+                                        Add Side
+                                    </button>
+                                </div>
+                                
+                                <div id="sideOptionsList{{ course.id }}" class="space-y-2 max-h-[200px] overflow-y-auto">
+                                    {% for side in course.side_options.all %}
+                                    <div class="flex justify-between items-center p-2 {% if side.is_premium %}bg-amber-50{% else %}bg-gray-50{% endif %} rounded">
+                                        <div>
+                                            <div class="flex items-center gap-2">
+                                                <p class="font-medium">{{ side.name }}</p>
+                                                {% if side.is_premium %}
+                                                    <span class="text-sm text-amber-600 font-medium">+${{ side.price }}</span>
+                                                {% endif %}
+                                            </div>
+                                            {% if side.description %}
+                                                <p class="text-sm text-gray-600">{{ side.description }}</p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button class="editSideOption text-blue-500 hover:text-blue-700"
+                                                    data-side-id="{{ side.id }}">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="deleteSideOption text-red-500 hover:text-red-700"
+                                                    data-side-id="{{ side.id }}">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <p class="text-gray-500 text-center">No side options available</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="saveCourseOptions w-full mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors duration-200"
+                                data-course-id="{{ course.id }}">
+                            Save Course Changes
+                        </button>
+                    </div>
                     {% for dish in dishes %}
                         {% if dish.course == course %}
                             <article id="o{{ dish.id }}" class="border rounded-lg p-4 mb-4 grid md:grid-cols-3 gap-4">
                                 <div class="text-center">
                                     <h3 class="text-xl font-bold mb-2">{{ dish.name }}</h3>
-                                    <!-- <img src="{{ dish.image_url }}" class="mx-auto object-contain h-40 w-40" alt="{{ dish.name }}"> -->
                                     {% if dish.image %}
                                         <img src="{{ dish.image.url }}" class="mx-auto object-contain h-40 w-40" alt="{{ dish.name }}">
                                     {% else %}

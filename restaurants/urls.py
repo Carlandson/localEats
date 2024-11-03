@@ -20,6 +20,7 @@ urlpatterns = [
     path("<slug:eatery>/menu/add_course/", views.add_course, name="add_course"),
     path("<slug:eatery>/create/<str:page_type>/", views.create_subpage, name="create_subpage"),
     path("<slug:eatery>/menu/add_dish/", views.add_dish, name="add_dish"),
+    path('<str:eatery>/menu/update_course_description/<int:course_id>/', views.update_course_description, name='update_course_description'),
     path("search/<str:position>/<str:distance>/", views.search, name="search"),
     path("filter/<str:place>", views.filter, name="filter"),
     path('<slug:eatery>/menu/edit_dish/<int:dishid>/', views.edit_dish, name='edit_dish'),

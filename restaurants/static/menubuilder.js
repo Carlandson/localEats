@@ -51,6 +51,29 @@ document.addEventListener('DOMContentLoaded', function() {
             const courseId = e.target.closest('.deleteCourse').getAttribute('data-course-id');
             deleteCourse(courseId);
         }
+        if (e.target.matches('.editDescription') || e.target.closest('.editDescription')) {
+            const button = e.target.closest('.editDescription') || e.target;
+            const courseId = button.dataset.courseId;
+            editCourseDescription(courseId);
+        }
+
+        // Save Description button
+        if (e.target.matches('.saveDescription')) {
+            const courseId = e.target.dataset.courseId;
+            saveCourseDescription(courseId);
+        }
+        // Edit Note button
+        if (e.target.matches('.editNote') || e.target.closest('.editNote')) {
+            const button = e.target.closest('.editNote') || e.target;
+            const courseId = button.dataset.courseId;
+            editCourseNote(courseId);
+        }
+
+        // Save Note button
+        if (e.target.matches('.saveNote')) {
+            const courseId = e.target.dataset.courseId;
+            saveCourseNote(courseId);
+        }
     });
 });
 
@@ -533,5 +556,168 @@ function deleteCourse(courseId) {
         courseElement.style.opacity = '1';
         buttons.forEach(button => button.disabled = false);
         alert('Error deleting course. Please try again.');
+    });
+}
+
+function editCourseDescription(courseId) {
+    const displayDiv = document.getElementById(`descriptionDisplay${courseId}`);
+    const formDiv = document.getElementById(`descriptionForm${courseId}`);
+    
+    // Show form, hide display
+    displayDiv.classList.add('hidden');
+    formDiv.classList.remove('hidden');
+    
+    // Set textarea value to current description
+    const currentDescription = displayDiv.querySelector('p').textContent;
+    document.getElementById(`courseDescription${courseId}`).value = currentDescription;
+}
+
+function saveCourseDescription(courseId) {
+    const eatery = JSON.parse(document.getElementById('kitchen').textContent);
+    
+    fetch(`/${eatery}/menu/update_course_description/${courseId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            description: document.querySelector(`#courseDescription${courseId}`).value
+        })
+    })
+    .then(response => response.json())
+    .then(result => {
+        const description = document.querySelector(`#courseDescription${courseId}`).value;
+        
+        // Find the parent container that contains both display and form divs
+        const parentContainer = document.getElementById(`descriptionDisplay${courseId}`).parentElement;
+        
+        // Create new container with both display and form divs
+        const containerDiv = document.createElement('div');
+        containerDiv.className = 'mb-4';
+        
+        // Create display div
+        const displayDiv = document.createElement('div');
+        displayDiv.id = `descriptionDisplay${courseId}`;
+        displayDiv.classList.remove('hidden');  // Make sure it's visible
+        displayDiv.innerHTML = `
+            <div class="flex justify-between items-start gap-4">
+                <p class="text-gray-600">${description || 'No description added yet.'}</p>
+                <button class="editDescription text-blue-500 hover:text-blue-700 flex-shrink-0"
+                        data-course-id="${courseId}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        // Create form div (hidden)
+        const formDiv = document.createElement('div');
+        formDiv.id = `descriptionForm${courseId}`;
+        formDiv.className = 'mt-2 hidden';
+        formDiv.innerHTML = `
+            <textarea id="courseDescription${courseId}" 
+                    class="w-full p-2 border rounded"
+                    rows="3"
+                    placeholder="Add a description for this course">${description}</textarea>
+            <button class="saveDescription mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors duration-200"
+                    data-course-id="${courseId}">
+                Save Description
+            </button>
+        `;
+
+        // Add both divs to container
+        containerDiv.appendChild(displayDiv);
+        containerDiv.appendChild(formDiv);
+
+        // Replace the entire parent container
+        parentContainer.replaceWith(containerDiv);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating description. Please try again.');
+    });
+}
+
+// Add these new functions
+function editCourseNote(courseId) {
+    const displayDiv = document.getElementById(`noteDisplay${courseId}`);
+    const formDiv = document.getElementById(`noteForm${courseId}`);
+    
+    // Show form, hide display
+    displayDiv.classList.add('hidden');
+    formDiv.classList.remove('hidden');
+    
+    // Set textarea value to current note
+    const currentNote = displayDiv.querySelector('p').textContent;
+    document.getElementById(`courseNote${courseId}`).value = currentNote;
+}
+
+function saveCourseNote(courseId) {
+    const eatery = JSON.parse(document.getElementById('kitchen').textContent);
+    
+    fetch(`/${eatery}/menu/update_course_note/${courseId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            note: document.querySelector(`#courseNote${courseId}`).value
+        })
+    })
+    .then(response => response.json())
+    .then(result => {
+        const note = document.querySelector(`#courseNote${courseId}`).value;
+        
+        // Find the parent container
+        const parentContainer = document.getElementById(`noteDisplay${courseId}`).parentElement;
+        
+        // Create new container
+        const containerDiv = document.createElement('div');
+        containerDiv.className = 'mb-4';
+        
+        // Create display div
+        const displayDiv = document.createElement('div');
+        displayDiv.id = `noteDisplay${courseId}`;
+        displayDiv.classList.remove('hidden');
+        displayDiv.innerHTML = `
+            <div class="flex justify-between items-start gap-4">
+                <p class="text-gray-600">${note || 'No note added yet.'}</p>
+                <button class="editNote text-blue-500 hover:text-blue-700 flex-shrink-0"
+                        data-course-id="${courseId}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        // Create form div (hidden)
+        const formDiv = document.createElement('div');
+        formDiv.id = `noteForm${courseId}`;
+        formDiv.className = 'mt-2 hidden';
+        formDiv.innerHTML = `
+            <textarea id="courseNote${courseId}" 
+                    class="w-full p-2 border rounded"
+                    rows="3"
+                    placeholder="Add a note for this course">${note}</textarea>
+            <button class="saveNote mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors duration-200"
+                    data-course-id="${courseId}">
+                Save Note
+            </button>
+        `;
+
+        // Add both divs to container
+        containerDiv.appendChild(displayDiv);
+        containerDiv.appendChild(formDiv);
+
+        // Replace the entire parent container
+        parentContainer.replaceWith(containerDiv);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating note. Please try again.');
     });
 }

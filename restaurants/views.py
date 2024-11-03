@@ -8,6 +8,7 @@ from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.urls import reverse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
 from .models import Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Kitchen, CuisineCategory
 from django.shortcuts import render, redirect, get_object_or_404
@@ -715,3 +716,32 @@ def upload_image(request, model_name, object_id):
         form = ImageUploadForm()
 
     return render(request, 'upload_image.html', {'form': form, 'object': obj})
+
+
+def update_course_description(request, eatery, course_id):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    try:
+        course = Course.objects.get(id=course_id)
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        
+        # Verify owner
+        if request.user != restaurant.owner:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
+            
+        data = json.loads(request.body)
+        course.description = data.get('description', '').strip()
+        course.save()
+        
+        return JsonResponse({
+            "message": "Course description updated successfully",
+            "course_id": course_id
+        }, status=200)
+        
+    except Course.DoesNotExist:
+        return JsonResponse({"error": "Course does not exist."}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)

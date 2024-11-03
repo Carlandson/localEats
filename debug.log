@@ -4007,3 +4007,194 @@ INFO 2024-10-29 22:12:55,104 basehttp 30336 35664 "GET /broadwaybarandgrill/ HTT
 INFO 2024-10-29 22:12:55,143 basehttp 30336 35664 - Broken pipe from ('127.0.0.1', 49685)
 INFO 2024-10-29 22:13:40,559 basehttp 30336 12084 "GET /broadwaybarandgrill/ HTTP/1.1" 200 14391
 INFO 2024-10-29 22:13:40,723 basehttp 30336 12084 - Broken pipe from ('127.0.0.1', 51362)
+INFO 2024-10-31 09:24:08,878 autoreload 36700 14076 Watching for file changes with StatReloader
+INFO 2024-10-31 09:24:16,140 basehttp 36700 34112 "GET /broadwaybarandgrill/ HTTP/1.1" 200 14391
+INFO 2024-10-31 09:24:16,193 basehttp 36700 43888 "GET /static/css/tailwind.css HTTP/1.1" 304 0
+INFO 2024-10-31 09:24:16,194 basehttp 36700 13340 "GET /static/index.js HTTP/1.1" 304 0
+INFO 2024-10-31 09:24:16,194 basehttp 36700 16112 "GET /static/logout.js HTTP/1.1" 304 0
+INFO 2024-10-31 09:24:16,307 basehttp 36700 11604 "GET /static/menubuilder.js HTTP/1.1" 200 20681
+INFO 2024-10-31 09:24:16,317 basehttp 36700 34112 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2024-10-31 09:24:16,336 basehttp 36700 11604 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2024-10-31 09:24:16,340 basehttp 36700 11604 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-10-31 09:24:18,166 basehttp 36700 11604 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 21275
+INFO 2024-10-31 09:24:22,025 basehttp 36700 11604 "DELETE /delete_dish/40 HTTP/1.1" 200 55
+INFO 2024-10-31 09:24:29,038 basehttp 36700 11604 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-31 09:24:33,539 basehttp 36700 11604 "PUT /broadwaybarandgrill/menu/edit_dish/43/ HTTP/1.1" 200 72
+INFO 2024-10-31 09:24:35,477 basehttp 36700 11604 "DELETE /delete_dish/43 HTTP/1.1" 200 55
+INFO 2024-10-31 09:42:55,150 basehttp 36700 24056 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 19570
+INFO 2024-10-31 09:42:55,240 basehttp 36700 24056 - Broken pipe from ('127.0.0.1', 63314)
+INFO 2024-10-31 09:42:59,914 basehttp 36700 36088 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-31 10:18:39,966 autoreload 25716 27280 Watching for file changes with StatReloader
+INFO 2024-10-31 10:18:43,697 basehttp 25716 35756 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 31993
+INFO 2024-10-31 10:18:43,865 basehttp 25716 35756 - Broken pipe from ('127.0.0.1', 64105)
+INFO 2024-10-31 10:18:43,869 basehttp 25716 26684 - Broken pipe from ('127.0.0.1', 64107)
+INFO 2024-10-31 10:19:48,057 basehttp 25716 43228 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 30302
+INFO 2024-10-31 10:19:48,131 basehttp 25716 43228 "GET /static/menubuilder.js HTTP/1.1" 200 20681
+INFO 2024-10-31 10:19:48,169 basehttp 25716 43228 - Broken pipe from ('127.0.0.1', 49834)
+INFO 2024-10-31 10:20:12,370 basehttp 25716 19388 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 21326
+INFO 2024-10-31 10:20:12,491 basehttp 25716 19388 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-10-31 10:20:54,983 basehttp 25716 19388 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 31664
+INFO 2024-10-31 10:20:55,090 basehttp 25716 19388 - Broken pipe from ('127.0.0.1', 49889)
+INFO 2024-10-31 10:21:23,132 basehttp 25716 26392 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 21326
+INFO 2024-10-31 10:21:23,323 basehttp 25716 26392 - Broken pipe from ('127.0.0.1', 49762)
+INFO 2024-10-31 10:29:29,449 basehttp 25716 8284 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32034
+INFO 2024-10-31 10:29:34,571 basehttp 25716 8284 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 28518
+INFO 2024-10-31 10:29:34,759 basehttp 25716 8284 - Broken pipe from ('127.0.0.1', 55884)
+INFO 2024-10-31 10:29:41,956 basehttp 25716 32832 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 21218
+INFO 2024-10-31 10:29:42,067 basehttp 25716 32832 - Broken pipe from ('127.0.0.1', 55942)
+INFO 2024-10-31 15:33:25,626 autoreload 2924 26244 Watching for file changes with StatReloader
+INFO 2024-10-31 15:33:33,528 basehttp 2924 9940 "GET / HTTP/1.1" 200 13345
+INFO 2024-10-31 15:33:33,786 basehttp 2924 9940 "GET /static/paginate.js HTTP/1.1" 200 2626
+INFO 2024-10-31 15:33:33,792 basehttp 2924 30536 - Broken pipe from ('127.0.0.1', 62432)
+INFO 2024-10-31 15:33:33,830 basehttp 2924 35780 "GET /static/images/test2.jpg HTTP/1.1" 200 2206722
+INFO 2024-10-31 15:33:33,834 basehttp 2924 9940 "GET /static/images/test1.jpg HTTP/1.1" 200 1800794
+INFO 2024-10-31 15:33:33,837 basehttp 2924 43104 "GET /static/images/test3.jpg HTTP/1.1" 200 3262750
+INFO 2024-10-31 15:33:33,893 basehttp 2924 9940 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-10-31 15:33:38,862 basehttp 2924 43104 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 21218
+INFO 2024-10-31 15:33:39,147 basehttp 2924 43104 "GET /static/menubuilder.js HTTP/1.1" 304 0
+INFO 2024-10-31 15:33:39,169 basehttp 2924 43104 - Broken pipe from ('127.0.0.1', 62435)
+INFO 2024-10-31 15:41:25,041 basehttp 2924 8344 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 29336
+INFO 2024-10-31 15:41:25,183 basehttp 2924 8344 - Broken pipe from ('127.0.0.1', 59844)
+INFO 2024-10-31 15:41:47,146 basehttp 2924 45652 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-10-31 15:44:17,999 basehttp 2924 34764 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32063
+INFO 2024-10-31 15:44:18,117 basehttp 2924 34764 - Broken pipe from ('127.0.0.1', 62526)
+INFO 2024-10-31 15:46:58,101 basehttp 2924 44036 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32063
+INFO 2024-10-31 15:47:57,887 autoreload 2924 26244 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\urls.py changed, reloading.
+INFO 2024-10-31 15:47:58,874 autoreload 42500 29936 Watching for file changes with StatReloader
+INFO 2024-10-31 15:48:05,554 autoreload 42500 29936 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-31 15:48:06,406 autoreload 39844 1824 Watching for file changes with StatReloader
+INFO 2024-10-31 15:48:10,745 autoreload 39844 1824 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-31 15:48:11,586 autoreload 29860 1984 Watching for file changes with StatReloader
+INFO 2024-10-31 15:48:40,990 autoreload 29860 1984 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-31 15:48:41,865 autoreload 18912 17488 Watching for file changes with StatReloader
+INFO 2024-10-31 15:48:49,529 basehttp 18912 34432 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32063
+INFO 2024-10-31 15:48:49,727 basehttp 18912 34432 - Broken pipe from ('127.0.0.1', 62540)
+INFO 2024-10-31 15:48:57,893 basehttp 18912 46000 - Broken pipe from ('127.0.0.1', 62554)
+INFO 2024-10-31 15:48:58,090 basehttp 18912 36636 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 8729
+INFO 2024-10-31 15:49:13,854 basehttp 18912 14708 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32063
+INFO 2024-10-31 15:49:13,931 basehttp 18912 11080 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2024-10-31 15:49:13,931 basehttp 18912 11760 "GET /static/index.js HTTP/1.1" 200 4271
+INFO 2024-10-31 15:49:13,933 basehttp 18912 14708 "GET /static/css/tailwind.css HTTP/1.1" 200 641212
+INFO 2024-10-31 15:49:13,935 basehttp 18912 14708 "GET /static/logout.js HTTP/1.1" 200 2449
+INFO 2024-10-31 15:49:13,940 basehttp 18912 14708 "GET /static/menubuilder.js HTTP/1.1" 200 23502
+INFO 2024-10-31 15:49:14,051 basehttp 18912 14708 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2024-10-31 15:49:14,075 basehttp 18912 14708 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+ERROR 2024-10-31 15:49:15,580 log 18912 14708 Internal Server Error: /broadwaybarandgrill/menu/update_course_description/15/
+ERROR 2024-10-31 15:49:15,580 basehttp 18912 14708 "PUT /broadwaybarandgrill/menu/update_course_description/15/ HTTP/1.1" 500 95
+INFO 2024-10-31 15:49:54,444 autoreload 18912 17488 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-31 15:49:55,470 autoreload 24832 12824 Watching for file changes with StatReloader
+INFO 2024-10-31 15:50:06,177 autoreload 24832 12824 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-31 15:50:07,039 autoreload 40444 34524 Watching for file changes with StatReloader
+INFO 2024-10-31 15:54:04,401 autoreload 40444 34524 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2024-10-31 15:54:05,217 autoreload 44116 34492 Watching for file changes with StatReloader
+INFO 2024-10-31 15:56:29,665 basehttp 44116 6632 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32063
+INFO 2024-10-31 15:56:29,860 basehttp 44116 11072 "GET /static/menubuilder.js HTTP/1.1" 200 23394
+INFO 2024-10-31 15:56:29,879 basehttp 44116 11072 - Broken pipe from ('127.0.0.1', 64863)
+INFO 2024-10-31 15:56:29,881 basehttp 44116 6632 - Broken pipe from ('127.0.0.1', 64856)
+INFO 2024-10-31 15:56:47,216 basehttp 44116 2408 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32063
+INFO 2024-10-31 15:56:47,305 basehttp 44116 2408 "GET /static/menubuilder.js HTTP/1.1" 200 23392
+INFO 2024-10-31 15:56:47,367 basehttp 44116 2408 - Broken pipe from ('127.0.0.1', 64897)
+ERROR 2024-10-31 15:56:49,390 log 44116 41336 Internal Server Error: /broadwaybarandgrill/menu/update_course_description/15
+Traceback (most recent call last):
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\utils\deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\middleware\common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+  File "C:\Users\Jx1\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\django\middleware\common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/broadwaybarandgrill/menu/update_course_description/15/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+ERROR 2024-10-31 15:56:49,392 basehttp 44116 41336 "POST /broadwaybarandgrill/menu/update_course_description/15 HTTP/1.1" 500 86420
+INFO 2024-10-31 15:57:40,678 basehttp 44116 36400 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32063
+INFO 2024-10-31 15:57:40,801 basehttp 44116 36400 - Broken pipe from ('127.0.0.1', 56992)
+INFO 2024-10-31 15:57:40,802 basehttp 44116 45612 "GET /static/menubuilder.js HTTP/1.1" 200 23393
+INFO 2024-10-31 15:57:40,873 basehttp 44116 45612 - Broken pipe from ('127.0.0.1', 57005)
+WARNING 2024-10-31 15:57:42,069 log 44116 33272 Forbidden (CSRF token missing.): /broadwaybarandgrill/menu/update_course_description/15/
+WARNING 2024-10-31 15:57:42,070 basehttp 44116 33272 "POST /broadwaybarandgrill/menu/update_course_description/15/ HTTP/1.1" 403 2506
+INFO 2024-10-31 15:58:12,308 basehttp 44116 33272 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32063
+INFO 2024-10-31 15:58:12,455 basehttp 44116 33272 "GET /static/menubuilder.js HTTP/1.1" 200 23548
+INFO 2024-10-31 15:58:12,551 basehttp 44116 33272 - Broken pipe from ('127.0.0.1', 57009)
+INFO 2024-10-31 15:58:22,155 basehttp 44116 38356 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32063
+INFO 2024-10-31 15:58:22,243 basehttp 44116 38356 "GET /static/menubuilder.js HTTP/1.1" 200 23546
+INFO 2024-10-31 15:58:22,303 basehttp 44116 38356 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-10-31 15:58:23,940 basehttp 44116 38356 "POST /broadwaybarandgrill/menu/update_course_description/15/ HTTP/1.1" 200 71
+INFO 2024-10-31 15:59:37,328 basehttp 44116 38356 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32882
+INFO 2024-10-31 15:59:37,392 basehttp 44116 38356 "GET /static/menubuilder.js HTTP/1.1" 200 23509
+INFO 2024-10-31 15:59:37,483 basehttp 44116 38356 - Broken pipe from ('127.0.0.1', 60055)
+INFO 2024-10-31 15:59:47,778 basehttp 44116 44060 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32882
+INFO 2024-10-31 15:59:47,837 basehttp 44116 44060 "GET /static/menubuilder.js HTTP/1.1" 200 23546
+INFO 2024-10-31 15:59:47,937 basehttp 44116 44060 - Broken pipe from ('127.0.0.1', 58261)
+INFO 2024-10-31 16:00:00,249 basehttp 44116 28292 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32882
+INFO 2024-10-31 16:00:00,365 basehttp 44116 28292 "GET /static/menubuilder.js HTTP/1.1" 200 23393
+INFO 2024-10-31 16:00:00,415 basehttp 44116 28292 - Broken pipe from ('127.0.0.1', 58317)
+INFO 2024-10-31 16:00:25,489 basehttp 44116 27124 - Broken pipe from ('127.0.0.1', 52817)
+INFO 2024-10-31 16:00:44,497 basehttp 44116 33724 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32882
+INFO 2024-10-31 16:00:44,571 basehttp 44116 33724 "GET /static/menubuilder.js HTTP/1.1" 200 23546
+INFO 2024-10-31 16:00:44,657 basehttp 44116 33724 - Broken pipe from ('127.0.0.1', 52886)
+INFO 2024-11-03 08:05:50,590 autoreload 23732 11864 Watching for file changes with StatReloader
+INFO 2024-11-03 08:05:56,357 basehttp 23732 42968 "GET / HTTP/1.1" 200 13345
+INFO 2024-11-03 08:05:56,442 basehttp 23732 42968 "GET /static/css/tailwind.css HTTP/1.1" 304 0
+INFO 2024-11-03 08:05:56,448 basehttp 23732 31552 "GET /static/index.js HTTP/1.1" 304 0
+INFO 2024-11-03 08:05:56,449 basehttp 23732 1816 "GET /static/logout.js HTTP/1.1" 304 0
+INFO 2024-11-03 08:05:56,576 basehttp 23732 42968 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2024-11-03 08:05:56,581 basehttp 23732 39528 "GET /static/paginate.js HTTP/1.1" 200 2626
+INFO 2024-11-03 08:05:56,592 basehttp 23732 42968 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2024-11-03 08:05:56,611 basehttp 23732 31552 "GET /static/images/test1.jpg HTTP/1.1" 200 1800794
+INFO 2024-11-03 08:05:56,615 basehttp 23732 1816 "GET /static/images/test2.jpg HTTP/1.1" 200 2206722
+INFO 2024-11-03 08:05:56,627 basehttp 23732 39528 "GET /static/images/test3.jpg HTTP/1.1" 200 3262750
+INFO 2024-11-03 08:05:56,821 basehttp 23732 39528 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-11-03 08:05:56,828 basehttp 23732 39528 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-11-03 08:06:02,764 basehttp 23732 39528 "GET /profile/ HTTP/1.1" 200 12118
+INFO 2024-11-03 08:06:04,516 basehttp 23732 39528 "GET /broadwaybarandgrill/ HTTP/1.1" 200 14391
+INFO 2024-11-03 08:06:04,628 basehttp 23732 39528 "GET /static/menubuilder.js HTTP/1.1" 200 23546
+INFO 2024-11-03 08:06:05,345 basehttp 23732 39528 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32882
+INFO 2024-11-03 08:06:15,950 basehttp 23732 36172 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 8729
+INFO 2024-11-03 08:07:48,264 basehttp 23732 39528 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32882
+INFO 2024-11-03 08:07:48,326 basehttp 23732 39528 - Broken pipe from ('127.0.0.1', 59350)
+INFO 2024-11-03 08:07:58,660 basehttp 23732 30340 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32882
+INFO 2024-11-03 08:07:58,745 basehttp 23732 30340 "GET /static/css/tailwind.css HTTP/1.1" 200 641212
+INFO 2024-11-03 08:07:58,747 basehttp 23732 30340 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2024-11-03 08:07:58,748 basehttp 23732 30340 "GET /static/index.js HTTP/1.1" 200 4271
+INFO 2024-11-03 08:07:58,750 basehttp 23732 30340 "GET /static/logout.js HTTP/1.1" 200 2449
+INFO 2024-11-03 08:07:58,751 basehttp 23732 28184 "GET /static/menubuilder.js HTTP/1.1" 200 23574
+INFO 2024-11-03 08:07:58,763 basehttp 23732 30340 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2024-11-03 08:07:58,849 basehttp 23732 30340 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-11-03 08:09:49,469 basehttp 23732 30340 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32882
+INFO 2024-11-03 08:09:49,570 basehttp 23732 30340 - Broken pipe from ('127.0.0.1', 55237)
+INFO 2024-11-03 08:09:49,570 basehttp 23732 28184 - Broken pipe from ('127.0.0.1', 55240)
+INFO 2024-11-03 08:09:49,571 basehttp 23732 8644 "GET /static/menubuilder.js HTTP/1.1" 200 23673
+INFO 2024-11-03 08:09:49,659 basehttp 23732 8644 - Broken pipe from ('127.0.0.1', 60473)
+INFO 2024-11-03 08:10:07,314 basehttp 23732 11900 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32882
+INFO 2024-11-03 08:10:07,372 basehttp 23732 11900 "GET /static/menubuilder.js HTTP/1.1" 200 23659
+INFO 2024-11-03 08:10:08,109 basehttp 23732 11900 - Broken pipe from ('127.0.0.1', 60514)
+INFO 2024-11-03 08:10:11,355 basehttp 23732 21988 "POST /broadwaybarandgrill/menu/update_course_description/15/ HTTP/1.1" 200 71
+INFO 2024-11-03 08:10:48,366 basehttp 23732 21988 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32882
+INFO 2024-11-03 08:10:48,419 basehttp 23732 21988 "GET /static/index.js HTTP/1.1" 200 4271
+INFO 2024-11-03 08:10:48,424 basehttp 23732 21988 - Broken pipe from ('127.0.0.1', 60521)
+INFO 2024-11-03 08:10:48,426 basehttp 23732 38108 "GET /static/menubuilder.js HTTP/1.1" 200 23512
+INFO 2024-11-03 08:10:48,510 basehttp 23732 38108 - Broken pipe from ('127.0.0.1', 60760)
+INFO 2024-11-03 08:10:51,270 basehttp 23732 28920 "POST /broadwaybarandgrill/menu/update_course_description/15/ HTTP/1.1" 200 71
+INFO 2024-11-03 08:11:37,298 basehttp 23732 28920 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32882
+INFO 2024-11-03 08:11:37,450 basehttp 23732 28920 "GET /static/menubuilder.js HTTP/1.1" 200 24622
+INFO 2024-11-03 08:11:37,641 basehttp 23732 28920 - Broken pipe from ('127.0.0.1', 60785)
+INFO 2024-11-03 08:11:40,932 basehttp 23732 38288 "POST /broadwaybarandgrill/menu/update_course_description/15/ HTTP/1.1" 200 71
+INFO 2024-11-03 08:11:44,812 basehttp 23732 38288 "POST /broadwaybarandgrill/menu/update_course_description/15/ HTTP/1.1" 200 71
+INFO 2024-11-03 08:12:41,735 basehttp 23732 38288 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 32844
+INFO 2024-11-03 08:12:41,865 basehttp 23732 38288 "GET /static/menubuilder.js HTTP/1.1" 200 24827
+INFO 2024-11-03 08:12:41,938 basehttp 23732 38288 - Broken pipe from ('127.0.0.1', 65529)
+INFO 2024-11-03 08:12:47,561 basehttp 23732 15152 "POST /broadwaybarandgrill/menu/update_course_description/15/ HTTP/1.1" 200 71
+INFO 2024-11-03 08:12:57,993 basehttp 23732 15152 "POST /broadwaybarandgrill/menu/update_course_description/15/ HTTP/1.1" 200 71
+INFO 2024-11-03 08:16:12,362 basehttp 23732 38800 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 37610
+INFO 2024-11-03 08:16:12,431 basehttp 23732 38800 "GET /static/menubuilder.js HTTP/1.1" 200 24827
+INFO 2024-11-03 08:16:12,507 basehttp 23732 38800 - Broken pipe from ('127.0.0.1', 61678)
+INFO 2024-11-03 08:17:14,400 basehttp 23732 24580 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 37610
+INFO 2024-11-03 08:17:14,471 basehttp 23732 24580 "GET /static/menubuilder.js HTTP/1.1" 200 25295
+INFO 2024-11-03 08:17:14,532 basehttp 23732 24580 - Broken pipe from ('127.0.0.1', 63837)
+INFO 2024-11-03 08:17:32,882 basehttp 23732 13628 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 37610
+INFO 2024-11-03 08:17:32,947 basehttp 23732 13628 "GET /static/menubuilder.js HTTP/1.1" 200 28706
+INFO 2024-11-03 08:17:33,015 basehttp 23732 13628 - Broken pipe from ('127.0.0.1', 49387)
+WARNING 2024-11-03 08:17:34,796 log 23732 26324 Not Found: /broadwaybarandgrill/menu/update_course_note/15/
+WARNING 2024-11-03 08:17:34,797 basehttp 23732 26324 "POST /broadwaybarandgrill/menu/update_course_note/15/ HTTP/1.1" 404 6635
+WARNING 2024-11-03 08:17:38,742 log 23732 26324 Not Found: /broadwaybarandgrill/menu/update_course_note/15/
+WARNING 2024-11-03 08:17:38,743 basehttp 23732 26324 "POST /broadwaybarandgrill/menu/update_course_note/15/ HTTP/1.1" 404 6635
