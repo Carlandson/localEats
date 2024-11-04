@@ -48,7 +48,7 @@
                 
                 <div id="panel{{ forloop.counter }}" class="hidden px-4 py-3 bg-white">
                     <!-- Course Options Section -->
-                    <div class="mb-6 border-b pb-4">
+                    <div class="mb-6 border-b pb-4 bg-amber-50 rounded-lg shadow-md p-2">
                         <div class="grid md:grid-cols-2 gap-4">
                             <!-- Course Details -->
                             <div class="space-y-4">
@@ -125,15 +125,12 @@
                             <div class="space-y-4">
                                 <div class="flex justify-between items-center">
                                     <label class="font-medium">Side Options:</label>
-                                    <button class="addSideOption text-sm px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded"
-                                            data-course-id="{{ course.id }}">
-                                        Add Side
-                                    </button>
                                 </div>
                                 
                                 <div id="sideOptionsList{{ course.id }}" class="space-y-2 max-h-[200px] overflow-y-auto">
                                     {% for side in course.side_options.all %}
-                                    <div class="flex justify-between items-center p-2 {% if side.is_premium %}bg-amber-50{% else %}bg-gray-50{% endif %} rounded">
+                                    <div id="sideOption{{ side.id }}" data-side-id="{{ side.id }}" data-course-id="{{ course.id }}"
+                                         class="flex justify-between items-center p-2 {% if side.is_premium %}bg-amber-50{% else %}bg-gray-50{% endif %} rounded">
                                         <div>
                                             <div class="flex items-center gap-2">
                                                 <p class="font-medium">{{ side.name }}</p>
@@ -164,13 +161,14 @@
                                     <p class="text-gray-500 text-center">No side options available</p>
                                     {% endfor %}
                                 </div>
+                                <div id="addSideButtonContainer{{ course.id }}" class="flex justify-end mt-2">
+                                    <button class="addSideOption text-sm px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded"
+                                            data-course-id="{{ course.id }}">
+                                        Add Side
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        
-                        <button class="saveCourseOptions w-full mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors duration-200"
-                                data-course-id="{{ course.id }}">
-                            Save Course Changes
-                        </button>
                     </div>
                     {% for dish in dishes %}
                         {% if dish.course == course %}

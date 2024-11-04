@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
-from .models import Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Kitchen, CuisineCategory
+from .models import Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Kitchen, CuisineCategory, SideOption
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -745,3 +745,117 @@ def update_course_description(request, eatery, course_id):
         return JsonResponse({"error": "Invalid JSON"}, status=400)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
+    
+def update_course_note(request, eatery, course_id):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    try:
+        course = Course.objects.get(id=course_id)
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        
+        # Verify owner
+        if request.user != restaurant.owner:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
+            
+        data = json.loads(request.body)
+        course.note = data.get('note', '').strip()
+        course.save()
+        
+        return JsonResponse({
+            "message": "Course note updated successfully",
+            "course_id": course_id
+        }, status=200)
+        
+    except Course.DoesNotExist:
+        return JsonResponse({"error": "Course does not exist."}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
+    
+
+@require_http_methods(["GET", "POST", "DELETE"])
+def side_options(request, eatery, id):
+    """
+    Handles all side option operations:
+    GET with course_id: Returns all side options for a course
+    GET with side_id: Returns a specific side option
+    POST with course_id: Creates a new side option
+    POST with side_id: Updates an existing side option
+    DELETE with side_id: Deletes a side option
+    """
+    try:
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
+
+        # GET request handling
+        if request.method == "GET":
+            try:
+                # Try to get a specific side option
+                side = SideOption.objects.get(id=id)
+                return JsonResponse({
+                    'id': side.id,
+                    'name': side.name,
+                    'description': side.description,
+                    'price': str(side.price),
+                    'is_premium': side.is_premium,
+                    'course_id': side.course.id
+                })
+            except SideOption.DoesNotExist:
+                # If not found, assume id is course_id and return all side options
+                course = get_object_or_404(Course, id=id)
+                side_options = course.side_options.all()
+                return JsonResponse([{
+                    'id': side.id,
+                    'name': side.name,
+                    'description': side.description,
+                    'price': str(side.price),
+                    'is_premium': side.is_premium
+                } for side in side_options], safe=False)
+
+        # POST request handling
+        elif request.method == "POST":
+            data = json.loads(request.body)
+            
+            try:
+                # Try to get existing side option (update case)
+                side = SideOption.objects.get(id=id)
+                side.name = data.get('name', side.name)
+                side.description = data.get('description', side.description)
+                side.is_premium = data.get('is_premium', side.is_premium)
+                side.price = data.get('price', side.price)
+                side.save()
+                course_id = side.course.id
+            except SideOption.DoesNotExist:
+                # If not found, create new side option
+                course = get_object_or_404(Course, id=id)
+                side = SideOption.objects.create(
+                    course=course,
+                    name=data.get('name'),
+                    description=data.get('description', ''),
+                    is_premium=data.get('is_premium', False),
+                    price=data.get('price', 0)
+                )
+                course_id = course.id
+
+            return JsonResponse({
+                'message': 'Side option saved successfully',
+                'course_id': course_id
+            })
+
+        # DELETE request handling
+        elif request.method == "DELETE":
+            side = get_object_or_404(SideOption, id=id)
+            course_id = side.course.id
+            side.delete()
+            return JsonResponse({
+                'message': 'Side option deleted successfully',
+                'course_id': course_id
+            })
+
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

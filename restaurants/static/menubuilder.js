@@ -1,4 +1,7 @@
+let eatery;
+
 document.addEventListener('DOMContentLoaded', function() {
+    eatery = JSON.parse(document.getElementById('kitchen').textContent);
     const accordionTriggers = document.querySelectorAll('.accordion-trigger');
     
     accordionTriggers.forEach(trigger => {
@@ -73,6 +76,23 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.matches('.saveNote')) {
             const courseId = e.target.dataset.courseId;
             saveCourseNote(courseId);
+        }
+        // Add Side Option button
+        if (e.target.matches('.addSideOption')) {
+            const courseId = e.target.dataset.courseId;
+            showSideOptionForm(courseId);
+        }
+
+        // Edit Side Option button
+        if (e.target.closest('.editSideOption')) {
+            const sideId = e.target.closest('.editSideOption').dataset.sideId;
+            editSideOption(sideId);
+        }
+
+        // Delete Side Option button
+        if (e.target.closest('.deleteSideOption')) {
+            const sideId = e.target.closest('.deleteSideOption').dataset.sideId;
+            deleteSideOption(sideId);
         }
     });
 });
@@ -211,7 +231,7 @@ function getCookie(name) {
 
 function addDish(course) {
     let currentCourse = course.replace('submit', "");
-    const eatery = JSON.parse(document.getElementById('kitchen').textContent);
+    // const eatery = JSON.parse(document.getElementById('kitchen').textContent);
     let addButton = document.getElementById(course);
     
     // Find the correct panel by traversing up and then finding the container
@@ -368,7 +388,7 @@ function editDish(dishId) {
         event.preventDefault();
         const imageInput = document.querySelector(`#dishImage${dishId}`);
         const imageData = await handleImageUpload(imageInput);
-        const eatery = JSON.parse(document.getElementById('kitchen').textContent);
+        // const eatery = JSON.parse(document.getElementById('kitchen').textContent);
 
         const formData = {
             name: document.querySelector(`#dishName${dishId}`).value,
@@ -522,7 +542,7 @@ function deleteCourse(courseId) {
         return;
     }
 
-    const eatery = JSON.parse(document.getElementById('kitchen').textContent);
+    // const eatery = JSON.parse(document.getElementById('kitchen').textContent);
     const courseElement = document.getElementById(`delete${courseId}`).closest('.mb-4');
     
     // Add loading state
@@ -573,7 +593,7 @@ function editCourseDescription(courseId) {
 }
 
 function saveCourseDescription(courseId) {
-    const eatery = JSON.parse(document.getElementById('kitchen').textContent);
+    // const eatery = JSON.parse(document.getElementById('kitchen').textContent);
     
     fetch(`/${eatery}/menu/update_course_description/${courseId}/`, {
         method: 'POST',
@@ -589,17 +609,22 @@ function saveCourseDescription(courseId) {
     .then(result => {
         const description = document.querySelector(`#courseDescription${courseId}`).value;
         
-        // Find the parent container that contains both display and form divs
-        const parentContainer = document.getElementById(`descriptionDisplay${courseId}`).parentElement;
+        // Find the parent container - try both possible parent elements
+        let parentContainer = document.getElementById(`descriptionForm${courseId}`);
+        if (!parentContainer) {
+            console.error('Could not find description form');
+            return;
+        }
+        parentContainer = parentContainer.parentElement;
         
-        // Create new container with both display and form divs
+        // Create new container
         const containerDiv = document.createElement('div');
         containerDiv.className = 'mb-4';
         
         // Create display div
         const displayDiv = document.createElement('div');
         displayDiv.id = `descriptionDisplay${courseId}`;
-        displayDiv.classList.remove('hidden');  // Make sure it's visible
+        displayDiv.classList.remove('hidden');
         displayDiv.innerHTML = `
             <div class="flex justify-between items-start gap-4">
                 <p class="text-gray-600">${description || 'No description added yet.'}</p>
@@ -655,7 +680,7 @@ function editCourseNote(courseId) {
 }
 
 function saveCourseNote(courseId) {
-    const eatery = JSON.parse(document.getElementById('kitchen').textContent);
+    // const eatery = JSON.parse(document.getElementById('kitchen').textContent);
     
     fetch(`/${eatery}/menu/update_course_note/${courseId}/`, {
         method: 'POST',
@@ -672,7 +697,7 @@ function saveCourseNote(courseId) {
         const note = document.querySelector(`#courseNote${courseId}`).value;
         
         // Find the parent container
-        const parentContainer = document.getElementById(`noteDisplay${courseId}`).parentElement;
+        const parentContainer = document.getElementById(`noteForm${courseId}`).parentElement;
         
         // Create new container
         const containerDiv = document.createElement('div');
@@ -720,4 +745,276 @@ function saveCourseNote(courseId) {
         console.error('Error:', error);
         alert('Error updating note. Please try again.');
     });
+}
+
+function showSideOptionForm(courseId, sideOption = null) {
+    const buttonContainer = document.getElementById(`addSideButtonContainer${courseId}`);
+    // Create a new div for the form instead of replacing existing content
+    const formDiv = document.createElement('div');
+    formDiv.id = `addSideButtonContainer${courseId}`; // Keep the same ID
+    formDiv.className = 'bg-white p-4 rounded-lg border mt-2';
+    
+    formDiv.innerHTML = `
+        <h3 class="text-lg font-semibold mb-4">${sideOption ? 'Edit' : 'Add'} Side Option</h3>
+        <form id="sideOptionForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Name</label>
+                <input type="text" id="sideName" 
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                       value="${sideOption ? sideOption.name : ''}" required>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea id="sideDescription" 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        rows="2">${sideOption ? sideOption.description || '' : ''}</textarea>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center">
+                    <input type="checkbox" id="isPremium" 
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                           ${sideOption && sideOption.is_premium ? 'checked' : ''}>
+                    <label class="ml-2 text-sm text-gray-700">Premium Side</label>
+                </div>
+                <div class="flex-1" id="priceField" ${sideOption && sideOption.is_premium ? '' : 'hidden'}>
+                    <label class="block text-sm font-medium text-gray-700">Price</label>
+                    <input type="number" id="sidePrice" 
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                           step="0.01" min="0"
+                           value="${sideOption ? sideOption.price || '0.00' : '0.00'}">
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 mt-4">
+                <button type="button" class="cancelSideOption px-4 py-2 text-gray-700 hover:text-gray-900">
+                    Cancel
+                </button>
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    ${sideOption ? 'Save Changes' : 'Add Side'}
+                </button>
+            </div>
+        </form>
+    `;
+
+    // Add the form to the container
+    buttonContainer.replaceWith(formDiv);
+    // const container = document.getElementById(`sideOptionsList${courseId}`);
+    // container.appendChild(formDiv);
+    formDiv.querySelector('.cancelSideOption').addEventListener('click', () => {
+        const newButtonContainer = document.createElement('div');
+        newButtonContainer.id = `addSideButtonContainer${courseId}`;
+        newButtonContainer.className = 'flex justify-end mt-2';
+        newButtonContainer.innerHTML = `
+            <button class="addSideOption text-sm px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded"
+                    data-course-id="${courseId}">
+                Add Side
+            </button>
+        `;
+        formDiv.replaceWith(newButtonContainer);
+    });
+    // Toggle price field visibility based on premium checkbox
+    const isPremiumCheckbox = formDiv.querySelector('#isPremium');
+    const priceField = formDiv.querySelector('#priceField');
+    isPremiumCheckbox.addEventListener('change', () => {
+        priceField.hidden = !isPremiumCheckbox.checked;
+    });
+
+    // Handle form submission
+    const form = formDiv.querySelector('#sideOptionForm');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = {
+            name: formDiv.querySelector('#sideName').value,
+            description: formDiv.querySelector('#sideDescription').value,
+            is_premium: formDiv.querySelector('#isPremium').checked,
+            price: formDiv.querySelector('#sidePrice').value || 0,
+            course_id: courseId
+        };
+
+        try {
+            const endpoint = sideOption 
+                ? `/${eatery}/menu/side_options/${sideOption.id}/`
+                : `/${eatery}/menu/side_options/${courseId}/`;
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+            const result = await response.json();
+
+            // Remove the form
+            const newButtonContainer = document.createElement('div');
+            newButtonContainer.id = `addSideButtonContainer${courseId}`;
+            newButtonContainer.className = 'flex justify-end mt-2';
+            newButtonContainer.innerHTML = `
+                <button class="addSideOption text-sm px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded"
+                        data-course-id="${courseId}">
+                    Add Side
+                </button>
+            `;
+            formDiv.remove();
+            
+            // Update the side options list
+            updateSideOptionsList(courseId);
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error saving side option. Please try again.');
+        }
+    });
+
+    // Handle cancel button
+    formDiv.querySelector('.cancelSideOption').addEventListener('click', () => {
+        formDiv.remove();
+    });
+}
+async function editSideOption(sideId) {
+    try {
+        const response = await fetch(`/${eatery}/menu/side_options/${sideId}/`);
+        if (!response.ok) throw new Error('Network response was not ok');
+        const sideOption = await response.json();
+        showSideOptionForm(sideOption.course_id, sideOption);
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error loading side option. Please try again.');
+    }
+}
+
+function deleteSideOption(sideId) {
+    if (!confirm('Are you sure you want to delete this side option?')) {
+        return;
+    }
+
+    // Find the button first, then traverse up to the parent container
+    const deleteButton = document.querySelector(`button.deleteSideOption[data-side-id="${sideId}"]`);
+    if (!deleteButton) {
+        console.error('Could not find delete button');
+        return;
+    }
+
+    // Find the side option div directly by ID
+    const sideElement = document.getElementById(`sideOption${sideId}`);
+    if (!sideElement) {
+        console.error('Could not find side option element');
+        return;
+    }
+
+    // Add loading state
+    sideElement.style.opacity = '0.5';
+    const buttons = sideElement.querySelectorAll('button');
+    buttons.forEach(button => button.disabled = true);
+
+    fetch(`/${eatery}/menu/side_options/${sideId}/`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(result => {
+        sideElement.style.transition = 'all 0.3s ease-out';
+        sideElement.style.transform = 'translateX(100%)';
+        sideElement.style.opacity = '0';
+        
+        setTimeout(() => {
+            sideElement.remove();
+            
+            // Check if this was the last side option
+            const listContainer = document.getElementById(`sideOptionsList${result.course_id}`);
+            const remainingSides = listContainer.querySelectorAll('div[data-side-id]').length;
+            
+            if (remainingSides === 0) {
+                updateSideOptionsList(result.course_id);
+            }
+        }, 300);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        sideElement.style.opacity = '1';
+        buttons.forEach(button => button.disabled = false);
+        alert('Error deleting side option. Please try again.');
+    });
+}
+
+async function updateSideOptionsList(courseId) {
+    try {
+        const response = await fetch(`/${eatery}/menu/side_options/${courseId}/`);
+        if (!response.ok) throw new Error('Network response was not ok');
+        const sideOptions = await response.json();
+
+        const listContainer = document.getElementById(`sideOptionsList${courseId}`);
+        
+        // Clear the container while preserving the button container
+        const buttonContainer = document.getElementById(`addSideButtonContainer${courseId}`);
+        listContainer.innerHTML = '';
+        
+        // Add side options in order (oldest first)
+        sideOptions.forEach(side => {
+            console.log('Adding side option:', side, 'to course:', courseId);
+            const sideDiv = document.createElement('div');
+            sideDiv.id = `sideOption${side.id}`; // Add specific ID
+            sideDiv.setAttribute('data-side-id', side.id);
+            sideDiv.className = 'flex justify-between items-center p-2 ' + 
+                               (side.is_premium ? 'bg-amber-50' : 'bg-gray-50') + 
+                               ' rounded mb-2';
+            
+            sideDiv.innerHTML = `
+                <div>
+                    <div class="flex items-center gap-2">
+                        <p class="font-medium">${side.name}</p>
+                        ${side.is_premium ? `<span class="text-sm text-amber-600 font-medium">+$${side.price}</span>` : ''}
+                    </div>
+                    ${side.description ? `<p class="text-sm text-gray-600">${side.description}</p>` : ''}
+                </div>
+                <div class="flex gap-2">
+                    <button class="editSideOption text-blue-500 hover:text-blue-700"
+                            data-side-id="${side.id}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                    </button>
+                    <button class="deleteSideOption text-red-500 hover:text-red-700"
+                            data-side-id="${side.id}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            listContainer.appendChild(sideDiv);
+        });
+
+        // Add "No side options" message if needed
+        if (sideOptions.length === 0) {
+            const noOptionsMessage = document.createElement('p');
+            noOptionsMessage.className = 'text-gray-500 text-center';
+            noOptionsMessage.textContent = 'No side options available';
+            listContainer.appendChild(noOptionsMessage);
+        }
+
+        // Re-add the button container at the end
+        const newButtonContainer = document.createElement('div');
+        newButtonContainer.id = `addSideButtonContainer${courseId}`;
+        newButtonContainer.className = 'flex justify-end mt-2';
+        newButtonContainer.innerHTML = `
+            <button class="addSideOption text-sm px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded"
+                    data-course-id="${courseId}">
+                Add Side
+            </button>
+        `;
+        listContainer.appendChild(newButtonContainer);
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error updating side options list. Please try again.');
+    }
 }

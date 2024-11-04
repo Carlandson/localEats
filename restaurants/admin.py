@@ -2,7 +2,7 @@ from django.contrib import admin
 import json
 from django_google_maps import widgets as map_widgets
 from django_google_maps import fields as map_fields
-from .models import Image, CuisineCategory, Kitchen, Menu, Course, Dish, SubPage, Event, AboutUsPage, EventsPage, SpecialsPage
+from .models import Image, CuisineCategory, Kitchen, Menu, Course, Dish, SubPage, Event, AboutUsPage, EventsPage, SpecialsPage, SideOption
 
 class SubPageInline(admin.StackedInline):
     model = SubPage
@@ -84,6 +84,7 @@ class EventAdmin(admin.ModelAdmin):
 class ImageAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'uploaded_by', 'upload_date']
 
+admin.site.register(SideOption)
 admin.site.register(AboutUsPage)
 admin.site.register(EventsPage)
 admin.site.register(SpecialsPage)
