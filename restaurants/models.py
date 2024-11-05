@@ -177,6 +177,7 @@ class Course(models.Model):
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
 
+
     def __str__(self):
         return f"{self.menu.name} - {self.name}"
 

@@ -4891,3 +4891,177 @@ WARNING 2024-11-04 13:24:01,867 log 27064 35096 Not Found: /broadwaybarandgrill/
 WARNING 2024-11-04 13:24:01,868 basehttp 27064 35096 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
 INFO 2024-11-04 13:24:01,910 basehttp 27064 21040 "GET /static/menubuilder.js HTTP/1.1" 304 0
 INFO 2024-11-04 13:24:20,629 basehttp 27064 21040 - Broken pipe from ('127.0.0.1', 54518)
+INFO 2024-11-05 09:52:59,807 autoreload 19380 41292 Watching for file changes with StatReloader
+INFO 2024-11-05 09:56:57,560 basehttp 19380 26116 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 83561
+INFO 2024-11-05 09:56:57,838 basehttp 19380 26116 "GET /static/menubuilder.js HTTP/1.1" 200 42219
+INFO 2024-11-05 09:56:57,936 basehttp 19380 26116 - Broken pipe from ('127.0.0.1', 63582)
+WARNING 2024-11-05 09:56:57,964 log 19380 10404 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 09:56:57,964 basehttp 19380 10404 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 09:57:10,423 basehttp 19380 10096 "POST /broadwaybarandgrill/menu/side_options/16/ HTTP/1.1" 200 62
+INFO 2024-11-05 09:57:10,476 basehttp 19380 10096 "GET /broadwaybarandgrill/menu/side_options/16/ HTTP/1.1" 200 123
+INFO 2024-11-05 09:59:08,534 basehttp 19380 43596 "POST /broadwaybarandgrill/menu/side_options/17/ HTTP/1.1" 200 62
+INFO 2024-11-05 09:59:08,580 basehttp 19380 43596 "GET /broadwaybarandgrill/menu/side_options/17/ HTTP/1.1" 200 96
+INFO 2024-11-05 09:59:12,761 basehttp 19380 43596 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 85696
+INFO 2024-11-05 09:59:13,067 basehttp 19380 43596 - Broken pipe from ('127.0.0.1', 55654)
+WARNING 2024-11-05 09:59:13,112 log 19380 27288 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 09:59:13,113 basehttp 19380 27288 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:05:20,978 basehttp 19380 31604 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 85696
+WARNING 2024-11-05 10:05:21,183 log 19380 3884 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:05:21,184 basehttp 19380 3884 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:05:21,204 basehttp 19380 31604 - Broken pipe from ('127.0.0.1', 59774)
+INFO 2024-11-05 10:05:28,372 basehttp 19380 3264 "POST /broadwaybarandgrill/menu/side_options/16/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:05:28,418 basehttp 19380 3264 "GET /broadwaybarandgrill/menu/side_options/16/ HTTP/1.1" 200 109
+INFO 2024-11-05 10:05:33,997 basehttp 19380 3264 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 85682
+WARNING 2024-11-05 10:05:34,172 log 19380 3884 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:05:34,172 basehttp 19380 3884 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:05:45,340 basehttp 19380 3264 "POST /broadwaybarandgrill/menu/side_options/17/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:05:45,409 basehttp 19380 3264 "GET /broadwaybarandgrill/menu/side_options/17/ HTTP/1.1" 200 194
+INFO 2024-11-05 10:05:54,009 basehttp 19380 3264 "GET /broadwaybarandgrill/menu/ HTTP/1.1" 200 87948
+WARNING 2024-11-05 10:05:54,181 log 19380 3884 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:05:54,181 basehttp 19380 3884 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:05:54,183 basehttp 19380 3264 "GET /static/css/tailwind.css HTTP/1.1" 200 641212
+INFO 2024-11-05 10:05:54,190 basehttp 19380 3264 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2024-11-05 10:05:54,192 basehttp 19380 3264 "GET /static/index.js HTTP/1.1" 200 4271
+INFO 2024-11-05 10:05:54,194 basehttp 19380 3532 "GET /static/logout.js HTTP/1.1" 200 2449
+INFO 2024-11-05 10:05:54,194 basehttp 19380 3264 "GET /static/menubuilder.js HTTP/1.1" 200 42340
+INFO 2024-11-05 10:05:54,430 basehttp 19380 3264 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2024-11-05 10:05:54,641 basehttp 19380 3264 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-11-05 10:05:54,655 basehttp 19380 3264 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-11-05 10:06:03,241 basehttp 19380 3264 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 87948
+INFO 2024-11-05 10:06:03,371 basehttp 19380 3264 "GET /static/menubuilder.js HTTP/1.1" 304 0
+WARNING 2024-11-05 10:06:03,449 log 19380 3884 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:06:03,450 basehttp 19380 3884 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:06:03,746 basehttp 19380 3264 - Broken pipe from ('127.0.0.1', 61070)
+INFO 2024-11-05 10:06:12,713 basehttp 19380 3532 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 87948
+INFO 2024-11-05 10:06:12,822 basehttp 19380 3532 "GET /static/menubuilder.js HTTP/1.1" 304 0
+WARNING 2024-11-05 10:06:12,849 log 19380 3884 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:06:12,849 basehttp 19380 3884 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:06:24,106 basehttp 19380 3532 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 87948
+INFO 2024-11-05 10:06:24,219 basehttp 19380 3532 "GET /static/menubuilder.js HTTP/1.1" 304 0
+WARNING 2024-11-05 10:06:24,250 log 19380 3884 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:06:24,250 basehttp 19380 3884 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:06:43,166 basehttp 19380 3532 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 87948
+INFO 2024-11-05 10:06:43,300 basehttp 19380 3532 "GET /static/menubuilder.js HTTP/1.1" 200 42219
+WARNING 2024-11-05 10:06:43,500 log 19380 3884 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:06:43,500 basehttp 19380 3884 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:06:43,731 basehttp 19380 3532 - Broken pipe from ('127.0.0.1', 61118)
+INFO 2024-11-05 10:07:43,058 basehttp 19380 16324 "DELETE /broadwaybarandgrill/menu/side_options/32/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:07:49,800 basehttp 19380 16324 "POST /broadwaybarandgrill/menu/side_options/17/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:07:49,871 basehttp 19380 16324 "GET /broadwaybarandgrill/menu/side_options/17/ HTTP/1.1" 200 188
+INFO 2024-11-05 10:11:17,028 basehttp 19380 33476 "POST /broadwaybarandgrill/menu/side_options/16/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:11:17,113 basehttp 19380 33476 "GET /broadwaybarandgrill/menu/side_options/16/ HTTP/1.1" 200 108
+INFO 2024-11-05 10:11:36,953 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/side_options/16/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:11:38,874 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/side_options/31/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:11:40,914 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/side_options/30/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:11:42,525 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/side_options/29/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:11:44,274 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/side_options/24/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:11:46,178 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/side_options/23/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:11:47,710 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/side_options/8/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:11:49,922 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/side_options/10/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:11:50,381 basehttp 19380 33476 "GET /broadwaybarandgrill/menu/side_options/15/ HTTP/1.1" 200 2
+INFO 2024-11-05 10:11:53,362 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/delete_course/15/ HTTP/1.1" 200 68
+INFO 2024-11-05 10:11:55,499 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/delete_course/16/ HTTP/1.1" 200 68
+INFO 2024-11-05 10:12:04,504 basehttp 19380 33476 "POST /broadwaybarandgrill/menu/side_options/17/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:12:04,550 basehttp 19380 33476 "GET /broadwaybarandgrill/menu/side_options/17/ HTTP/1.1" 200 282
+INFO 2024-11-05 10:12:11,932 basehttp 19380 33476 "POST /broadwaybarandgrill/menu/side_options/18/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:12:12,007 basehttp 19380 33476 "GET /broadwaybarandgrill/menu/side_options/18/ HTTP/1.1" 200 101
+INFO 2024-11-05 10:12:17,370 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/side_options/36/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:12:17,721 basehttp 19380 33476 "GET /broadwaybarandgrill/menu/side_options/18/ HTTP/1.1" 200 2
+INFO 2024-11-05 10:12:18,918 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/delete_course/18/ HTTP/1.1" 200 68
+INFO 2024-11-05 10:12:22,464 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/side_options/35/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:12:24,212 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/side_options/33/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:12:26,197 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/side_options/34/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:12:26,554 basehttp 19380 33476 "GET /broadwaybarandgrill/menu/side_options/17/ HTTP/1.1" 200 2
+INFO 2024-11-05 10:12:29,132 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/delete_course/17/ HTTP/1.1" 200 68
+INFO 2024-11-05 10:12:31,871 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/delete_course/19/ HTTP/1.1" 200 68
+INFO 2024-11-05 10:12:34,245 basehttp 19380 33476 "DELETE /broadwaybarandgrill/menu/delete_course/22/ HTTP/1.1" 200 68
+INFO 2024-11-05 10:12:35,446 basehttp 19380 33476 "POST /broadwaybarandgrill/menu/add_course/ HTTP/1.1" 200 57
+INFO 2024-11-05 10:12:35,714 basehttp 19380 33476 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 19609
+INFO 2024-11-05 10:12:35,847 basehttp 19380 33476 "GET /static/menubuilder.js HTTP/1.1" 200 42219
+WARNING 2024-11-05 10:12:35,882 log 19380 19416 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:12:35,882 basehttp 19380 19416 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:12:36,251 basehttp 19380 33476 - Broken pipe from ('127.0.0.1', 57590)
+INFO 2024-11-05 10:12:40,050 basehttp 19380 38192 "POST /broadwaybarandgrill/menu/add_course/ HTTP/1.1" 200 57
+INFO 2024-11-05 10:12:40,179 basehttp 19380 38192 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 26017
+WARNING 2024-11-05 10:12:40,319 log 19380 19416 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:12:40,320 basehttp 19380 19416 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:12:40,509 basehttp 19380 38192 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-11-05 10:12:46,098 basehttp 19380 38192 "POST /broadwaybarandgrill/menu/side_options/24/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:12:46,146 basehttp 19380 38192 "GET /broadwaybarandgrill/menu/side_options/24/ HTTP/1.1" 200 98
+INFO 2024-11-05 10:12:53,183 basehttp 19380 38192 "POST /broadwaybarandgrill/menu/side_options/23/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:12:53,329 basehttp 19380 38192 "GET /broadwaybarandgrill/menu/side_options/23/ HTTP/1.1" 200 99
+INFO 2024-11-05 10:13:01,216 basehttp 19380 38192 "DELETE /broadwaybarandgrill/menu/side_options/37/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:13:01,563 basehttp 19380 38192 "GET /broadwaybarandgrill/menu/side_options/24/ HTTP/1.1" 200 2
+INFO 2024-11-05 10:13:03,708 basehttp 19380 38192 "DELETE /broadwaybarandgrill/menu/delete_course/24/ HTTP/1.1" 200 68
+INFO 2024-11-05 10:13:06,048 basehttp 19380 38192 "DELETE /broadwaybarandgrill/menu/side_options/38/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:13:06,400 basehttp 19380 38192 "GET /broadwaybarandgrill/menu/side_options/23/ HTTP/1.1" 200 2
+INFO 2024-11-05 10:13:13,804 basehttp 19380 38192 "DELETE /broadwaybarandgrill/menu/delete_course/23/ HTTP/1.1" 200 68
+INFO 2024-11-05 10:13:16,196 basehttp 19380 38192 "POST /broadwaybarandgrill/menu/add_course/ HTTP/1.1" 200 57
+INFO 2024-11-05 10:13:16,305 basehttp 19380 38192 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 19600
+INFO 2024-11-05 10:13:16,406 basehttp 19380 38192 "GET /static/menubuilder.js HTTP/1.1" 200 42219
+WARNING 2024-11-05 10:13:16,469 log 19380 19416 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:13:16,470 basehttp 19380 19416 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:13:16,762 basehttp 19380 38192 - Broken pipe from ('127.0.0.1', 53108)
+INFO 2024-11-05 10:13:25,622 basehttp 19380 40036 "POST /broadwaybarandgrill/menu/add_course/ HTTP/1.1" 200 57
+INFO 2024-11-05 10:13:25,737 basehttp 19380 40036 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 26011
+WARNING 2024-11-05 10:13:25,930 log 19380 19416 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:13:25,931 basehttp 19380 19416 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:13:26,339 basehttp 19380 40036 - Broken pipe from ('127.0.0.1', 53194)
+INFO 2024-11-05 10:13:32,928 basehttp 19380 24624 "POST /broadwaybarandgrill/menu/side_options/26/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:13:32,993 basehttp 19380 24624 "GET /broadwaybarandgrill/menu/side_options/26/ HTTP/1.1" 200 99
+INFO 2024-11-05 10:13:37,168 basehttp 19380 24624 "POST /broadwaybarandgrill/menu/side_options/26/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:13:37,213 basehttp 19380 24624 "GET /broadwaybarandgrill/menu/side_options/26/ HTTP/1.1" 200 186
+INFO 2024-11-05 10:13:40,854 basehttp 19380 24624 "DELETE /broadwaybarandgrill/menu/side_options/40/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:13:42,440 basehttp 19380 24624 "DELETE /broadwaybarandgrill/menu/side_options/39/ HTTP/1.1" 200 64
+INFO 2024-11-05 10:13:42,797 basehttp 19380 24624 "GET /broadwaybarandgrill/menu/side_options/26/ HTTP/1.1" 200 2
+INFO 2024-11-05 10:14:01,499 basehttp 19380 24624 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-11-05 10:15:18,444 basehttp 19380 24624 "POST /broadwaybarandgrill/menu/side_options/25/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:15:18,622 basehttp 19380 24624 "GET /broadwaybarandgrill/menu/side_options/25/ HTTP/1.1" 200 96
+INFO 2024-11-05 10:15:32,730 basehttp 19380 24624 "POST /broadwaybarandgrill/menu/side_options/26/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:15:32,776 basehttp 19380 24624 "GET /broadwaybarandgrill/menu/side_options/26/ HTTP/1.1" 200 95
+INFO 2024-11-05 10:16:25,175 basehttp 19380 24624 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 31949
+INFO 2024-11-05 10:16:25,357 basehttp 19380 24624 "GET /static/menubuilder.js HTTP/1.1" 200 41719
+WARNING 2024-11-05 10:16:25,379 log 19380 33212 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:16:25,380 basehttp 19380 33212 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:16:25,735 basehttp 19380 24624 - Broken pipe from ('127.0.0.1', 51892)
+INFO 2024-11-05 10:16:32,451 basehttp 19380 12564 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-11-05 10:16:35,307 basehttp 19380 12564 "DELETE /delete_dish/47 HTTP/1.1" 200 55
+INFO 2024-11-05 10:16:41,252 basehttp 19380 12564 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-11-05 10:16:49,870 basehttp 19380 12564 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 33887
+WARNING 2024-11-05 10:16:50,094 log 19380 33212 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:16:50,095 basehttp 19380 33212 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:16:50,101 basehttp 19380 12564 "GET /static/menubuilder.js HTTP/1.1" 200 42219
+INFO 2024-11-05 10:16:50,467 basehttp 19380 12564 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2024-11-05 10:22:09,319 basehttp 19380 39464 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 33887
+WARNING 2024-11-05 10:22:09,553 log 19380 32068 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:22:09,554 basehttp 19380 32068 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:22:09,610 basehttp 19380 39464 "GET /static/menubuilder.js HTTP/1.1" 200 41749
+INFO 2024-11-05 10:22:09,895 basehttp 19380 39464 - Broken pipe from ('127.0.0.1', 58597)
+INFO 2024-11-05 10:22:15,320 basehttp 19380 37372 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-11-05 10:22:25,199 basehttp 19380 37372 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 35825
+INFO 2024-11-05 10:22:25,378 basehttp 19380 37372 "GET /static/menubuilder.js HTTP/1.1" 200 42219
+WARNING 2024-11-05 10:22:25,387 log 19380 32068 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:22:25,387 basehttp 19380 32068 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:22:25,871 basehttp 19380 37372 - Broken pipe from ('127.0.0.1', 58621)
+INFO 2024-11-05 10:22:34,756 basehttp 19380 42668 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-11-05 10:26:45,437 basehttp 19380 28064 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 37763
+WARNING 2024-11-05 10:26:45,649 log 19380 13052 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:26:45,650 basehttp 19380 13052 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:26:45,651 basehttp 19380 28064 "GET /static/menubuilder.js HTTP/1.1" 200 42397
+INFO 2024-11-05 10:26:46,060 basehttp 19380 28064 - Broken pipe from ('127.0.0.1', 58003)
+INFO 2024-11-05 10:27:01,078 basehttp 19380 44776 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-11-05 10:27:04,018 basehttp 19380 44776 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 39705
+WARNING 2024-11-05 10:27:04,185 log 19380 13052 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:27:04,186 basehttp 19380 13052 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:27:04,186 basehttp 19380 44776 "GET /static/menubuilder.js HTTP/1.1" 304 0
+INFO 2024-11-05 10:28:01,502 basehttp 19380 44776 "GET /broadwaybarandgrill/menu/? HTTP/1.1" 200 39705
+INFO 2024-11-05 10:28:01,693 basehttp 19380 44776 "GET /static/menubuilder.js HTTP/1.1" 200 42005
+WARNING 2024-11-05 10:28:01,775 log 19380 13052 Not Found: /broadwaybarandgrill/menu/installHook.js.map
+WARNING 2024-11-05 10:28:01,775 basehttp 19380 13052 "GET /broadwaybarandgrill/menu/installHook.js.map HTTP/1.1" 404 7081
+INFO 2024-11-05 10:28:02,155 basehttp 19380 44776 - Broken pipe from ('127.0.0.1', 58021)
+INFO 2024-11-05 10:28:07,592 basehttp 19380 16380 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-11-05 10:28:14,270 basehttp 19380 16380 "POST /broadwaybarandgrill/menu/add_dish/ HTTP/1.1" 201 70
+INFO 2024-11-05 10:30:27,023 basehttp 19380 23692 "PUT /broadwaybarandgrill/menu/edit_dish/53/ HTTP/1.1" 200 72
+INFO 2024-11-05 10:30:34,083 basehttp 19380 23692 "DELETE /delete_dish/53 HTTP/1.1" 200 55
+INFO 2024-11-05 10:30:53,370 basehttp 19380 23692 "POST /broadwaybarandgrill/menu/side_options/25/ HTTP/1.1" 200 62
+INFO 2024-11-05 10:30:53,416 basehttp 19380 23692 "GET /broadwaybarandgrill/menu/side_options/25/ HTTP/1.1" 200 205

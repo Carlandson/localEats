@@ -231,7 +231,6 @@ function getCookie(name) {
 
 function addDish(course) {
     let currentCourse = course.replace('submit', "");
-    // const eatery = JSON.parse(document.getElementById('kitchen').textContent);
     let addButton = document.getElementById(course);
     
     // Find the correct panel by traversing up and then finding the container
@@ -243,13 +242,17 @@ function addDish(course) {
     }
 
     // Store the original button's parent
-    const buttonContainer = addButton.parentNode;
+    // const buttonContainer = addButton.parentNode;
+
+    const buttonContainer = addButton.closest('.text-center');
+    const deleteButton = buttonContainer.querySelector('.deleteCourse');
+    buttonContainer.style.display = 'none';
 
     let formDiv = document.createElement('div');
     formDiv.innerHTML = getFormHTML(false);
-
+    buttonContainer.parentNode.insertBefore(formDiv, buttonContainer);
     // Replace the button with the form
-    addButton.replaceWith(formDiv);
+    // addButton.replaceWith(formDiv);
 
     // Add cancel button functionality
     formDiv.querySelector('.cancel-add').addEventListener('click', () => {
@@ -299,22 +302,16 @@ function addDish(course) {
 
             // Insert the new dish before the button container
             buttonContainer.insertAdjacentElement('beforebegin', newDishArticle);
-
-            // Restore the button
-            buttonContainer.appendChild(addButton);
-            formDiv.remove();
-
-            // Add event listeners to new buttons
-            // const newEditBtn = newDishArticle.querySelector('.editDish');
-            // const newDeleteBtn = newDishArticle.querySelector('.deleteDish');
-            // newEditBtn.addEventListener('click', () => editDish(result.dish_id));
-            // newDeleteBtn.addEventListener('click', () => deleteDish(result.dish_id));
-            buttonContainer.insertAdjacentElement('beforebegin', newDishArticle);
-            buttonContainer.appendChild(addButton);
+            
+            // Show the original button container
+            buttonContainer.style.display = '';
             formDiv.remove();
         })
         .catch(error => {
             console.error('Error:', error);
+            // Show the original button container on error
+            buttonContainer.style.display = '';
+            formDiv.remove();
             alert(error.message || 'Error adding dish. Please try again.');
         });
     });
