@@ -89,7 +89,7 @@ class Kitchen(models.Model):
     city = models.CharField(max_length=64)
     state = models.CharField(max_length=64)
     zip_code = models.CharField(max_length=20)
-    description = models.TextField(max_length=200, default="")
+    description = models.TextField(max_length=200, default="", blank=True)
     created = models.DateTimeField(auto_now_add=True)
     user_favorite = models.ManyToManyField(User, blank=True, related_name="regular")
     phone_number = PhoneNumberField()

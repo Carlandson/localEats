@@ -7,19 +7,30 @@ document.addEventListener('DOMContentLoaded', function() {
     accordionTriggers.forEach(trigger => {
         trigger.addEventListener('click', () => {
             const target = document.getElementById(trigger.dataset.target);
-            const arrow = trigger.querySelector('svg');
-            
-            // Toggle current panel
+            const arrow = trigger.querySelector('svg'); // Select the arrow icon
+    
+            // Toggle panel visibility
             target.classList.toggle('hidden');
-            arrow.classList.toggle('rotate-180');
-            
-            // Optional: Close other panels
+    
+
+            // Rotate the arrow based on panel's visibility
+            if (target.classList.contains('hidden')) {
+                trigger.classList.remove('bg-gray-100', 'hover:bg-gray-400'); 
+                trigger.classList.add('bg-white', 'hover:bg-gray-400');
+                arrow.classList.remove('rotate-90'); // Reset rotation when hidden
+            } else {
+                trigger.classList.remove('bg-white', 'hover:bg-gray-50'); // Open state
+                trigger.classList.add('bg-gray-100', 'hover:bg-gray-400');
+                arrow.classList.add('rotate-90'); // Apply rotation when open
+            }
+    
+            // Optional: Close other panels if needed
             // accordionTriggers.forEach(otherTrigger => {
             //     if (otherTrigger !== trigger) {
             //         const otherTarget = document.getElementById(otherTrigger.dataset.target);
             //         const otherArrow = otherTrigger.querySelector('svg');
             //         otherTarget.classList.add('hidden');
-            //         otherArrow.classList.remove('rotate-180');
+            //         otherArrow.classList.remove('rotate-90');
             //     }
             // });
         });

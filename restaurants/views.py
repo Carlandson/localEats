@@ -4,7 +4,7 @@ import logging
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
 from django.urls import reverse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
@@ -859,3 +859,75 @@ def side_options(request, eatery, id):
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+    
+@login_required
+def preview_restaurant(request, eatery):
+    try:
+        restaurant = Kitchen.objects.get(subdirectory=eatery)
+        
+        # Check if user is the owner
+        if request.user != restaurant.owner:
+            return HttpResponseForbidden("You don't have permission to preview this restaurant")
+            
+        # Get the same context you use for visitor view
+        context = {
+            'restaurant_details': restaurant,
+            'dishes': Dish.objects.filter(course__restaurant=restaurant),
+            'courses': Course.objects.filter(restaurant=restaurant),
+            'is_preview': True  # Add this to indicate it's a preview
+        }
+        
+        return render(request, 'restaurants/eatery_visitor.html', context)
+        
+    except Kitchen.DoesNotExist:
+        return HttpResponseNotFound("Restaurant not found")
+
+@login_required
+def preview_menu(request, eatery):
+    try:
+        restaurant = Kitchen.objects.get(subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return HttpResponseForbidden("You don't have permission to preview this restaurant")
+            
+        context = {
+            'restaurant_details': restaurant,
+            'dishes': Dish.objects.filter(course__restaurant=restaurant),
+            'courses': Course.objects.filter(restaurant=restaurant),
+            'is_preview': True
+        }
+        return render(request, 'restaurants/visitor_subpages/menu.html', context)
+    except Kitchen.DoesNotExist:
+        return HttpResponseNotFound("Restaurant not found")
+
+@login_required
+def preview_events(request, eatery):
+    try:
+        restaurant = Kitchen.objects.get(subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return HttpResponseForbidden("You don't have permission to preview this restaurant")
+            
+        context = {
+            'restaurant_details': restaurant,
+            'events': Event.objects.filter(restaurant=restaurant),
+            'is_preview': True
+        }
+        return render(request, 'restaurants/visitor_subpages/events.html', context)
+    except Kitchen.DoesNotExist:
+        return HttpResponseNotFound("Restaurant not found")
+    
+@login_required
+def preview_about(request, eatery):
+    try:
+        restaurant = Kitchen.objects.get(subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return HttpResponseForbidden("You don't have permission to preview this restaurant")
+            
+        context = {
+            'restaurant_details': restaurant,
+            'about': AboutUsPage.objects.filter(restaurant=restaurant),
+            'is_preview': True
+        }
+        return render(request, 'restaurants/visitor_subpages/events.html', context)
+    except Kitchen.DoesNotExist:
+        return HttpResponseNotFound("Restaurant not found")
+

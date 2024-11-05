@@ -65,7 +65,7 @@ class RestaurantCreateForm(forms.ModelForm):
     )
     class Meta:
         model = Kitchen
-        fields = ['restaurant_name', 'cuisine', 'address', 'city', 'state', 'zip_code', 'phone_number', 'subdirectory']
+        fields = ['restaurant_name', 'cuisine', 'address', 'city', 'state', 'zip_code', 'phone_number', 'subdirectory', 'description']
 
 
     def clean_cuisine(self):
@@ -123,7 +123,8 @@ class RestaurantCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['restaurant_name'].widget.attrs.update({'placeholder': 'Name of restaurant'})       
+        self.fields['restaurant_name'].widget.attrs.update({'placeholder': 'Name of restaurant'})
+        self.fields['description'].required = False  # Add this       
 
 class DishSubmit(ModelForm):
     class Meta:
