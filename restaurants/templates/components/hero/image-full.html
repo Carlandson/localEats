@@ -1,0 +1,39 @@
+<div class="relative">
+    {% with hero_image=restaurant_details.get_hero_image %}
+        {% if hero_image %}
+            <div class="absolute inset-0">
+                <img class="w-full h-[600px] object-cover" 
+                     src="{{ hero_image.image.url }}" 
+                     alt="{{ hero_image.alt_text }}">
+                <div class="absolute inset-0 bg-gray-600 mix-blend-multiply"></div>
+            </div>
+            <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
+                <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+                    {{ restaurant_details.restaurant_name }}
+                </h1>
+                {% if restaurant_details.description %}
+                    <p class="mt-6 text-xl text-white max-w-3xl">
+                        {{ restaurant_details.description }}
+                    </p>
+                {% endif %}
+                <div class="mt-10">
+                    <a href="/{{ eatery }}/menu/" 
+                       class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                        View Menu
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <!-- Placeholder when no image is uploaded -->
+            <div class="bg-gray-100 h-[600px] flex items-center justify-center">
+                <div class="text-center">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ restaurant_details.restaurant_name }}</h1>
+                    {% if restaurant_details.description %}
+                        <p class="text-xl text-gray-500 mb-8">{{ restaurant_details.description }}</p>
+                    {% endif %}
+                    <p class="text-gray-500 mb-4">No hero image uploaded</p>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+</div>

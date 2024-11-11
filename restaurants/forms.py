@@ -146,3 +146,37 @@ class ImageUploadForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ['image', 'alt_text', 'caption']
+
+
+class RestaurantCustomizationForm(forms.ModelForm):
+    class Meta:
+        model = Kitchen
+        fields = [
+            'navigation_style',
+            'hero_style',
+            'menu_style',
+            'show_gallery',
+            'show_testimonials',
+            'show_social_feed',
+            'show_hours',
+            'show_map',
+            'primary_color',
+            'secondary_color',
+            'font_heading',
+            'font_body',
+            'layout'
+        ]
+        widgets = {
+            'primary_color': forms.TextInput(attrs={'type': 'color'}),
+            'secondary_color': forms.TextInput(attrs={'type': 'color'}),
+        }
+
+
+class RestaurantImageForm(forms.ModelForm):
+    class Meta:
+        model = Image
+        fields = ['image', 'alt_text', 'caption']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['alt_text'].help_text = "Use 'logo' for restaurant logo or 'hero' for hero image"

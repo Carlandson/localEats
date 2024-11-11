@@ -1,0 +1,78 @@
+<nav class="bg-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-center items-center h-16">
+            <!-- Logo/Restaurant Name -->
+            <div class="flex-shrink-0 text-center">
+                {% with logo=restaurant_details.get_logo %}
+                    {% if logo %}
+                        <img src="{{ logo.image.url }}" alt="{{ logo.alt_text }}" class="h-8 w-auto">
+                    {% else %}
+                        <span class="text-xl font-semibold">{{ restaurant_details.restaurant_name }}</span>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="hidden md:flex items-center justify-center space-x-8 ml-10">
+                <a href="/{{ eatery }}/" 
+                   class="text-gray-700 hover:text-gray-900">Home</a>
+                
+                {% if menu_page %}
+                    <a href="/{{ eatery }}/menu/" 
+                       class="text-gray-700 hover:text-gray-900">Menu</a>
+                {% endif %}
+                
+                {% if about_page %}
+                    <a href="/{{ eatery }}/about/" 
+                       class="text-gray-700 hover:text-gray-900">About</a>
+                {% endif %}
+                
+                {% if events_page %}
+                    <a href="/{{ eatery }}/events/" 
+                       class="text-gray-700 hover:text-gray-900">Events</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100">
+                <span class="sr-only">Open main menu</span>
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="hidden mobile-menu md:hidden">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+            <a href="/{{ eatery }}/" 
+               class="block px-3 py-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+                Home
+            </a>
+            
+            {% if menu_page %}
+                <a href="/{{ eatery }}/menu/" 
+                   class="block px-3 py-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+                    Menu
+                </a>
+            {% endif %}
+            
+            {% if about_page %}
+                <a href="/{{ eatery }}/about/" 
+                   class="block px-3 py-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+                    About
+                </a>
+            {% endif %}
+            
+            {% if events_page %}
+                <a href="/{{ eatery }}/events/" 
+                   class="block px-3 py-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+                    Events
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

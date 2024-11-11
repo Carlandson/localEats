@@ -1,0 +1,100 @@
+<nav class="w-full {% if restaurant_details.theme == 'dark' %}bg-gray-900 text-white{% else %}bg-white text-gray-800{% endif %} shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Desktop Navigation -->
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo/Name -->
+            <div class="flex-shrink-0">
+                {% with logo=restaurant_details.get_logo %}
+                    {% if logo %}
+                        <img src="{{ logo.image.url }}" alt="{{ logo.alt_text }}" class="h-8 w-auto">
+                    {% else %}
+                        <h1 class="text-xl font-semibold">{{ restaurant_details.restaurant_name }}</h1>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="{% url 'eatery' eatery=eatery %}" 
+                   class="text-sm font-medium hover:text-primary-600 transition-colors {% if request.resolver_match.url_name == 'eatery' %}text-primary-600{% endif %}">
+                    Home
+                </a>
+                
+                {% if menu_page %}
+                    <a href="{% url 'menu' eatery=eatery %}" 
+                       class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'menu' in request.path %}text-primary-600{% endif %}">
+                        Menu
+                    </a>
+                {% endif %}
+                
+                {% if about_page %}
+                    <a href="{% url 'about' eatery=eatery %}" 
+                       class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'about' in request.path %}text-primary-600{% endif %}">
+                        About
+                    </a>
+                {% endif %}
+                
+                {% if events_page %}
+                    <a href="{% url 'events' eatery=eatery %}" 
+                       class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'events' in request.path %}text-primary-600{% endif %}">
+                        Events
+                    </a>
+                {% endif %}
+
+                {% if restaurant_details.phone_number %}
+                    <span class="text-sm text-gray-500">
+                        <i class="fas fa-phone text-xs mr-1"></i>
+                        {{ restaurant_details.phone_number }}
+                    </span>
+                {% endif %}
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden">
+                <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md hover:bg-gray-100 focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="hidden mobile-menu md:hidden py-2">
+            <div class="space-y-1">
+                <a href="{% url 'eatery' eatery=eatery %}" 
+                   class="block px-3 py-2 text-base font-medium rounded-md hover:bg-gray-100">
+                    Home
+                </a>
+                
+                {% if menu_page %}
+                    <a href="{% url 'menu' eatery=eatery %}" 
+                       class="block px-3 py-2 text-base font-medium rounded-md hover:bg-gray-100">
+                        Menu
+                    </a>
+                {% endif %}
+                
+                {% if about_page %}
+                    <a href="{% url 'about' eatery=eatery %}" 
+                       class="block px-3 py-2 text-base font-medium rounded-md hover:bg-gray-100">
+                        About
+                    </a>
+                {% endif %}
+                
+                {% if events_page %}
+                    <a href="{% url 'events' eatery=eatery %}" 
+                       class="block px-3 py-2 text-base font-medium rounded-md hover:bg-gray-100">
+                        Events
+                    </a>
+                {% endif %}
+
+                {% if restaurant_details.phone_number %}
+                    <div class="px-3 py-2 text-base text-gray-500">
+                        <i class="fas fa-phone text-xs mr-1"></i>
+                        {{ restaurant_details.phone_number }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

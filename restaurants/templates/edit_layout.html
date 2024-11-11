@@ -1,0 +1,141 @@
+{% extends "owner_layout.html" %}
+{% load static %}
+{% block body %}
+{{ eatery|json_script:"kitchen" }}
+<div class="flex h-screen overflow-hidden">
+    <!-- Left Sidebar - Fixed width -->
+    <div class="w-80 bg-white shadow-lg overflow-y-auto border-r flex-shrink-0">
+        <div class="p-6">
+            <h1 class="text-2xl font-bold mb-6">Layout Editor</h1>
+            
+            <!-- Navigation Style -->
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold mb-4">Navigation Style</h2>
+                <div class="space-y-2">
+                    <label class="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="nav_style" value="minimal" 
+                               {% if restaurant_details.navigation_style == 'minimal' %}checked{% endif %}
+                               class="component-selector"
+                               data-component="navigation">
+                        <span>Minimal</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="nav_style" value="centered" 
+                               {% if restaurant_details.navigation_style == 'centered' %}checked{% endif %}
+                               class="component-selector"
+                               data-component="navigation">
+                        <span>Centered</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="nav_style" value="split" 
+                               {% if restaurant_details.navigation_style == 'split' %}checked{% endif %}
+                               class="component-selector"
+                               data-component="navigation">
+                        <span>Split</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Hero Section -->
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold mb-4">Hero Image</h2>
+                <div class="space-y-4">
+                    <!-- Current Image Preview -->
+                    <div class="relative">
+                        {% with hero_image=restaurant_details.get_hero_image %}
+                            {% if hero_image %}
+                                <img src="{{ hero_image.image.url }}" 
+                                     alt="Current hero image" 
+                                     class="w-full h-40 object-cover rounded-lg">
+                                <button type="button" 
+                                        id="remove-hero-image"
+                                        class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            {% else %}
+                                <div class="w-full h-40 bg-gray-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-gray-400">No image uploaded</span>
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+            
+                    <!-- Upload Button -->
+                    <div class="relative">
+                        <input type="file" 
+                               id="hero-image-upload" 
+                               accept="image/*"
+                               class="hidden">
+                        <button type="button"
+                                id="upload-hero-button"
+                                class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Upload New Image
+                        </button>
+                    </div>
+                </div>
+            </div>
+                <div class="space-y-2">
+                    <label class="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="hero_style" value="minimal" 
+                               {% if restaurant_details.hero_style == 'minimal' %}checked{% endif %}
+                               class="component-selector"
+                               data-component="hero">
+                        <span>Minimal</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="hero_style" value="image-full" 
+                               {% if restaurant_details.hero_style == 'image-full' %}checked{% endif %}
+                               class="component-selector"
+                               data-component="hero">
+                        <span>Full Image</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Colors -->
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold mb-4">Colors</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Primary Color</label>
+                        <input type="color" 
+                               value="{{ restaurant_details.primary_color }}"
+                               class="color-picker w-full h-10 rounded border"
+                               data-color-type="primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Secondary Color</label>
+                        <input type="color" 
+                               value="{{ restaurant_details.secondary_color }}"
+                               class="color-picker w-full h-10 rounded border"
+                               data-color-type="secondary">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <button type="button" 
+                    id="save-layout" 
+                    class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                Save Changes
+            </button>
+        </div>
+
+    <!-- Right Content Area -->
+    <div class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
+        <div id="preview-area">
+            <div id="navigation-preview">
+                {% include "components/navigation/top-nav/"|add:restaurant_details.navigation_style|add:".html" %}
+            </div>
+            <div id="hero-preview">
+                {% include "components/hero/"|add:restaurant_details.hero_style|add:".html" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'layoutEditor.js' %}"></script>
+{% endblock %}

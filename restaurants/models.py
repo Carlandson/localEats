@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError
 from PIL import Image as PILImage
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.contrib.contenttypes.fields import GenericRelation
 import sys
 
 # Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Kitchen, CuisineCategory
@@ -100,7 +101,58 @@ class Kitchen(models.Model):
         ('modern', 'Modern Layout'),
         ('classic', 'Classic Layout'),
     ]
+    NAV_CHOICES = [
+        ('minimal', 'Minimal Navigation'),
+        ('centered', 'Centered Navigation'),
+        ('split', 'Split Navigation'),
+    ]
+    
+    HERO_CHOICES = [
+        ('image-full', 'Full Screen Image'),
+        ('split', 'Split Layout'),
+        ('minimal', 'Minimal Text'),
+    ]
+    
+    MENU_DISPLAY_CHOICES = [
+        ('grid', 'Grid Layout'),
+        ('classic', 'Classic List'),
+        ('cards', 'Card Layout'),
+    ]
+    
     layout = models.CharField(max_length=20, choices=LAYOUT_CHOICES, default='default')
+        # Component Settings
+    navigation_style = models.CharField(max_length=20, choices=NAV_CHOICES, default='minimal')
+    hero_style = models.CharField(max_length=20, choices=HERO_CHOICES, default='minimal')
+    menu_style = models.CharField(max_length=20, choices=MENU_DISPLAY_CHOICES, default='classic')
+    
+    # Feature Toggles
+    show_gallery = models.BooleanField(default=True)
+    show_testimonials = models.BooleanField(default=True)
+    show_social_feed = models.BooleanField(default=True)
+    show_hours = models.BooleanField(default=True)
+    show_map = models.BooleanField(default=True)
+    
+    # Customization Options
+    primary_color = models.CharField(max_length=7, default='#4F46E5')  # Hex color
+    secondary_color = models.CharField(max_length=7, default='#1F2937')
+    font_heading = models.CharField(max_length=50, default='Inter')
+    font_body = models.CharField(max_length=50, default='Inter')
+    
+    # Media
+    images = GenericRelation(Image)
+
+    def get_logo(self):
+        """Get the restaurant's logo image"""
+        return self.images.filter(alt_text='logo').first()
+
+    def get_hero_image(self):
+        """Get the hero image for this restaurant"""
+        return self.images.filter(alt_text__startswith='hero_').first()
+
+    def get_gallery_images(self):
+        """Get all gallery images"""
+        return self.images.exclude(alt_text__in=['logo', 'hero'])
+
     def clean(self):
         if Kitchen.objects.filter(subdirectory=self.subdirectory).exclude(pk=self.pk).exists():
             raise ValidationError({'subdirectory': 'This subdirectory is already in use. Please choose a different one.'})

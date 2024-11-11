@@ -4,11 +4,11 @@ import logging
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound, HttpResponse
 from django.urls import reverse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 from django.core.paginator import Paginator
 from .models import Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Kitchen, CuisineCategory, SideOption
 from django.shortcuts import render, redirect, get_object_or_404
@@ -24,10 +24,11 @@ from allauth.socialaccount.models import SocialAccount
 from google.oauth2.credentials import Credentials
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import RestaurantCreateForm, DishSubmit, CustomSignupView, ImageUploadForm
+from .forms import RestaurantCreateForm, DishSubmit, CustomSignupView, ImageUploadForm, RestaurantCustomizationForm
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Max
 from django.core.files.base import ContentFile
+from django.template.loader import render_to_string
 import base64, uuid
 import googlemaps
 
@@ -232,28 +233,33 @@ def create(request):
         }
         return render(request, "create.html", context)
 
-def eatery(request, eatery):
-    restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
-    
-    # Check for existence of each subpage
+def get_restaurant_context(restaurant, user, is_preview=False):
+    """Helper function to create consistent context for both views"""
+    # Get subpage information
     menu_page = SubPage.objects.filter(kitchen=restaurant, page_type='menu').exists()
     about_page = SubPage.objects.filter(kitchen=restaurant, page_type='about').exists()
     events_page = SubPage.objects.filter(kitchen=restaurant, page_type='events').exists()
     specials_page = SubPage.objects.filter(kitchen=restaurant, page_type='specials').exists()
-
-    context = {
-        "eatery": eatery,
+    
+    return {
+        "eatery": restaurant.subdirectory,
         "restaurant_details": restaurant,
-        "owner": request.user == restaurant.owner,
+        "owner": user == restaurant.owner,
         "is_verified": restaurant.is_verified,
         "menu_page": menu_page,
         "about_page": about_page,
         "events_page": events_page,
         "specials_page": specials_page,
+        "is_preview": is_preview
     }
 
+def eatery(request, eatery):
+    restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+    
     if request.method != "GET":
         return JsonResponse({"error": "GET request required."}, status=400)
+
+    context = get_restaurant_context(restaurant, request.user)
 
     if not restaurant.is_verified and request.user != restaurant.owner:
         return render(request, "restaurant_under_construction.html", context)
@@ -261,8 +267,8 @@ def eatery(request, eatery):
     if request.user == restaurant.owner:
         return render(request, "eatery_owner.html", context)
     else:
-        return render(request, "eatery.html", context)
-
+        return render(request, "visitor_layout.html", context)
+    
 def create_subpage(request, eatery, page_type):
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
@@ -869,35 +875,38 @@ def preview_restaurant(request, eatery):
         if request.user != restaurant.owner:
             return HttpResponseForbidden("You don't have permission to preview this restaurant")
             
-        # Get the same context you use for visitor view
-        context = {
-            'restaurant_details': restaurant,
-            'dishes': Dish.objects.filter(course__restaurant=restaurant),
-            'courses': Course.objects.filter(restaurant=restaurant),
-            'is_preview': True  # Add this to indicate it's a preview
-        }
-        
-        return render(request, 'restaurants/eatery_visitor.html', context)
+        context = get_restaurant_context(restaurant, request.user, is_preview=True)
+        return render(request, "visitor_layout.html", context)
         
     except Kitchen.DoesNotExist:
         return HttpResponseNotFound("Restaurant not found")
 
+
 @login_required
 def preview_menu(request, eatery):
+    """Separate view for menu preview"""
     try:
         restaurant = Kitchen.objects.get(subdirectory=eatery)
+        
         if request.user != restaurant.owner:
-            return HttpResponseForbidden("You don't have permission to preview this restaurant")
+            return HttpResponseForbidden()
             
-        context = {
-            'restaurant_details': restaurant,
-            'dishes': Dish.objects.filter(course__restaurant=restaurant),
-            'courses': Course.objects.filter(restaurant=restaurant),
-            'is_preview': True
-        }
-        return render(request, 'restaurants/visitor_subpages/menu.html', context)
+        # Get menu-specific data
+        menus = Menu.objects.filter(kitchen=restaurant)
+        courses = Course.objects.filter(menu__in=menus)
+        dishes = Dish.objects.filter(course__in=courses)
+        
+        context = get_restaurant_context(restaurant, request.user, is_preview=True)
+        context.update({
+            'menus': menus,
+            'courses': courses,
+            'dishes': dishes,
+        })
+        
+        return render(request, "kitchen_subpages/menu.html", context)
+        
     except Kitchen.DoesNotExist:
-        return HttpResponseNotFound("Restaurant not found")
+        return HttpResponseNotFound()
 
 @login_required
 def preview_events(request, eatery):
@@ -930,4 +939,149 @@ def preview_about(request, eatery):
         return render(request, 'restaurants/visitor_subpages/events.html', context)
     except Kitchen.DoesNotExist:
         return HttpResponseNotFound("Restaurant not found")
+
+
+@login_required
+def edit_layout(request, eatery):
+    restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+    
+    # Check if user is the owner
+    if request.user != restaurant.owner:
+        return HttpResponseForbidden()
+    
+    if request.method == "POST":
+        form = RestaurantCustomizationForm(request.POST, instance=restaurant)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Layout settings updated successfully!")
+            return redirect('edit_layout', eatery=eatery)
+    else:
+        form = RestaurantCustomizationForm(instance=restaurant)
+    
+    context = {
+        'restaurant_details': restaurant,
+        'form': form,
+        'eatery': eatery,
+    }
+    
+    return render(request, "edit_layout.html", context)
+
+@login_required
+def preview_component(request, eatery, component, style):
+    try:
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        
+        if request.user != restaurant.owner:
+            return HttpResponseForbidden()
+        
+        template_name = None
+        if component == 'navigation':
+            template_name = f"components/navigation/top-nav/{style}.html"
+        elif component == 'hero':
+            template_name = f"components/hero/{style}.html"
+        
+        print(f"Looking for template: {template_name}")  # Debug log
+        
+        context = {
+            'restaurant_details': restaurant,
+            'eatery': eatery,
+            'menu_page': True,
+            'about_page': True,
+            'events_page': True,
+            'request': request,  # Add this for template context
+        }
+        
+        try:
+            html = render_to_string(template_name, context)
+            return HttpResponse(html)
+        except Exception as e:
+            print(f"Template rendering error: {str(e)}")  # Debug log
+            return HttpResponse(f"Error rendering template: {str(e)}", status=500)
+            
+    except Exception as e:
+        print(f"View error: {str(e)}")  # Debug log
+        return HttpResponse(f"Server error: {str(e)}", status=500)
+
+@require_POST
+@login_required
+def save_layout(request, eatery):
+    """Save layout preferences"""
+    restaurant = get_object_or_404(Kitchen, subdirectory=eatery, owner=request.user)
+    
+    try:
+        data = json.loads(request.body)
+        restaurant.navigation_style = data.get('navigation_style')
+        restaurant.hero_style = data.get('hero_style')
+        restaurant.primary_color = data.get('primary_color')
+        restaurant.secondary_color = data.get('secondary_color')
+        restaurant.save()
+        
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+@login_required
+def upload_hero_image(request, eatery):
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Invalid method'})
+
+    try:
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return JsonResponse({'success': False, 'error': 'Unauthorized'})
+
+        image_file = request.FILES.get('hero_image')
+        if not image_file:
+            return JsonResponse({'success': False, 'error': 'No image provided'})
+
+        # Remove old hero image if it exists
+        content_type = ContentType.objects.get_for_model(Kitchen)
+        old_hero = Image.objects.filter(
+            content_type=content_type,
+            object_id=restaurant.id,
+            alt_text__startswith='hero_'  # Use alt_text to identify hero images
+        ).first()
+        
+        if old_hero:
+            old_hero.delete()  # This will handle cleaning up the files
+
+        # Create new hero image
+        new_image = Image.objects.create(
+            image=image_file,
+            uploaded_by=request.user,
+            content_type=content_type,
+            object_id=restaurant.id,
+            alt_text=f'hero_{restaurant.subdirectory}',  # Use this to identify hero images
+            caption=f'Hero image for {restaurant.restaurant_name}'
+        )
+
+        return JsonResponse({'success': True})
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+@login_required
+def remove_hero_image(request, eatery):
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Invalid method'})
+
+    try:
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return JsonResponse({'success': False, 'error': 'Unauthorized'})
+
+        content_type = ContentType.objects.get_for_model(Kitchen)
+        hero_image = Image.objects.filter(
+            content_type=content_type,
+            object_id=restaurant.id,
+            alt_text__startswith='hero_'
+        ).first()
+
+        if hero_image:
+            hero_image.delete()
+
+        return JsonResponse({'success': True})
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
 
