@@ -1,0 +1,34 @@
+<!-- Preview Container -->
+<div class="preview-content">
+    <!-- Navigation Preview (if needed in preview) -->
+    {% include "components/navigation/top-nav/"|add:restaurant_details.navigation_style|add:".html" %}
+
+    <!-- Page-Specific Content -->
+    {% if current_page == 'home' %}
+        <!-- Home Page Components -->
+        <div class="home-preview">
+            {% if subpage.has_hero %}
+                {% include "components/hero/"|add:subpage.hero_layout|add:".html" %}
+            {% endif %}
+            <!-- Add other home page components -->
+        </div>
+
+    {% elif current_page == 'menu' %}
+        <!-- Menu Page Components -->
+        <div class="menu-preview">
+            {% if subpage.has_hero %}
+                {% include "components/hero/"|add:subpage.hero_layouct|add:".html" %}
+            {% endif %}
+            {% include "components/menu/menu_section.html" %}
+        </div>
+
+    {% elif current_page == 'about' %}
+        <!-- About Page Components -->
+        <div class="about-preview">
+            {% if subpage.has_hero %}
+                {% include "components/hero/"|add:subpage.hero_layout|add:".html" %}
+            {% endif %}
+            {% include "components/about/about_section.html" %}
+        </div>
+    {% endif %}
+</div>

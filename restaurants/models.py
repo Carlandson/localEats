@@ -96,21 +96,17 @@ class Kitchen(models.Model):
     phone_number = PhoneNumberField()
     is_verified = models.BooleanField(default=False)
     subdirectory = models.SlugField(max_length=64, unique=True)
-    LAYOUT_CHOICES = [
-        ('default', 'Default Layout'),
-        ('modern', 'Modern Layout'),
-        ('classic', 'Classic Layout'),
-    ]
     NAV_CHOICES = [
-        ('minimal', 'Minimal Navigation'),
-        ('centered', 'Centered Navigation'),
-        ('split', 'Split Navigation'),
+        ('minimal', 'Minimal'),
+        ('centered', 'Centered'),
+        ('split', 'Split'),
     ]
     
     HERO_CHOICES = [
         ('image-full', 'Full Screen Image'),
-        ('split', 'Split Layout'),
-        ('minimal', 'Minimal Text'),
+        ('offset-left', 'Offset Left'),
+        ('offset-right', 'Offset Right'),
+        ('banner-slider', 'Banner Slider'),
     ]
     
     MENU_DISPLAY_CHOICES = [
@@ -119,10 +115,9 @@ class Kitchen(models.Model):
         ('cards', 'Card Layout'),
     ]
     
-    layout = models.CharField(max_length=20, choices=LAYOUT_CHOICES, default='default')
-        # Component Settings
+    # Component Settings
     navigation_style = models.CharField(max_length=20, choices=NAV_CHOICES, default='minimal')
-    hero_style = models.CharField(max_length=20, choices=HERO_CHOICES, default='minimal')
+    hero_style = models.CharField(max_length=20, choices=HERO_CHOICES, default='image-full')
     menu_style = models.CharField(max_length=20, choices=MENU_DISPLAY_CHOICES, default='classic')
     
     # Feature Toggles
@@ -145,10 +140,24 @@ class Kitchen(models.Model):
         """Get the restaurant's logo image"""
         return self.images.filter(alt_text='logo').first()
 
-    def get_hero_image(self):
-        """Get the hero image for this restaurant"""
-        return self.images.filter(alt_text__startswith='hero_').first()
+    def get_hero_image(self, page_type='home'):
+        """Get the hero image for a specific page"""
+        content_type = ContentType.objects.get_for_model(self)
+        return Image.objects.filter(
+            content_type=content_type,
+            object_id=self.id,
+            alt_text__startswith=f'hero_{page_type}_'
+        ).first()
 
+    def get_slider_images(self, page_type='home'):
+        """Get all slider images for a specific page"""
+        content_type = ContentType.objects.get_for_model(self)
+        return Image.objects.filter(
+            content_type=content_type,
+            object_id=self.id,
+            alt_text__startswith=f'slider_{page_type}_'
+        ).order_by('alt_text')
+    
     def get_gallery_images(self):
         """Get all gallery images"""
         return self.images.exclude(alt_text__in=['logo', 'hero'])
@@ -196,6 +205,7 @@ class SubPage(models.Model):
     is_published = models.BooleanField(default=False)
 
     PAGE_TYPES = (
+        ('home', 'Home'),
         ('about', 'About Us'),
         ('menu', 'Menu'),
         ('events', 'Events'),
@@ -203,7 +213,69 @@ class SubPage(models.Model):
     )
     page_type = models.CharField(max_length=10, choices=PAGE_TYPES)
 
+    HERO_CHOICES = [
+        ('offset-left', 'Image with Left Text'),
+        ('offset-right', 'Image with Right Text'),
+        ('full-image', 'Full Image'),
+        ('banner-slider', 'Banner Slider'),
+    ]
+    
+    hero_layout = models.CharField(
+        max_length=20,
+        choices=HERO_CHOICES,
+        default='offset-left'
+    )
+        # Hero Text Content
+    hero_heading = models.CharField(max_length=200, blank=True)
+    hero_subheading = models.TextField(blank=True)
+    hero_button_text = models.CharField(max_length=50, blank=True)
+    hero_button_link = models.CharField(max_length=200, blank=True)
+    hero_text_align = models.CharField(
+        max_length=10,
+        choices=[('left', 'Left'), ('center', 'Center')],
+        default='left'
+    )
+    hero_text_color = models.CharField(max_length=7, default='#000000')  # Hex color
+    hero_subtext_color = models.CharField(max_length=7, default='#6B7280')  # Hex color
+
+    def get_hero_image(self):
+        """Get the hero image for this subpage"""
+        content_type = ContentType.objects.get_for_model(self)
+        return Image.objects.filter(
+            content_type=content_type,
+            object_id=self.id,
+            purpose='hero'
+        ).first()
+
+    def get_slider_images(self):
+        """Get all slider images for this subpage"""
+        content_type = ContentType.objects.get_for_model(self)
+        return Image.objects.filter(
+            content_type=content_type,
+            object_id=self.id,
+            purpose='slider'
+        ).order_by('order')
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            if self.page_type == 'home':
+                # For home page, use just the kitchen subdirectory
+                self.slug = self.kitchen.subdirectory
+            else:
+                # For other pages, append the page type
+                base_slug = f"{self.kitchen.subdirectory}-{self.page_type}"
+                self.slug = base_slug
+                
+                # If the slug exists, append a number
+                counter = 1
+                while SubPage.objects.filter(slug=self.slug).exists():
+                    self.slug = f"{base_slug}-{counter}"
+                    counter += 1
+                
+        super().save(*args, **kwargs)
+
     class Meta:
+        unique_together = ['kitchen', 'page_type']  # Ensure one page type per kitchen
         ordering = ['order']
 
 class Menu(models.Model):

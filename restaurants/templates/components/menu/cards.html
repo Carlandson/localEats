@@ -1,0 +1,48 @@
+{% include "components/navigation/top-nav/"|add:restaurant_details.navigation_style|add:".html" %}
+
+{% if subpage.hero_layout %}
+    {% include "components/hero/"|add:subpage.hero_layout|add:".html" %}
+{% endif %}
+
+<!-- Menu Content -->
+<div class="container mx-auto px-4 py-8">
+    {% if menu_data %}
+        {% for menu in menu_data %}
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold mb-4">{{ menu.name }}</h2>
+                {% if menu.description %}
+                    <p class="text-gray-600 mb-6">{{ menu.description }}</p>
+                {% endif %}
+                
+                {% for course in menu.courses %}
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-semibold mb-4">{{ course.name }}</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {% for dish in course.dishes %}
+                                <!-- Card Layout -->
+                                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                                    {% if dish.image %}
+                                        <img src="{{ dish.image.url }}" 
+                                             alt="{{ dish.name }}" 
+                                             class="w-full h-48 object-cover">
+                                    {% endif %}
+                                    <div class="p-4">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <h4 class="text-lg font-semibold">{{ dish.name }}</h4>
+                                            <span class="text-lg font-bold">${{ dish.price }}</span>
+                                        </div>
+                                        {% if dish.description %}
+                                            <p class="text-gray-600">{{ dish.description }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-center text-gray-500">No menu items available.</p>
+    {% endif %}
+</div>

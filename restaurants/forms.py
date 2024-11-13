@@ -140,7 +140,17 @@ class DishSubmit(ModelForm):
 class KitchenEditForm(forms.ModelForm):
     class Meta:
         model = Kitchen
-        fields = ['restaurant_name', 'description', 'layout'] 
+        fields = [
+            'navigation_style',
+            'hero_style',
+            # Remove 'layout' from here
+            # Add any other fields you want to be editable
+        ]
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['navigation_style'].choices = Kitchen.NAV_CHOICES
+        self.fields['hero_style'].choices = Kitchen.HERO_CHOICES
 
 class ImageUploadForm(forms.ModelForm):
     class Meta:
@@ -164,12 +174,16 @@ class RestaurantCustomizationForm(forms.ModelForm):
             'secondary_color',
             'font_heading',
             'font_body',
-            'layout'
         ]
         widgets = {
             'primary_color': forms.TextInput(attrs={'type': 'color'}),
             'secondary_color': forms.TextInput(attrs={'type': 'color'}),
         }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['navigation_style'].choices = Kitchen.NAV_CHOICES
+        self.fields['hero_style'].choices = Kitchen.HERO_CHOICES
 
 
 class RestaurantImageForm(forms.ModelForm):

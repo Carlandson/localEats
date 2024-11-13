@@ -259,7 +259,25 @@ def eatery(request, eatery):
     if request.method != "GET":
         return JsonResponse({"error": "GET request required."}, status=400)
 
+    # Get or create home subpage
+    subpage, created = SubPage.objects.get_or_create(
+        kitchen=restaurant,
+        page_type='home',
+        defaults={
+            'title': restaurant.restaurant_name,
+            'slug': restaurant.subdirectory,
+            'is_published': True
+        }
+    )
+
+    # Get your existing context
     context = get_restaurant_context(restaurant, request.user)
+    
+    # Add subpage to context
+    context.update({
+        'subpage': subpage,
+        'is_home': True
+    })
 
     if not restaurant.is_verified and request.user != restaurant.owner:
         return render(request, "restaurant_under_construction.html", context)
@@ -943,29 +961,140 @@ def preview_about(request, eatery):
 
 @login_required
 def edit_layout(request, eatery):
-    restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
-    
-    # Check if user is the owner
-    if request.user != restaurant.owner:
-        return HttpResponseForbidden()
-    
-    if request.method == "POST":
-        form = RestaurantCustomizationForm(request.POST, instance=restaurant)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Layout settings updated successfully!")
-            return redirect('edit_layout', eatery=eatery)
-    else:
-        form = RestaurantCustomizationForm(instance=restaurant)
-    
-    context = {
-        'restaurant_details': restaurant,
-        'form': form,
-        'eatery': eatery,
-    }
-    
-    return render(request, "edit_layout.html", context)
+    try:
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return HttpResponseForbidden()
 
+        # Get or create subpages for each type
+        subpages = {}
+        current_page = request.GET.get('page', 'home')
+        
+        for page_type, label in SubPage.PAGE_TYPES:
+            # Generate a unique slug for each page type
+            slug = f"{restaurant.subdirectory}-{page_type}"
+            
+            subpage, created = SubPage.objects.get_or_create(
+                kitchen=restaurant,
+                page_type=page_type,
+                defaults={
+                    'title': f"{restaurant.restaurant_name} {label}",
+                    'slug': slug,
+                    'is_published': True
+                }
+            )
+            subpages[page_type] = subpage
+
+        # Get the current subpage for initial load
+        current_subpage = subpages.get(current_page)
+
+        context = {
+            'restaurant_details': restaurant,
+            'eatery': eatery,
+            'subpages': subpages,  # Dictionary of all subpages
+            'subpage': current_subpage,  # Current subpage for initial load
+            'current_page': current_page,
+            'hero_choices': SubPage.HERO_CHOICES,
+            'nav_styles': Kitchen.NAV_CHOICES,
+        }
+        
+        return render(request, "edit_layout.html", context)
+        
+    except Exception as e:
+        logger.error(f"Error in edit_layout: {str(e)}")
+        return HttpResponse(f"Error loading layout editor: {str(e)}", status=500)
+
+@login_required
+def preview_page(request, eatery, page_type):
+    try:
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return HttpResponseForbidden()
+            
+        # For home page, we don't need a SubPage instance
+        if page_type != 'home':
+            subpage = get_object_or_404(SubPage, kitchen=restaurant, page_type=page_type)
+        else:
+            subpage = None
+        
+        # Get menu data if this is a menu page
+        menu_data = None
+        if page_type == 'menu':
+            menus = Menu.objects.filter(kitchen=restaurant)
+            menu_data = []
+            for menu in menus:
+                courses = Course.objects.filter(menu=menu).order_by('order')
+                course_data = []
+                for course in courses:
+                    dishes = Dish.objects.filter(course=course).order_by('name')
+                    course_data.append({
+                        'name': course.name,
+                        'description': course.description,
+                        'dishes': dishes
+                    })
+                menu_data.append({
+                    'name': menu.name,
+                    'description': menu.description,
+                    'courses': course_data
+                })
+        
+        context = {
+            'restaurant_details': restaurant,
+            'subpage': subpage,
+            'preview_mode': True,
+            'eatery': eatery,
+            'menu_data': menu_data,
+            'is_home': page_type == 'home',
+            'menu_page': page_type == 'menu',
+            'about_page': page_type == 'about',
+            'events_page': page_type == 'events',
+        }
+        
+        # Map page types to their templates
+        template_mapping = {
+            'home': 'components/home/default.html',  # Use a default template for home
+            'menu': f'components/menu/{restaurant.menu_style}.html',
+            'about': 'components/about/default.html',
+            'events': 'components/events/default.html',
+        }
+        
+        template_name = template_mapping.get(page_type)
+        if not template_name:
+            raise ValueError(f"Invalid page type: {page_type}")
+            
+        logger.debug(f"Using template: {template_name}")
+        return render(request, template_name, context)
+        
+    except Exception as e:
+        logger.error(f"Error in preview_page: {str(e)}")
+        return HttpResponse(f"Error loading preview: {str(e)}", status=500)
+    
+@login_required
+def get_page_data(request, eatery, page_type):
+    try:
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return JsonResponse({'error': 'Unauthorized'}, status=403)
+            
+        subpage = get_object_or_404(SubPage, kitchen=restaurant, page_type=page_type)
+        
+        data = {
+            'subpage_id': subpage.id,
+            'hero_heading': subpage.hero_heading,
+            'hero_subheading': subpage.hero_subheading,
+            'hero_button_text': subpage.hero_button_text,
+            'hero_layout': subpage.hero_layout,
+            'hero_text_align': subpage.hero_text_align,
+            'hero_text_color': subpage.hero_text_color,
+            'hero_subtext_color': subpage.hero_subtext_color,
+        }
+        
+        return JsonResponse(data)
+        
+    except Exception as e:
+        logger.error(f"Error in get_page_data: {str(e)}")
+        return JsonResponse({'error': str(e)}, status=500)
+        
 @login_required
 def preview_component(request, eatery, component, style):
     try:
@@ -1002,6 +1131,73 @@ def preview_component(request, eatery, component, style):
         print(f"View error: {str(e)}")  # Debug log
         return HttpResponse(f"Server error: {str(e)}", status=500)
 
+
+@login_required
+def preview_navigation(request, eatery, style):
+    try:
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return HttpResponseForbidden()
+        
+        template_name = f"components/navigation/top-nav/{style}.html"
+        context = {
+            'restaurant_details': restaurant,
+            'eatery': eatery,
+            'menu_page': True,
+            'about_page': True,
+            'events_page': True,
+        }
+        
+        html = render_to_string(template_name, context)
+        return HttpResponse(html)
+            
+    except Exception as e:
+        logger.error(f"Error in preview_navigation: {str(e)}")
+        return HttpResponse(f"Error: {str(e)}", status=500)
+
+@login_required
+@require_POST
+def update_global_component(request, eatery):
+    try:
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return JsonResponse({'error': 'Unauthorized'}, status=403)
+
+        data = json.loads(request.body)
+        component = data.get('component')
+        style = data.get('style')
+
+        logger.debug(f"Updating component: {component} with style: {style}")
+
+        # Map components to their model fields and choices
+        component_map = {
+            'navigation': ('navigation_style', Kitchen.NAV_CHOICES),
+            'hero': ('hero_style', Kitchen.HERO_CHOICES),
+        }
+
+        if component not in component_map:
+            return JsonResponse({'error': f'Invalid component: {component}'}, status=400)
+
+        field_name, choices = component_map[component]
+        valid_styles = [choice[0] for choice in choices]
+
+        if style not in valid_styles:
+            return JsonResponse({
+                'error': f'Invalid {component} style. Got "{style}", expected one of: {valid_styles}'
+            }, status=400)
+
+        # Update only the specific field
+        setattr(restaurant, field_name, style)
+        
+        # Save only the updated field
+        restaurant.save(update_fields=[field_name])
+        
+        return JsonResponse({'success': True})
+
+    except Exception as e:
+        logger.error(f"Error in update_global_component: {str(e)}")
+        return JsonResponse({'error': str(e)}, status=500)
+      
 @require_POST
 @login_required
 def save_layout(request, eatery):
@@ -1084,4 +1280,66 @@ def remove_hero_image(request, eatery):
 
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
+
+
+@login_required
+@require_http_methods(["POST"])
+def update_subpage_hero(request, eatery, subpage_id):
+    try:
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return JsonResponse({'success': False, 'error': 'Unauthorized'}, status=403)
+
+        subpage = get_object_or_404(SubPage, id=subpage_id, kitchen=restaurant)
+        data = json.loads(request.body)
+        
+        field = data.get('field')
+        value = data.get('value')
+
+        valid_fields = ['heading', 'subheading', 'button_text', 'layout']
+        if field not in valid_fields:
+            return JsonResponse({'success': False, 'error': 'Invalid field'}, status=400)
+
+        setattr(subpage, f'hero_{field}', value)
+        subpage.save()
+
+        return JsonResponse({'success': True})
+
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Invalid JSON'}, status=400)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    
+@login_required
+@require_POST
+def update_hero(request, eatery):
+    try:
+        restaurant = get_object_or_404(Kitchen, subdirectory=eatery)
+        if request.user != restaurant.owner:
+            return JsonResponse({'error': 'Unauthorized'}, status=403)
+
+        data = json.loads(request.body)
+        page_type = data.get('page_type')
+        field = data.get('field')
+        value = data.get('value')
+
+        subpage = get_object_or_404(SubPage, kitchen=restaurant, page_type=page_type)
+        
+        valid_fields = [
+            'heading', 'subheading', 'button_text', 'button_link',
+            'layout', 'text_align', 'text_color', 'subtext_color'
+        ]
+        
+        if field not in valid_fields:
+            return JsonResponse({'error': 'Invalid field'}, status=400)
+
+        setattr(subpage, f'hero_{field}', value)
+        subpage.save()
+
+        return JsonResponse({'success': True})
+
+    except Exception as e:
+        logger.error(f"Error in update_hero: {str(e)}")
+        return JsonResponse({'error': str(e)}, status=500)
+
 

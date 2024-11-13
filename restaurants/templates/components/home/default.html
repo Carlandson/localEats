@@ -1,0 +1,40 @@
+{% include "components/navigation/top-nav/"|add:restaurant_details.navigation_style|add:".html" %}
+
+{% if restaurant_details.hero_style %}
+    {% include "components/hero/"|add:restaurant_details.hero_style|add:".html" %}
+{% endif %}
+
+<!-- Main Content -->
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-4xl font-bold mb-4">{{ restaurant_details.restaurant_name }}</h1>
+        {% if restaurant_details.description %}
+            <p class="text-lg text-gray-600">{{ restaurant_details.description }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Featured Sections -->
+    {% if restaurant_details.show_hours %}
+        <div class="mb-8">
+            <!-- Add your hours section -->
+        </div>
+    {% endif %}
+
+    {% if restaurant_details.show_gallery %}
+        <div class="mb-8">
+            <!-- Add your gallery section -->
+        </div>
+    {% endif %}
+
+    {% if restaurant_details.show_testimonials %}
+        <div class="mb-8">
+            <!-- Add your testimonials section -->
+        </div>
+    {% endif %}
+
+    {% if restaurant_details.show_map %}
+        <div class="mb-8">
+            <!-- Add your map section -->
+        </div>
+    {% endif %}
+</div>

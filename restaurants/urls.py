@@ -38,6 +38,11 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('accounts/signup/', custom_signup, name='account_signup'),
     path("accounts/logout/", custom_logout, name="account_logout"),
+    path('<str:eatery>/get-page-data/<str:page_type>/', views.get_page_data, name='get_page_data'),
+    path('<str:eatery>/update-hero/', views.update_hero, name='update_hero'),
+    path('<str:eatery>/preview-component/navigation/top-nav/<str:style>/', views.preview_navigation, name='preview_navigation'),
+    path('<str:eatery>/preview-page/<str:page_type>/', views.preview_page, name='preview_page'),
     path('<str:eatery>/upload-hero-image/', views.upload_hero_image, name='upload_hero_image'),
     path('<str:eatery>/remove-hero-image/', views.remove_hero_image, name='remove_hero_image'),
+    path('<str:eatery>/update-global-component/', views.update_global_component, name='update_global_component'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
