@@ -3,7 +3,57 @@ document.addEventListener('DOMContentLoaded', function() {
     const cuisineSuggestions = document.getElementById('cuisine-suggestions');
     const selectedCuisines = document.getElementById('selected-cuisines');
     const hiddenInput = document.getElementById('cuisine-hidden');
-
+    const businessInput = document.getElementById('business-input');
+    const businessSuggestions = document.getElementById('business-suggestions');
+    const businessHiddenInput = document.getElementById('business-hidden');
+    const cuisineSection = document.querySelector('#cuisine-section');
+    const businessList = [
+        'Restaurant', 'Cafe', 'Bar', 'Food Truck', 'Bakery', 
+        'Deli', 'Coffee Shop', 'Ice Cream Shop', 'Juice Bar'
+    ];
+    businessInput.addEventListener('input', function() {
+        businessInput.classList.remove('border-teal-500', 'bg-teal-50');
+        const inputValue = this.value.toLowerCase();
+        const filteredBusinesses = businessList.filter(business => 
+            business.toLowerCase().includes(inputValue)
+        );
+    
+        businessSuggestions.innerHTML = '';
+        if (filteredBusinesses.length > 0 && inputValue.length > 0) {
+            filteredBusinesses.forEach(business => {
+                const div = document.createElement('div');
+                div.textContent = business;
+                div.addEventListener('click', () => selectBusiness(business));
+                businessSuggestions.appendChild(div);
+            });
+            businessSuggestions.classList.add('active');
+        } else {
+            businessSuggestions.classList.remove('active');
+        }
+    });
+    function selectBusiness(business) {
+        businessHiddenInput.value = business;
+        businessInput.value = business;
+        businessSuggestions.innerHTML = '';
+        businessSuggestions.classList.remove('active');
+        
+        if (business === 'Restaurant') {
+            cuisineSection.style.display = 'block';
+        } else {
+            cuisineSection.style.display = 'none';
+            selectedCuisineSet.clear();
+            updateSelectedCuisines();
+            updateHiddenInput();
+        }
+    }
+    
+    document.addEventListener('click', function(event) {
+        if (businessSuggestions.classList.contains('active') && 
+            !businessInput.contains(event.target) && 
+            !businessSuggestions.contains(event.target)) {
+            businessSuggestions.classList.remove('active');
+        }
+    });
     const cuisineList = [
         'Afghan', 'Algerian', 'American', 'Armenian', 'Argentinian', 'Australian', 
         'Bangladeshi', 'BBQ', 'Belgian', 'Brazilian', 'Cajun', 'Cambodian', 

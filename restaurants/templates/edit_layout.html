@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block body %}
-{{ restaurant_details.navigation_style|json_script:"nav_style" }}
-{{ eatery|json_script:"kitchen" }}
+{{ business_details.navigation_style|json_script:"nav_style" }}
+{{ business_subdirectory|json_script:"business" }}
 <div class="flex h-screen overflow-hidden">
     <!-- Left Sidebar - Editor Panel -->
     <div class="w-80 bg-white shadow-lg overflow-y-auto border-r flex-shrink-0">
@@ -37,11 +37,11 @@
     <!-- Right Content Area - Preview -->
         <div class="flex-1 overflow-y-auto bg-gray-50">
             <div id="preview-container">
-                <!-- Navigation Preview -->
-
                 <!-- Page Content Preview -->
                 <div id="page-content-preview">
-                    {% include "components/preview/page_preview.html" %}
+                    {% with template_name="visitor_pages/"|add:current_page|add:".html" %}
+                        {% include template_name %}
+                    {% endwith %}
                 </div>
             </div>
         </div>

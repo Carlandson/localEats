@@ -6,22 +6,22 @@
         <h1 class="text-center p-2 text-4xl mb-8">{{user_display_name}}'s Dashboard</h1>
         <div class="grid md:grid-cols-3 gap-4 grid-cols-1">
             <div class="bg-white rounded-lg shadow-md p-4">
-                <h2 class="text-xl font-semibold mb-4 -mt-1">Manage your Restaurants</h2>
+                <h2 class="text-xl font-semibold mb-4 -mt-1">Manage your Businesses</h2>
                 <ul class="p-4 inline-block space-y-4 w-full max-w-md">
-                    {% for restaurant in owners_restaurants %}
+                    {% for business in owner_business %}
                         <li class="p-4 border rounded-lg bg-orange-300 hover:bg-orange-400 transition-colors duration-200">
-                            <a href="{% url 'eatery' restaurant.subdirectory %}" class="block text-lg font-semibold">
-                                {{restaurant.restaurant_name}}
+                            <a href="{% url 'business_subdirectory' business.subdirectory %}" class="block text-lg font-semibold">
+                                {{business.business_name}}
                             </a>
                         </li>
-                    </ul>
                     {% endfor %}
+                </ul>
             </div>
             <div class="bg-white rounded-lg shadow-md p-4">
-                <h2 class="text-xl font-semibold mb-4 -mt-1">Register Restaurant</h2>
+                <h2 class="text-xl font-semibold mb-4 -mt-1">Register Business</h2>
                 <a href="{% url 'create' %}" 
                 class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
-                    Register your Restaurant
+                    Register your Business
                 </a>
             </div>
             <div class="bg-white rounded-lg shadow-md p-4 min-h-[300px]">

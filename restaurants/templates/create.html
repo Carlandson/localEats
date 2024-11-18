@@ -24,7 +24,7 @@
             {% endfor %}
         {% endfor %}
     {% endif %}
-        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Register your Restaurant</h1>
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Register your Business</h1>
         <div class="max-w-7xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
             <div class="flex flex-col md:flex-row">
                 <div class="w-full md:w-1/3 p-8 border-r-2 border-gray-300">
@@ -56,19 +56,31 @@
                           <span class="bg-white px-3 text-gray-600 italic text-sm">Or Register Manually</span>
                         </div>
                       </div>
-                    <form action="{% url 'create' %}" method="POST">
+                      <form action="{% url 'create' %}" method="POST">
                         {% csrf_token %}
                         <ul class="space-y-4">
                             {% for field in create %}
                             <li>
                                 <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
-                                {% if field.name == 'cuisine' %}
+                                {% if field.name == 'business_type' %}
+                                    <div class="business-select mt-1 relative">
+                                        <input type="text" id="business-input" name="{{ field.name }}" 
+                                               class="form-input mt-1 w-full" 
+                                               placeholder="Type to search business types...">
+                                        <div id="business-suggestions"></div>
+                                        {{ field.as_hidden }}
+                                </div>
+                                <div id="cuisine-section" style="display: none;" class="mt-4">
+                                    <label class="block text-sm font-medium text-gray-700">Cuisines</label>
                                     <div class="cuisine-select mt-1">
-                                        <input type="text" id="cuisine-input" name="{{ field.name }}" placeholder="Type to search cuisines...">
+                                        <input type="text" id="cuisine-input" name="cuisine" 
+                                               class="form-input mt-1 w-full" 
+                                               placeholder="Type to search cuisines...">
                                         <div id="cuisine-suggestions"></div>
                                         <div id="selected-cuisines"></div>
-                                        {{ field.as_hidden }}
                                     </div>
+                                </div>
+                                {% elif field.name == 'cuisine' %}
                                 {% elif field.name == 'subdirectory' %}
                                     <div class="flex items-center mt-1">
                                         <span class="text-gray-500 mr-2">patrons.love/</span>
@@ -82,7 +94,8 @@
                             </li>
                         {% endfor %}
                         <input type="hidden" id="cuisine-hidden" name="cuisine">
-                        <button type="submit" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 mt-8 rounded-md inline w-full">Register Restaurant</button>
+                        <input type="hidden" id="business-hidden" name="business_type">
+                        <button type="submit" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 mt-8 rounded-md inline w-full">Register Business</button>
                     </form>
                 </div>
                 <div class="w-full md:w-2/3">

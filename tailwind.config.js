@@ -9,6 +9,13 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        'brand': {
+          'primary': 'var(--primary-color)',
+          'secondary': 'var(--secondary-color)',
+          'hover': 'var(--hover-color)',
+        }
+      },
       boxShadow: {
         'input-focus': '0 0 0 3px rgba(147, 197, 253, 0.5)'
 

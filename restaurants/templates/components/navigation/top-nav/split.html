@@ -1,29 +1,29 @@
-<nav class="w-full {% if restaurant_details.theme == 'dark' %}bg-gray-900 text-white{% else %}bg-white text-gray-800{% endif %} shadow-sm"></nav>
+<nav class="w-full" style="background-color: {{ primary_color }}">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Top bar with contact & social -->
         <div class="hidden md:flex justify-between items-center py-2 text-sm border-b border-gray-200">
             <div class="flex items-center space-x-4">
-                {% if restaurant_details.phone_number %}
+                {% if business_details.phone_number %}
                     <span>
                         <i class="fas fa-phone text-sm mr-2"></i>
-                        {{ restaurant_details.phone_number }}
+                        {{ business_details.phone_number }}
                     </span>
                 {% endif %}
-                {% if restaurant_details.address %}
+                {% if business_details.address %}
                     <span>
                         <i class="fas fa-map-marker-alt text-sm mr-2"></i>
-                        {{ restaurant_details.address }}
+                        {{ business_details.address }}
                     </span>
                 {% endif %}
             </div>
             <div class="flex items-center space-x-4">
-                {% if restaurant_details.facebook_url %}
-                    <a href="{{ restaurant_details.facebook_url }}" target="_blank" class="hover:text-primary-600">
+                {% if business_details.facebook_url %}
+                    <a href="{{ business_details.facebook_url }}" target="_blank" class="hover:text-primary-600">
                         <i class="fab fa-facebook"></i>
                     </a>
                 {% endif %}
-                {% if restaurant_details.instagram_url %}
-                    <a href="{{ restaurant_details.instagram_url }}" target="_blank" class="hover:text-primary-600">
+                {% if business_details.instagram_url %}
+                    <a href="{{ business_details.instagram_url }}" target="_blank" class="hover:text-primary-600">
                         <i class="fab fa-instagram"></i>
                     </a>
                 {% endif %}
@@ -34,12 +34,12 @@
         <div class="flex justify-between items-center h-20">
             <!-- Left Navigation -->
             <div class="hidden md:flex items-center space-x-8">
-                <a href="{% url 'eatery' eatery=eatery %}" 
-                   class="text-sm font-medium hover:text-primary-600 transition-colors {% if request.resolver_match.url_name == 'eatery' %}text-primary-600{% endif %}">
+                <a href="{% url 'business_subdirectory' business_subdirectory=business_subdirectory %}" 
+                   class="text-sm font-medium hover:text-primary-600 transition-colors {% if request.resolver_match.url_name == 'business_subdirectory' %}text-primary-600{% endif %}">
                     Home
                 </a>
                 {% if menu_page %}
-                    <a href="{% url 'menu' eatery=eatery %}" 
+                    <a href="{% url 'menu' business_subdirectory=business_subdirectory %}" 
                        class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'menu' in request.path %}text-primary-600{% endif %}">
                         Menu
                     </a>
@@ -48,11 +48,11 @@
 
             <!-- Center Logo -->
             <div class="flex-shrink-0">
-                {% with logo=restaurant_details.get_logo %}
+                {% with logo=business_details.get_logo %}
                     {% if logo %}
                         <img src="{{ logo.image.url }}" alt="{{ logo.alt_text }}" class="h-12 w-auto">
                     {% else %}
-                        <h1 class="text-xl font-semibold">{{ restaurant_details.restaurant_name }}</h1>
+                        <h1 class="text-xl font-semibold">{{ business_details.business_name }}</h1>
                     {% endif %}
                 {% endwith %}
             </div>
@@ -60,13 +60,13 @@
             <!-- Right Navigation -->
             <div class="hidden md:flex items-center space-x-8">
                 {% if about_page %}
-                    <a href="{% url 'about' eatery=eatery %}" 
+                    <a href="{% url 'about' business_subdirectory=business_subdirectory %}" 
                        class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'about' in request.path %}text-primary-600{% endif %}">
                         About
                     </a>
                 {% endif %}
                 {% if events_page %}
-                    <a href="{% url 'events' eatery=eatery %}" 
+                    <a href="{% url 'events' business_subdirectory=business_subdirectory %}" 
                        class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'events' in request.path %}text-primary-600{% endif %}">
                         Events
                     </a>
@@ -86,24 +86,24 @@
         <!-- Mobile Menu -->
         <div class="hidden mobile-menu md:hidden py-2">
             <div class="space-y-1">
-                <a href="{% url 'eatery' eatery=eatery %}" 
+                <a href="{% url 'business_subdirectory' business_subdirectory=business_subdirectory %}" 
                    class="block px-3 py-2 text-base font-medium rounded-md hover:bg-gray-100">
                     Home
                 </a>
                 {% if menu_page %}
-                    <a href="{% url 'menu' eatery=eatery %}" 
+                    <a href="{% url 'menu' business_subdirectory=business_subdirectory %}" 
                        class="block px-3 py-2 text-base font-medium rounded-md hover:bg-gray-100">
                         Menu
                     </a>
                 {% endif %}
                 {% if about_page %}
-                    <a href="{% url 'about' eatery=eatery %}" 
+                    <a href="{% url 'about' business_subdirectory=business_subdirectory %}" 
                        class="block px-3 py-2 text-base font-medium rounded-md hover:bg-gray-100">
                         About
                     </a>
                 {% endif %}
                 {% if events_page %}
-                    <a href="{% url 'events' eatery=eatery %}" 
+                    <a href="{% url 'events' business_subdirectory=business_subdirectory %}" 
                        class="block px-3 py-2 text-base font-medium rounded-md hover:bg-gray-100">
                         Events
                     </a>

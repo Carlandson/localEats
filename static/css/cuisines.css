@@ -94,3 +94,53 @@
 .remove-cuisine {
     margin-bottom: 0.1875rem;
 }
+
+.business-select {
+    position: relative;  /* Can also be added here instead of in the HTML */
+}
+
+#business-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);  /* Optional: adds a subtle shadow */
+}
+
+#business-suggestions.active {
+    display: block;
+}
+
+#business-suggestions div {
+    padding: 8px;
+    cursor: pointer;
+}
+
+#business-suggestions div:hover {
+    background-color: #f3f4f6;
+}
+
+#business-input.border-teal-500 {
+    border-color: #14b8a6;
+    transition: all 0.2s ease-in-out;
+}
+
+#business-input.bg-teal-50 {
+    background-color: #f0fdfa;
+}
+
+#business-input.border-teal-500 + .check-mark::after {
+    content: '✓';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #14b8a6;
+}

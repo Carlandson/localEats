@@ -199,7 +199,8 @@ function handleImageUpload(fileInput) {
 
 function addCourse(dishData){
     let currentKitchen = JSON.parse(document.getElementById('kitchen').textContent);
-    // Fix the URL construction - remove the duplicate restaurant name
+    console.log(currentKitchen)
+    // Fix the URL construction to use the full path
     fetch(`/${currentKitchen}/menu/add_course/`, {
         method: "POST",
         headers: {
@@ -222,7 +223,7 @@ function addCourse(dishData){
     .catch(error => {
         console.error('Error:', error);
     });
-};
+}
 
 // Add this function to get CSRF token
 function getCookie(name) {
@@ -867,7 +868,8 @@ function showSideOptionForm(courseId, sideOption = null) {
             formDiv.remove();
             
             // Update the side options list
-            updateSideOptionsList(courseId);
+            await updateSideOptionsList(courseId);
+
         } catch (error) {
             console.error('Error:', error);
             alert('Error saving side option. Please try again.');
@@ -956,70 +958,89 @@ async function updateSideOptionsList(courseId) {
     try {
         const response = await fetch(`/${eatery}/menu/side_options/${courseId}/`);
         if (!response.ok) throw new Error('Network response was not ok');
-        const sideOptions = await response.json();
+        const data = await response.json();
+        
+        console.log('Received side options:', data); // Debug log
+        
+        // Ensure sideOptions is an array
+        const sideOptions = Array.isArray(data) ? data : [];
 
+        // Find the main list container
         const listContainer = document.getElementById(`sideOptionsList${courseId}`);
-        
-        // Clear the container while preserving the button container
-        const buttonContainer = document.getElementById(`addSideButtonContainer${courseId}`);
-        listContainer.innerHTML = '';
-        
-        // Add side options in order (oldest first)
-        sideOptions.forEach(side => {
-            console.log('Adding side option:', side, 'to course:', courseId);
-            const sideDiv = document.createElement('div');
-            sideDiv.id = `sideOption${side.id}`; // Add specific ID
-            sideDiv.setAttribute('data-side-id', side.id);
-            sideDiv.className = 'flex justify-between items-center p-2 ' + 
-                               (side.is_premium ? 'bg-amber-50' : 'bg-gray-50') + 
-                               ' rounded mb-2';
-            
-            sideDiv.innerHTML = `
-                <div>
-                    <div class="flex items-center gap-2">
-                        <p class="font-medium">${side.name}</p>
-                        ${side.is_premium ? `<span class="text-sm text-amber-600 font-medium">+$${side.price}</span>` : ''}
-                    </div>
-                    ${side.description ? `<p class="text-sm text-gray-600">${side.description}</p>` : ''}
-                </div>
-                <div class="flex gap-2">
-                    <button class="editSideOption text-blue-500 hover:text-blue-700"
-                            data-side-id="${side.id}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                        </svg>
-                    </button>
-                    <button class="deleteSideOption text-red-500 hover:text-red-700"
-                            data-side-id="${side.id}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                        </svg>
-                    </button>
-                </div>
-            `;
-            
-            listContainer.appendChild(sideDiv);
-        });
+        if (!listContainer) {
+            console.error('Could not find list container:', `sideOptionsList${courseId}`);
+            return;
+        }
 
-        // Add "No side options" message if needed
-        if (sideOptions.length === 0) {
+        // Clear the entire list container first
+        listContainer.innerHTML = '';
+
+        // Create a container for side options
+        const sideOptionsContainer = document.createElement('div');
+        sideOptionsContainer.className = 'side-options-container';
+        listContainer.appendChild(sideOptionsContainer);
+        
+        // Add side options in order
+        if (sideOptions.length > 0) {
+            sideOptions.forEach(side => {
+                if (!side || !side.id) {
+                    console.error('Invalid side option:', side);
+                    return;
+                }
+                
+                const sideDiv = document.createElement('div');
+                sideDiv.id = `sideOption${side.id}`;
+                sideDiv.setAttribute('data-side-id', side.id);
+                sideDiv.className = 'flex justify-between items-center p-2 ' + 
+                                   (side.is_premium ? 'bg-amber-50' : 'bg-gray-50') + 
+                                   ' rounded mb-2';
+                
+                sideDiv.innerHTML = `
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <p class="font-medium">${side.name || ''}</p>
+                            ${side.is_premium ? `<span class="text-sm text-amber-600 font-medium">+$${side.price || '0.00'}</span>` : ''}
+                        </div>
+                        ${side.description ? `<p class="text-sm text-gray-600">${side.description}</p>` : ''}
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="editSideOption text-blue-500 hover:text-blue-700"
+                                data-side-id="${side.id}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                        </button>
+                        <button class="deleteSideOption text-red-500 hover:text-red-700"
+                                data-side-id="${side.id}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                
+                sideOptionsContainer.appendChild(sideDiv);
+            });
+        } else {
+            // Add "No side options" message if needed
             const noOptionsMessage = document.createElement('p');
             noOptionsMessage.className = 'text-gray-500 text-center';
             noOptionsMessage.textContent = 'No side options available';
-            listContainer.appendChild(noOptionsMessage);
+            sideOptionsContainer.appendChild(noOptionsMessage);
         }
 
-        // Re-add the button container at the end
-        const newButtonContainer = document.createElement('div');
-        newButtonContainer.id = `addSideButtonContainer${courseId}`;
-        newButtonContainer.className = 'flex justify-end mt-2';
-        newButtonContainer.innerHTML = `
+        // Add the button container
+        const buttonContainer = document.createElement('div');
+        buttonContainer.id = `addSideButtonContainer${courseId}`;
+        buttonContainer.className = 'flex justify-end mt-2';
+        buttonContainer.innerHTML = `
             <button class="addSideOption text-sm px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded"
                     data-course-id="${courseId}">
                 Add Side
             </button>
         `;
-        listContainer.appendChild(newButtonContainer);
+        const parentContainer = listContainer.parentElement;
+        parentContainer.appendChild(buttonContainer);
 
     } catch (error) {
         console.error('Error:', error);

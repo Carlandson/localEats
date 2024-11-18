@@ -12,7 +12,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.contrib.contenttypes.fields import GenericRelation
 import sys
 
-# Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Kitchen, CuisineCategory
+# Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, business, CuisineCategory
 User = get_user_model()
 
 class Image(models.Model):
@@ -81,45 +81,37 @@ class CuisineCategory(models.Model):
 #https://github.com/SmileyChris/django-countries/
 #https://pypi.org/project/django-google-maps/
 
-class Kitchen(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner")
-    cuisine = models.ForeignKey(CuisineCategory, on_delete=models.CASCADE, related_name="cuisines")
-    restaurant_name = models.CharField(max_length=64)
-    address = map_fields.AddressField(max_length=200)
-    geolocation = map_fields.GeoLocationField(max_length=200, blank=True)
-    city = models.CharField(max_length=64)
-    state = models.CharField(max_length=64)
-    zip_code = models.CharField(max_length=20)
-    description = models.TextField(max_length=200, default="", blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    user_favorite = models.ManyToManyField(User, blank=True, related_name="regular")
-    phone_number = PhoneNumberField()
-    is_verified = models.BooleanField(default=False)
-    subdirectory = models.SlugField(max_length=64, unique=True)
+class Business(models.Model):
     NAV_CHOICES = [
         ('minimal', 'Minimal'),
         ('centered', 'Centered'),
         ('split', 'Split'),
     ]
     
-    HERO_CHOICES = [
-        ('image-full', 'Full Screen Image'),
-        ('offset-left', 'Offset Left'),
-        ('offset-right', 'Offset Right'),
-        ('banner-slider', 'Banner Slider'),
+    FOOTER_CHOICES = [
+        ('detailed', 'Detailed'),
+        ('minimal', 'Minimal'),
+        ('simple', 'Simple'),
     ]
-    
-    MENU_DISPLAY_CHOICES = [
-        ('grid', 'Grid Layout'),
-        ('classic', 'Classic List'),
-        ('cards', 'Card Layout'),
-    ]
-    
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner")
+    cuisine = models.ManyToManyField(CuisineCategory, related_name="cuisines", blank=True)
+    business_name = models.CharField(max_length=64)
+    business_type = models.CharField(max_length=50)
+    address = map_fields.AddressField(max_length=200)
+    geolocation = map_fields.GeoLocationField(max_length=200, blank=True)
+    city = models.CharField(max_length=64)
+    state = models.CharField(max_length=64)
+    zip_code = models.CharField(max_length=20)
+    email = models.EmailField(blank=True)
+    description = models.TextField(max_length=200, default="", blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    user_favorite = models.ManyToManyField(User, blank=True, related_name="regular")
+    phone_number = PhoneNumberField()
+    is_verified = models.BooleanField(default=False)
+    subdirectory = models.SlugField(max_length=64, unique=True)
     # Component Settings
     navigation_style = models.CharField(max_length=20, choices=NAV_CHOICES, default='minimal')
-    hero_style = models.CharField(max_length=20, choices=HERO_CHOICES, default='image-full')
-    menu_style = models.CharField(max_length=20, choices=MENU_DISPLAY_CHOICES, default='classic')
-    
+    footer_style = models.CharField(max_length=20, choices=FOOTER_CHOICES, default='minimal')
     # Feature Toggles
     show_gallery = models.BooleanField(default=True)
     show_testimonials = models.BooleanField(default=True)
@@ -130,6 +122,7 @@ class Kitchen(models.Model):
     # Customization Options
     primary_color = models.CharField(max_length=7, default='#4F46E5')  # Hex color
     secondary_color = models.CharField(max_length=7, default='#1F2937')
+    hover_color = models.CharField(max_length=7, default='#9333EA') 
     font_heading = models.CharField(max_length=50, default='Inter')
     font_body = models.CharField(max_length=50, default='Inter')
     
@@ -137,7 +130,7 @@ class Kitchen(models.Model):
     images = GenericRelation(Image)
 
     def get_logo(self):
-        """Get the restaurant's logo image"""
+        """Get the business's logo image"""
         return self.images.filter(alt_text='logo').first()
 
     def get_hero_image(self, page_type='home'):
@@ -163,17 +156,17 @@ class Kitchen(models.Model):
         return self.images.exclude(alt_text__in=['logo', 'hero'])
 
     def clean(self):
-        if Kitchen.objects.filter(subdirectory=self.subdirectory).exclude(pk=self.pk).exists():
+        if Business.objects.filter(subdirectory=self.subdirectory).exclude(pk=self.pk).exists():
             raise ValidationError({'subdirectory': 'This subdirectory is already in use. Please choose a different one.'})
 
     def save(self, *args, **kwargs):
         if not self.subdirectory:
-            self.subdirectory = slugify(self.restaurant_name)
+            self.subdirectory = slugify(self.business_name)
         self.full_clean()
         super().save(*args, **kwargs)
     
     def __str__(self):
-        return f"{self.restaurant_name}"
+        return f"{self.business_name}"
 
     def regular_count(self):
         return self.user_favorite.count()
@@ -184,59 +177,69 @@ class Kitchen(models.Model):
 
     def clean(self):
         super().clean()
-        if not self.pk and Kitchen.verified_business_exists(self.address):
+        if not self.pk and Business.verified_business_exists(self.address):
             raise ValidationError("A verified business already exists at this address.")
         
     def serialize(self):
         return {
             "cuisine": self.cuisine.serialize(),
-            "name": self.restaurant_name,
+            "name": self.business_name,
             "address": self.address,
             "city": self.city,
             "state": self.state,
             "description": self.description
         }
     
+    class Meta:
+        verbose_name_plural = "Businesses"
+    
 class SubPage(models.Model):
-    kitchen = models.ForeignKey(Kitchen, on_delete=models.CASCADE, related_name='subpages')
+    business = models.ForeignKey(Business, on_delete=models.CASCADE, related_name='subpages')
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     order = models.IntegerField(default=0)
     is_published = models.BooleanField(default=False)
+    primary_color = models.CharField(max_length=7, default='#4F46E5')  # Hex color
+    secondary_color = models.CharField(max_length=7, default='#1F2937')
 
-    PAGE_TYPES = (
+    PAGE_TYPES = [
         ('home', 'Home'),
-        ('about', 'About Us'),
-        ('menu', 'Menu'),
-        ('events', 'Events'),
-        ('specials', 'Specials'),
-    )
+        ('about', 'About'),
+        ('menu', 'Menu'),  # For restaurants
+        ('services', 'Services'),  # For service businesses
+        ('products', 'Products'),  # For retail
+        ('gallery', 'Gallery'),
+        ('contact', 'Contact'),
+    ]
     page_type = models.CharField(max_length=10, choices=PAGE_TYPES)
 
     HERO_CHOICES = [
+        ('full-image', 'Full Image'),
         ('offset-left', 'Image with Left Text'),
         ('offset-right', 'Image with Right Text'),
-        ('full-image', 'Full Image'),
         ('banner-slider', 'Banner Slider'),
+    ]
+    TEXT_ALIGN_CHOICES = [
+        ('left', 'Left'),
+        ('center', 'Center'),
+        ('right', 'Right'),
     ]
     
     hero_layout = models.CharField(
         max_length=20,
         choices=HERO_CHOICES,
-        default='offset-left'
+        default='full-image'
     )
         # Hero Text Content
     hero_heading = models.CharField(max_length=200, blank=True)
     hero_subheading = models.TextField(blank=True)
     hero_button_text = models.CharField(max_length=50, blank=True)
     hero_button_link = models.CharField(max_length=200, blank=True)
-    hero_text_align = models.CharField(
-        max_length=10,
-        choices=[('left', 'Left'), ('center', 'Center')],
-        default='left'
-    )
+    hero_text_align = models.CharField(max_length=10, choices=TEXT_ALIGN_CHOICES, default='left')
     hero_text_color = models.CharField(max_length=7, default='#000000')  # Hex color
     hero_subtext_color = models.CharField(max_length=7, default='#6B7280')  # Hex color
+    show_hero_heading = models.BooleanField(default=False)
+    show_hero_subheading = models.BooleanField(default=False)
 
     def get_hero_image(self):
         """Get the hero image for this subpage"""
@@ -244,7 +247,7 @@ class SubPage(models.Model):
         return Image.objects.filter(
             content_type=content_type,
             object_id=self.id,
-            purpose='hero'
+            alt_text__startswith='hero_'  # Using alt_text instead of purpose
         ).first()
 
     def get_slider_images(self):
@@ -253,17 +256,17 @@ class SubPage(models.Model):
         return Image.objects.filter(
             content_type=content_type,
             object_id=self.id,
-            purpose='slider'
-        ).order_by('order')
+            alt_text__startswith='slider_'  # Using alt_text instead of purpose
+        ).order_by('upload_date')
     
     def save(self, *args, **kwargs):
         if not self.slug:
             if self.page_type == 'home':
-                # For home page, use just the kitchen subdirectory
-                self.slug = self.kitchen.subdirectory
+                # For home page, use just the business subdirectory
+                self.slug = self.business.subdirectory
             else:
                 # For other pages, append the page type
-                base_slug = f"{self.kitchen.subdirectory}-{self.page_type}"
+                base_slug = f"{self.business.subdirectory}-{self.page_type}"
                 self.slug = base_slug
                 
                 # If the slug exists, append a number
@@ -275,17 +278,24 @@ class SubPage(models.Model):
         super().save(*args, **kwargs)
 
     class Meta:
-        unique_together = ['kitchen', 'page_type']  # Ensure one page type per kitchen
+        unique_together = ['business', 'page_type']  # Ensure one page type per business
         ordering = ['order']
 
 class Menu(models.Model):
-    kitchen = models.ForeignKey(Kitchen, on_delete=models.CASCADE, related_name="menus")
+
+    MENU_DISPLAY_CHOICES = [
+        ('grid', 'Grid Layout'),
+        ('list', 'List Layout'),
+        ('cards', 'Card Layout'),
+    ]
+    business = models.ForeignKey(Business, on_delete=models.CASCADE, related_name="menus")
     name = models.CharField(max_length=64)
     description = models.TextField(blank=True)
     subpage = models.ForeignKey(SubPage, on_delete=models.SET_NULL, null=True, related_name='menu_content')
+    display_style = models.CharField(max_length=20, choices=MENU_DISPLAY_CHOICES, default='grid')
 
     def __str__(self):
-        return f"{self.kitchen.restaurant_name} - {self.name}"
+        return f"{self.business.business_name} - {self.name}"
 
 class Course(models.Model):
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name="courses")
@@ -325,7 +335,7 @@ class Dish(models.Model):
         return {
             "name" : self.name,
             "price" : str(self.price),
-            "kitchen": self.menu.kitchen,
+            "business": self.menu.business,
             "course": self.course.course_list,
             "description": self.description,
             "image_url": self.image_url.url if self.image_url else None

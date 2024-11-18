@@ -1,17 +1,17 @@
 {% extends "owner_layout.html" %}
 {% load static %}
 {% block body %}
-{{ eatery|json_script:"kitchen" }}
+{{ business_subdirectory|json_script:"business" }}
 <br>
 
     <div class="min-h-screen bg-gray-100 py-12">
         <div class="container mx-auto px-4">
             <div class="container">
                 <div class="text-center">
-                    <h1 class="p-2 text-4xl">{{restaurant_details.restaurant_name}}</h1>
+                    <h1 class="p-2 text-4xl">{{business_details.business_name}}</h1>
                     <ul>
-                        <li><span>{{restaurant_details.address}}</span></li>
-                        <li><i>{{restaurant_details.phone_number}}</i></li>
+                        <li><span>{{business_details.address}}</span></li>
+                        <li><i>{{business_details.phone_number}}</i></li>
                     </ul>
                 </div>
                 <div class="grid md:grid-cols-3 gap-4 grid-cols-1">
@@ -19,12 +19,12 @@
                     <div class="bg-white rounded-lg shadow-md p-4 min-h-[300px]">
                         <h2 class="text-xl font-semibold mb-4 -mt-1">{% if menu_page %}Edit{% else %}Add{% endif %} Your Menu</h2>
                         {% if menu_page %}
-                            <a href="{% url 'menu' restaurant_details.subdirectory %}" 
+                            <a href="{% url 'menu' business_details.subdirectory %}" 
                                class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
                                 Edit Menu
                             </a>
                         {% else %}
-                            <form method="post" action="{% url 'create_subpage' restaurant_details.subdirectory 'menu' %}" class="inline">
+                            <form method="post" action="{% url 'create_subpage' business_details.subdirectory 'menu' %}" class="inline">
                                 {% csrf_token %}
                                 <button type="submit" 
                                         class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="bg-white rounded-lg shadow-md p-4 min-h-[300px]">
                         <h2 class="text-xl font-semibold mb-4 -mt-1">Edit Your Layout</h2>
-                        <a href="{% url 'edit_layout' eatery=restaurant_details.subdirectory %}" 
+                        <a href="{% url 'edit_layout' business_subdirectory=business_details.subdirectory %}" 
                            class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
                             Edit Layout
                         </a>
@@ -44,12 +44,12 @@
                     <div class="bg-white rounded-lg shadow-md p-4 min-h-[300px]">
                         <h2 class="text-xl font-semibold mb-4 -mt-1">{% if specials_page %}Edit{% else %}Add{% endif %} Specials</h2>
                         {% if specials_page %}
-                            <a href="{% url 'specials' restaurant_details.subdirectory %}" 
+                            <a href="{% url 'specials' business_details.subdirectory %}" 
                                class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
                                 Edit Specials
                             </a>
                         {% else %}
-                            <form method="post" action="{% url 'create_subpage' restaurant_details.subdirectory 'specials' %}" class="inline">
+                            <form method="post" action="{% url 'create_subpage' business_details.subdirectory 'specials' %}" class="inline">
                                 {% csrf_token %}
                                 <button type="submit" 
                                         class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
@@ -63,12 +63,12 @@
                     <div class="bg-white rounded-lg shadow-md p-4 min-h-[300px]">
                         <h2 class="text-xl font-semibold mb-4 -mt-1">{% if events_page %}Edit{% else %}Add{% endif %} Events</h2>
                         {% if events_page %}
-                            <a href="{% url 'events' restaurant_details.subdirectory %}" 
+                            <a href="{% url 'events' business_details.subdirectory %}" 
                                class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
                                 Edit Events
                             </a>
                         {% else %}
-                            <form method="post" action="{% url 'create_subpage' restaurant_details.subdirectory 'events' %}" class="inline">
+                            <form method="post" action="{% url 'create_subpage' business_details.subdirectory 'events' %}" class="inline">
                                 {% csrf_token %}
                                 <button type="submit" 
                                         class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
@@ -80,14 +80,14 @@
         
                     <!-- About Box -->
                     <div class="bg-white rounded-lg shadow-md p-4 min-h-[300px]">
-                        <h2 class="text-xl font-semibold mb-4 -mt-1">{% if about_page %}Edit{% else %}Add{% endif %} Restaurant Information</h2>
+                        <h2 class="text-xl font-semibold mb-4 -mt-1">{% if about_page %}Edit{% else %}Add{% endif %} business Information</h2>
                         {% if about_page %}
-                            <a href="{% url 'about' restaurant_details.subdirectory %}" 
+                            <a href="{% url 'about' business_details.subdirectory %}" 
                                class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
                                 Edit Information
                             </a>
                         {% else %}
-                            <form method="post" action="{% url 'create_subpage' restaurant_details.subdirectory 'about' %}" class="inline">
+                            <form method="post" action="{% url 'create_subpage' business_details.subdirectory 'about' %}" class="inline">
                                 {% csrf_token %}
                                 <button type="submit" 
                                         class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">

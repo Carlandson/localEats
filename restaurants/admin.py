@@ -2,7 +2,7 @@ from django.contrib import admin
 import json
 from django_google_maps import widgets as map_widgets
 from django_google_maps import fields as map_fields
-from .models import Image, CuisineCategory, Kitchen, Menu, Course, Dish, SubPage, Event, AboutUsPage, EventsPage, SpecialsPage, SideOption
+from .models import Image, CuisineCategory, Business, Menu, Course, Dish, SubPage, Event, AboutUsPage, EventsPage, SpecialsPage, SideOption
 
 class SubPageInline(admin.StackedInline):
     model = SubPage
@@ -12,12 +12,12 @@ class MenuInline(admin.TabularInline):
     model = Menu
     extra = 1
 
-@admin.register(Kitchen)
-class KitchenAdmin(admin.ModelAdmin):
-    list_display = ['restaurant_name', 'owner', 'is_verified', 'subdirectory']
+@admin.register(Business)
+class BusinessAdmin(admin.ModelAdmin):
+    list_display = ['business_name', 'owner', 'is_verified', 'subdirectory']
     list_filter = ['is_verified', 'cuisine']
-    search_fields = ['restaurant_name', 'owner__username']
-    actions = ['verify_restaurants']
+    search_fields = ['business_name', 'owner__username']
+    actions = ['verify_businesses']
     inlines = [SubPageInline, MenuInline]
     formfield_overrides = {
         map_fields.AddressField: {'widget': map_widgets.GoogleMapsAddressWidget(attrs={
@@ -28,9 +28,9 @@ class KitchenAdmin(admin.ModelAdmin):
         })},
     }
 
-    def verify_restaurants(self, request, queryset):
+    def verify_businesses(self, request, queryset):
         queryset.update(is_verified=True)
-    verify_restaurants.short_description = "Verify selected restaurants"
+    verify_businesses.short_description = "Verify selected businesses"
 
 class AboutUsPageInline(admin.StackedInline):
     model = AboutUsPage
@@ -43,17 +43,17 @@ class SpecialsPageInline(admin.StackedInline):
 
 @admin.register(SubPage)
 class SubPageAdmin(admin.ModelAdmin):
-    list_display = ['title', 'kitchen', 'page_type', 'order', 'is_published']
+    list_display = ['title', 'business', 'page_type', 'order', 'is_published']
     list_filter = ['page_type', 'is_published']
-    search_fields = ['title', 'kitchen__restaurant_name']
+    search_fields = ['title', 'business__business_name']
     prepopulated_fields = {'slug': ('title',)}
     inlines = [AboutUsPageInline, EventsPageInline, SpecialsPageInline]
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ['name', 'kitchen', 'subpage']
-    list_filter = ['kitchen']
-    search_fields = ['name', 'kitchen__restaurant_name']
+    list_display = ['name', 'business', 'subpage']
+    list_filter = ['business']
+    search_fields = ['name', 'business__business_name']
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -71,14 +71,14 @@ class CuisineCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['title', 'get_kitchen', 'date']
-    list_filter = ['date', 'events_page__subpage__kitchen']
-    search_fields = ['title', 'events_page__subpage__kitchen__restaurant_name']
+    list_display = ['title', 'get_business', 'date']
+    list_filter = ['date', 'events_page__subpage__business']
+    search_fields = ['title', 'events_page__subpage__business__business_name']
 
-    def get_kitchen(self, obj):
-        return obj.events_page.subpage.kitchen
-    get_kitchen.short_description = 'Kitchen'
-    get_kitchen.admin_order_field = 'events_page__subpage__kitchen'
+    def get_business(self, obj):
+        return obj.events_page.subpage.business
+    get_business.short_description = 'business'
+    get_business.admin_order_field = 'events_page__subpage__business'
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):

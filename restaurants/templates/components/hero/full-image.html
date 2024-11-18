@@ -1,0 +1,24 @@
+
+{% if debug %}
+<div class="bg-red-100 p-4">
+    <p>Hero Image: {{ hero_image|default:"No hero image" }}</p>
+    <p>Hero Layout: {{ subpage.hero_layout|default:"No layout" }}</p>
+</div>
+{% endif %}
+<div class="hero-section relative">
+    {% if hero_image %}
+        <img src="{{ hero_image.image.url }}" 
+             alt="{{ hero_image.alt_text }}"
+             class="w-full h-screen object-cover">
+    {% else %}
+        <!-- Optional: Default/placeholder state -->
+        <div class="w-full h-screen bg-gray-100 flex items-center justify-center">
+            <p class="text-gray-500">No hero image set</p>
+        </div>
+    {% endif %}
+    
+    <!-- Hero content overlay -->
+    <div class="absolute inset-0 flex items-center justify-center">
+        <!-- Add your hero text content here -->
+    </div>
+</div>

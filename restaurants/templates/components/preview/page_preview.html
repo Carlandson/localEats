@@ -1,34 +1,44 @@
 <!-- Preview Container -->
 <div class="preview-content">
-    <!-- Navigation Preview (if needed in preview) -->
-    {% include "components/navigation/top-nav/"|add:restaurant_details.navigation_style|add:".html" %}
+    <!-- Navigation Preview -->
+    <div id="navigation-preview">
+        {% include "components/navigation/top-nav/"|add:business_details.navigation_style|add:".html" %}
+    </div>
+    
+    <!-- Page Content Preview -->
+    <div id="page-content-preview">
+        {% if is_home %}
+            <!-- Home Page Components -->
+            <div class="home-preview">
+                {% if hero_image and subpage.hero_layout %}
+                    {% with template_name="components/hero/"|add:subpage.hero_layout|add:".html" %}
+                        {% include template_name %}
+                    {% endwith %}
+                {% endif %}
+                <!-- Add other home page components -->
+            </div>
 
-    <!-- Page-Specific Content -->
-    {% if current_page == 'home' %}
-        <!-- Home Page Components -->
-        <div class="home-preview">
-            {% if subpage.has_hero %}
-                {% include "components/hero/"|add:subpage.hero_layout|add:".html" %}
-            {% endif %}
-            <!-- Add other home page components -->
-        </div>
+        {% elif menu_page %}
+            <!-- Menu Page Components -->
+            <div class="menu-preview">
+                {% if hero_image and subpage.hero_layout %}
+                    {% with template_name="components/hero/"|add:subpage.hero_layout|add:".html" %}
+                        {% include template_name %}
+                    {% endwith %}
+                {% endif %}
+                {% include "components/menu/menu_section.html" %}
+            </div>
 
-    {% elif current_page == 'menu' %}
-        <!-- Menu Page Components -->
-        <div class="menu-preview">
-            {% if subpage.has_hero %}
-                {% include "components/hero/"|add:subpage.hero_layouct|add:".html" %}
-            {% endif %}
-            {% include "components/menu/menu_section.html" %}
-        </div>
-
-    {% elif current_page == 'about' %}
-        <!-- About Page Components -->
-        <div class="about-preview">
-            {% if subpage.has_hero %}
-                {% include "components/hero/"|add:subpage.hero_layout|add:".html" %}
-            {% endif %}
-            {% include "components/about/about_section.html" %}
-        </div>
-    {% endif %}
+        {% elif about_page %}
+            <!-- About Page Components -->
+            <div class="about-preview">
+                {% if hero_image and subpage.hero_layout %}
+                    {% with template_name="components/hero/"|add:subpage.hero_layout|add:".html" %}
+                        {% include template_name %}
+                    {% endwith %}
+                {% endif %}
+                {% include "components/about/about_section.html" %}
+            </div>
+        {% endif %}
+    </div>
 </div>

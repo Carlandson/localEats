@@ -12,7 +12,7 @@
                         <input type="radio" 
                                name="nav_style" 
                                value="{{ value }}" 
-                               {% if restaurant_details.navigation_style == value %}checked{% endif %}
+                               {% if business_details.navigation_style == value %}checked{% endif %}
                                class="component-selector"
                                data-component="navigation">
                         <span>{{ label }}</span>
@@ -28,14 +28,14 @@
                 <div>
                     <label class="block text-sm font-medium mb-2">Primary Color</label>
                     <input type="color" 
-                           value="{{ restaurant_details.primary_color }}"
+                           value="{{ business_details.primary_color }}"
                            class="color-picker w-full h-10 rounded border"
                            data-color-type="primary">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2">Secondary Color</label>
                     <input type="color" 
-                           value="{{ restaurant_details.secondary_color }}"
+                           value="{{ business_details.secondary_color }}"
                            class="color-picker w-full h-10 rounded border"
                            data-color-type="secondary">
                 </div>
@@ -55,6 +55,8 @@
                     <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
                         <input type="radio" 
                                name="hero_layout" 
+                               class="component-selector"
+                               data-component="hero_layout"
                                value="{{ value }}" 
                                {% if subpage.hero_layout == value %}checked{% endif %}>
                         <span class="ml-2">{{ label }}</span>
@@ -63,70 +65,121 @@
             </div>
         </div>
 
-        <!-- Content -->
-        <div class="space-y-4">
-            <div>
-                <label for="hero-heading" class="block text-sm font-medium text-gray-700">Heading</label>
-                <input type="text"
-                       id="hero-heading"
-                       value="{{ subpage.hero_heading }}"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                       placeholder="Enter main heading">
-            </div>
 
-            <div>
-                <label for="hero-subheading" class="block text-sm font-medium text-gray-700">Subheading</label>
-                <textarea id="hero-subheading"
-                          rows="3"
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                          placeholder="Enter descriptive text">{{ subpage.hero_subheading }}</textarea>
-            </div>
-
-            <!-- Button Settings -->
-            <div class="space-y-4">
-                <div>
-                    <label for="hero-button-text" class="block text-sm font-medium text-gray-700">Button Text</label>
+            <div class="space-y-8">
+                <!-- Heading Settings -->
+                <div class="space-y-4 pb-4 border-b border-gray-200">
+                    <div class="flex items-center justify-between mb-4">  
+                        <label class="block text-sm font-medium text-gray-700">Heading</label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" 
+                                   id="show-hero-heading"
+                                   class="form-checkbox"
+                                   {% if subpage.show_hero_heading %}checked{% endif %}>
+                            <span class="ml-2 text-sm text-gray-600">Show Heading</span>
+                        </label>
+                    </div>
                     <input type="text"
-                           id="hero-button-text"
-                           value="{{ subpage.hero_button_text }}"
+                           id="hero-heading"
+                           value="{{ value }}"
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                           placeholder="Enter button text">
-                </div>
-
-                <div>
-                    <label for="hero-button-link" class="block text-sm font-medium text-gray-700">Button Link</label>
-                    <div class="mt-1 flex rounded-md shadow-sm">
-                        <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
-                            /{{ eatery }}/
-                        </span>
-                        <input type="text"
-                               id="hero-button-link"
-                               value="{{ subpage.hero_button_link }}"
-                               class="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                               placeholder="menu">
+                           placeholder="Enter main heading">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Font Family</label>
+                            <select id="heading-font" class="mt-1 block w-full rounded-md border-gray-300">
+                                {% for font in font_choices %}
+                                    <option value="{{ font.value }}" {% if subpage.heading_font == font.value %}selected{% endif %}>
+                                        {{ font.label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Font Size</label>
+                            <select id="heading-size" class="mt-1 block w-full rounded-md border-gray-300">
+                                <option value="text-3xl" {% if subpage.heading_size == 'text-3xl' %}selected{% endif %}>Small</option>
+                                <option value="text-4xl" {% if subpage.heading_size == 'text-4xl' %}selected{% endif %}>Medium</option>
+                                <option value="text-5xl" {% if subpage.heading_size == 'text-5xl' %}selected{% endif %}>Large</option>
+                                <option value="text-6xl" {% if subpage.heading_size == 'text-6xl' %}selected{% endif %}>Extra Large</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-
+            
+                <!-- Subheading Settings -->
+                <div class="space-y-4 pb-4 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <label class="block text-sm font-medium text-gray-700">Subheading</label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" 
+                                   id="show-hero-subheading"
+                                   class="form-checkbox"
+                                   {% if subpage.show_hero_subheading %}checked{% endif %}>
+                            <span class="ml-2 text-sm text-gray-600">Show Subheading</span>
+                        </label>
+                    </div>
+                    <textarea id="hero-subheading"
+                              rows="3"
+                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                              placeholder="Enter descriptive text">{{ subpage.hero_subheading }}</textarea>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Font Family</label>
+                            <select id="subheading-font" class="mt-1 block w-full rounded-md border-gray-300">
+                                {% for font in font_choices %}
+                                    <option value="{{ font.value }}" {% if subpage.subheading_font == font.value %}selected{% endif %}>
+                                        {{ font.label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Font Size</label>
+                            <select id="subheading-size" class="mt-1 block w-full rounded-md border-gray-300">
+                                <option value="text-lg" {% if subpage.subheading_size == 'text-lg' %}selected{% endif %}>Small</option>
+                                <option value="text-xl" {% if subpage.subheading_size == 'text-xl' %}selected{% endif %}>Medium</option>
+                                <option value="text-2xl" {% if subpage.subheading_size == 'text-2xl' %}selected{% endif %}>Large</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Menu Button (Conditional) -->
+                {% if business_details.business_type == 'restaurant' and subpage.page_type != 'menu' %}
+                    <div class="space-y-4 pt-4">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-sm font-medium text-gray-700">Menu Button</label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" 
+                                       id="show-menu-button"
+                                       class="form-checkbox"
+                                       {% if subpage.show_menu_button %}checked{% endif %}>
+                                <span class="ml-2 text-sm text-gray-600">Show Menu Button</span>
+                            </label>
+                        </div>
+                        <input type="text"
+                               id="menu-button-text"
+                               value="{{ subpage.menu_button_text|default:'View Menu' }}"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                               placeholder="Enter button text">
+                    </div>
+                {% endif %}
             <!-- Styling -->
             <div class="space-y-4 pt-4 border-t border-gray-200">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Text Alignment</label>
-                    <div class="flex space-x-4">
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700">Text Alignment</label>
+                    <div class="mt-2 space-x-4">
+                        {% for value, label in text_align_choices %}
                         <label class="inline-flex items-center">
-                            <input type="radio"
-                                   name="hero-text-align"
-                                   value="left"
-                                   {% if not subpage.hero_text_align or subpage.hero_text_align == 'left' %}checked{% endif %}>
-                            <span class="ml-2">Left</span>
+                            <input type="radio" 
+                                   name="hero-text-align" 
+                                   value="{{ value }}"
+                                   {% if subpage.hero_text_align == value %}checked{% endif %}
+                                   class="form-radio">
+                            <span class="ml-2">{{ label }}</span>
                         </label>
-                        <label class="inline-flex items-center">
-                            <input type="radio"
-                                   name="hero-text-align"
-                                   value="center"
-                                   {% if subpage.hero_text_align == 'center' %}checked{% endif %}>
-                            <span class="ml-2">Center</span>
-                        </label>
+                        {% endfor %}
                     </div>
                 </div>
 
@@ -152,8 +205,9 @@
             </div>
 
             <!-- Image Upload -->
-            <div class="pt-4 border-t border-gray-200">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Hero Image</label>
+            {% with hero_image=subpage.get_hero_image %}
+                <div class="pt-4 border-t border-gray-200">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Hero Image</label>
                 <div class="space-y-4">
                     <input type="file" 
                            id="hero-image-upload" 
@@ -162,22 +216,42 @@
                     <button type="button"
                             id="upload-hero-button"
                             class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                        {% if subpage.hero_image %}Replace{% else %}Upload{% endif %} Image
+                        {% if hero_image %}Replace{% else %}Upload{% endif %} Image
                     </button>
-                    {% if subpage.hero_image %}
+                    
+                    {% if hero_image %}
                         <div class="relative group">
-                            <img src="{{ subpage.hero_image.url }}" 
-                                 alt="Hero image" 
+                            <img src="{{ hero_image.image.url }}" 
+                                 alt="{{ hero_image.alt_text }}" 
                                  class="w-full h-40 object-cover rounded-lg">
                             <button type="button"
                                     id="remove-hero-image"
-                                    class="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                    class="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                                    title="Remove image">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
                             </button>
                         </div>
                     {% endif %}
+                </div>
+            {% endwith %}
+            <!-- Footer Style -->
+            <div class="mb-8">
+                    <h3 class="text-md font-semibold mb-4">Footer Style</h3>
+                    <div class="space-y-2">
+                        {% for value, label in footer_styles %}
+                            <label class="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="radio" 
+                                       name="footer_style" 
+                                       value="{{ value }}" 
+                                       {% if business_details.footer_style == value %}checked{% endif %}
+                                       class="component-selector"
+                                       data-component="footer">
+                                <span>{{ label }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

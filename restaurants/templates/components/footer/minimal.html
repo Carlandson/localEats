@@ -1,0 +1,13 @@
+<footer style="background-color: {{ secondary_color }}" class="py-4"></footer>
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center">
+            <p class="text-sm">© {{ business_details.business_name }}</p>
+            <div class="flex space-x-4">
+                {% if business_details.email %}
+                    <a href="mailto:{{ business_details.email }}" class="text-sm hover:underline">Contact</a>
+                {% endif %}
+                <a href="/{{ business_details.subdirectory }}" class="text-sm hover:underline">Home</a>
+            </div>
+        </div>
+    </div>
+</footer>

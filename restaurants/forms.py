@@ -1,7 +1,7 @@
 from allauth.account.forms import SignupForm
 from allauth.account.views import SignupView
 from django import forms
-from .models import Kitchen, Dish, CuisineCategory
+from .models import Business, Dish, CuisineCategory
 from django.forms import ModelForm
 from django.core.mail import send_mail
 from django.conf import settings
@@ -52,7 +52,7 @@ class CustomSignupView(SignupView):
 
 custom_signup = CustomSignupView.as_view()
 
-class RestaurantCreateForm(forms.ModelForm):
+class BusinessCreateForm(forms.ModelForm):
     phone_number = PhoneNumberField(
         widget=PhoneNumberPrefixWidget(initial='US')
     )
@@ -61,11 +61,11 @@ class RestaurantCreateForm(forms.ModelForm):
         max_length=64, 
         required=False,
         label="Custom URL",
-        widget=forms.TextInput(attrs={'placeholder': 'your-restaurant-name'})
+        widget=forms.TextInput(attrs={'placeholder': 'your-business-name'})
     )
     class Meta:
-        model = Kitchen
-        fields = ['restaurant_name', 'cuisine', 'address', 'city', 'state', 'zip_code', 'phone_number', 'subdirectory', 'description']
+        model = Business
+        fields = ['business_name', 'business_type', 'address', 'city', 'state', 'zip_code', 'phone_number', 'subdirectory', 'description']
 
 
     def clean_cuisine(self):
@@ -74,7 +74,7 @@ class RestaurantCreateForm(forms.ModelForm):
         return cuisine
     
     def save(self, commit=True):
-        instance = super(RestaurantCreateForm, self).save(commit=False)
+        instance = super(BusinessCreateForm, self).save(commit=False)
         instance.is_verified = False
         if commit:
             instance.save()
@@ -84,9 +84,9 @@ class RestaurantCreateForm(forms.ModelForm):
     def clean_subdirectory(self):
         subdirectory = self.cleaned_data.get('subdirectory')
         if not subdirectory:
-            subdirectory = slugify(self.cleaned_data.get('restaurant_name'))
+            subdirectory = slugify(self.cleaned_data.get('business_name'))
         
-        if Kitchen.objects.filter(subdirectory=subdirectory).exists():
+        if Business.objects.filter(subdirectory=subdirectory).exists():
             raise forms.ValidationError("This subdirectory is already in use. Please choose a different one.")
         
         return subdirectory
@@ -95,23 +95,23 @@ class RestaurantCreateForm(forms.ModelForm):
         cleaned_data = super().clean()
         address = cleaned_data.get('address')
         
-        if address and Kitchen.verified_business_exists(address):
+        if address and Business.verified_business_exists(address):
             raise forms.ValidationError("A verified business already exists at this address.")
         
         return cleaned_data
 
     def send_verification_email(self, instance):
-        subject = 'New Restaurant Submission'
+        subject = 'New Business Submission'
         message = f"""
-        A new restaurant has been submitted for verification:
+        A new business has been submitted for verification:
         
-        Name: {instance.restaurant_name}
+        Name: {instance.business_name}
         Phone: {instance.phone_number}
         Address: {instance.address}
         City: {instance.city}
         State: {instance.state}
         Country: {instance.country}
-        Cuisine: {instance.cuisine}
+        Business Type: {instance.business_type}
         Description: {instance.description}
         
         Please verify this information and update the verification status in the admin panel.
@@ -123,7 +123,7 @@ class RestaurantCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['restaurant_name'].widget.attrs.update({'placeholder': 'Name of restaurant'})
+        self.fields['business_name'].widget.attrs.update({'placeholder': 'Name of business'})
         self.fields['description'].required = False  # Add this       
 
 class DishSubmit(ModelForm):
@@ -137,20 +137,25 @@ class DishSubmit(ModelForm):
             'image': forms.FileInput(attrs={'class': 'form-control'}),  # Changed from URLInput to FileInput
         }
 
-class KitchenEditForm(forms.ModelForm):
+class BusinessEditForm(forms.ModelForm):
     class Meta:
-        model = Kitchen
+        model = Business
         fields = [
+            'business_name',
+            'business_type',
+            'cuisine',
+            'description',
+            'address',
+            'phone_number',
+            'email',
             'navigation_style',
-            'hero_style',
-            # Remove 'layout' from here
-            # Add any other fields you want to be editable
+            'footer_style',
         ]
-        
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['navigation_style'].choices = Kitchen.NAV_CHOICES
-        self.fields['hero_style'].choices = Kitchen.HERO_CHOICES
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'navigation_style': forms.RadioSelect(),
+            'footer_style': forms.RadioSelect(),
+        }
 
 class ImageUploadForm(forms.ModelForm):
     class Meta:
@@ -158,13 +163,12 @@ class ImageUploadForm(forms.ModelForm):
         fields = ['image', 'alt_text', 'caption']
 
 
-class RestaurantCustomizationForm(forms.ModelForm):
+class BusinessCustomizationForm(forms.ModelForm):
     class Meta:
-        model = Kitchen
+        model = Business
         fields = [
             'navigation_style',
-            'hero_style',
-            'menu_style',
+            'footer_style',
             'show_gallery',
             'show_testimonials',
             'show_social_feed',
@@ -182,15 +186,15 @@ class RestaurantCustomizationForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['navigation_style'].choices = Kitchen.NAV_CHOICES
-        self.fields['hero_style'].choices = Kitchen.HERO_CHOICES
+        self.fields['navigation_style'].choices = Business.NAV_CHOICES
+        self.fields['footer_style'].choices = Business.FOOTER_CHOICES
 
 
-class RestaurantImageForm(forms.ModelForm):
+class BusinessImageForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ['image', 'alt_text', 'caption']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['alt_text'].help_text = "Use 'logo' for restaurant logo or 'hero' for hero image"
+        self.fields['alt_text'].help_text = "Use 'logo' for business logo or 'hero' for hero image"
