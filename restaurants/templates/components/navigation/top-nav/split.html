@@ -1,16 +1,16 @@
-<nav class="w-full" style="background-color: {{ primary_color }}">
+<nav class="w-full" style="background-color: {{ primary_color }}; font-family: {{ business_details.main_font }}">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Top bar with contact & social -->
         <div class="hidden md:flex justify-between items-center py-2 text-sm border-b border-gray-200">
             <div class="flex items-center space-x-4">
                 {% if business_details.phone_number %}
-                    <span>
+                    <span style="color: {{ secondary_color }}">
                         <i class="fas fa-phone text-sm mr-2"></i>
                         {{ business_details.phone_number }}
                     </span>
                 {% endif %}
                 {% if business_details.address %}
-                    <span>
+                    <span style="color: {{ secondary_color }}">
                         <i class="fas fa-map-marker-alt text-sm mr-2"></i>
                         {{ business_details.address }}
                     </span>
@@ -18,12 +18,12 @@
             </div>
             <div class="flex items-center space-x-4">
                 {% if business_details.facebook_url %}
-                    <a href="{{ business_details.facebook_url }}" target="_blank" class="hover:text-primary-600">
+                    <a href="{{ business_details.facebook_url }}" target="_blank" class="hover:text-primary-600" style="color: {{ secondary_color }}">
                         <i class="fab fa-facebook"></i>
                     </a>
                 {% endif %}
                 {% if business_details.instagram_url %}
-                    <a href="{{ business_details.instagram_url }}" target="_blank" class="hover:text-primary-600">
+                    <a href="{{ business_details.instagram_url }}" target="_blank" class="hover:text-primary-600" style="color: {{ secondary_color }}">
                         <i class="fab fa-instagram"></i>
                     </a>
                 {% endif %}
@@ -35,14 +35,16 @@
             <!-- Left Navigation -->
             <div class="hidden md:flex items-center space-x-8">
                 <a href="{% url 'business_subdirectory' business_subdirectory=business_subdirectory %}" 
-                   class="text-sm font-medium hover:text-primary-600 transition-colors {% if request.resolver_match.url_name == 'business_subdirectory' %}text-primary-600{% endif %}">
-                    Home
-                </a>
+                   class="text-sm font-medium hover:text-primary-600 transition-colors {% if request.resolver_match.url_name == 'business_subdirectory' %}text-primary-600{% endif %}"                   style="color: {{ text_color }}"
+                   class="transition-colors duration-200"
+                   onmouseover="this.style.color='{{ hover_color }}'"
+                   onmouseout="this.style.color='{{ text_color }}'">Home</a>
                 {% if menu_page %}
                     <a href="{% url 'menu' business_subdirectory=business_subdirectory %}" 
-                       class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'menu' in request.path %}text-primary-600{% endif %}">
-                        Menu
-                    </a>
+                       class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'menu' in request.path %}text-primary-600{% endif %}"                   style="color: {{ text_color }}"
+                       class="transition-colors duration-200"
+                       onmouseover="this.style.color='{{ hover_color }}'"
+                       onmouseout="this.style.color='{{ text_color }}'">Menu</a>
                 {% endif %}
             </div>
 
@@ -52,7 +54,7 @@
                     {% if logo %}
                         <img src="{{ logo.image.url }}" alt="{{ logo.alt_text }}" class="h-12 w-auto">
                     {% else %}
-                        <h1 class="text-xl font-semibold">{{ business_details.business_name }}</h1>
+                        <h1 class="text-xl font-semibold" style="color: {{ text_color }}">{{ business_details.business_name }}</h1>
                     {% endif %}
                 {% endwith %}
             </div>
@@ -61,14 +63,17 @@
             <div class="hidden md:flex items-center space-x-8">
                 {% if about_page %}
                     <a href="{% url 'about' business_subdirectory=business_subdirectory %}" 
-                       class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'about' in request.path %}text-primary-600{% endif %}">
-                        About
-                    </a>
+                       class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'about' in request.path %}text-primary-600{% endif %}"
+    
+                       class="transition-colors duration-200"
+                       onmouseover="this.style.color='{{ hover_color }}'"
+                       onmouseout="this.style.color='{{ text_color }}'">About</a>
                 {% endif %}
                 {% if events_page %}
                     <a href="{% url 'events' business_subdirectory=business_subdirectory %}" 
-                       class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'events' in request.path %}text-primary-600{% endif %}">
-                        Events
+                       class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'events' in request.path %}text-primary-600{% endif %}"                   style="color: {{ text_color }}"
+                       onmouseover="this.style.color='{{ hover_color }}'"
+                       onmouseout="this.style.color='{{ text_color }}'">Events</a>
                     </a>
                 {% endif %}
             </div>

@@ -29,6 +29,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Max
 from django.core.files.base import ContentFile
 from django.template.loader import render_to_string
+from .constants import get_font_choices, get_font_sizes
 import base64, uuid
 import googlemaps
 
@@ -417,31 +418,79 @@ def menu(request, business_subdirectory):
 
 
 def about(request, business_subdirectory):
-    business = get_object_or_404(business, subdirectory=business_subdirectory)
-    about_page = AboutUsPage.objects.filter(Business=business)
+    business = get_object_or_404(Business, subdirectory=business_subdirectory)
+    
+    # First get the subpage for this business
+    about_subpage = get_object_or_404(SubPage, business=business, page_type='about')
+    
+    # Then get the about page associated with this subpage
+    about_page = get_object_or_404(AboutUsPage, subpage=about_subpage)
+    
     context = {
+        "business_details": business,
+        "business_subdirectory": business_subdirectory,
         "about_page": about_page,
         "owner": request.user == business.owner,
     }
-    return render(request, "about.html", context)
+
+    if not business.is_verified and request.user != business.owner:
+        return render(request, "business_under_construction.html", context)
+        
+    elif request.user != business.owner:
+        return render(request, "visitor_pages/about.html", context)
+    
+    else:
+        return render(request, "owner_subpages/about.html", context)
 
 def specials(request, business_subdirectory):
     business = get_object_or_404(Business, subdirectory=business_subdirectory)
-    specials_page = SpecialsPage.objects.filter(Business=business)
+    
+    # First get the subpage for this business
+    specials_subpage = get_object_or_404(SubPage, business=business, page_type='specials')
+    
+    # Then get the specials page associated with this subpage
+    specials_page = get_object_or_404(SpecialsPage, subpage=specials_subpage)
+    
     context = {
+        "business_details": business,
+        "business_subdirectory": business_subdirectory,
         "specials_page": specials_page,
         "owner": request.user == business.owner,
     }
-    return render(request, "specials.html", context)
 
+    if not business.is_verified and request.user != business.owner:
+        return render(request, "business_under_construction.html", context)
+        
+    elif request.user != business.owner:
+        return render(request, "visitor_pages/specials.html", context)
+    
+    else:
+        return render(request, "owner_subpages/specials.html", context)
+    
 def events(request, business_subdirectory):
     business = get_object_or_404(Business, subdirectory=business_subdirectory)
-    events_page = EventsPage.objects.filter(Business=business)
+    
+    # First get the subpage for this business
+    events_subpage = get_object_or_404(SubPage, business=business, page_type='events')
+    
+    # Then get the events page associated with this subpage
+    events_page = get_object_or_404(EventsPage, subpage=events_subpage)
+    
     context = {
+        "business_details": business,
+        "business_subdirectory": business_subdirectory,
         "events_page": events_page,
         "owner": request.user == business.owner,
     }
-    return render(request, "events.html", context)
+
+    if not business.is_verified and request.user != business.owner:
+        return render(request, "business_under_construction.html", context)
+        
+    elif request.user != business.owner:
+        return render(request, "visitor_pages/events.html", context)
+    
+    else:
+        return render(request, "owner_subpages/events.html", context)
 
 @login_required
 def new_dish(request, business_name):
@@ -977,6 +1026,9 @@ def edit_layout(request, business_subdirectory):
             'nav_styles': business.NAV_CHOICES,
             'footer_styles': business.FOOTER_CHOICES,
             'text_align_choices': SubPage.TEXT_ALIGN_CHOICES,
+            'font_choices': get_font_choices(),
+            'heading_sizes': get_font_sizes('heading'),
+            'subheading_sizes': get_font_sizes('subheading'),
         }
         
         return render(request, "edit_layout.html", context)
@@ -1162,8 +1214,6 @@ def preview_navigation(request, business_subdirectory, style):
         logger.error(f"Error in preview_navigation: {str(e)}")
         return HttpResponse(f"Error: {str(e)}", status=500)
 
-@login_required
-@require_POST
 def update_global_component(request, business_subdirectory):
     try:
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
@@ -1186,7 +1236,12 @@ def update_global_component(request, business_subdirectory):
                 'choices': business.NAV_CHOICES,
                 'instance': business
             },
-            # Page-specific components (SubPage model)
+            'main_font': {
+                'model': business,
+                'field': 'main_font',
+                'choices': get_font_choices(),  # From your constants.py
+                'instance': business
+            },
             'hero_layout': {
                 'model': SubPage,
                 'field': 'hero_layout',
@@ -1205,7 +1260,12 @@ def update_global_component(request, business_subdirectory):
             return JsonResponse({'error': f'Invalid component: {component}'}, status=400)
 
         component_info = component_map[component]
-        valid_styles = [choice[0] for choice in component_info['choices']]
+        
+        # For main_font, we validate against the font values, not the display names
+        if component == 'main_font':
+            valid_styles = [font[0] for font in component_info['choices']]
+        else:
+            valid_styles = [choice[0] for choice in component_info['choices']]
 
         if style not in valid_styles:
             return JsonResponse({
@@ -1561,6 +1621,10 @@ def update_brand_colors(request, business_subdirectory):
             business.primary_color = color_value
         elif color_type == 'secondary':
             business.secondary_color = color_value
+        elif color_type == 'hover-color':
+            business.hover_color = color_value
+        elif color_type == 'text-color':
+            business.text_color = color_value
         else:
             return JsonResponse({'success': False, 'error': 'Invalid color type'})
 

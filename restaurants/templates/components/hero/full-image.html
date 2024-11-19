@@ -1,4 +1,3 @@
-
 {% if debug %}
 <div class="bg-red-100 p-4">
     <p>Hero Image: {{ hero_image|default:"No hero image" }}</p>
@@ -18,7 +17,36 @@
     {% endif %}
     
     <!-- Hero content overlay -->
-    <div class="absolute inset-0 flex items-center justify-center">
-        <!-- Add your hero text content here -->
+    <div class="absolute inset-0 flex items-center">
+        <div class="w-full px-4 sm:px-6 lg:px-16 xl:px-24">
+            <div class="{% if subpage.hero_text_align == 'left' %}mr-auto{% endif %}
+                        {% if subpage.hero_text_align == 'right' %}ml-auto{% endif %}
+                        {% if subpage.hero_text_align == 'center' %}mx-auto{% endif %}
+                        {% if subpage.hero_text_align != 'right' %}max-w-prose{% endif %}">
+                {% if subpage.show_hero_heading %}
+                    <h1 class="text-4xl font-bold tracking-tight sm:text-5xl sm:tracking-tight text-{{ subpage.hero_text_align }}"
+                        {% if subpage.hero_text_color %}style="color: {{ subpage.hero_text_color|safe }}"{% endif %}>
+                        {{ subpage.hero_heading|default:subpage.title }}
+                    </h1>
+                {% endif %}
+                
+                {% if subpage.show_hero_subheading and subpage.hero_subheading %}
+                    <p class="mt-6 text-xl text-{{ subpage.hero_text_align }}"
+                       {% if subpage.hero_subtext_color %}style="color: {{ subpage.hero_subtext_color|safe }}"{% endif %}>
+                        {{ subpage.hero_subheading }}
+                    </p>
+                {% endif %}
+                
+                {% if subpage.hero_button_text %}
+                    <div class="mt-8 sm:mt-10 text-{{ subpage.hero_text_align }}">
+                        <a href="{{ subpage.hero_button_link|default:'#' }}" 
+                           class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white"
+                           style="background-color: {{ secondary_color }}; hover:background-color: {{ hover_color }}">
+                            {{ subpage.hero_button_text }}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>

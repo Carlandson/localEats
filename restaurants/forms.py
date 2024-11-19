@@ -176,12 +176,21 @@ class BusinessCustomizationForm(forms.ModelForm):
             'show_map',
             'primary_color',
             'secondary_color',
-            'font_heading',
-            'font_body',
+            'hover_color',
+            'text_color',
+            'main_font',
         ]
         widgets = {
             'primary_color': forms.TextInput(attrs={'type': 'color'}),
             'secondary_color': forms.TextInput(attrs={'type': 'color'}),
+            'hover_color': forms.TextInput(attrs={'type': 'color'}),
+            'text_color': forms.TextInput(attrs={'type': 'color'}),
+            'main_font': forms.Select(attrs={'class': 'form-control'}),
+            'hero_font': forms.Select(attrs={'class': 'form-control'}),
+            'hero_heading_size': forms.Select(attrs={'class': 'form-control'}),
+            'hero_subheading_size': forms.Select(attrs={'class': 'form-control'}),
+            'body_font': forms.Select(attrs={'class': 'form-control'}),
+            'body_size': forms.Select(attrs={'class': 'form-control'}),
         }
         
     def __init__(self, *args, **kwargs):

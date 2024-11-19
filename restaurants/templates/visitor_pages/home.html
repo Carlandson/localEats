@@ -2,12 +2,14 @@
 <div class="relative">
     <!-- Navigation -->
     {% with nav_colors=business_details %}
-        {% include "components/navigation/top-nav/"|add:business_details.navigation_style|add:".html" with primary_color=nav_colors.primary_color secondary_color=nav_colors.secondary_color %}
+        {% include "components/navigation/top-nav/"|add:business_details.navigation_style|add:".html" with primary_color=nav_colors.primary_color secondary_color=nav_colors.secondary_color text_color=nav_colors.text_color hover_color=nav_colors.hover_color %}
     {% endwith %}  
 
     <!-- Hero Section -->
     {% if hero_image and subpage.hero_layout %}
-        {% include "components/hero/"|add:subpage.hero_layout|add:".html" %}
+        {% with hero_colors=business_details %}
+            {% include "components/hero/"|add:subpage.hero_layout|add:".html" with primary_color=hero_colors.primary_color secondary_color=hero_colors.secondary_color text_color=hero_colors.text_color hover_color=hero_colors.hover_color %}
+        {% endwith %}
     {% endif %}
 
     <!-- Main Content -->

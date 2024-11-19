@@ -123,8 +123,8 @@ class Business(models.Model):
     primary_color = models.CharField(max_length=7, default='#4F46E5')  # Hex color
     secondary_color = models.CharField(max_length=7, default='#1F2937')
     hover_color = models.CharField(max_length=7, default='#9333EA') 
-    font_heading = models.CharField(max_length=50, default='Inter')
-    font_body = models.CharField(max_length=50, default='Inter')
+    text_color = models.CharField(max_length=7, default='#000000')
+    main_font = models.CharField(max_length=50, default='Inter')
     
     # Media
     images = GenericRelation(Image)
@@ -201,6 +201,10 @@ class SubPage(models.Model):
     is_published = models.BooleanField(default=False)
     primary_color = models.CharField(max_length=7, default='#4F46E5')  # Hex color
     secondary_color = models.CharField(max_length=7, default='#1F2937')
+    hover_color = models.CharField(max_length=7, default='#9333EA')
+    text_color = models.CharField(max_length=7, default='#000000')
+    font_heading = models.CharField(max_length=50, default='Inter')
+    font_body = models.CharField(max_length=50, default='Inter')
 
     PAGE_TYPES = [
         ('home', 'Home'),
@@ -239,7 +243,10 @@ class SubPage(models.Model):
     hero_text_color = models.CharField(max_length=7, default='#000000')  # Hex color
     hero_subtext_color = models.CharField(max_length=7, default='#6B7280')  # Hex color
     show_hero_heading = models.BooleanField(default=False)
+    hero_heading_size = models.CharField(max_length=20, default='text-3xl')
+    hero_subheading_size = models.CharField(max_length=20, default='text-lg')
     show_hero_subheading = models.BooleanField(default=False)
+    hero_font = models.CharField(max_length=50, default='Inter')
 
     def get_hero_image(self):
         """Get the hero image for this subpage"""

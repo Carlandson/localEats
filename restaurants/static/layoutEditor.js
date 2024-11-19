@@ -17,11 +17,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const uploadButton = document.getElementById('upload-hero-button');
     const fileInput = document.getElementById('hero-image-upload');
     const removeButton = document.getElementById('remove-hero-image');
+    // Font selectors
+    const mainFontSelect = document.getElementById('main-font');
+    if (mainFontSelect) {
+        mainFontSelect.addEventListener('change', async function() {
+            try {
+                await updateGlobalComponent('main_font', this.value);
+                // Update the preview to show new font
+                await updatePreview(pageSelector.value);
+            } catch (error) {
+                console.error('Error updating main font:', error);
+                displayError('Failed to update main font');
+            }
+        });
 
-    // Initialize event listeners
-    if (pageSelector) {
-        pageSelector.addEventListener('change', function() {
-            loadPageData(this.value);
+        // Add preview on hover
+        mainFontSelect.addEventListener('mouseover', function(e) {
+            if (e.target.tagName === 'OPTION') {
+                // Temporarily apply the font to preview it
+                e.target.style.fontFamily = e.target.value;
+            }
         });
     }
 
@@ -148,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
         picker.addEventListener('input', debounce(async function() {
             const colorType = this.dataset.colorType;
             const colorValue = this.value;
-            
+            console.log('Updating brand color:', colorType, colorValue);
             try {
                 const response = await fetch(`/${business_subdirectory}/update-brand-colors/`, {
                     method: 'POST',
