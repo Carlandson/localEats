@@ -92,18 +92,17 @@
                 {% endfor %}
             </div>
         </div>
-
-
             <div class="space-y-8">
                 <!-- Heading Settings -->
                 <div class="space-y-4 pb-4 border-b border-gray-200">
                     <div class="flex items-center justify-between mb-4">  
                         <label class="block text-sm font-bold text-gray-700">Heading</label>
                         <label class="inline-flex items-center">
-                            <input type="checkbox" 
-                                   id="show-hero-heading"
-                                   class="form-checkbox"
-                                   {% if subpage.show_hero_heading %}checked{% endif %}>
+                            <input type="checkbox"
+                                id="show-hero-heading"
+                                class="form-checkbox"
+                                data-initial-state="{{ subpage.show_hero_heading|lower }}"
+                                {% if subpage.show_hero_heading %}checked{% endif %}>
                             <span class="ml-2 text-sm text-gray-600">Show Heading</span>
                         </label>
                     </div>
@@ -114,24 +113,26 @@
                            placeholder="Enter main heading">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Font Family</label>
-                            <select id="heading-font" class="mt-1 block w-full rounded-md border-gray-300">
+                            <label class="block text-sm font-medium text-gray-700">Heading Font</label>
+                            <select id="hero-heading-font" class="mt-1 block w-full rounded-md border-gray-300">
                                 {% for value, label in font_choices %}
                                     <option value="{{ value }}" 
                                             style="font-family: {{ value }}"
-                                            {% if subpage.heading_font == value %}selected{% endif %}>
+                                            {% if subpage.hero_heading_font == value %}selected{% endif %}>
                                         {{ label }}
                                     </option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Font Size</label>
-                            <select id="heading-size" class="mt-1 block w-full rounded-md border-gray-300">
-                                <option value="text-3xl" {% if subpage.heading_size == 'text-3xl' %}selected{% endif %}>Small</option>
-                                <option value="text-4xl" {% if subpage.heading_size == 'text-4xl' %}selected{% endif %}>Medium</option>
-                                <option value="text-5xl" {% if subpage.heading_size == 'text-5xl' %}selected{% endif %}>Large</option>
-                                <option value="text-6xl" {% if subpage.heading_size == 'text-6xl' %}selected{% endif %}>Extra Large</option>
+                            <label class="block text-sm font-medium text-gray-700">Heading Size</label>
+                            <select id="hero-heading-size" class="mt-1 block w-full rounded-md border-gray-300">
+                                {% for value, label in heading_sizes %}
+                                    <option value="{{ value }}" 
+                                            {% if subpage.hero_heading_size == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -145,6 +146,7 @@
                             <input type="checkbox" 
                                    id="show-hero-subheading"
                                    class="form-checkbox"
+                                   data-initial-state="{{ subpage.show_hero_subheading|lower }}"
                                    {% if subpage.show_hero_subheading %}checked{% endif %}>
                             <span class="ml-2 text-sm text-gray-600">Show Subheading</span>
                         </label>
@@ -155,23 +157,26 @@
                               placeholder="Enter descriptive text">{{ subpage.hero_subheading }}</textarea>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Font Family</label>
-                            <select id="subheading-font" class="mt-1 block w-full rounded-md border-gray-300">
+                            <label class="block text-sm font-medium text-gray-700">Subheading Font</label>
+                            <select id="hero-subheading-font" class="mt-1 block w-full rounded-md border-gray-300">
                                 {% for value, label in font_choices %}
                                     <option value="{{ value }}" 
                                             style="font-family: {{ value }}"
-                                            {% if subpage.heading_font == value %}selected{% endif %}>
+                                            {% if subpage.hero_subheading_font == value %}selected{% endif %}>
                                         {{ label }}
                                     </option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Font Size</label>
-                            <select id="subheading-size" class="mt-1 block w-full rounded-md border-gray-300">
-                                <option value="text-lg" {% if subpage.subheading_size == 'text-lg' %}selected{% endif %}>Small</option>
-                                <option value="text-xl" {% if subpage.subheading_size == 'text-xl' %}selected{% endif %}>Medium</option>
-                                <option value="text-2xl" {% if subpage.subheading_size == 'text-2xl' %}selected{% endif %}>Large</option>
+                            <label class="block text-sm font-medium text-gray-700">Subheading Size</label>
+                            <select id="hero-subheading-size" class="mt-1 block w-full rounded-md border-gray-300">
+                                {% for value, label in subheading_sizes %}
+                                    <option value="{{ value }}" 
+                                            {% if subpage.hero_subheading_size == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -183,7 +188,7 @@
                         <div class="flex items-center justify-between">
                             <label class="block text-sm font-medium text-gray-700">Menu Button</label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" 
+                                <input type="checkbox" id="show-hero-heading" 
                                        id="show-menu-button"
                                        class="form-checkbox"
                                        {% if subpage.show_menu_button %}checked{% endif %}>
@@ -279,7 +284,7 @@
                                        value="{{ value }}" 
                                        {% if business_details.footer_style == value %}checked{% endif %}
                                        class="component-selector"
-                                       data-component="footer">
+                                       data-component="footer_style">
                                 <span>{{ label }}</span>
                             </label>
                         {% endfor %}

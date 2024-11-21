@@ -23,14 +23,14 @@
                             {% if subpage.hero_text_align == 'center' %}mx-auto{% endif %}
                             {% if subpage.hero_text_align != 'right' %}max-w-prose{% endif %}">
                     {% if subpage.show_hero_heading %}
-                        <h1 class="text-4xl font-bold tracking-tight sm:text-5xl sm:tracking-tight text-{{ subpage.hero_text_align }}"
-                            {% if subpage.hero_text_color %}style="color: {{ subpage.hero_text_color|safe }}"{% endif %}>
-                    {{ subpage.hero_heading|default:subpage.title }}
+                        <h1 class="{{ subpage.hero_heading_size }} font-bold tracking-tight text-{{ subpage.hero_text_align }}"
+                            style="font-family: {{ subpage.hero_heading_font }}; {% if subpage.hero_text_color %}color: {{ subpage.hero_text_color|safe }}{% endif %}">
+                            {{ subpage.hero_heading|default:subpage.title }}
                         </h1>
                     {% endif %}
                     {% if subpage.show_hero_subheading and subpage.hero_subheading %}
-                        <p class="mt-6 text-xl text-{{ subpage.hero_text_align }}"
-                       {% if subpage.hero_subtext_color %}style="color: {{ subpage.hero_subtext_color|safe }}"{% endif %}>
+                    <p class="{{ subpage.hero_subheading_size }} mt-6 text-{{ subpage.hero_text_align }}"
+                            style="font-family: {{ subpage.hero_subheading_font }}; {% if subpage.hero_subtext_color %}color: {{ subpage.hero_subtext_color|safe }}{% endif %}">
                             {{ subpage.hero_subheading }}
                         </p>
                     {% endif %}

@@ -246,8 +246,9 @@ class SubPage(models.Model):
     hero_heading_size = models.CharField(max_length=20, default='text-3xl')
     hero_subheading_size = models.CharField(max_length=20, default='text-lg')
     show_hero_subheading = models.BooleanField(default=False)
-    hero_font = models.CharField(max_length=50, default='Inter')
-
+    hero_heading_font = models.CharField(max_length=50, default='Inter')
+    hero_subheading_font = models.CharField(max_length=50, default='Inter')
+    
     def get_hero_image(self):
         """Get the hero image for this subpage"""
         content_type = ContentType.objects.get_for_model(self)

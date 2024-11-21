@@ -6,12 +6,47 @@ document.addEventListener('DOMContentLoaded', function() {
     const subheadingInput = document.getElementById('hero-subheading');
     const showHeadingCheckbox = document.getElementById('show-hero-heading');
     const showSubheadingCheckbox = document.getElementById('show-hero-subheading');
+    console.log('Checkbox element:', showHeadingCheckbox);
+    console.log('Initial state:', showHeadingCheckbox?.dataset.initialState);
+    console.log('Is checked:', showHeadingCheckbox?.checked);
+
+    if (showHeadingCheckbox) {
+        showHeadingCheckbox.checked = showHeadingCheckbox.dataset.initialState === 'true';
+        
+        showHeadingCheckbox.addEventListener('change', async function() {
+            if (headingInput) {
+                headingInput.disabled = !this.checked;
+            }
+            await updateHeroText('show-hero-heading', this.checked);
+            // If checkbox is checked and there's a value, update the heading
+            if (this.checked && headingInput && headingInput.value) {
+                await updateHeroText('hero-heading', headingInput.value);
+            }
+        });
+    }
+
+    if (showSubheadingCheckbox) {
+        showSubheadingCheckbox.checked = showSubheadingCheckbox.dataset.initialState === 'true';
+        
+        showSubheadingCheckbox.addEventListener('change', async function() {
+            if (subheadingInput) {
+                subheadingInput.disabled = !this.checked;
+            }
+            await updateHeroText('show-hero-subheading', this.checked);
+            // If checkbox is checked and there's a value, update the subheading
+            if (this.checked && subheadingInput && subheadingInput.value) {
+                await updateHeroText('hero-subheading', subheadingInput.value);
+            }
+        });
+    }
+    // Font and size selectors
+    const heroHeadingFontSelect = document.getElementById('hero-heading-font');
+    const heroSubheadingFontSelect = document.getElementById('hero-subheading-font');
+    const heroHeadingSizeSelect = document.getElementById('hero-heading-size');
+    const heroSubheadingSizeSelect = document.getElementById('hero-subheading-size');
     const business_subdirectory = JSON.parse(document.getElementById('business').textContent);
     console.log('Business subdirectory:', business_subdirectory);
     const navStyle = JSON.parse(document.getElementById('nav_style').textContent);
-    const business_details = {
-        navigation_style: navStyle
-    };
     const pageSelector = document.getElementById('page-selector');
     // Image upload elements
     const uploadButton = document.getElementById('upload-hero-button');
@@ -39,7 +74,29 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    if (heroHeadingFontSelect) {
+        heroHeadingFontSelect.addEventListener('change', async function() {
+            await updateGlobalComponent('hero_heading_font', this.value);
+        });
+    }
 
+    if (heroSubheadingFontSelect) {
+        heroSubheadingFontSelect.addEventListener('change', async function() {
+            await updateGlobalComponent('hero_subheading_font', this.value);
+        });
+    }
+
+    if (heroHeadingSizeSelect) {
+        heroHeadingSizeSelect.addEventListener('change', async function() {
+            await updateGlobalComponent('hero_heading_size', this.value);
+        });
+    }
+
+    if (heroSubheadingSizeSelect) {
+        heroSubheadingSizeSelect.addEventListener('change', async function() {
+            await updateGlobalComponent('hero_subheading_size', this.value);
+        });
+    }
     // Hero Layout Radio Buttons
     document.querySelectorAll('input[name="hero_layout"]').forEach(radio => {
         radio.addEventListener('change', async function() {
@@ -117,46 +174,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (removeButton) {
         removeButton.addEventListener('click', removeHeroImage);
     }
-    // Heading Input Handler
-    if (headingInput) {
-        headingInput.addEventListener('input', debounce(function() {
-            if (showHeadingCheckbox && showHeadingCheckbox.checked) {
-                updateHeroText(this.id, this.value);
-            } else {
-                console.log('Heading update skipped - heading is hidden');
-            }
-        }, 500));
-    }
-    // Subheading Input Handler
-    if (subheadingInput) {
-        subheadingInput.addEventListener('input', debounce(function() {
-            if (showSubheadingCheckbox && showSubheadingCheckbox.checked) {
-                updateHeroText(this.id, this.value);
-            } else {
-                console.log('Subheading update skipped - subheading is hidden');
-            }
-        }, 500));
-    }
-    // Show/Hide Toggle Handlers
-    if (showHeadingCheckbox) {
-        showHeadingCheckbox.addEventListener('change', async function() {
-            await updateHeroText('show-hero-heading', this.checked);
-            if (this.checked && headingInput && headingInput.value) {
-                // Update heading text if checkbox is checked and there's a value
-                await updateHeroText('hero-heading', headingInput.value);
-            }
-        });
-    }
-
-    if (showSubheadingCheckbox) {
-        showSubheadingCheckbox.addEventListener('change', async function() {
-            await updateHeroText('show-hero-subheading', this.checked);
-            if (this.checked && subheadingInput && subheadingInput.value) {
-                // Update subheading text if checkbox is checked and there's a value
-                await updateHeroText('hero-subheading', subheadingInput.value);
-            }
-        });
-    }
     // Brand Color Pickers
     const brandColorPickers = document.querySelectorAll('.color-picker');
     brandColorPickers.forEach(picker => {
@@ -193,6 +210,20 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 100));
     });
+
+    const footerStyleSelect = document.getElementById('footer-style');
+    if (footerStyleSelect) {
+        footerStyleSelect.addEventListener('change', async function() {
+            try {
+                await updateGlobalComponent('footer_style', this.value);
+                // Update preview to show new footer
+                await updatePreview(pageSelector.value);
+            } catch (error) {
+                console.error('Error updating footer style:', error);
+                displayError('Failed to update footer style');
+            }
+        });
+    }
     // Core Functions
     async function loadPageData(pageType) {
         try {
@@ -245,12 +276,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const element = document.getElementById(id);
             if (element) element.value = value;
         });
-        if (showHeadingCheckbox) {
-            showHeadingCheckbox.checked = data.show_hero_heading || false;
-        }
-        if (showSubheadingCheckbox) {
-            showSubheadingCheckbox.checked = data.show_hero_subheading || false;
-        }
     }
 
     async function updateHeroText(field, value) {

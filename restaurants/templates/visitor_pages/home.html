@@ -86,49 +86,10 @@
             </div>
         </section>
         {% endif %}
-
-        <!-- Contact/Hours Section -->
-        <section class="py-16 bg-gray-50">
-            <div class="container mx-auto px-4">
-                <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Hours -->
-                    <div>
-                        <h2 class="text-2xl font-bold mb-6">Hours of Operation</h2>
-                        <ul class="space-y-2">
-                            {% for schedule in business_details.schedules.all %}
-                            <li class="flex justify-between">
-                                <span class="font-medium">{{ schedule.day }}</span>
-                                <span>{{ schedule.hours }}</span>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    
-                    <!-- Contact -->
-                    <div>
-                        <h2 class="text-2xl font-bold mb-6">Contact Us</h2>
-                        <div class="space-y-4">
-                            <p>
-                                <span class="font-medium">Address:</span><br>
-                                {{ business_details.address }}
-                            </p>
-                            <p>
-                                <span class="font-medium">Phone:</span><br>
-                                {{ business_details.phone }}
-                            </p>
-                            <p>
-                                <span class="font-medium">Email:</span><br>
-                                {{ business_details.email }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Footer -->
     {% with footer_colors=business_details %}
-        {% include "components/footer/"|add:business_details.footer_style|add:".html" with primary_color=footer_colors.primary_color secondary_color=footer_colors.secondary_color %}
+        {% include "components/footer/"|add:business_details.footer_style|add:".html" with primary_color=business_details.primary_color secondary_color=business_details.secondary_color text_color=business_details.text_color hover_color=business_details.hover_color %}
     {% endwith %}   
 </div>

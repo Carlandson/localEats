@@ -1029,6 +1029,8 @@ def edit_layout(request, business_subdirectory):
             'font_choices': get_font_choices(),
             'heading_sizes': get_font_sizes('heading'),
             'subheading_sizes': get_font_sizes('subheading'),
+            'show_hero_heading': current_subpage.show_hero_heading,
+            'show_hero_subheading': current_subpage.show_hero_subheading,
         }
         
         return render(request, "edit_layout.html", context)
@@ -1246,6 +1248,30 @@ def update_global_component(request, business_subdirectory):
                 'model': SubPage,
                 'field': 'hero_layout',
                 'choices': SubPage.HERO_CHOICES,
+                'instance': SubPage.objects.get(business=business, page_type=page_type)
+            },
+            'hero_heading_font': {
+                'model': SubPage,
+                'field': 'hero_heading_font',
+                'choices': get_font_choices(),
+                'instance': SubPage.objects.get(business=business, page_type=page_type)
+            },
+            'hero_subheading_font': {
+                'model': SubPage,
+                'field': 'hero_subheading_font',
+                'choices': get_font_choices(),
+                'instance': SubPage.objects.get(business=business, page_type=page_type)
+            },
+            'hero_heading_size': {
+                'model': SubPage,
+                'field': 'hero_heading_size',
+                'choices': get_font_sizes('heading'),
+                'instance': SubPage.objects.get(business=business, page_type=page_type)
+            },
+            'hero_subheading_size': {
+                'model': SubPage,
+                'field': 'hero_subheading_size',
+                'choices': get_font_sizes('subheading'),
                 'instance': SubPage.objects.get(business=business, page_type=page_type)
             },
             'footer_style': {

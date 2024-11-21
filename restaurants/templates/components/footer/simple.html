@@ -1,17 +1,25 @@
-<footer style="background-color: {{ secondary_color }}" class="py-6"></footer>
+<footer style="background-color: {{ primary_color }}; font-family: {{ business_details.main_font }}" class="py-6">
     <div class="container mx-auto px-4">
         <div class="text-center">
-            <h3 class="text-lg font-semibold mb-2">{{ business_details.business_name }}</h3>
-            <p class="text-sm mb-4">{{ business_details.address }}</p>
+            <h3 class="text-lg font-semibold mb-2" style="color: {{ text_color }}">{{ business_details.business_name }}</h3>
+            <p class="text-sm mb-4" style="color: {{ text_color }}">{{ business_details.address }}</p>
             <div class="flex justify-center space-x-6 mb-4">
                 {% if business_details.phone_number %}
-                    <a href="tel:{{ business_details.phone_number }}" class="text-sm hover:underline">{{ business_details.phone_number }}</a>
+                    <a href="tel:{{ business_details.phone_number }}" 
+                       class="text-sm transition-colors duration-200"
+                       style="color: {{ text_color }}"
+                       onmouseover="this.style.color='{{ hover_color }}'"
+                       onmouseout="this.style.color='{{ text_color }}'">{{ business_details.phone_number }}</a>
                 {% endif %}
                 {% if business_details.email %}
-                    <a href="mailto:{{ business_details.email }}" class="text-sm hover:underline">{{ business_details.email }}</a>
+                    <a href="mailto:{{ business_details.email }}" 
+                       class="text-sm transition-colors duration-200"
+                       style="color: {{ text_color }}"
+                       onmouseover="this.style.color='{{ hover_color }}'"
+                       onmouseout="this.style.color='{{ text_color }}'">{{ business_details.email }}</a>
                 {% endif %}
             </div>
-            <p class="text-sm">© {% now "Y" %} {{ business_details.business_name }}</p>
+            <p class="text-sm" style="color: {{ text_color }}">© {% now "Y" %} {{ business_details.business_name }}</p>
         </div>
     </div>
 </footer>

@@ -1,43 +1,67 @@
-<footer style="background-color: {{ secondary_color }}" class="py-8"></footer>
+<footer style="background-color: {{ primary_color }}; font-family: {{ business_details.main_font }}" class="py-8">
     <div class="container mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Business Info -->
             <div>
-                <h3 class="text-lg font-semibold mb-4">{{ business_details.business_name }}</h3>
-                <p class="text-sm mb-2">{{ business_details.address }}</p>
+                <h3 class="text-lg font-semibold mb-4" style="color: {{ text_color }}">{{ business_details.business_name }}</h3>
+                <p class="text-sm mb-2" style="color: {{ text_color }}">{{ business_details.address }}</p>
                 {% if business_details.phone_number %}
-                    <p class="text-sm mb-2">{{ business_details.phone_number }}</p>
+                    <p class="text-sm mb-2" style="color: {{ text_color }}">{{ business_details.phone_number }}</p>
                 {% endif %}
                 {% if business_details.email %}
-                    <p class="text-sm">{{ business_details.email }}</p>
+                    <p class="text-sm" style="color: {{ text_color }}">{{ business_details.email }}</p>
                 {% endif %}
             </div>
 
             <!-- Hours -->
             <div>
-                <h3 class="text-lg font-semibold mb-4">Hours</h3>
+                <h3 class="text-lg font-semibold mb-4" style="color: {{ text_color }}">Hours</h3>
                 <ul class="text-sm space-y-1">
                     {% for schedule in business_details.schedules.all %}
-                        <li>{{ schedule.day }}: {{ schedule.hours }}</li>
+                        <li style="color: {{ text_color }}">{{ schedule.day }}: {{ schedule.hours }}</li>
                     {% endfor %}
                 </ul>
             </div>
 
             <!-- Quick Links -->
             <div>
-                <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                <h3 class="text-lg font-semibold mb-4" style="color: {{ text_color }}">Quick Links</h3>
                 <ul class="text-sm space-y-2">
-                    <li><a href="/{{ business_details.subdirectory }}" class="hover:underline">Home</a></li>
-                    <li><a href="/{{ business_details.subdirectory }}/menu" class="hover:underline">Menu</a></li>
-                    <li><a href="/{{ business_details.subdirectory }}/about" class="hover:underline">About</a></li>
-                    <li><a href="/{{ business_details.subdirectory }}/contact" class="hover:underline">Contact</a></li>
+                    <li>
+                        <a href="/{{ business_details.subdirectory }}" 
+                           style="color: {{ text_color }}"
+                           class="transition-colors duration-200"
+                           onmouseover="this.style.color='{{ hover_color }}'"
+                           onmouseout="this.style.color='{{ text_color }}'">Home</a>
+                    </li>
+                    <li>
+                        <a href="/{{ business_details.subdirectory }}/menu" 
+                           style="color: {{ text_color }}"
+                           class="transition-colors duration-200"
+                           onmouseover="this.style.color='{{ hover_color }}'"
+                           onmouseout="this.style.color='{{ text_color }}'">Menu</a>
+                    </li>
+                    <li>
+                        <a href="/{{ business_details.subdirectory }}/about" 
+                           style="color: {{ text_color }}"
+                           class="transition-colors duration-200"
+                           onmouseover="this.style.color='{{ hover_color }}'"
+                           onmouseout="this.style.color='{{ text_color }}'">About</a>
+                    </li>
+                    <li>
+                        <a href="/{{ business_details.subdirectory }}/contact" 
+                           style="color: {{ text_color }}"
+                           class="transition-colors duration-200"
+                           onmouseover="this.style.color='{{ hover_color }}'"
+                           onmouseout="this.style.color='{{ text_color }}'">Contact</a>
+                    </li>
                 </ul>
             </div>
         </div>
         
         <!-- Copyright -->
-        <div class="mt-8 pt-4 border-t">
-            <p class="text-sm text-center">© {% now "Y" %} {{ business_details.business_name }}. All rights reserved.</p>
+        <div class="mt-8 pt-4 border-t" style="border-color: {{ text_color }}">
+            <p class="text-sm text-center" style="color: {{ text_color }}">© {% now "Y" %} {{ business_details.business_name }}. All rights reserved.</p>
         </div>
     </div>
 </footer>
