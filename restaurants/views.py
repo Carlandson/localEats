@@ -1337,6 +1337,7 @@ def save_layout(request, business_subdirectory):
         return JsonResponse({'success': False, 'error': str(e)})
 
 @login_required
+@require_POST
 def upload_hero_image(request, business_subdirectory):
     if request.method != 'POST':
         return JsonResponse({'success': False, 'error': 'Invalid method'})
@@ -1346,13 +1347,14 @@ def upload_hero_image(request, business_subdirectory):
         if request.user != business.owner:
             return JsonResponse({'success': False, 'error': 'Unauthorized'})
 
-        image_file = request.FILES.get('hero_image')
         page_type = request.POST.get('page_type', 'home')
+        banner_type = request.POST.get('banner_type', 'primary')
+        image_file = request.FILES.get('image')
         
         if not image_file:
             return JsonResponse({'success': False, 'error': 'No image provided'})
 
-        logger.debug(f"Processing hero image upload for {business_subdirectory}, page type: {page_type}")
+        logger.debug(f"Processing {banner_type} image upload for {business_subdirectory}, page type: {page_type}")
         logger.debug(f"Image file: {image_file.name}, size: {image_file.size}")
 
         # Get or create the subpage
@@ -1364,30 +1366,41 @@ def upload_hero_image(request, business_subdirectory):
             }
         )
 
-        # Remove old hero image if it exists
+        # Determine the alt_text based on banner type
+        alt_text_map = {
+            'primary': 'hero_primary',
+            'banner_2': 'hero_banner_2',
+            'banner_3': 'hero_banner_3'
+        }
+        alt_text = alt_text_map.get(banner_type)
+        
+        if not alt_text:
+            return JsonResponse({'error': 'Invalid banner type'}, status=400)
+
+        # Remove existing image for this banner type if it exists
         content_type = ContentType.objects.get_for_model(SubPage)
-        old_hero = Image.objects.filter(
+        old_image = Image.objects.filter(
             content_type=content_type,
             object_id=subpage.id,
-            alt_text__startswith='hero_'  # Using alt_text instead of purpose
+            alt_text=alt_text
         ).first()
         
-        if old_hero:
-            logger.debug(f"Removing old hero image: {old_hero.image.url}")
-            old_hero.delete()
+        if old_image:
+            logger.debug(f"Removing old {banner_type} image: {old_image.image.url}")
+            old_image.delete()
 
-        # Create new hero image
+        # Create new image
         new_image = Image.objects.create(
             image=image_file,
             uploaded_by=request.user,
             content_type=content_type,
             object_id=subpage.id,
-            alt_text=f'hero_{page_type}_{subpage.id}',  # Using alt_text to identify hero images
-            caption=f'Hero image for {business.business_name} {page_type} page'
+            alt_text=alt_text,
+            caption=f'{banner_type.title()} image for {business.business_name} {page_type} page'
         )
 
         image_url = new_image.image.url
-        logger.debug(f"New hero image created with URL: {image_url}")
+        logger.debug(f"New {banner_type} image created with URL: {image_url}")
 
         return JsonResponse({
             'success': True,
@@ -1395,7 +1408,8 @@ def upload_hero_image(request, business_subdirectory):
             'debug_info': {
                 'subpage_id': subpage.id,
                 'content_type': str(content_type),
-                'alt_text': new_image.alt_text
+                'alt_text': new_image.alt_text,
+                'banner_type': banner_type
             }
         })
 

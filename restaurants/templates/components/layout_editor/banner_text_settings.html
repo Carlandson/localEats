@@ -1,0 +1,85 @@
+<!-- Heading Settings -->
+<div class="space-y-4 pb-4 border-b border-gray-200">
+    <div class="flex items-center justify-between mb-4">
+        <label class="block text-sm font-bold text-gray-700">Heading</label>
+        <label class="inline-flex items-center">
+            <input type="checkbox" id="show-{{ prefix }}-heading" class="form-checkbox" data-initial-state="{{ show_heading|lower }}" {% if show_heading %}checked{% endif %}>
+            <span class="ml-2 text-sm text-gray-600">Show Heading</span>
+        </label>
+    </div>
+    <input type="text" id="{{ prefix }}-heading" value="{{ heading_value }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="Enter heading">
+    
+    <!-- Text Alignment -->
+    <div class="flex space-x-4">
+        <label class="inline-flex items-center">
+            <input type="radio" name="{{ prefix }}-text-align" value="left" class="form-radio" {% if text_align == 'left' %}checked{% endif %}>
+            <span class="ml-2">Left</span>
+        </label>
+        <label class="inline-flex items-center">
+            <input type="radio" name="{{ prefix }}-text-align" value="center" class="form-radio" {% if text_align == 'center' %}checked{% endif %}>
+            <span class="ml-2">Center</span>
+        </label>
+        <label class="inline-flex items-center">
+            <input type="radio" name="{{ prefix }}-text-align" value="right" class="form-radio" {% if text_align == 'right' %}checked{% endif %}>
+            <span class="ml-2">Right</span>
+        </label>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4">
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Heading Font</label>
+            <select id="{{ prefix }}-heading-font" class="mt-1 block w-full rounded-md border-gray-300">
+                {% for value, label in font_choices %}
+                    <option value="{{ value }}" style="font-family: {{ value }}" {% if heading_font == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Heading Size</label>
+            <select id="{{ prefix }}-heading-size" class="mt-1 block w-full rounded-md border-gray-300">
+                {% for value, label in heading_sizes %}
+                    <option value="{{ value }}" {% if heading_size == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Heading Color</label>
+            <input type="color" id="{{ prefix }}-text-color" value="{{ text_color|default:'#000000' }}" class="mt-1 block w-full h-10 rounded-md border-gray-300">
+        </div>
+    </div>
+</div>
+
+<!-- Subheading Settings -->
+<div class="space-y-4 pb-4 border-b border-gray-200">
+    <div class="flex items-center justify-between">
+        <label class="block text-sm font-bold text-gray-700">Subheading</label>
+        <label class="inline-flex items-center">
+            <input type="checkbox" id="show-{{ prefix }}-subheading" class="form-checkbox" data-initial-state="{{ show_subheading|lower }}" {% if show_subheading %}checked{% endif %}>
+            <span class="ml-2 text-sm text-gray-600">Show Subheading</span>
+        </label>
+    </div>
+    <textarea id="{{ prefix }}-subheading" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="Enter descriptive text">{{ subheading_value }}</textarea>
+    
+    <div class="grid grid-cols-3 gap-4">
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Subheading Font</label>
+            <select id="{{ prefix }}-subheading-font" class="mt-1 block w-full rounded-md border-gray-300">
+                {% for value, label in font_choices %}
+                    <option value="{{ value }}" style="font-family: {{ value }}" {% if subheading_font == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Subheading Size</label>
+            <select id="{{ prefix }}-subheading-size" class="mt-1 block w-full rounded-md border-gray-300">
+                {% for value, label in subheading_sizes %}
+                    <option value="{{ value }}" {% if subheading_size == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Subheading Color</label>
+            <input type="color" id="{{ prefix }}-subtext-color" value="{{ subtext_color|default:'#6B7280' }}" class="mt-1 block w-full h-10 rounded-md border-gray-300">
+        </div>
+    </div>
+</div>

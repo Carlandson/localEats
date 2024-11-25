@@ -11,6 +11,7 @@ from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.contrib.contenttypes.fields import GenericRelation
 import sys
+from django.db.models import Case, When
 
 # Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, business, CuisineCategory
 User = get_user_model()
@@ -248,24 +249,64 @@ class SubPage(models.Model):
     show_hero_subheading = models.BooleanField(default=False)
     hero_heading_font = models.CharField(max_length=50, default='Inter')
     hero_subheading_font = models.CharField(max_length=50, default='Inter')
-    
+    show_banner_2_heading = models.BooleanField(default=True)
+    banner_2_heading = models.CharField(max_length=200, blank=True)
+    banner_2_heading_font = models.CharField(max_length=100, default='Inter')
+    banner_2_heading_size = models.CharField(max_length=20, default='text-4xl')
+    show_banner_2_subheading = models.BooleanField(default=True)
+    banner_2_subheading = models.TextField(blank=True)
+    banner_2_subheading_font = models.CharField(max_length=100, default='Inter')
+    banner_2_subheading_size = models.CharField(max_length=20, default='text-xl')
+    show_banner_3_heading = models.BooleanField(default=True)
+    banner_3_heading = models.CharField(max_length=200, blank=True)
+    banner_3_heading_font = models.CharField(max_length=100, default='Inter')
+    banner_3_heading_size = models.CharField(max_length=20, default='text-4xl')
+    show_banner_3_subheading = models.BooleanField(default=True)
+    banner_3_subheading = models.TextField(blank=True)
+    banner_3_subheading_font = models.CharField(max_length=100, default='Inter')
+    banner_3_subheading_size = models.CharField(max_length=20, default='text-xl')
+
     def get_hero_image(self):
         """Get the hero image for this subpage"""
         content_type = ContentType.objects.get_for_model(self)
         return Image.objects.filter(
             content_type=content_type,
             object_id=self.id,
-            alt_text__startswith='hero_'  # Using alt_text instead of purpose
+            alt_text='hero_primary'  # Standardized alt_text for primary hero
         ).first()
 
-    def get_slider_images(self):
-        """Get all slider images for this subpage"""
+    def get_banner_image_2(self):
+        """Get the second banner image"""
         content_type = ContentType.objects.get_for_model(self)
         return Image.objects.filter(
             content_type=content_type,
             object_id=self.id,
-            alt_text__startswith='slider_'  # Using alt_text instead of purpose
-        ).order_by('upload_date')
+            alt_text='hero_banner_2'  # Standardized alt_text for second banner
+        ).first()
+
+    def get_banner_image_3(self):
+        """Get the third banner image"""
+        content_type = ContentType.objects.get_for_model(self)
+        return Image.objects.filter(
+            content_type=content_type,
+            object_id=self.id,
+            alt_text='hero_banner_3'  # Standardized alt_text for third banner
+        ).first()
+
+    def get_slider_images(self):
+        """Get all banner images in order"""
+        content_type = ContentType.objects.get_for_model(self)
+        return Image.objects.filter(
+            content_type=content_type,
+            object_id=self.id,
+            alt_text__in=['hero_primary', 'hero_banner_2', 'hero_banner_3']
+        ).order_by(
+            Case(
+                When(alt_text='hero_primary', then=0),
+                When(alt_text='hero_banner_2', then=1),
+                When(alt_text='hero_banner_3', then=2),
+            )
+        )
     
     def save(self, *args, **kwargs):
         if not self.slug:

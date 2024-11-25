@@ -1,0 +1,47 @@
+<div class="hero-image-container mb-4" id="{{ prefix }}-container">
+    {% if image %}
+        <div class="relative group">
+            <img src="{{ image.image.url }}" 
+                alt="{{ image.alt_text }}" 
+                class="w-full h-40 object-cover rounded-lg cursor-pointer"
+                id="{{ prefix }}-preview">
+            <button type="button"
+                id="remove-{{ prefix }}"
+                class="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                title="Remove image"
+                {% if prefix != 'hero-image' and layout != 'banner_slider' %}disabled{% endif %}>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    {% else %}
+        <button type="button"
+            id="upload-{{ prefix }}-button"
+            class="w-full {% if prefix != 'hero-image' and layout != 'banner_slider' %}opacity-50 cursor-not-allowed{% endif %}"
+            {% if prefix != 'hero-image' and layout != 'banner_slider' %}disabled{% endif %}>
+            <div class="relative group cursor-pointer" id="{{ prefix }}-placeholder">
+                <div class="w-full h-40 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-gray-400 
+                           {% if prefix != 'hero-image' and layout != 'banner_slider' %}opacity-50{% endif %}">
+                    <div class="text-center">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        <span class="mt-2 block text-sm font-medium text-gray-600">
+                            {% if prefix != 'hero-image' and layout != 'banner_slider' %}
+                                Banner Slider Layout Required
+                            {% else %}
+                                {{ placeholder_text }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </button>
+    {% endif %}
+    <input type="file" 
+           id="{{ prefix }}-upload" 
+           accept="image/*" 
+           class="hidden" 
+           {% if prefix != 'hero-image' and layout != 'banner_slider' %}disabled{% endif %}>
+</div>

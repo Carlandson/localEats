@@ -23,26 +23,17 @@
 
             <!-- Editor Options -->
             {% include "components/layout_editor.html" %}
-
-            <!-- Save Button -->
-            <div class="mt-8">
-                <button type="button" 
-                        id="save-layout" 
-                        class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-                    Save Changes
-                </button>
-            </div>
         </div>
+    </div>
 
     <!-- Right Content Area - Preview -->
-        <div class="flex-1 overflow-y-auto bg-gray-50">
-            <div id="preview-container">
-                <!-- Page Content Preview -->
-                <div id="page-content-preview">
-                    {% with template_name="visitor_pages/"|add:current_page|add:".html" %}
-                        {% include template_name %}
-                    {% endwith %}
-                </div>
+    <div class="flex-1 overflow-y-auto bg-gray-50">
+        <div id="preview-container">
+            <!-- Page Content Preview -->
+            <div id="page-content-preview">
+                {% with template_name="visitor_pages/"|add:current_page|add:".html" %}
+                    {% include template_name %}
+                {% endwith %}
             </div>
         </div>
     </div>

@@ -97,19 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
             await updateGlobalComponent('hero_subheading_size', this.value);
         });
     }
-    // Hero Layout Radio Buttons
-    document.querySelectorAll('input[name="hero_layout"]').forEach(radio => {
-        radio.addEventListener('change', async function() {
-            try {
-                console.log('Updating hero layout to:', this.value);
-                await updateGlobalComponent('hero_layout', this.value);
-                console.log('Hero layout updated successfully');
-            } catch (error) {
-                console.error('Error updating hero layout:', error);
-                displayError('Failed to update hero layout');
-            }
-        });
-    });
 
     // Text Input Fields
     const textInputs = [
@@ -156,8 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             try {
                 await updateGlobalComponent(component, value);
-                // Force preview refresh after component update
-                await updatePreview(pageSelector.value);
+                // Removed duplicate updatePreview call
             } catch (error) {
                 console.error(`Error updating ${component}:`, error);
                 displayError(`Failed to update ${component}`);
@@ -246,6 +232,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateFormValues(data) {
         // Update text inputs
+        if (data.hero_layout === 'banner-slider') {
+            handleBannerSliderVisibility('banner-slider');
+        }
         const textFields = {
             'hero-heading': data.hero_heading || '',
             'hero-subheading': data.hero_subheading || '',
@@ -360,76 +349,109 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
-async function handleImageUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const uploadButton = document.getElementById('upload-hero-button');
-    const fileInput = document.getElementById('hero-image-upload');
-    const formData = new FormData();
-    formData.append('hero_image', file);
-    formData.append('page_type', pageSelector.value);
-
-    uploadButton.textContent = 'Uploading...';
-    uploadButton.disabled = true;
-
-    try {
-        console.log('Uploading image...');
-        const response = await fetch(`/${business_subdirectory}/upload-hero-image/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken'),
-            },
-            body: formData
-        });
-
-        const data = await response.json();
-        console.log('Upload response:', data);
-
-        if (data.success) {
-            console.log('Image uploaded successfully:', data.image_url);
+    function initializeImageUploads() {
+        ['hero-image', 'banner-2', 'banner-3'].forEach(prefix => {
+            const uploadButton = document.getElementById(`upload-${prefix}-button`);
+            const fileInput = document.getElementById(`${prefix}-upload`);
             
-            // Find the existing image div or create a new one
-            let imageDiv = document.querySelector('.relative.group');
-            if (imageDiv) {
-                // Replace existing image div
-                imageDiv.outerHTML = createHeroImageHTML(data.image_url);
-            } else {
-                // Create new image div
-                const uploadContainer = uploadButton.parentElement;
-                uploadContainer.insertAdjacentHTML('beforeend', createHeroImageHTML(data.image_url));
-            }
-            
-            // Update upload button text
-            uploadButton.textContent = 'Replace Image';
-            
-            // Attach event listener to the new remove button
-            const newRemoveButton = document.getElementById('remove-hero-image');
-            if (newRemoveButton) {
-                console.log('Attaching remove event listener to new button');
-                newRemoveButton.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    await removeHeroImage();
+            if (uploadButton && fileInput) {
+                uploadButton.addEventListener('click', () => {
+                    if (!uploadButton.disabled) {
+                        fileInput.click();
+                    }
                 });
+                
+                fileInput.addEventListener('change', handleImageUpload);
             }
-            
-            // Update preview
-            console.log('Updating preview...');
-            await updatePreview(pageSelector.value);
-            console.log('Preview updated successfully');
-        } else {
-            throw new Error(data.error || 'Upload failed');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        displayError('Failed to upload image: ' + error.message);
-    } finally {
-        uploadButton.textContent = 'Upload Image';
-        uploadButton.disabled = false;
-        fileInput.value = '';
+        });
     }
-}
 
+    async function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Get the prefix from the input ID (e.g., "hero-image-upload" -> "hero-image")
+        const inputId = event.target.id;
+        const prefix = inputId.replace('-upload', '');
+        
+        const uploadButton = document.getElementById(`upload-${prefix}-button`);
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('page_type', pageSelector.value);
+        formData.append('banner_type', prefix === 'hero-image' ? 'primary' : prefix.replace('banner-', ''));
+
+        if (uploadButton) {
+            uploadButton.textContent = 'Uploading...';
+            uploadButton.disabled = true;
+        }
+
+        try {
+            console.log('Uploading image...', prefix);
+            const response = await fetch(`/${business_subdirectory}/upload-hero-image/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+            console.log('Upload response:', data);
+
+            if (data.success) {
+                console.log('Image uploaded successfully:', data.image_url);
+                
+                // Update the container with the new image
+                const container = document.getElementById(`${prefix}-container`);
+                if (container) {
+                    container.innerHTML = `
+                        <div class="relative group">
+                            <img src="${data.image_url}" 
+                                alt="${prefix} image" 
+                                class="w-full h-40 object-cover rounded-lg cursor-pointer"
+                                id="${prefix}-preview">
+                            <button type="button"
+                                id="remove-${prefix}"
+                                class="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                                title="Remove image">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <input type="file" id="${prefix}-upload" accept="image/*" class="hidden">
+                    `;
+                    
+                    // Reattach event listeners
+                    initializeImageUploads();
+                    attachRemoveListeners();
+                }
+                
+                // Update preview
+                await updatePreview(pageSelector.value);
+            } else {
+                throw new Error(data.error || 'Upload failed');
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            displayError('Failed to upload image: ' + error.message);
+        } finally {
+            if (uploadButton) {
+                uploadButton.textContent = 'Upload Image';
+                uploadButton.disabled = false;
+            }
+        }
+    }
+
+    function attachRemoveListeners() {
+        ['hero-image', 'banner-2', 'banner-3'].forEach(prefix => {
+            const removeButton = document.getElementById(`remove-${prefix}`);
+            if (removeButton) {
+                removeButton.addEventListener('click', () => removeHeroImage(prefix));
+            }
+        });
+    }
+    
     async function removeHeroImage() {
         if (!confirm('Are you sure you want to remove the hero image?')) return;
     
@@ -489,9 +511,58 @@ async function handleImageUpload(event) {
         }
     }
 
+    function handleBannerSliderVisibility(layoutStyle) {
+        const bannerSliderContainer = document.getElementById('banner-slider-images');
+        if (!bannerSliderContainer) return;
+    
+        console.log('Handling banner slider visibility:', layoutStyle);
+        
+        if (layoutStyle === 'banner-slider') {
+            console.log('Displaying banner slider');
+            bannerSliderContainer.style.display = 'block';
+            // Enable banner upload inputs and buttons
+            ['banner-2', 'banner-3'].forEach(prefix => {
+                const fileInput = document.getElementById(`${prefix}-upload`);
+                const uploadButton = document.getElementById(`upload-${prefix}-button`);
+                const container = document.getElementById(`${prefix}-container`);
+                
+                if (fileInput) fileInput.disabled = false;
+                if (uploadButton) {
+                    uploadButton.disabled = false;
+                    uploadButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+                if (container) {
+                    container.classList.remove('opacity-50');
+                }
+            });
+        } else {
+            bannerSliderContainer.style.display = 'none';
+            // Disable banner upload inputs and buttons
+            ['banner-2', 'banner-3'].forEach(prefix => {
+                const fileInput = document.getElementById(`${prefix}-upload`);
+                const uploadButton = document.getElementById(`upload-${prefix}-button`);
+                const container = document.getElementById(`${prefix}-container`);
+                
+                if (fileInput) fileInput.disabled = true;
+                if (uploadButton) {
+                    uploadButton.disabled = true;
+                    uploadButton.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+                if (container) {
+                    container.classList.add('opacity-50');
+                }
+            });
+        }
+    }
+
     async function updateGlobalComponent(component, style) {
         try {
             console.log('Sending update request:', { component, style });
+                    // Handle banner slider visibility if this is a hero layout update
+            if (component === 'hero_layout') {
+                console.log('Updating banner slider visibility:', style);
+                handleBannerSliderVisibility(style);
+            }
             const response = await fetch(`/${business_subdirectory}/update-global-component/`, {
                 method: 'POST',
                 headers: {
@@ -560,5 +631,6 @@ async function handleImageUpload(event) {
         return cookieValue;
     }
     // Initialize the first page
+    initializeImageUploads();
     loadPageData(pageSelector.value);
 });

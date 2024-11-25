@@ -1,4 +1,4 @@
-<div class="space-y-8"></div>
+<div class="space-y-8">
     <!-- Global Settings -->
     <div class="editor-section" data-section="global">
         <h1 class="text-lg font-bold mb-4">Global Components</h1>
@@ -9,12 +9,7 @@
             <div class="space-y-2">
                 {% for value, label in nav_styles %}
                     <label class="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                        <input type="radio" 
-                               name="nav_style" 
-                               value="{{ value }}" 
-                               {% if business_details.navigation_style == value %}checked{% endif %}
-                               class="component-selector"
-                               data-component="navigation">
+                        <input type="radio" name="nav_style" value="{{ value }}" {% if business_details.navigation_style == value %}checked{% endif %} class="component-selector" data-component="navigation">
                         <span>{{ label }}</span>
                     </label>
                 {% endfor %}
@@ -27,49 +22,46 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium mb-2">Primary Color</label>
-                    <input type="color" 
-                           value="{{ business_details.primary_color }}"
-                           class="color-picker w-full h-10 rounded border"
-                           data-color-type="primary">
+                    <input type="color" value="{{ business_details.primary_color }}" class="color-picker w-full h-10 rounded border" data-color-type="primary">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2">Secondary Color</label>
-                    <input type="color" 
-                           value="{{ business_details.secondary_color }}"
-                           class="color-picker w-full h-10 rounded border"
-                           data-color-type="secondary">
+                    <input type="color" value="{{ business_details.secondary_color }}" class="color-picker w-full h-10 rounded border" data-color-type="secondary">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2">Text Color</label>
-                    <input type="color" 
-                           value="{{ business_details.text_color }}"
-                           class="color-picker w-full h-10 rounded border"
-                           data-color-type="text-color">
+                    <input type="color" value="{{ business_details.text_color }}" class="color-picker w-full h-10 rounded border" data-color-type="text-color">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2">Hover Color</label>
-                    <input type="color" 
-                           value="{{ business_details.hover_color }}"
-                           class="color-picker w-full h-10 rounded border"
-                           data-color-type="hover-color">
+                    <input type="color" value="{{ business_details.hover_color }}" class="color-picker w-full h-10 rounded border" data-color-type="hover-color">
                 </div>
             </div>
         </div>
+
+        <!-- Main Font -->
         <div class="mb-8">
             <h3 class="text-md font-semibold mb-4">Main Font</h3>
-            <select id="main-font" 
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            <select id="main-font" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 {% for value, label in font_choices %}
-                    <option value="{{ value }}" 
-                            style="font-family: {{ value }}"
-                            {% if business_details.main_font == value %}selected{% endif %}>
-                        {{ label }}
-                    </option>
+                    <option value="{{ value }}" style="font-family: {{ value }}" {% if business_details.main_font == value %}selected{% endif %}>{{ label }}</option>
                 {% endfor %}
             </select>
         </div>
-    </div>
 
+        <!-- Footer Style -->
+        <div class="mb-8">
+            <h3 class="text-md font-semibold mb-4">Footer Style</h3>
+            <div class="space-y-2">
+                {% for value, label in footer_styles %}
+                    <label class="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="footer_style" value="{{ value }}" {% if business_details.footer_style == value %}checked{% endif %} class="component-selector" data-component="footer_style">
+                        <span>{{ label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <div class="editor-section" data-section="hero" data-subpage-id="{{ subpage.id }}">
@@ -81,216 +73,47 @@
             <div class="space-y-2">
                 {% for value, label in hero_choices %}
                     <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                        <input type="radio" 
-                               name="hero_layout" 
-                               class="component-selector"
-                               data-component="hero_layout"
-                               value="{{ value }}" 
-                               {% if subpage.hero_layout == value %}checked{% endif %}>
+                        <input type="radio" name="hero_layout" class="component-selector" data-component="hero_layout" value="{{ value }}" {% if subpage.hero_layout == value %}checked{% endif %}>
                         <span class="ml-2">{{ label }}</span>
                     </label>
                 {% endfor %}
             </div>
         </div>
+
+        <!-- Hero Image Editor -->
+        <div class="pt-4 border-t border-gray-200">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Hero Images</label>
             <div class="space-y-8">
-                <!-- Heading Settings -->
-                <div class="space-y-4 pb-4 border-b border-gray-200">
-                    <div class="flex items-center justify-between mb-4">  
-                        <label class="block text-sm font-bold text-gray-700">Heading</label>
-                        <label class="inline-flex items-center">
-                            <input type="checkbox"
-                                id="show-hero-heading"
-                                class="form-checkbox"
-                                data-initial-state="{{ subpage.show_hero_heading|lower }}"
-                                {% if subpage.show_hero_heading %}checked{% endif %}>
-                            <span class="ml-2 text-sm text-gray-600">Show Heading</span>
-                        </label>
-                    </div>
-                    <input type="text"
-                           id="hero-heading"
-                           value="{{ value }}"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                           placeholder="Enter main heading">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Heading Font</label>
-                            <select id="hero-heading-font" class="mt-1 block w-full rounded-md border-gray-300">
-                                {% for value, label in font_choices %}
-                                    <option value="{{ value }}" 
-                                            style="font-family: {{ value }}"
-                                            {% if subpage.hero_heading_font == value %}selected{% endif %}>
-                                        {{ label }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Heading Size</label>
-                            <select id="hero-heading-size" class="mt-1 block w-full rounded-md border-gray-300">
-                                {% for value, label in heading_sizes %}
-                                    <option value="{{ value }}" 
-                                            {% if subpage.hero_heading_size == value %}selected{% endif %}>
-                                        {{ label }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            
-                <!-- Subheading Settings -->
-                <div class="space-y-4 pb-4 border-b border-gray-200">
-                    <div class="flex items-center justify-between">
-                        <label class="block text-sm font-bold text-gray-700">Subheading</label>
-                        <label class="inline-flex items-center">
-                            <input type="checkbox" 
-                                   id="show-hero-subheading"
-                                   class="form-checkbox"
-                                   data-initial-state="{{ subpage.show_hero_subheading|lower }}"
-                                   {% if subpage.show_hero_subheading %}checked{% endif %}>
-                            <span class="ml-2 text-sm text-gray-600">Show Subheading</span>
-                        </label>
-                    </div>
-                    <textarea id="hero-subheading"
-                              rows="3"
-                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                              placeholder="Enter descriptive text">{{ subpage.hero_subheading }}</textarea>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Subheading Font</label>
-                            <select id="hero-subheading-font" class="mt-1 block w-full rounded-md border-gray-300">
-                                {% for value, label in font_choices %}
-                                    <option value="{{ value }}" 
-                                            style="font-family: {{ value }}"
-                                            {% if subpage.hero_subheading_font == value %}selected{% endif %}>
-                                        {{ label }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Subheading Size</label>
-                            <select id="hero-subheading-size" class="mt-1 block w-full rounded-md border-gray-300">
-                                {% for value, label in subheading_sizes %}
-                                    <option value="{{ value }}" 
-                                            {% if subpage.hero_subheading_size == value %}selected{% endif %}>
-                                        {{ label }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            
-                <!-- Menu Button (Conditional) -->
-                {% if business_details.business_type == 'restaurant' and subpage.page_type != 'menu' %}
-                    <div class="space-y-4 pt-4">
-                        <div class="flex items-center justify-between">
-                            <label class="block text-sm font-medium text-gray-700">Menu Button</label>
-                            <label class="inline-flex items-center">
-                                <input type="checkbox" id="show-hero-heading" 
-                                       id="show-menu-button"
-                                       class="form-checkbox"
-                                       {% if subpage.show_menu_button %}checked{% endif %}>
-                                <span class="ml-2 text-sm text-gray-600">Show Menu Button</span>
-                            </label>
-                        </div>
-                        <input type="text"
-                               id="menu-button-text"
-                               value="{{ subpage.menu_button_text|default:'View Menu' }}"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                               placeholder="Enter button text">
-                    </div>
-                {% endif %}
-            <!-- Styling -->
-            <div class="space-y-4 pt-4 border-t border-gray-200">
-                <div class="mt-4">
-                    <label class="block text-sm font-medium text-gray-700">Text Alignment</label>
-                    <div class="mt-2 space-x-4">
-                        {% for value, label in text_align_choices %}
-                        <label class="inline-flex items-center">
-                            <input type="radio" 
-                                   name="hero-text-align" 
-                                   value="{{ value }}"
-                                   {% if subpage.hero_text_align == value %}checked{% endif %}
-                                   class="form-radio">
-                            <span class="ml-2">{{ label }}</span>
-                        </label>
-                        {% endfor %}
-                    </div>
+                <!-- Primary Banner Section -->
+                <div class="banner-section">
+                    <h3 class="text-md font-semibold mb-4">Primary Banner</h3>
+                    {% include "components/layout_editor/banner_image_upload.html" with prefix="hero-image" image=subpage.get_hero_image placeholder_text="Add Primary Image" layout=subpage.hero_layout %}
+
+                    <!-- Text Settings -->
+                    {% include "components/layout_editor/banner_text_settings.html" with prefix="hero" heading_value=subpage.hero_heading subheading_value=subpage.hero_subheading show_heading=subpage.show_hero_heading show_subheading=subpage.show_hero_subheading heading_font=subpage.hero_heading_font subheading_font=subpage.hero_subheading_font heading_size=subpage.hero_heading_size subheading_size=subpage.hero_subheading_size font_choices=font_choices heading_sizes=heading_sizes subheading_sizes=subheading_sizes %}
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Colors</label>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs text-gray-500 mb-1">Heading & Button</label>
-                            <input type="color"
-                                   id="hero-text-color"
-                                   value="{{ subpage.hero_text_color|default:'#000000' }}"
-                                   class="w-full h-8 rounded border">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-500 mb-1">Subheading</label>
-                            <input type="color"
-                                   id="hero-subtext-color"
-                                   value="{{ subpage.hero_subtext_color|default:'#6B7280' }}"
-                                   class="w-full h-8 rounded border">
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <!-- Banner Slider Additional Images -->
+                <div id="banner-slider-images" class="space-y-8" {% if subpage.hero_layout != 'banner_slider' %}style="display: none;"{% endif %}>
+                    <!-- Second Banner Section -->
+                    <div class="banner-section">
+                        <h3 class="text-md font-semibold mb-4">Second Banner</h3>
+                        {% include "components/layout_editor/banner_image_upload.html" with prefix="banner-2" image=subpage.get_banner_image_2 placeholder_text="Add Second Image" layout=subpage.hero_layout %}
 
-            <!-- Image Upload -->
-            {% with hero_image=subpage.get_hero_image %}
-                <div class="pt-4 border-t border-gray-200">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Hero Image</label>
-                <div class="space-y-4">
-                    <input type="file" 
-                           id="hero-image-upload" 
-                           accept="image/*"
-                           class="hidden">
-                    <button type="button"
-                            id="upload-hero-button"
-                            class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                        {% if hero_image %}Replace{% else %}Upload{% endif %} Image
-                    </button>
-                    
-                    {% if hero_image %}
-                        <div class="relative group">
-                            <img src="{{ hero_image.image.url }}" 
-                                 alt="{{ hero_image.alt_text }}" 
-                                 class="w-full h-40 object-cover rounded-lg">
-                            <button type="button"
-                                    id="remove-hero-image"
-                                    class="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
-                                    title="Remove image">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            </button>
-                        </div>
-                    {% endif %}
-                </div>
-            {% endwith %}
-            <!-- Footer Style -->
-            <div class="mb-8">
-                    <h3 class="text-md font-semibold mb-4">Footer Style</h3>
-                    <div class="space-y-2">
-                        {% for value, label in footer_styles %}
-                            <label class="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                                <input type="radio" 
-                                       name="footer_style" 
-                                       value="{{ value }}" 
-                                       {% if business_details.footer_style == value %}checked{% endif %}
-                                       class="component-selector"
-                                       data-component="footer_style">
-                                <span>{{ label }}</span>
-                            </label>
-                        {% endfor %}
+                        <!-- Text Settings -->
+                        {% include "components/layout_editor/banner_text_settings.html" with prefix="banner_2" heading_value=subpage.banner_2_heading subheading_value=subpage.banner_2_subheading show_heading=subpage.show_banner_2_heading show_subheading=subpage.show_banner_2_subheading heading_font=subpage.banner_2_heading_font subheading_font=subpage.banner_2_subheading_font heading_size=subpage.banner_2_heading_size subheading_size=subpage.banner_2_subheading_size font_choices=font_choices heading_sizes=heading_sizes subheading_sizes=subheading_sizes %}
+                    </div>
+
+                    <!-- Third Banner Section -->
+                    <div class="banner-section">
+                        <h3 class="text-md font-semibold mb-4">Third Banner</h3>
+                        {% include "components/layout_editor/banner_image_upload.html" with prefix="banner-3" image=subpage.get_banner_image_3 placeholder_text="Add Third Image" layout=subpage.hero_layout %}
+
+                        <!-- Text Settings -->
+                        {% include "components/layout_editor/banner_text_settings.html" with prefix="banner_3" heading_value=subpage.banner_3_heading subheading_value=subpage.banner_3_subheading show_heading=subpage.show_banner_3_heading show_subheading=subpage.show_banner_3_subheading heading_font=subpage.banner_3_heading_font subheading_font=subpage.banner_3_subheading_font heading_size=subpage.banner_3_heading_size subheading_size=subpage.banner_3_subheading_size font_choices=font_choices heading_sizes=heading_sizes subheading_sizes=subheading_sizes %}
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </div>  
 </div>
