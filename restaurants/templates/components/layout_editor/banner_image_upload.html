@@ -9,7 +9,7 @@
                 id="remove-{{ prefix }}"
                 class="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
                 title="Remove image"
-                {% if prefix != 'hero-image' and layout != 'banner_slider' %}disabled{% endif %}>
+                >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
@@ -28,11 +28,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
                         <span class="mt-2 block text-sm font-medium text-gray-600">
-                            {% if prefix != 'hero-image' and layout != 'banner_slider' %}
-                                Banner Slider Layout Required
-                            {% else %}
-                                {{ placeholder_text }}
-                            {% endif %}
+                            {% if prefix == 'banner-2' %}
+                            Banner Image 2
+                        {% elif prefix == 'banner-3' %}
+                            Banner Image 3
+                        {% else %}
+                            {{ placeholder_text }}
+                        {% endif %}
                         </span>
                     </div>
                 </div>

@@ -40,6 +40,10 @@
 </div>
 {% endblock %}
 
-{% block script %}
-<script src="{% static 'layoutEditor.js' %}"></script>
+{% block dev_scripts %}
+    <script type="module" src="{% static 'js/layoutEditor.js' %}"></script>
+{% endblock %}
+
+{% block prod_scripts %}
+    {# <script src="{% static 'dist/layoutEditor.bundle.js' %}"></script> #}
 {% endblock %}

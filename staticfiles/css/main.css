@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import './login.css';
+@import './animations.css';
+@import './cuisines.css';

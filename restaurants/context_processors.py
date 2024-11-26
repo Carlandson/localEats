@@ -1,3 +1,5 @@
+from django.conf import settings
+
 def user_data(request):
     user = request.user
     if user.is_authenticated:
@@ -7,3 +9,9 @@ def user_data(request):
             'user_id': user.id,
         }
     return {}
+
+
+def debug_settings(request):
+    return {
+        'debug': settings.DEBUG
+    }

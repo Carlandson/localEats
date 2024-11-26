@@ -109,6 +109,6 @@
 {% block script %}             
     {{ block.super }}
     <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
-    <script src="{% static 'cuisineSelect.js' %}"></script>
-    <script src="{% static 'addressValidate.js' %}"></script>
+    <script src="{% static 'js/cuisineSelect.js' %}"></script>
+    <script src="{% static 'js/addressValidate.js' %}"></script>
 {% endblock %}

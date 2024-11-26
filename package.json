@@ -6,14 +6,24 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:css": "tailwindcss -i static/css/main.css -o static/css/tailwind.css",
-    "watch:css": "tailwindcss -i static/css/main.css -o static/css/tailwind.css --watch"
+    "watch:css": "tailwindcss -i static/css/main.css -o static/css/tailwind.css --watch",
+    "build:js": "webpack --mode production",
+    "watch:js": "webpack --mode development --watch",
+    "build": "npm run build:css && npm run build:js",
+    "dev": "concurrently \"npm run watch:css\" \"npm run watch:js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.x.x",
+    "@babel/preset-env": "^7.x.x",
     "autoprefixer": "^10.4.20",
+    "babel-loader": "^8.x.x",
+    "concurrently": "^8.x.x",
     "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.13"
+    "tailwindcss": "^3.4.13",
+    "webpack": "^5.x.x",
+    "webpack-cli": "^4.x.x"
   }
 }

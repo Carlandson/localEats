@@ -1,0 +1,42 @@
+    async function updateGlobalComponent(component, style) {
+        try {
+            console.log('Sending update request:', { component, style });
+                    // Handle banner slider visibility if this is a hero layout update
+            if (component === 'hero_layout') {
+                console.log('Updating banner slider visibility:', style);
+                handleBannerSliderVisibility(style);
+            }
+            const response = await fetch(`/${business_subdirectory}/update-global-component/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({
+                    component: component,
+                    style: style,
+                    page_type: pageSelector.value
+                })
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to update component');
+            }
+            
+            const data = await response.json();
+            console.log('Update response:', data);
+            
+            if (data.success) {
+                // Update preview after successful component change
+                await updatePreview(pageSelector.value);
+                return true;
+            } else {
+                throw new Error(data.error || 'Update failed');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            displayError('Failed to update component: ' + error.message);
+            throw error;
+        }
+    }

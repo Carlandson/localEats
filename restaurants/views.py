@@ -1051,7 +1051,7 @@ def preview_page(request, business_subdirectory, page_type):
         try:
             # Try to get existing SubPage
             subpage = SubPage.objects.get(
-                Business=business,
+                business=business,
                 page_type=page_type
             )
             logger.debug(f"Found existing subpage: {subpage.id}")
@@ -1059,7 +1059,7 @@ def preview_page(request, business_subdirectory, page_type):
         except SubPage.DoesNotExist:
             # Create new SubPage if it doesn't exist
             subpage = SubPage.objects.create(
-                Business=business,
+                business=business,
                 page_type=page_type,
                 title=f"{Business.business_name} {page_type.title()}",
             )
@@ -1369,13 +1369,16 @@ def upload_hero_image(request, business_subdirectory):
         # Determine the alt_text based on banner type
         alt_text_map = {
             'primary': 'hero_primary',
-            'banner_2': 'hero_banner_2',
-            'banner_3': 'hero_banner_3'
+            '2': 'hero_banner_2',
+            '3': 'hero_banner_3',
+            'banner_2': 'hero_banner_2',  # Add these fallback mappings
+            'banner_3': 'hero_banner_3'   # Add these fallback mappings
         }
         alt_text = alt_text_map.get(banner_type)
         
         if not alt_text:
-            return JsonResponse({'error': 'Invalid banner type'}, status=400)
+            logger.error(f"Invalid banner type received: {banner_type}")
+            return JsonResponse({'error': f'Invalid banner type: {banner_type}'}, status=400)
 
         # Remove existing image for this banner type if it exists
         content_type = ContentType.objects.get_for_model(SubPage)

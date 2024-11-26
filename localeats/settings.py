@@ -90,6 +90,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "allauth.account.middleware.AccountMiddleware",
     'restaurants.middleware.ClearMessagesMiddleware', 
+    'restaurants.middleware.JavaScriptMimeTypeMiddleware',
 ]
 
 # WebP settings
@@ -113,7 +114,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'restaurants.context_processors.user_data'
+                'restaurants.context_processors.user_data',
+                'restaurants.context_processors.debug_settings',
             ],
         },
     },
@@ -219,7 +221,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'restaurants/static/dist'),
 ]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

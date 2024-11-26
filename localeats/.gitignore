@@ -263,4 +263,6 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
+# Webpack bundle
+restaurants/static/dist/
 # End of https://www.toptal.com/developers/gitignore/api/django,python
