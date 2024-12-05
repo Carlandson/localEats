@@ -76,21 +76,6 @@
                         <input type="radio" name="hero_layout" class="component-selector" data-component="hero_layout" value="{{ value }}" {% if subpage.hero_layout == value %}checked{% endif %}>
                         <span class="ml-2">{{ label }}</span>
                     </label>
-                    {% if value == 'banner_slider' %}
-                        <!-- Slider Controls - Only visible when banner_slider is selected -->
-                        <div id="slider-controls" class="ml-8 mt-2 {% if subpage.hero_layout != 'banner_slider' %}hidden{% endif %}">
-                            <button id="editor-pause-play" 
-                                    class="flex items-center space-x-2 px-3 py-2 text-sm text-gray-700 bg-white border rounded-md hover:bg-gray-50">
-                                <span>Auto-Slide:</span>
-                                <svg class="w-4 h-4 pause-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6"/>
-                                </svg>
-                                <svg class="w-4 h-4 play-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    {% endif %}
                 {% endfor %}
             </div>
         </div>

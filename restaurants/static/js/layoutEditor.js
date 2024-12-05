@@ -17,6 +17,7 @@ function initializeEditor() {
         const businessElement = document.getElementById('business');
         const pageSelectorElement = document.getElementById('page-selector');
 
+
         if (!businessElement || !pageSelectorElement) {
             throw new Error('Required elements not found');
         }
