@@ -1,0 +1,35 @@
+{% load static %}
+
+<div class="hero-section relative">
+    {% if hero_primary %}
+    <div class="relative w-full h-screen">
+        <img src="{{ hero_primary.image.url }}" 
+             alt="{{ hero_primary.alt_text }}"
+             class="w-full h-screen object-cover">
+        
+        <!-- Hero content overlay -->
+        <div class="absolute inset-0 flex items-center">
+            <div class="w-full px-4 sm:px-6 lg:px-16 xl:px-24">
+                <div class="{% if subpage.hero_text_align == 'left' %}mr-auto{% endif %}
+                            {% if subpage.hero_text_align == 'right' %}ml-auto{% endif %}
+                            {% if subpage.hero_text_align == 'center' %}mx-auto{% endif %}
+                            {% if subpage.hero_text_align != 'right' %}max-w-prose{% endif %}">
+                    {% if subpage.show_hero_heading %}
+                    <h1 class="{{ subpage.hero_heading_size }} font-bold tracking-tight text-{{ subpage.hero_text_align }}"
+                        style="font-family: {{ subpage.hero_heading_font }}; {% if subpage.hero_text_color %}color: {{ subpage.hero_text_color|safe }}{% endif %}">
+                        {{ subpage.hero_heading|default:subpage.title }}
+                    </h1>
+                    {% endif %}
+                    
+                    {% if subpage.show_hero_subheading and subpage.hero_subheading %}
+                    <p class="{{ subpage.hero_subheading_size }} mt-6 text-{{ subpage.hero_text_align }}"
+                        style="font-family: {{ subpage.hero_subheading_font }}; {% if subpage.hero_subtext_color %}color: {{ subpage.hero_subtext_color|safe }}{% endif %}">
+                        {{ subpage.hero_subheading }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>

@@ -12,7 +12,9 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.contrib.contenttypes.fields import GenericRelation
 import sys
 from django.db.models import Case, When
+import logging
 
+logger = logging.getLogger(__name__)
 # Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, business, CuisineCategory
 User = get_user_model()
 
@@ -30,10 +32,25 @@ class Image(models.Model):
     caption = models.TextField(blank=True)
 
     def save(self, *args, **kwargs):
+        logger.debug(f"""
+            Saving Image:
+            - Alt Text: {self.alt_text}
+            - Content Type: {self.content_type}
+            - Object ID: {self.object_id}
+            - Content Object: {self.content_object}
+            - Image Path: {self.image.name if self.image else 'No image'}
+        """)
         if not self.id:
             self.image = self.compress_image(self.image)
             self.create_thumbnail()
         super(Image, self).save(*args, **kwargs)
+        logger.debug(f"""
+            Image Saved:
+            - ID: {self.id}
+            - Alt Text: {self.alt_text}
+            - Content Type: {self.content_type}
+            - Object ID: {self.object_id}
+        """)
 
     def compress_image(self, uploadedImage):
         im = PILImage.open(uploadedImage)
@@ -241,8 +258,8 @@ class SubPage(models.Model):
     hero_button_text = models.CharField(max_length=50, blank=True)
     hero_button_link = models.CharField(max_length=200, blank=True)
     hero_text_align = models.CharField(max_length=10, choices=TEXT_ALIGN_CHOICES, default='left')
-    hero_text_color = models.CharField(max_length=7, default='#000000')  # Hex color
-    hero_subtext_color = models.CharField(max_length=7, default='#6B7280')  # Hex color
+    hero_heading_color = models.CharField(max_length=7, default='#000000')  # Hex color
+    hero_subheading_color = models.CharField(max_length=7, default='#6B7280')  # Hex color
     show_hero_heading = models.BooleanField(default=False)
     hero_heading_size = models.CharField(max_length=20, default='text-3xl')
     hero_subheading_size = models.CharField(max_length=20, default='text-lg')
@@ -253,60 +270,91 @@ class SubPage(models.Model):
     banner_2_heading = models.CharField(max_length=200, blank=True)
     banner_2_heading_font = models.CharField(max_length=100, default='Inter')
     banner_2_heading_size = models.CharField(max_length=20, default='text-4xl')
+    banner_2_heading_color = models.CharField(max_length=7, default='#000000')  # Hex color
     show_banner_2_subheading = models.BooleanField(default=True)
     banner_2_subheading = models.TextField(blank=True)
     banner_2_subheading_font = models.CharField(max_length=100, default='Inter')
     banner_2_subheading_size = models.CharField(max_length=20, default='text-xl')
+    banner_2_subheading_color = models.CharField(max_length=7, default='#6B7280')  # Hex color
+    banner_2_text_align = models.CharField(max_length=10, choices=TEXT_ALIGN_CHOICES, default='left')
+    banner_2_button_text = models.CharField(max_length=50, blank=True)
+    banner_2_button_link = models.CharField(max_length=200, blank=True)
     show_banner_3_heading = models.BooleanField(default=True)
     banner_3_heading = models.CharField(max_length=200, blank=True)
     banner_3_heading_font = models.CharField(max_length=100, default='Inter')
     banner_3_heading_size = models.CharField(max_length=20, default='text-4xl')
+    banner_3_heading_color = models.CharField(max_length=7, default='#000000')  # Hex color
     show_banner_3_subheading = models.BooleanField(default=True)
     banner_3_subheading = models.TextField(blank=True)
     banner_3_subheading_font = models.CharField(max_length=100, default='Inter')
     banner_3_subheading_size = models.CharField(max_length=20, default='text-xl')
+    banner_3_subheading_color = models.CharField(max_length=7, default='#6B7280')  # Hex color
+    banner_3_text_align = models.CharField(max_length=10, choices=TEXT_ALIGN_CHOICES, default='left')
+    banner_3_button_text = models.CharField(max_length=50, blank=True)
+    banner_3_button_link = models.CharField(max_length=200, blank=True)
 
-    def get_hero_image(self):
+    def get_hero_primary(self):
         """Get the hero image for this subpage"""
         content_type = ContentType.objects.get_for_model(self)
-        return Image.objects.filter(
+        logger.debug(f"""
+            Searching for hero_primary:
+            - SubPage ID: {self.id}
+            - Content Type: {content_type.app_label}.{content_type.model}
+        """)
+        
+        # First, let's see ALL images for this content type and object_id
+        all_images = Image.objects.filter(
+            content_type=content_type,
+            object_id=self.id
+        )
+        logger.debug(f"All images found: {[f'ID:{img.id}, Alt:{img.alt_text}' for img in all_images]}")
+        
+        # Now try to find the specific hero_primary
+        hero = Image.objects.filter(
             content_type=content_type,
             object_id=self.id,
-            alt_text='hero_primary'  # Standardized alt_text for primary hero
+            alt_text='hero_primary'
         ).first()
+        
+        logger.debug(f"Hero primary found: {hero.id if hero else 'None'}")
+        return hero
 
-    def get_banner_image_2(self):
+    def get_hero_banner_2(self):
         """Get the second banner image"""
         content_type = ContentType.objects.get_for_model(self)
-        return Image.objects.filter(
+        logger.debug(f"""
+            Searching for hero_banner_2:
+            - SubPage ID: {self.id}
+            - Content Type: {content_type.app_label}.{content_type.model}
+        """)
+        
+        banner = Image.objects.filter(
             content_type=content_type,
             object_id=self.id,
-            alt_text='hero_banner_2'  # Standardized alt_text for second banner
+            alt_text='hero_banner_2'
         ).first()
+        
+        logger.debug(f"Banner 2 found: {banner.id if banner else 'None'}")
+        return banner
 
-    def get_banner_image_3(self):
+    def get_hero_banner_3(self):
         """Get the third banner image"""
         content_type = ContentType.objects.get_for_model(self)
-        return Image.objects.filter(
+        logger.debug(f"""
+            Searching for hero_banner_3:
+            - SubPage ID: {self.id}
+            - Content Type: {content_type.app_label}.{content_type.model}
+        """)
+        
+        banner = Image.objects.filter(
             content_type=content_type,
             object_id=self.id,
-            alt_text='hero_banner_3'  # Standardized alt_text for third banner
+            alt_text='hero_banner_3'
         ).first()
+        
+        logger.debug(f"Banner 3 found: {banner.id if banner else 'None'}")
+        return banner
 
-    def get_slider_images(self):
-        """Get all banner images in order"""
-        content_type = ContentType.objects.get_for_model(self)
-        return Image.objects.filter(
-            content_type=content_type,
-            object_id=self.id,
-            alt_text__in=['hero_primary', 'hero_banner_2', 'hero_banner_3']
-        ).order_by(
-            Case(
-                When(alt_text='hero_primary', then=0),
-                When(alt_text='hero_banner_2', then=1),
-                When(alt_text='hero_banner_3', then=2),
-            )
-        )
     
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -417,3 +465,23 @@ class Event(models.Model):
 class SpecialsPage(models.Model):
     subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='specials_content')
 
+
+
+def get_all_images(self):
+    """Debug method to get all images for this subpage"""
+    content_type = ContentType.objects.get_for_model(self)
+    images = Image.objects.filter(
+        content_type=content_type,
+        object_id=self.id
+    )
+    logger.debug(f"""
+        All Images for SubPage {self.id}:
+        Content Type: {content_type.app_label}.{content_type.model}
+        Images Found: {[{
+            'id': img.id,
+            'alt_text': img.alt_text,
+            'content_type': img.content_type,
+            'object_id': img.object_id
+        } for img in images]}
+    """)
+    return images

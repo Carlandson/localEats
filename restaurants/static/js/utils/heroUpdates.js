@@ -3,7 +3,7 @@ import { displayError } from './errors.js';
 
 export async function updateHeroText(field, value, context) {
     try {
-        const response = await fetch(`/${context.business_subdirectory}/update-hero-text/`, {
+        const response = await fetch(`/${context.business_subdirectory}/update-hero/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

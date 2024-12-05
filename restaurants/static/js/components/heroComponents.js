@@ -1,5 +1,6 @@
 import { initializeSlider } from './slider.js';
 
+let sliderInstance = null;
 const slider = initializeSlider();
 
 export function handleBannerSliderVisibility(layoutStyle) {
@@ -11,7 +12,15 @@ export function handleBannerSliderVisibility(layoutStyle) {
     if (layoutStyle === 'banner-slider') {
         console.log('Displaying banner slider');
         bannerSliderContainer.style.display = 'block';
-        slider.start(); // Start the slider when banner-slider is selected
+        
+        // Initialize slider
+        if (!sliderInstance) {
+            console.log('Initializing slider');
+            sliderInstance = slider.init();
+            if (sliderInstance) {
+                sliderInstance.start();
+            }
+        }
         
         // Enable banner upload inputs and buttons
         ['banner-2', 'banner-3'].forEach(prefix => {
@@ -29,8 +38,11 @@ export function handleBannerSliderVisibility(layoutStyle) {
             if (removeButton) removeButton.disabled = false;
         });
     } else {
+        if (sliderInstance) {
+            sliderInstance.stop();
+            sliderInstance = null;
+        }
         bannerSliderContainer.style.display = 'none';
-        slider.stop(); // Stop the slider when another layout is selected
         
         // Disable banner upload inputs and buttons
         ['banner-2', 'banner-3'].forEach(prefix => {
@@ -47,5 +59,16 @@ export function handleBannerSliderVisibility(layoutStyle) {
             if (container) container.classList.add('opacity-50');
             if (removeButton) removeButton.disabled = true;
         });
+    }
+}
+
+// Add this function to reinitialize the slider after content changes
+export function reinitializeSlider() {
+    if (sliderInstance) {
+        sliderInstance.stop();
+    }
+    sliderInstance = slider.init();
+    if (sliderInstance && document.getElementById('banner-slider-images').style.display !== 'none') {
+        sliderInstance.start();
     }
 }

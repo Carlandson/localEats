@@ -1,5 +1,6 @@
 import { getCookie } from './cookies.js';
 import { displayError } from './errors.js';
+import { reinitializeSlider } from '../components/heroComponents.js';
 
 export async function updatePreview(pageType, context) {
     console.log('updatePreview called with:', { pageType, context });
@@ -10,20 +11,19 @@ export async function updatePreview(pageType, context) {
     }
 
     try {
-        const url = `/${context.business_subdirectory}/page-content/${pageType}/`;
+        const url = `/${context.business_subdirectory}/preview-page/${pageType}/`;
         console.log('Fetching preview from:', url);
 
         const response = await fetch(url, {
             headers: {
                 'Cache-Control': 'no-cache',
                 'Pragma': 'no-cache',
-                'Accept': 'text/html' // Explicitly request HTML
+                'Accept': 'text/html'
             },
             credentials: 'same-origin'
         });
         
         if (!response.ok) {
-            // For error responses, try to parse as JSON first
             const contentType = response.headers.get('content-type');
             if (contentType && contentType.includes('application/json')) {
                 const errorData = await response.json();
@@ -34,24 +34,28 @@ export async function updatePreview(pageType, context) {
             }
         }
 
-        // Get the HTML content
         const html = await response.text();
-        
-        // Find the preview container
         const previewContainer = document.getElementById('page-content-preview');
         if (!previewContainer) {
             throw new Error('Preview container not found in DOM');
         }
 
+
+        
         // Update the preview content
         previewContainer.innerHTML = html;
-        console.log('Preview updated successfully');
+        
+        const sliderContainer = previewContainer.querySelector('.slider-container');
+        if (sliderContainer) {
+            console.log('Banner slider detected, initializing...');
+            reinitializeSlider();
+        }
         return true;
 
     } catch (error) {
         console.error('Preview update error:', {
             message: error.message,
-            url: `/${context.business_subdirectory}/page-content/${pageType}/`,
+            url: `/${context.business_subdirectory}/preview-page/${pageType}/`,
             context: context,
             pageType: pageType
         });

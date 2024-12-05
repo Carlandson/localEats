@@ -1046,81 +1046,47 @@ def preview_page(request, business_subdirectory, page_type):
         if request.user != business.owner:
             return HttpResponseForbidden()
             
-        logger.debug(f"Preview page request for {business_subdirectory}, page type: {page_type}")
+        subpage = SubPage.objects.get(
+            business=business,
+            page_type=page_type
+        )
         
-        try:
-            # Try to get existing SubPage
-            subpage = SubPage.objects.get(
-                business=business,
-                page_type=page_type
-            )
-            logger.debug(f"Found existing subpage: {subpage.id}")
-            logger.debug(f"Hero layout: {subpage.hero_layout}")
-        except SubPage.DoesNotExist:
-            # Create new SubPage if it doesn't exist
-            subpage = SubPage.objects.create(
-                business=business,
-                page_type=page_type,
-                title=f"{Business.business_name} {page_type.title()}",
-            )
-            logger.debug(f"Created new subpage: {subpage.id}")
+        # Add debug logging
+        logger.debug(f"Loading preview for {business_subdirectory}, page type: {page_type}")
         
-        # Get hero image using the model method
-        hero_image = subpage.get_hero_image()
-        if hero_image:
-            logger.debug(f"Found hero image: {hero_image.image.url}")
-        else:
-            logger.debug(f"No hero image found for subpage {subpage.id}")
+        # Get all hero images
+        hero_primary = subpage.get_hero_primary()
+        hero_banner_2 = subpage.get_hero_banner_2()
+        hero_banner_3 = subpage.get_hero_banner_3()
         
-        # Get menu data if this is a menu page
-        menu_data = None
-        if page_type == 'menu':
-            menus = Menu.objects.filter(Business=business)
-            menu_data = []
-            for menu in menus:
-                courses = Course.objects.filter(menu=menu).order_by('order')
-                course_data = []
-                for course in courses:
-                    dishes = Dish.objects.filter(course=course).order_by('name')
-                    course_data.append({
-                        'name': course.name,
-                        'description': course.description,
-                        'dishes': dishes
-                    })
-                menu_data.append({
-                    'name': menu.name,
-                    'description': menu.description,
-                    'courses': course_data
-                })
+        # Debug log the images
+        logger.debug(f"Hero images found: Primary={hero_primary}, Banner2={hero_banner_2}, Banner3={hero_banner_3}")
         
         context = {
-            'Business_details': business,
+            'business_details': business,
             'subpage': subpage,
-            'hero_image': hero_image,
+            'hero_primary': hero_primary,
+            'hero_banner_2': hero_banner_2,
+            'hero_banner_3': hero_banner_3,
+            'hero_image': hero_primary,  # For backwards compatibility
             'preview_mode': True,
             'business_subdirectory': business_subdirectory,
-            'menu_data': menu_data,
-            'is_home': page_type == 'home',
-            'menu_page': page_type == 'menu',
-            'about_page': page_type == 'about',
-            'events_page': page_type == 'events',
+            'debug': True,  # Make sure debug is True
+            # Add specific color context
+            'primary_color': business.primary_color,
+            'secondary_color': business.secondary_color,
+            'text_color': business.text_color,
+            'hover_color': business.hover_color,
+            'navigation_style': business.navigation_style,
+            'footer_style': business.footer_style
         }
         
-        # Map page types to their templates
-        template_mapping = {
-            'home': 'components/home/default.html',
-            'menu': f'components/menu/{business.menu_style}.html',
-            'about': 'components/about/default.html',
-            'events': 'components/events/default.html',
-        }
+        # Debug log the context
+        logger.debug(f"Context keys: {context.keys()}")
         
-        template_name = template_mapping.get(page_type)
-        if not template_name:
-            raise ValueError(f"Invalid page type: {page_type}")
-            
+        # Use the full visitor page template instead of just the hero component
+        template_name = 'visitor_pages/home.html'
         logger.debug(f"Using template: {template_name}")
-        if hero_image:
-            logger.debug(f"Context hero_image: {hero_image.image.url}")
         
         return render(request, template_name, context)
         
@@ -1131,13 +1097,20 @@ def preview_page(request, business_subdirectory, page_type):
     
 @login_required
 def get_page_data(request, business_subdirectory, page_type):
-    print(f"Getting page data for {business_subdirectory}, page type: {page_type}")
     try:
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
         if request.user != business.owner:
             return JsonResponse({'error': 'Unauthorized'}, status=403)
             
         subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
+        
+        # Get all images
+        hero_primary = subpage.get_hero_primary()
+        hero_banner_2 = subpage.get_hero_banner_2()
+        hero_banner_3 = subpage.get_hero_banner_3()
+        
+        # Debug log to verify we have the images
+        logger.debug(f"Images found - Primary: {hero_primary}, Banner2: {hero_banner_2}, Banner3: {hero_banner_3}")
         
         data = {
             'subpage_id': subpage.id,
@@ -1146,19 +1119,64 @@ def get_page_data(request, business_subdirectory, page_type):
             'hero_button_text': subpage.hero_button_text,
             'hero_layout': subpage.hero_layout,
             'hero_text_align': subpage.hero_text_align,
-            'hero_text_color': subpage.hero_text_color,
-            'hero_subtext_color': subpage.hero_subtext_color,
+            'hero_heading_color': subpage.hero_heading_color,
+            'hero_subheading_color': subpage.hero_subheading_color,
+            'hero_button_link': subpage.hero_button_link,
+            'images': {
+                'hero_primary': {
+                    'url': hero_primary.image.url if hero_primary else None,
+                    'alt_text': hero_primary.alt_text if hero_primary else None
+                },
+                'hero_banner_2': {
+                    'url': hero_banner_2.image.url if hero_banner_2 else None,
+                    'alt_text': hero_banner_2.alt_text if hero_banner_2 else None
+                },
+                'hero_banner_3': {
+                    'url': hero_banner_3.image.url if hero_banner_3 else None,
+                    'alt_text': hero_banner_3.alt_text if hero_banner_3 else None
+                }
+            },
+            'hero_banner_2': {
+                'heading': subpage.banner_2_heading,
+                'subheading': subpage.banner_2_subheading,
+                'show_heading': subpage.show_banner_2_heading,
+                'show_subheading': subpage.show_banner_2_subheading,
+                'heading_font': subpage.banner_2_heading_font,
+                'subheading_font': subpage.banner_2_subheading_font,
+                'heading_size': subpage.banner_2_heading_size,
+                'subheading_size': subpage.banner_2_subheading_size,
+                'heading_color': subpage.banner_2_heading_color,
+                'subheading_color': subpage.banner_2_subheading_color,
+                'button_text': subpage.banner_2_button_text,
+                'button_link': subpage.banner_2_button_link,
+            },
+            'hero_banner_3': {
+                'heading': subpage.banner_3_heading,
+                'subheading': subpage.banner_3_subheading,
+                'show_heading': subpage.show_banner_3_heading,
+                'show_subheading': subpage.show_banner_3_subheading,
+                'heading_font': subpage.banner_3_heading_font,
+                'subheading_font': subpage.banner_3_subheading_font,
+                'heading_size': subpage.banner_3_heading_size,
+                'subheading_size': subpage.banner_3_subheading_size,
+                'heading_color': subpage.banner_3_heading_color,
+                'subheading_color': subpage.banner_3_subheading_color,
+                'button_text': subpage.banner_3_button_text,
+                'button_link': subpage.banner_3_button_link,
+            }
         }
-        
+        print("get_page_data")
         return JsonResponse(data)
         
     except Exception as e:
         logger.error(f"Error in get_page_data: {str(e)}")
+        logger.exception("Full traceback:")
         return JsonResponse({'error': str(e)}, status=500)
         
 @login_required
 def preview_component(request, business_subdirectory, component, style):
     try:
+        print(f"Previewing component: {component} with style: {style}")  # Debug log
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
         
         if request.user != business.owner:
@@ -1368,11 +1386,12 @@ def upload_hero_image(request, business_subdirectory):
 
         # Determine the alt_text based on banner type
         alt_text_map = {
-            'primary': 'hero_primary',
+            'hero_primary': 'hero_primary',
+            'hero_banner_2': 'hero_banner_2',
+            'hero_banner_3': 'hero_banner_3',
+            # Legacy support
             '2': 'hero_banner_2',
-            '3': 'hero_banner_3',
-            'banner_2': 'hero_banner_2',  # Add these fallback mappings
-            'banner_3': 'hero_banner_3'   # Add these fallback mappings
+            '3': 'hero_banner_3'
         }
         alt_text = alt_text_map.get(banner_type)
         
@@ -1505,7 +1524,7 @@ def update_hero(request, business_subdirectory):
     try:
         data = json.loads(request.body)
         field = data.get('field')
-        value = data.get('value')
+        value = data.get('value', 'default')  # Provide a default value
         page_type = data.get('page_type')
 
         logger.debug(f"Updating hero field: {field} to value: {value} for page: {page_type}")
@@ -1518,38 +1537,67 @@ def update_hero(request, business_subdirectory):
         
         # Map of frontend field names to model field names
         field_mapping = {
-            'text-align': 'hero_text_align',
-            'hero-heading': 'hero_heading',
-            'hero-subheading': 'hero_subheading',
-            'hero-button-text': 'hero_button_text',
-            'hero-button-link': 'hero_button_link',
-            'hero-text-color': 'hero_text_color',
-            'hero-subtext-color': 'hero_subtext_color',
-            'show-hero-heading': 'show_hero_heading',
-            'show-hero-subheading': 'show_hero_subheading',
+            'text_align': 'hero_text_align',
+            'hero_heading': 'hero_heading',
+            'hero_subheading': 'hero_subheading',
+            'hero_button_text': 'hero_button_text',
+            'hero_button_link': 'hero_button_link',
+            'hero_heading_color': 'hero_heading_color',
+            'hero_subheading_color': 'hero_subheading_color',
+            'show_hero_heading': 'show_hero_heading',
+            'show_hero_subheading': 'show_hero_subheading',
+            'hero_layout': 'hero_layout',
+            # Banner 2 fields - updated to match model field names
+            'hero_banner_2_heading': 'banner_2_heading',
+            'hero_banner_2_subheading': 'banner_2_subheading',
+            'show_hero_banner_2_heading': 'show_banner_2_heading',
+            'show_hero_banner_2_subheading': 'show_banner_2_subheading',
+            'hero_banner_2_heading_font': 'banner_2_heading_font',
+            'hero_banner_2_heading_size': 'banner_2_heading_size',
+            'hero_banner_2_heading_color': 'banner_2_heading_color',
+            'hero_banner_2_subheading_font': 'banner_2_subheading_font',
+            'hero_banner_2_subheading_size': 'banner_2_subheading_size',
+            'hero_banner_2_subheading_color': 'banner_2_subheading_color',
+            'hero_banner_2_text_align': 'banner_2_text_align',
+            'hero_banner_2_button_text': 'banner_2_button_text',
+            'hero_banner_2_button_link': 'banner_2_button_link',
+            # Banner 3 fields - updated to match model field names
+            'hero_banner_3_heading': 'banner_3_heading',
+            'hero_banner_3_subheading': 'banner_3_subheading',
+            'show_hero_banner_3_heading': 'show_banner_3_heading',
+            'show_hero_banner_3_subheading': 'show_banner_3_subheading',
+            'hero_banner_3_heading_font': 'banner_3_heading_font',
+            'hero_banner_3_heading_size': 'banner_3_heading_size',
+            'hero_banner_3_heading_color': 'banner_3_heading_color',
+            'hero_banner_3_subheading_font': 'banner_3_subheading_font',
+            'hero_banner_3_subheading_size': 'banner_3_subheading_size',
+            'hero_banner_3_subheading_color': 'banner_3_subheading_color',
+            'hero_banner_3_text_align': 'banner_3_text_align',
+            'hero_banner_3_button_text': 'banner_3_button_text',
+            'hero_banner_3_button_link': 'banner_3_button_link',
         }
-
         # Get the correct field name from the mapping
         model_field = field_mapping.get(field)
+        print(f"Field mapping result: {model_field}")
+        logger.debug(f"Field mapping result: {model_field}")
+        logger.debug(f"Current value in database: {getattr(subpage, model_field, None)}")
+        logger.debug(f"New value being set: {value}")
         if not model_field:
             return JsonResponse({'success': False, 'error': f'Invalid field: {field}'})
 
-        # Log the field mapping for debugging
-        logger.debug(f"Field mapping: {field} -> {model_field}")
-        
-        if hasattr(subpage, model_field):
+        # Ensure value is not None before setting
+        if value is not None:
             setattr(subpage, model_field, value)
             subpage.save()
             logger.debug(f"Successfully updated {model_field} to {value}")
             return JsonResponse({'success': True})
         else:
-            logger.error(f"Invalid field name: {model_field}")
-            return JsonResponse({'success': False, 'error': f'Invalid field: {model_field}'})
+            return JsonResponse({'success': False, 'error': 'Value cannot be null'})
 
     except Exception as e:
         logger.error(f"Error in update_hero: {str(e)}")
         return JsonResponse({'success': False, 'error': str(e)})
-
+    
 @login_required
 def layout_editor(request, business_subdirectory):
     try:
@@ -1612,38 +1660,52 @@ def page_view(request, business_subdirectory, page_type):
 @login_required
 def page_content(request, business_subdirectory, page_type):
     try:
+        logger.debug(f"=== Starting page_content view ===")
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
         subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
         
-        # Get hero image
-        content_type = ContentType.objects.get_for_model(SubPage)
-        hero_image = Image.objects.filter(
-            content_type=content_type,
-            object_id=subpage.id,
-            alt_text__startswith='hero_'
-        ).order_by('-upload_date').first()
+        # Debug the subpage
+        logger.debug(f"Found subpage: {subpage.id} with layout: {subpage.hero_layout}")
         
-        logger.debug(f"Found hero image: {hero_image.image.url if hero_image else 'None'}")
-        logger.debug(f"Hero layout: {subpage.hero_layout}")
+        # Get hero images with detailed logging
+        hero_primary = subpage.get_hero_primary()
+        logger.debug(f"get_hero_primary() returned: {hero_primary}")
         
+        hero_banner_2 = subpage.get_hero_banner_2()
+        logger.debug(f"get_hero_banner_2() returned: {hero_banner_2}")
+        
+        hero_banner_3 = subpage.get_hero_banner_3()
+        logger.debug(f"get_hero_banner_3() returned: {hero_banner_3}")
+        
+        # Create context
         context = {
             'business_details': business,
             'subpage': subpage,
-            'hero_image': hero_image,
+            'hero_primary': hero_primary,
+            'hero_banner_2': hero_banner_2,
+            'hero_banner_3': hero_banner_3,
             'business_subdirectory': business_subdirectory,
-            'is_preview': True
+            'is_preview': True,
+            'debug': True,
+            'page_type': page_type,
         }
         
-        template_name = f'visitor_pages/{page_type}.html'
-        logger.debug(f"Rendering page content with template: {template_name}")
-        logger.debug(f"Context: {context}")
+        # Log the final context
+        logger.debug("=== Context being sent to template ===")
+        for key, value in context.items():
+            logger.debug(f"{key}: {value}")
         
-        return render(request, template_name, context)
+        template_name = f'components/hero/{subpage.hero_layout}.html'
+        logger.debug(f"Using template: {template_name}")
+        
+        response = render(request, template_name, context)
+        logger.debug("=== Finished rendering template ===")
+        return response
         
     except Exception as e:
-        logger.error(f"Error rendering page content: {str(e)}")
+        logger.error(f"Error in page_content: {str(e)}")
         logger.exception("Full traceback:")
-        return HttpResponse(f"Error: {str(e)}", status=500)
+        return HttpResponse(f"Error loading page content: {str(e)}", status=500)
     
 @login_required
 def update_brand_colors(request, business_subdirectory):

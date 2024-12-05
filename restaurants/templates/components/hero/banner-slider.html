@@ -1,132 +1,144 @@
 {% load static %}
 
 
-{% if debug %}
-<div class="bg-red-100 p-4">
-    <p>Hero Images: {{ hero_image|default:"No hero image" }}, {{ banner_image_2|default:"No second image" }}, {{ banner_image_3|default:"No third image" }}</p>
-    <p>Hero Layout: {{ subpage.hero_layout|default:"No layout" }}</p>
-</div>
-{% endif %}
-
 <div class="hero-section relative">
     <!-- Slider container -->
     <div class="slider-container relative w-full h-screen overflow-hidden">
         <!-- First Slide -->
+        {% if hero_primary %}
         <div class="slide absolute w-full h-full transition-opacity duration-500">
-            {% if hero_image %}
-                <img src="{{ hero_image.image.url }}" 
-                     alt="{{ hero_image.alt_text }}"
-                     class="w-full h-screen object-cover">
-                
-                <!-- Hero content overlay -->
-                <div class="absolute inset-0 flex items-center">
-                    <div class="w-full px-4 sm:px-6 lg:px-16 xl:px-24">
-                        <div class="{% if subpage.hero_text_align == 'left' %}mr-auto{% endif %}
-                                    {% if subpage.hero_text_align == 'right' %}ml-auto{% endif %}
-                                    {% if subpage.hero_text_align == 'center' %}mx-auto{% endif %}
-                                    {% if subpage.hero_text_align != 'right' %}max-w-prose{% endif %}">
-                            {% if subpage.show_hero_heading %}
-                            <h1 class="{{ subpage.hero_heading_size }} font-bold tracking-tight text-{{ subpage.hero_text_align }}"
-                                style="font-family: {{ subpage.hero_heading_font }}; {% if subpage.hero_text_color %}color: {{ subpage.hero_text_color|safe }}{% endif %}">
-                                {{ subpage.hero_heading|default:subpage.title }}
-                            </h1>
-                            {% endif %}
-                            
-                            {% if subpage.show_hero_subheading and subpage.hero_subheading %}
-                            <p class="{{ subpage.hero_subheading_size }} mt-6 text-{{ subpage.hero_text_align }}"
-                                style="font-family: {{ subpage.hero_subheading_font }}; {% if subpage.hero_subtext_color %}color: {{ subpage.hero_subtext_color|safe }}{% endif %}">
-                                {{ subpage.hero_subheading }}
-                            </p>
-                            {% endif %}
-                        </div>
+            <img src="{{ hero_primary.image.url }}" 
+                 alt="{{ hero_primary.alt_text }}"
+                 class="w-full h-screen object-cover">
+            
+            <!-- Hero content overlay -->
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full px-4 sm:px-6 lg:px-16 xl:px-24">
+                    <div class="{% if subpage.hero_text_align == 'left' %}mr-auto{% endif %}
+                                {% if subpage.hero_text_align == 'right' %}ml-auto{% endif %}
+                                {% if subpage.hero_text_align == 'center' %}mx-auto{% endif %}
+                                {% if subpage.hero_text_align != 'right' %}max-w-prose{% endif %}">
+                        {% if subpage.show_hero_heading %}
+                        <h1 class="{{ subpage.hero_heading_size }} font-bold tracking-tight text-{{ subpage.hero_text_align }}"
+                            style="font-family: {{ subpage.hero_heading_font }}; {% if subpage.hero_heading_color %}color: {{ subpage.hero_heading_color|safe }}{% endif %}">
+                            {{ subpage.hero_heading|default:subpage.title }}
+                        </h1>
+                        {% endif %}
+                        
+                        {% if subpage.show_hero_subheading and subpage.hero_subheading %}
+                        <p class="{{ subpage.hero_subheading_size }} mt-6 text-{{ subpage.hero_text_align }}"
+                            style="font-family: {{ subpage.hero_subheading_font }}; {% if subpage.hero_subheading_color %}color: {{ subpage.hero_subheading_color|safe }}{% endif %}">
+                            {{ subpage.hero_subheading }}
+                        </p>
+                        {% endif %}
                     </div>
                 </div>
-            {% endif %}
+            </div>
         </div>
+        {% endif %}
 
         <!-- Second Slide -->
+        {% if hero_banner_2 %}
         <div class="slide absolute w-full h-full transition-opacity duration-500 opacity-0">
-            {% if banner_image_2 %}
-                <img src="{{ banner_image_2.image.url }}" 
-                     alt="{{ banner_image_2.alt_text }}"
-                     class="w-full h-screen object-cover">
-                
-                <!-- Banner 2 content overlay -->
-                <div class="absolute inset-0 flex items-center">
-                    <div class="w-full px-4 sm:px-6 lg:px-16 xl:px-24">
-                        <div class="{% if subpage.hero_text_align == 'left' %}mr-auto{% endif %}
-                                    {% if subpage.hero_text_align == 'right' %}ml-auto{% endif %}
-                                    {% if subpage.hero_text_align == 'center' %}mx-auto{% endif %}
-                                    {% if subpage.hero_text_align != 'right' %}max-w-prose{% endif %}">
-                            {% if subpage.show_banner_2_heading %}
-                            <h1 class="{{ subpage.banner_2_heading_size }} font-bold tracking-tight text-{{ subpage.hero_text_align }}"
-                                style="font-family: {{ subpage.banner_2_heading_font }}; {% if subpage.banner_2_text_color %}color: {{ subpage.banner_2_text_color|safe }}{% endif %}">
-                                {{ subpage.banner_2_heading }}
-                            </h1>
-                            {% endif %}
-                            
-                            {% if subpage.show_banner_2_subheading and subpage.banner_2_subheading %}
-                            <p class="{{ subpage.banner_2_subheading_size }} mt-6 text-{{ subpage.hero_text_align }}"
-                                style="font-family: {{ subpage.banner_2_subheading_font }}; {% if subpage.banner_2_subtext_color %}color: {{ subpage.banner_2_subtext_color|safe }}{% endif %}">
-                                {{ subpage.banner_2_subheading }}
-                            </p>
-                            {% endif %}
-                        </div>
+            <img src="{{ hero_banner_2.image.url }}" 
+                 alt="{{ hero_banner_2.alt_text }}"
+                 class="w-full h-screen object-cover">
+            
+            <!-- Banner 2 content overlay -->
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full px-4 sm:px-6 lg:px-16 xl:px-24">
+                    <div class="{% if subpage.banner_2_text_align == 'left' %}mr-auto{% endif %}
+                                {% if subpage.banner_2_text_align == 'right' %}ml-auto{% endif %}
+                                {% if subpage.banner_2_text_align == 'center' %}mx-auto{% endif %}
+                                {% if subpage.banner_2_text_align != 'right' %}max-w-prose{% endif %}">
+                                {% if subpage.show_banner_2_heading %}
+                                <h1 class="{{ subpage.banner_2_heading_size }} font-bold tracking-tight text-{{ subpage.banner_2_text_align }}"
+                                    style="font-family: {{ subpage.banner_2_heading_font }}; {% if subpage.banner_2_heading_color %}color: {{ subpage.banner_2_heading_color|safe }}{% endif %}">
+                                    {{ subpage.banner_2_heading|default:subpage.title }}
+                                </h1>
+                                {% endif %}
+                        
+                                {% if subpage.show_banner_2_subheading and subpage.banner_2_subheading %}
+                                <p class="{{ subpage.banner_2_subheading_size }} mt-6 text-{{ subpage.banner_2_text_align }}"
+                                    style="font-family: {{ subpage.banner_2_subheading_font }}; {% if subpage.banner_2_subheading_color %}color: {{ subpage.banner_2_subheading_color|safe }}{% endif %}">
+                                    {{ subpage.banner_2_subheading }}
+                                </p>
+                                {% endif %}
                     </div>
                 </div>
-            {% endif %}
+            </div>
         </div>
+        {% endif %}
 
         <!-- Third Slide -->
+        {% if hero_banner_3 %}
         <div class="slide absolute w-full h-full transition-opacity duration-500 opacity-0">
-            {% if banner_image_3 %}
-                <img src="{{ banner_image_3.image.url }}" 
-                     alt="{{ banner_image_3.alt_text }}"
-                     class="w-full h-screen object-cover">
-                
-                <!-- Banner 3 content overlay -->
-                <div class="absolute inset-0 flex items-center">
-                    <div class="w-full px-4 sm:px-6 lg:px-16 xl:px-24">
-                        <div class="{% if subpage.hero_text_align == 'left' %}mr-auto{% endif %}
-                                    {% if subpage.hero_text_align == 'right' %}ml-auto{% endif %}
-                                    {% if subpage.hero_text_align == 'center' %}mx-auto{% endif %}
-                                    {% if subpage.hero_text_align != 'right' %}max-w-prose{% endif %}">
-                            {% if subpage.show_banner_3_heading %}
-                            <h1 class="{{ subpage.banner_3_heading_size }} font-bold tracking-tight text-{{ subpage.hero_text_align }}"
-                                style="font-family: {{ subpage.banner_3_heading_font }}; {% if subpage.banner_3_text_color %}color: {{ subpage.banner_3_text_color|safe }}{% endif %}">
-                                {{ subpage.banner_3_heading }}
-                            </h1>
-                            {% endif %}
-                            
-                            {% if subpage.show_banner_3_subheading and subpage.banner_3_subheading %}
-                            <p class="{{ subpage.banner_3_subheading_size }} mt-6 text-{{ subpage.hero_text_align }}"
-                                style="font-family: {{ subpage.banner_3_subheading_font }}; {% if subpage.banner_3_subtext_color %}color: {{ subpage.banner_3_subtext_color|safe }}{% endif %}">
-                                {{ subpage.banner_3_subheading }}
-                            </p>
-                            {% endif %}
-                        </div>
+            <img src="{{ hero_banner_3.image.url }}" 
+                 alt="{{ hero_banner_3.alt_text }}"
+                 class="w-full h-screen object-cover">
+            
+            <!-- Banner 3 content overlay -->
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full px-4 sm:px-6 lg:px-16 xl:px-24">
+                    <div class="{% if subpage.banner_3_text_align == 'left' %}mr-auto{% endif %}
+                                {% if subpage.banner_3_text_align == 'right' %}ml-auto{% endif %}
+                                {% if subpage.banner_3_text_align == 'center' %}mx-auto{% endif %}
+                                {% if subpage.banner_3_text_align != 'right' %}max-w-prose{% endif %}">
+                                {% if subpage.show_banner_3_heading %}
+                                <h1 class="{{ subpage.banner_3_heading_size }} font-bold tracking-tight text-{{ subpage.banner_3_text_align }}"
+                                    style="font-family: {{ subpage.banner_3_heading_font }}; {% if subpage.banner_3_heading_color %}color: {{ subpage.banner_3_heading_color|safe }}{% endif %}">
+                                {{ subpage.banner_3_heading|default:subpage.title }}
+                                </h1>
+                                {% endif %}
+                                
+                                {% if subpage.show_banner_3_subheading and subpage.banner_3_subheading %}
+                                <p class="{{ subpage.banner_3_subheading_size }} mt-6 text-{{ subpage.banner_3_text_align }}"
+                                    style="font-family: {{ subpage.banner_3_subheading_font }}; {% if subpage.banner_3_subheading_color %}color: {{ subpage.banner_3_subheading_color|safe }}{% endif %}">
+                                    {{ subpage.banner_3_subheading }}
+                                </p>
+                                {% endif %}
                     </div>
                 </div>
-            {% endif %}
+            </div>
         </div>
+        {% endif %}
 
-        <!-- Navigation Dots -->
-        <div class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
-            <button class="w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-100 transition-opacity duration-200"></button>
-            <button class="w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-100 transition-opacity duration-200"></button>
-            <button class="w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-100 transition-opacity duration-200"></button>
-        </div>
+        <!-- Only show navigation if we have multiple slides -->
+        {% if hero_primary or hero_banner_2 or hero_banner_3 %}
+            <!-- Navigation Dots -->
+            <div class="absolute bottom-0 left-0 right-0 mb-8 z-20">
+                <div class="flex justify-center items-center">
+                    <div class="flex space-x-2 bg-black/20 rounded-full px-3 py-2">
+                        {% if hero_primary %}
+                            <button class="w-3 h-3 rounded-full bg-white opacity-100 transition-opacity duration-200 dot-nav"></button>
+                        {% endif %}
+                        {% if hero_banner_2 %}
+                            <button class="w-3 h-3 rounded-full bg-white opacity-50 transition-opacity duration-200 dot-nav"></button>
+                        {% endif %}
+                        {% if hero_banner_3 %}
+                            <button class="w-3 h-3 rounded-full bg-white opacity-50 transition-opacity duration-200 dot-nav"></button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
 
-        <!-- Arrow Navigation -->
-        <button class="absolute left-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white/75 transition-colors duration-200" id="prev-slide">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-            </svg>
-        </button>
-        <button class="absolute right-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white/75 transition-colors duration-200" id="next-slide">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-        </button>
+            <!-- Arrow Navigation -->
+            <button class="absolute left-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white/75 transition-colors duration-200" 
+                id="prev-slide" 
+                type="button" 
+                aria-label="Previous slide">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <button class="absolute right-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white/75 transition-colors duration-200" 
+                id="next-slide" 
+                type="button" 
+                aria-label="Next slide">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
+        {% endif %}
     </div>
 </div>

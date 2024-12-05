@@ -4,8 +4,7 @@ import { getCookie } from './utils/cookies.js';
 import { createHeroImageHTML, createUploadPlaceholderHTML } from './utils/placeholders.js';
 import { initializeImageUploads, removeHeroImage } from './handlers/imageHandlers.js';
 import { initializeTextInputs } from './handlers/textHandlers.js';
-import { updateGlobalComponent } from './components/globalComponents.js';
-import { handleBannerSliderVisibility } from './components/heroComponents.js';
+import { handleBannerSliderVisibility, reinitializeSlider } from './components/heroComponents.js';
 import { initializeColorHandlers } from './handlers/colorHandlers.js';
 import { updatePreview } from './utils/previewUpdates.js';
 import { initializeFontHandlers } from './handlers/fontHandlers.js';
@@ -38,6 +37,7 @@ function initializeEditor() {
             initializeTextInputs(context);
             initializeFontHandlers(context);
             initializeAlignmentHandlers(context);
+
         } catch (handlerError) {
             console.error('Error initializing handlers:', handlerError);
             displayError('Failed to initialize editor components');
@@ -69,6 +69,11 @@ async function loadPageData(pageType, context) {
         updateFormValues(data);
         await updatePreview(pageType, context);
         
+        // Initialize slider after preview is updated
+        if (data.hero_layout === 'banner-slider') {
+            reinitializeSlider();
+        }
+        
     } catch (error) {
         console.error('Error loading page data:', error);
         displayError('Failed to load page data');
@@ -80,14 +85,15 @@ function updateFormValues(data) {
         // Handle banner slider visibility
         if (data.hero_layout === 'banner-slider') {
             handleBannerSliderVisibility('banner-slider');
+            reinitializeSlider();
         }
 
         // Update text fields
         const textFields = {
-            'hero-heading': data.hero_heading || '',
-            'hero-subheading': data.hero_subheading || '',
-            'hero-button-text': data.hero_button_text || '',
-            'hero-button-link': data.hero_button_link || ''
+            'hero_heading': data.hero_heading || '',
+            'hero_subheading': data.hero_subheading || '',
+            'hero_button_text': data.hero_button_text || '',
+            'hero_button_link': data.hero_button_link || ''
         };
 
         Object.entries(textFields).forEach(([id, value]) => {
@@ -108,6 +114,9 @@ function updateFormValues(data) {
             'hero-text-color': data.hero_text_color || '#000000',
             'hero-subtext-color': data.hero_subtext_color || '#6B7280'
         };
+        if (data.hero_layout === 'banner-slider') {
+            handleBannerSliderVisibility('banner-slider');
+        }
 
         Object.entries(colorInputs).forEach(([id, value]) => {
             const element = document.getElementById(id);

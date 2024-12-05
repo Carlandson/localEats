@@ -1,9 +1,4 @@
-{% if debug %}
-<div class="bg-red-100 p-4">
-    <p>Hero Image: {{ hero_image|default:"No hero image" }}</p>
-    <p>Hero Layout: {{ subpage.hero_layout|default:"No layout" }}</p>
-</div>
-{% endif %}
+
 <div class="hero-section relative">
     {% if hero_image %}
         <img src="{{ hero_image.image.url }}" 

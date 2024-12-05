@@ -3,58 +3,52 @@ import { displayError } from '../utils/errors.js';
 import { getCookie } from '../utils/cookies.js';
 import { updatePreview } from '../utils/previewUpdates.js';
 
-export function getTextElements() {
-    return {
-        headingInput: document.getElementById('hero-heading'),
-        subheadingInput: document.getElementById('hero-subheading'),
-        showHeadingCheckbox: document.getElementById('show-hero-heading'),
-        showSubheadingCheckbox: document.getElementById('show-hero-subheading'),
-        bannerTwoHeadingInput: document.getElementById('banner-2-heading'),
-        bannerOneSubheadingInput: document.getElementById('banner-2-subheading'),
-        showBannerOneCheckbox: document.getElementById('show-banner-2'),
-        bannerThreeHeadingInput: document.getElementById('banner-3-heading'),
-        bannerThreeSubheadingInput: document.getElementById('banner-3-subheading'),
-        showBannerThreeCheckbox: document.getElementById('show-banner-3')
-    };
-}
+function initializeBannerText(prefix, context) {
+    const showHeadingId = `show_${prefix}_heading`;
+    const showSubheadingId = `show_${prefix}_subheading`;
+    const headingId = `${prefix}_heading`;
+    const subheadingId = `${prefix}_subheading`;
 
-export function initializeTextInputs(context) {
-    const elements = getTextElements();
-    
+    // Get elements
+    const showHeading = document.getElementById(showHeadingId);
+    const showSubheading = document.getElementById(showSubheadingId);
+    const headingInput = document.getElementById(headingId);
+    const subheadingInput = document.getElementById(subheadingId);
+
     // Initialize heading checkbox
-    if (elements.showHeadingCheckbox) {
-        elements.showHeadingCheckbox.checked = elements.showHeadingCheckbox.dataset.initialState === 'true';
+    if (showHeading) {
+        showHeading.checked = showHeading.dataset.initialState === 'true';
         
-        elements.showHeadingCheckbox.addEventListener('change', async function() {
-            if (elements.headingInput) {
-                elements.headingInput.disabled = !this.checked;
+        showHeading.addEventListener('change', async function() {
+            if (headingInput) {
+                headingInput.disabled = !this.checked;
             }
-            await updateHeroText('show-hero-heading', this.checked, context);
+            await updateHeroText(showHeadingId, this.checked, context);
             
-            if (this.checked && elements.headingInput && elements.headingInput.value) {
-                await updateHeroText('hero-heading', elements.headingInput.value, context);
+            if (this.checked && headingInput && headingInput.value) {
+                await updateHeroText(headingId, headingInput.value, context);
             }
         });
     }
 
     // Initialize subheading checkbox
-    if (elements.showSubheadingCheckbox) {
-        elements.showSubheadingCheckbox.checked = elements.showSubheadingCheckbox.dataset.initialState === 'true';
+    if (showSubheading) {
+        showSubheading.checked = showSubheading.dataset.initialState === 'true';
         
-        elements.showSubheadingCheckbox.addEventListener('change', async function() {
-            if (elements.subheadingInput) {
-                elements.subheadingInput.disabled = !this.checked;
+        showSubheading.addEventListener('change', async function() {
+            if (subheadingInput) {
+                subheadingInput.disabled = !this.checked;
             }
-            await updateHeroText('show-hero-subheading', this.checked, context);
+            await updateHeroText(showSubheadingId, this.checked, context);
             
-            if (this.checked && elements.subheadingInput && elements.subheadingInput.value) {
-                await updateHeroText('hero-subheading', elements.subheadingInput.value, context);
+            if (this.checked && subheadingInput && subheadingInput.value) {
+                await updateHeroText(subheadingId, subheadingInput.value, context);
             }
         });
     }
 
     // Initialize text inputs with debounce
-    [elements.headingInput, elements.subheadingInput].forEach(input => {
+    [headingInput, subheadingInput].forEach(input => {
         if (input) {
             input.addEventListener('input', debounce(async function() {
                 await updateHeroText(this.id, this.value, context);
@@ -63,8 +57,20 @@ export function initializeTextInputs(context) {
     });
 }
 
+export function initializeTextInputs(context) {
+    // Initialize all banners
+    initializeBannerText('hero', context);
+    initializeBannerText('hero_banner_2', context);
+    initializeBannerText('hero_banner_3', context);
+}
+
 export async function updateHeroText(field, value, context) {
     console.log(`Attempting to update ${field} to:`, value);
+    console.log('Full payload:', {
+        field: field,
+        value: value,
+        page_type: context.pageSelector.value
+    });
     try {
         const response = await fetch(`/${context.business_subdirectory}/update-hero/`, {
             method: 'POST',
