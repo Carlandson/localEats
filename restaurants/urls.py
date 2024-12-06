@@ -44,4 +44,5 @@ urlpatterns = [
     path('<str:business_subdirectory>/page-content/<str:page_type>/', views.page_content, name='page_content'),
     path('<str:business_subdirectory>/layout-editor/', views.layout_editor, name='layout_editor'),
     path('<str:business_subdirectory>/update-brand-colors/', views.update_brand_colors, name='update_brand_colors'),
+    path('<str:business_subdirectory>/preview-component/', views.preview_component, name='preview_component'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

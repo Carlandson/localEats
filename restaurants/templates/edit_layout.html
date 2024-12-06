@@ -6,24 +6,53 @@
 {{ business_subdirectory|json_script:"business" }}
 <div class="flex h-screen overflow-hidden">
     <!-- Left Sidebar - Editor Panel -->
-    <div class="w-80 bg-white shadow-lg overflow-y-auto border-r flex-shrink-0">
+    <div class="w-80 bg-white shadow-lg overflow-y-auto border-r flex-shrink-0 p-2">
         <div class="p-6">
             <h1 class="text-2xl font-bold mb-6">Layout Editor</h1>
-            
-            <!-- Page Selector -->
-            <div class="mb-6">
-                <select id="page-selector" class="form-select w-full rounded-md border-gray-300">
-                    {% for page_type, page_data in subpages.items %}
-                        <option value="{{ page_type }}" {% if current_page == page_type %}selected{% endif %}>
-                            {{ page_type|title }} Page
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
+            <!-- Page Selector and Publish Toggle Container -->
+            <div class="flex flex-col gap-4 mb-6">
+                <!-- Page Selector -->
+                <div class="flex items-center">
+                    <span class="text-sm font-medium text-gray-700 w-24">Page Type</span>
+                    <select id="page-selector" class="form-select flex-1 rounded-md border-gray-300 px-2">
+                        {% for page_type, page_data in subpages.items %}
+                            <option value="{{ page_type }}" {% if current_page == page_type %}selected{% endif %} class="px-2">
+                                {{ page_type|title }} Page
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <!-- Editor Options -->
-            {% include "components/layout_editor.html" %}
+                <!-- Publish Toggle -->
+                <div class="flex items-center">
+                    <span class="text-sm font-medium text-gray-700 w-24">Status</span>
+                    <label class="group relative flex h-10 w-48 cursor-pointer select-none rounded-full bg-gray-200">
+                        <input type="checkbox" 
+                               id="publish-toggle"
+                               class="peer hidden" 
+                               data-page-type="{{ current_page }}"
+                               {% if subpage.is_published %}checked{% endif %}>
+                        <div class="absolute left-0 z-10 h-full w-24 rounded-full bg-blue-600 transition-all duration-300
+                                    shadow-lg group-hover:shadow-xl
+                                    peer-checked:translate-x-24">
+                        </div>
+                        <span class="relative z-20 flex h-full w-24 items-center justify-center text-sm font-bold 
+                                     text-white transition-colors duration-300
+                                     peer-checked:text-gray-700">
+                            Draft
+                        </span>
+                        <span class="relative z-20 flex h-full w-24 items-center justify-center text-sm font-bold 
+                                     text-gray-700 transition-colors duration-300
+                                     peer-checked:text-white">
+                            Published
+                        </span>
+                    </label>
+                </div>
+            </div>
         </div>
+        
+            <!-- Editor Options -->
+            {% include "components/layout_editor.html" %}   
     </div>
 
     <!-- Right Content Area - Preview -->

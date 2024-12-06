@@ -22,7 +22,7 @@ export async function updateHeroText(field, value, context) {
 
         const data = await response.json();
         if (data.success) {
-            await updatePreview(context.pageSelector.value, context);
+            await updatePreview(context.pageSelector.value, context, false);
         } else {
             throw new Error(data.error || 'Update failed');
         }

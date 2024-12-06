@@ -1,8 +1,7 @@
-import { createSliderControls } from './sliderControls.js';
-
 export function initializeSlider() {
     let currentSlide = 0;
     let slideInterval;
+    let isPlaying = false;
 
     function setup() {
         // Get only slides that contain images
@@ -18,25 +17,7 @@ export function initializeSlider() {
             return null;
         }
 
-        // Move icon update to a separate function
-        function updateIcons(playing) {
-            const pauseIcon = pausePlayButton?.querySelector('.pause-icon');
-            const playIcon = pausePlayButton?.querySelector('.play-icon');
-            
-            console.log('Updating icons:', { playing, pauseIcon, playIcon });
-            
-            if (playing) {
-                pauseIcon?.classList.remove('hidden');
-                playIcon?.classList.add('hidden');
-            } else {
-                pauseIcon?.classList.add('hidden');
-                playIcon?.classList.remove('hidden');
-            }
-        }
-
-        function showSlide(index) {
-            console.log('Showing slide:', index);
-            // Hide all slides first
+        function showSlide(index) {            // Hide all slides first
             allSlides.forEach(slide => {
                 slide.style.opacity = '0';
                 slide.style.pointerEvents = 'none';
@@ -62,40 +43,81 @@ export function initializeSlider() {
         }
 
         function nextSlide() {
-            console.log('Next slide clicked, current:', currentSlide, 'total:', slides.length);
             const nextIndex = (currentSlide + 1) % slides.length;
             showSlide(nextIndex);
         }
 
         function prevSlide() {
-            console.log('Previous slide clicked, current:', currentSlide, 'total:', slides.length);
             const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
             showSlide(prevIndex);
         }
 
-        const controls = createSliderControls(slideInterval, nextSlide);
+        function updateIcons(playing) {
+            const pauseIcon = document.querySelector('#pause-play-slider .pause-icon');
+            const playIcon = document.querySelector('#pause-play-slider .play-icon');
+            
+            if (playing) {
+                pauseIcon?.classList.remove('hidden');
+                playIcon?.classList.add('hidden');
+            } else {
+                pauseIcon?.classList.add('hidden');
+                playIcon?.classList.remove('hidden');
+            }
+        }
 
-        // Add event listeners with error checking
+        function startAutoSlide() {
+            if (slideInterval) clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 5000);
+            isPlaying = true;
+            updateIcons(true);
+        }
+
+        function stopAutoSlide() {
+            if (slideInterval) {
+                clearInterval(slideInterval);
+                slideInterval = null;
+            }
+            isPlaying = false;
+            updateIcons(false);
+        }
+
+        function handleSlideChange(direction) {
+            if (direction === 'next') {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+            
+            // Reset the interval if playing
+            if (isPlaying) {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 5000);
+            }
+        }
+
+        // Add event listeners
         if (prevButton) {
             prevButton.addEventListener('click', (e) => {
                 e.preventDefault();
-                nextSlide();
-                restartAutoSlide();
+                handleSlideChange('prev');
             });
         }
 
         if (nextButton) {
             nextButton.addEventListener('click', (e) => {
                 e.preventDefault();
-                prevSlide();
-                restartAutoSlide();
+                handleSlideChange('next');
             });
         }
 
         if (pausePlayButton) {
             pausePlayButton.addEventListener('click', (e) => {
                 e.preventDefault();
-                controls.toggle();
+                if (isPlaying) {
+                    stopAutoSlide();
+                } else {
+                    startAutoSlide();
+                }
             });
         }
 
@@ -104,7 +126,10 @@ export function initializeSlider() {
                 dot.addEventListener('click', (e) => {
                     e.preventDefault();
                     showSlide(index);
-                    restartAutoSlide();
+                    if (isPlaying) {
+                        clearInterval(slideInterval);
+                        slideInterval = setInterval(nextSlide, 5000);
+                    }
                 });
                 dot.style.display = 'block';
             } else {
@@ -112,16 +137,9 @@ export function initializeSlider() {
             }
         });
 
-        function restartAutoSlide() {
-            if (slideInterval && isPlaying) {
-                clearInterval(slideInterval);
-                slideInterval = setInterval(nextSlide, 5000);
-            }
-        }
-
-        // Show initial slide
+        // Initialize slider
         showSlide(0);
-        controls.start();  
+        startAutoSlide();
     }
 
     return {

@@ -3,10 +3,13 @@
     {% if hero_image %}
         <img src="{{ hero_image.image.url }}" 
              alt="{{ hero_image.alt_text }}"
-             class="w-full h-screen object-cover">
+             class="w-full h-screen object-cover"
+             style="height: {% if subpage.hero_size == 'full-screen' %}100vh{% else %}50vh{% endif %}">
+             
     {% else %}
         <!-- Optional: Default/placeholder state -->
-        <div class="w-full h-screen bg-gray-100 flex items-center justify-center">
+        <div class="w-full h-screen bg-gray-100 flex items-center justify-center"
+            style="height: {% if subpage.hero_size == 'full-screen' %}100vh{% else %}50vh{% endif %}">
             <p class="text-gray-500">No hero image set</p>
         </div>
     {% endif %}

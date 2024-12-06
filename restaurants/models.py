@@ -233,6 +233,7 @@ class SubPage(models.Model):
         ('gallery', 'Gallery'),
         ('contact', 'Contact'),
     ]
+    
     page_type = models.CharField(max_length=10, choices=PAGE_TYPES)
 
     HERO_CHOICES = [
@@ -253,10 +254,19 @@ class SubPage(models.Model):
         default='full-image'
     )
         # Hero Text Content
+    HERO_SIZE_CHOICES = [
+        ('full-screen', 'Full Screen'),
+        ('half-screen', 'Half Screen'),
+    ]
+    hero_size = models.CharField(max_length=20, default='full-width', choices=HERO_SIZE_CHOICES)
     hero_heading = models.CharField(max_length=200, blank=True)
     hero_subheading = models.TextField(blank=True)
     hero_button_text = models.CharField(max_length=50, blank=True)
     hero_button_link = models.CharField(max_length=200, blank=True)
+    hero_button_bg_color = models.CharField(max_length=7, default='#3B82F6')  # Hex color
+    hero_button_text_color = models.CharField(max_length=7, default='#FFFFFF')  # Hex color
+    hero_button_size = models.CharField(max_length=20, default='md')
+    show_hero_button = models.BooleanField(default=False)
     hero_text_align = models.CharField(max_length=10, choices=TEXT_ALIGN_CHOICES, default='left')
     hero_heading_color = models.CharField(max_length=7, default='#000000')  # Hex color
     hero_subheading_color = models.CharField(max_length=7, default='#6B7280')  # Hex color
@@ -279,6 +289,10 @@ class SubPage(models.Model):
     banner_2_text_align = models.CharField(max_length=10, choices=TEXT_ALIGN_CHOICES, default='left')
     banner_2_button_text = models.CharField(max_length=50, blank=True)
     banner_2_button_link = models.CharField(max_length=200, blank=True)
+    banner_2_button_bg_color = models.CharField(max_length=7, default='#3B82F6')  # Hex color
+    banner_2_button_text_color = models.CharField(max_length=7, default='#FFFFFF')  # Hex color
+    banner_2_button_size = models.CharField(max_length=20, default='md')
+    show_banner_2_button = models.BooleanField(default=False)
     show_banner_3_heading = models.BooleanField(default=True)
     banner_3_heading = models.CharField(max_length=200, blank=True)
     banner_3_heading_font = models.CharField(max_length=100, default='Inter')
@@ -292,6 +306,10 @@ class SubPage(models.Model):
     banner_3_text_align = models.CharField(max_length=10, choices=TEXT_ALIGN_CHOICES, default='left')
     banner_3_button_text = models.CharField(max_length=50, blank=True)
     banner_3_button_link = models.CharField(max_length=200, blank=True)
+    banner_3_button_bg_color = models.CharField(max_length=7, default='#3B82F6')  # Hex color
+    banner_3_button_text_color = models.CharField(max_length=7, default='#FFFFFF')  # Hex color
+    banner_3_button_size = models.CharField(max_length=20, default='md')
+    show_banner_3_button = models.BooleanField(default=False)
 
     def get_hero_primary(self):
         """Get the hero image for this subpage"""

@@ -1,7 +1,7 @@
 import { debounce } from '../utils/debounce.js';
 import { displayError } from '../utils/errors.js';
 import { getCookie } from '../utils/cookies.js';
-import { updatePreview } from '../utils/previewUpdates.js';
+import { updatePreview, updateComponentPreview } from '../utils/previewUpdates.js';
 
 function initializeBannerText(prefix, context) {
     const showHeadingId = `show_${prefix}_heading`;
@@ -94,7 +94,9 @@ export async function updateHeroText(field, value, context) {
         const data = await response.json();
         console.log('Update response:', data);
         if (data.success) {
-            await updatePreview(context.pageSelector.value, context);
+            console.log('Updating component preview');
+            await updatePreview(context.pageSelector.value, context, false);
+            // await updateComponentPreview(field, value, context, false);
         } else {
             throw new Error(data.error || 'Update failed');
         }

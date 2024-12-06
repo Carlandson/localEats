@@ -29,6 +29,8 @@ module.exports = {
   },
   plugins: [],
   safelist: [
+    'h-[50vh]',
+    'h-64 sm:h-80 md:h-96 lg:h-[600px]',
     {
       pattern: /bg-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(50|100|200|300|400|500|600|700|800|900)/,
     },

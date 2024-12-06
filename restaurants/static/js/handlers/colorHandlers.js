@@ -34,13 +34,13 @@ export function initializeColorHandlers(context) {
         if (element) {
             element.addEventListener('input', debounce(async function() {
                 try {
-                    const field = id.replace(/-/g, '_');
-                    await updateHeroText(field, this.value, context);
+                    await updateHeroText(id, this.value, context);
                 } catch (error) {
-                    console.error(`Error updating ${id}:`, error);
                     displayError(`Failed to update ${id.replace(/-/g, ' ')}`);
                 }
             }, 100));
+        } else {
+            console.warn(`Failed to find element: ${id}`);
         }
     });
 }
@@ -65,7 +65,7 @@ async function handleBrandColorChange(colorType, value, context) {
 
         const data = await response.json();
         if (data.success) {
-            await updatePreview(context.pageSelector.value, context);
+            await updatePreview(context.pageSelector.value, context, false);
         } else {
             throw new Error(data.error || 'Update failed');
         }

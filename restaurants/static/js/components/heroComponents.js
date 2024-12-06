@@ -6,16 +6,11 @@ const slider = initializeSlider();
 export function handleBannerSliderVisibility(layoutStyle) {
     const bannerSliderContainer = document.getElementById('banner-slider-images');
     if (!bannerSliderContainer) return;
-    
-    console.log('Handling banner slider visibility:', layoutStyle);
-    
     if (layoutStyle === 'banner-slider') {
-        console.log('Displaying banner slider');
         bannerSliderContainer.style.display = 'block';
         
         // Initialize slider
         if (!sliderInstance) {
-            console.log('Initializing slider');
             sliderInstance = slider.init();
             if (sliderInstance) {
                 sliderInstance.start();
@@ -72,3 +67,10 @@ export function reinitializeSlider() {
         sliderInstance.start();
     }
 }
+
+export function handleBannerButtonVisibility(layoutStyle) {
+    const bannerButtonContainer = document.getElementById('banner-button-container');
+    if (!bannerButtonContainer) return;
+    bannerButtonContainer.style.display = layoutStyle === 'banner-slider' ? 'block' : 'none';
+}
+

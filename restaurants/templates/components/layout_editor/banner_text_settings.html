@@ -87,3 +87,65 @@
         </div>
     </div>
 </div>
+<div id="banner-button-editor">
+    <!-- Button Settings -->
+    <div class="space-y-4 pb-4">
+        <div class="flex items-center justify-between mb-4">
+            <label class="block text-sm font-bold text-gray-700">Button</label>
+            <label class="inline-flex items-center">
+                <input type="checkbox" id="show_{{ prefix }}_button" class="form-checkbox" data-initial-state="{{ show_button|lower }}" {% if show_button %}checked{% endif %}>
+                <span class="ml-2 text-sm text-gray-600">Show Button</span>
+            </label>
+        </div>
+
+        <div class="space-y-4">
+            <!-- Button Text -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Button Text</label>
+                <input type="text" id="{{ prefix }}_button_text" value="{{ button_text }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="Enter button text">
+            </div>
+
+            <!-- Button Link -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Button Link</label>
+                {% if available_pages %}
+                    <select 
+                        id="{{ prefix }}_button_link" 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        data-prefix="{{ prefix }}"
+                    >
+                        <option value="">Select a page</option>
+                        {% for page in available_pages %}
+                            <option value="/{{ business_subdirectory }}/{{ page.page_type }}/" 
+                                    {% if button_link == '/business_subdirectory/page.page_type/' %}selected{% endif %}>
+                                {{ page.title|default:page.page_type|title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    <p class="mt-1 text-sm text-gray-500">No other published pages available</p>
+                {% endif %}
+            </div>
+
+            <!-- Button Styles -->
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Button Color</label>
+                    <input type="color" id="{{ prefix }}_button_bg_color" value="{{ button_bg_color|default:'#3B82F6' }}" class="mt-1 block w-full h-10 rounded-md border-gray-300">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Text Color</label>
+                    <input type="color" id="{{ prefix }}_button_text_color" value="{{ button_text_color|default:'#FFFFFF' }}" class="mt-1 block w-full h-10 rounded-md border-gray-300">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Button Size</label>
+                    <select id="{{ prefix }}_button_size" class="mt-1 block w-full rounded-md border-gray-300">
+                        <option value="sm" {% if button_size == 'sm' %}selected{% endif %}>Small</option>
+                        <option value="md" {% if button_size == 'md' %}selected{% endif %}>Medium</option>
+                        <option value="lg" {% if button_size == 'lg' %}selected{% endif %}>Large</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

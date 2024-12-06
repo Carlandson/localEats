@@ -22,17 +22,13 @@ function getFontElements() {
 }
 
 export function initializeFontHandlers(context) {
-    console.log('Initializing font handlers');
-    
     const elements = getFontElements();
 
     if (elements.mainFontSelect) {
-        console.log('Attaching event listener to main font selector');
         elements.mainFontSelect.addEventListener('change', async function() {
             try {
-                console.log('Main font changed to:', this.value);
                 await updateGlobalComponent('main_font', this.value, context);
-                await updatePreview(context.pageSelector.value, context);
+                await updatePreview(context.pageSelector.value, context, false);
             } catch (error) {
                 console.error('Error updating main font:', error);
                 displayError('Failed to update main font');
@@ -53,8 +49,6 @@ export function initializeFontHandlers(context) {
     const fontSelectors = document.querySelectorAll('select[id$="_heading_font"], select[id$="_subheading_font"], select[id$="_heading_size"], select[id$="_subheading_size"]');
     
     fontSelectors.forEach(selector => {
-        console.log('Found selector:', selector.id);
-        
         selector.addEventListener('change', async function() {
             try {
                 const idParts = this.id.split('_');
@@ -74,19 +68,8 @@ export function initializeFontHandlers(context) {
                     (isSize ? 'subheading_size' : 'subheading_font') : 
                     (isSize ? 'heading_size' : 'heading_font');
                 const field = `${prefix}_${fieldType}`;
-                
-                console.log('Font/Size changed:', {
-                    element: this.id,
-                    field: field,
-                    value: this.value,
-                    prefix: prefix,
-                    fieldType: fieldType
-                });
-
                 await updateHeroText(field, this.value, context);
-                await updatePreview(context.pageSelector.value, context);
             } catch (error) {
-                console.error('Error updating font/size:', error);
                 displayError(`Failed to update ${this.id.includes('size') ? 'size' : 'font'}`);
             }
         });

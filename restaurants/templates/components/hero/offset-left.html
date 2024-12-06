@@ -1,5 +1,7 @@
 <div class="relative bg-white">
-    <div class="lg:grid lg:grid-cols-2 min-h-[800px]">
+    <div class="lg:grid lg:grid-cols-2 min-h-[800px]"
+        style="min-height: {% if subpage.hero_size == 'full-screen' %}100vh{% else %}50vh{% endif %}">
+
         <!-- Image Content (Left Side) -->
         <div class="h-64 lg:h-full">
             {% if hero_image %}

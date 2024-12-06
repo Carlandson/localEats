@@ -1031,6 +1031,7 @@ def edit_layout(request, business_subdirectory):
             'subheading_sizes': get_font_sizes('subheading'),
             'show_hero_heading': current_subpage.show_hero_heading,
             'show_hero_subheading': current_subpage.show_hero_subheading,
+            'hero_size_choices': SubPage.HERO_SIZE_CHOICES,
         }
         
         return render(request, "edit_layout.html", context)
@@ -1122,6 +1123,8 @@ def get_page_data(request, business_subdirectory, page_type):
             'hero_heading_color': subpage.hero_heading_color,
             'hero_subheading_color': subpage.hero_subheading_color,
             'hero_button_link': subpage.hero_button_link,
+            'hero_size': subpage.hero_size,
+            'is_published': subpage.is_published,
             'images': {
                 'hero_primary': {
                     'url': hero_primary.image.url if hero_primary else None,
@@ -1174,41 +1177,73 @@ def get_page_data(request, business_subdirectory, page_type):
         return JsonResponse({'error': str(e)}, status=500)
         
 @login_required
-def preview_component(request, business_subdirectory, component, style):
+def preview_component(request, business_subdirectory):
     try:
-        print(f"Previewing component: {component} with style: {style}")  # Debug log
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
-        
         if request.user != business.owner:
             return HttpResponseForbidden()
-        
+
+        # Get data from request
+        data = json.loads(request.body)
+        component = data.get('component')
+        value = data.get('value')
+        page_type = data.get('page_type', 'home')
+
+        # Get the subpage
+        subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
+
+        # Determine which template and context to use based on the component
         template_name = None
-        if component == 'navigation':
-            template_name = f"components/navigation/top-nav/{style}.html"
-        elif component == 'hero':
-            template_name = f"components/hero/{style}.html"
-        
-        print(f"Looking for template: {template_name}")  # Debug log
-        
         context = {
             'business_details': business,
+            'subpage': subpage,
             'business_subdirectory': business_subdirectory,
-            'menu_page': True,
-            'about_page': True,
-            'events_page': True,
-            'request': request,  # Add this for template context
         }
-        
+
+        # Handle different component types
+        if component.startswith('hero_'):
+            template_name = f"components/hero/{subpage.hero_layout}.html"
+            # Add hero-specific context if needed
+            context.update({
+                'hero_primary': subpage.get_hero_primary(),
+                'hero_banner_2': subpage.get_hero_banner_2(),
+                'hero_banner_3': subpage.get_hero_banner_3(),
+            })
+        elif component == 'navigation':
+            template_name = f"components/navigation/top-nav/{business.navigation_style}.html"
+            context.update({
+                'menu_page': True,
+                'about_page': True,
+                'events_page': True,
+            })
+        # Add more component types as needed
+
+        if not template_name:
+            return JsonResponse({
+                'success': False,
+                'error': f'Unknown component: {component}'
+            }, status=400)
+
         try:
             html = render_to_string(template_name, context)
-            return HttpResponse(html)
+            return JsonResponse({
+                'success': True,
+                'html': html,
+                'component': component
+            })
         except Exception as e:
-            print(f"Template rendering error: {str(e)}")  # Debug log
-            return HttpResponse(f"Error rendering template: {str(e)}", status=500)
-            
+            logger.error(f"Template rendering error: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'error': f'Template rendering error: {str(e)}'
+            }, status=500)
+
     except Exception as e:
-        print(f"View error: {str(e)}")  # Debug log
-        return HttpResponse(f"Server error: {str(e)}", status=500)
+        logger.error(f"Preview component error: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=500)
 
 
 @login_required
@@ -1298,23 +1333,40 @@ def update_global_component(request, business_subdirectory):
                 'choices': business.FOOTER_CHOICES,
                 'instance': business
             },
+            'hero_size': {
+                'model': SubPage,
+                'field': 'hero_size',
+                'choices': SubPage.HERO_SIZE_CHOICES,
+                'instance': SubPage.objects.get(business=business, page_type=page_type)
+            },
+            'is_published': {
+                'model': SubPage,
+                'field': 'is_published',
+                'instance': SubPage.objects.get(business=business, page_type=page_type)
+            },
+            
         }
 
         if component not in component_map:
             return JsonResponse({'error': f'Invalid component: {component}'}, status=400)
 
         component_info = component_map[component]
-        
-        # For main_font, we validate against the font values, not the display names
-        if component == 'main_font':
-            valid_styles = [font[0] for font in component_info['choices']]
-        else:
-            valid_styles = [choice[0] for choice in component_info['choices']]
 
-        if style not in valid_styles:
-            return JsonResponse({
-                'error': f'Invalid {component} style. Got "{style}", expected one of: {valid_styles}'
-            }, status=400)
+        if component == 'is_published':
+            if isinstance(style, str):
+                style = style.lower() == 'true'
+        else:
+            # Validate choices for all other components
+            if component == 'main_font':
+                valid_styles = [font[0] for font in component_info['choices']]
+            else:
+                valid_styles = [choice[0] for choice in component_info['choices']]
+
+            # Only validate non-boolean components
+            if style not in valid_styles:
+                return JsonResponse({
+                    'error': f'Invalid {component} style. Got "{style}", expected one of: {valid_styles}'
+                }, status=400)
 
         # Get the instance to update
         instance = component_info['instance']
@@ -1537,17 +1589,26 @@ def update_hero(request, business_subdirectory):
         
         # Map of frontend field names to model field names
         field_mapping = {
+            # hero fields
             'text_align': 'hero_text_align',
             'hero_heading': 'hero_heading',
             'hero_subheading': 'hero_subheading',
-            'hero_button_text': 'hero_button_text',
-            'hero_button_link': 'hero_button_link',
+            'hero_heading_font': 'hero_heading_font',
+            'hero_subheading_font': 'hero_subheading_font',
             'hero_heading_color': 'hero_heading_color',
             'hero_subheading_color': 'hero_subheading_color',
             'show_hero_heading': 'show_hero_heading',
             'show_hero_subheading': 'show_hero_subheading',
             'hero_layout': 'hero_layout',
-            # Banner 2 fields - updated to match model field names
+            'hero_size': 'hero_size',
+            'hero_button_text': 'hero_button_text',
+            # hero button fields
+            'hero_button_link': 'hero_button_link',
+            'show_hero_button': 'show_hero_button',
+            'hero_button_bg_color': 'hero_button_bg_color',
+            'hero_button_text_color': 'hero_button_text_color',
+            'hero_button_size': 'hero_button_size',
+            # Banner 2 fields
             'hero_banner_2_heading': 'banner_2_heading',
             'hero_banner_2_subheading': 'banner_2_subheading',
             'show_hero_banner_2_heading': 'show_banner_2_heading',
@@ -1559,9 +1620,14 @@ def update_hero(request, business_subdirectory):
             'hero_banner_2_subheading_size': 'banner_2_subheading_size',
             'hero_banner_2_subheading_color': 'banner_2_subheading_color',
             'hero_banner_2_text_align': 'banner_2_text_align',
+            # banner 2 button fields
             'hero_banner_2_button_text': 'banner_2_button_text',
             'hero_banner_2_button_link': 'banner_2_button_link',
-            # Banner 3 fields - updated to match model field names
+            'show_hero_banner_2_button': 'show_banner_2_button',
+            'hero_banner_2_button_bg_color': 'banner_2_button_bg_color',
+            'hero_banner_2_button_text_color': 'banner_2_button_text_color',
+            'hero_banner_2_button_size': 'banner_2_button_size',
+            # Banner 3 fields
             'hero_banner_3_heading': 'banner_3_heading',
             'hero_banner_3_subheading': 'banner_3_subheading',
             'show_hero_banner_3_heading': 'show_banner_3_heading',
@@ -1573,8 +1639,13 @@ def update_hero(request, business_subdirectory):
             'hero_banner_3_subheading_size': 'banner_3_subheading_size',
             'hero_banner_3_subheading_color': 'banner_3_subheading_color',
             'hero_banner_3_text_align': 'banner_3_text_align',
+            # banner 3 button fields
             'hero_banner_3_button_text': 'banner_3_button_text',
             'hero_banner_3_button_link': 'banner_3_button_link',
+            'show_hero_banner_3_button': 'show_banner_3_button',
+            'hero_banner_3_button_bg_color': 'banner_3_button_bg_color',
+            'hero_banner_3_button_text_color': 'banner_3_button_text_color',
+            'hero_banner_3_button_size': 'banner_3_button_size',
         }
         # Get the correct field name from the mapping
         model_field = field_mapping.get(field)
@@ -1598,6 +1669,15 @@ def update_hero(request, business_subdirectory):
         logger.error(f"Error in update_hero: {str(e)}")
         return JsonResponse({'success': False, 'error': str(e)})
     
+def get_published_subpages(business, current_page_type):
+    """Helper function to get published subpages excluding current page"""
+    return SubPage.objects.filter(
+        business=business,
+        is_published=True  # Assuming you have this field
+    ).exclude(
+        page_type=current_page_type
+    ).values('page_type', 'title')
+    
 @login_required
 def layout_editor(request, business_subdirectory):
     try:
@@ -1607,6 +1687,8 @@ def layout_editor(request, business_subdirectory):
 
         # Get current page type from query params or default to 'home'
         current_page = request.GET.get('page_type', 'home')
+        # Get available pages for the button links
+        available_pages = get_published_subpages(business, current_page)
 
         # Get all subpages for this Business
         subpages = {
@@ -1626,10 +1708,11 @@ def layout_editor(request, business_subdirectory):
             'business_subdirectory': business_subdirectory,
             'subpages': subpages,
             'subpage': subpage,
-            'current_page': current_page,  # This is your page_type
-            'page_type': current_page,     # Add this explicitly
+            'current_page': current_page,
+            'page_type': current_page,    
             'hero_choices': SubPage.HERO_CHOICES,
             'nav_styles': business.NAV_CHOICES,
+            'available_pages': available_pages,
         }
 
         logger.debug(f"Layout editor context: {context}")

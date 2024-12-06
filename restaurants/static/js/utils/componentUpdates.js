@@ -27,7 +27,7 @@ export async function updateGlobalComponent(component, value, context) {
         }
 
         // Optionally update preview after component change
-        await updatePreview(context.pageSelector.value, context);
+        await updatePreview(context.pageSelector.value, context, false);
     } catch (error) {
         console.error('Error updating component:', error);
         displayError(`Failed to update ${component.replace('_', ' ')}`);

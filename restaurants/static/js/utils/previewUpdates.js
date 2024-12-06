@@ -1,10 +1,8 @@
 import { getCookie } from './cookies.js';
 import { displayError } from './errors.js';
-import { reinitializeSlider } from '../components/heroComponents.js';
+import { reinitializeSlider, handleBannerSliderVisibility } from '../components/heroComponents.js';
 
-export async function updatePreview(pageType, context) {
-    console.log('updatePreview called with:', { pageType, context });
-
+export async function updatePreview(pageType, context, isInitialLoad = false) {
     if (!pageType || !context?.business_subdirectory) {
         console.error('Missing required parameters:', { pageType, context });
         throw new Error('Missing required parameters for preview update');
@@ -12,7 +10,6 @@ export async function updatePreview(pageType, context) {
 
     try {
         const url = `/${context.business_subdirectory}/preview-page/${pageType}/`;
-        console.log('Fetching preview from:', url);
 
         const response = await fetch(url, {
             headers: {
@@ -46,10 +43,13 @@ export async function updatePreview(pageType, context) {
         previewContainer.innerHTML = html;
         
         const sliderContainer = previewContainer.querySelector('.slider-container');
-        if (sliderContainer) {
-            console.log('Banner slider detected, initializing...');
+        if (sliderContainer && !isInitialLoad) {
+            handleBannerSliderVisibility('banner-slider');
+        }
+        else {
             reinitializeSlider();
         }
+
         return true;
 
     } catch (error) {
@@ -88,6 +88,32 @@ export async function updateComponentPreview(component, value, context) {
         if (!data.success) {
             throw new Error(data.error || 'Component preview update failed');
         }
+
+        // Find all elements that might contain this component's content
+        const componentElements = document.querySelectorAll(`[data-component="${component}"]`);
+        componentElements.forEach(element => {
+            // Preserve the element's attributes and only update its text content
+            if (data.text) {
+                // Keep the element's HTML structure but update text
+                const currentHTML = element.innerHTML;
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = currentHTML;
+                
+                // Find the text node and update it
+                const textNodes = Array.from(wrapper.childNodes).filter(node => 
+                    node.nodeType === Node.TEXT_NODE
+                );
+                if (textNodes.length > 0) {
+                    textNodes[0].textContent = data.text;
+                } else {
+                    // If no text node exists, create one
+                    element.textContent = data.text;
+                }
+            } else if (value) {
+                element.textContent = value;
+            }
+        });
+
     } catch (error) {
         console.error('Error updating component preview:', error);
         displayError('Failed to update component preview');

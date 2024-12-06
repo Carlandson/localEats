@@ -4,14 +4,17 @@ import { getCookie } from './utils/cookies.js';
 import { createHeroImageHTML, createUploadPlaceholderHTML } from './utils/placeholders.js';
 import { initializeImageUploads, removeHeroImage } from './handlers/imageHandlers.js';
 import { initializeTextInputs } from './handlers/textHandlers.js';
-import { handleBannerSliderVisibility, reinitializeSlider } from './components/heroComponents.js';
+import { initializeHeroSizeHandler } from './handlers/sizeHandlers.js';
 import { initializeColorHandlers } from './handlers/colorHandlers.js';
 import { updatePreview } from './utils/previewUpdates.js';
 import { initializeFontHandlers } from './handlers/fontHandlers.js';
 import { initializeLayoutHandlers } from './handlers/layoutHandlers.js';
 import { initializeAlignmentHandlers } from './handlers/alignmentHandlers.js';
+import { initializeHeroLayoutListener, initializeBannerButtonEditors } from './handlers/buttonHandlers.js';
+import { handleBannerSliderVisibility } from './components/heroComponents.js';
+import { initializePublishToggle } from './handlers/publishHandlers.js';
 
-function initializeEditor() {
+async function initializeEditor() {
     try {
         // Get required elements
         const businessElement = document.getElementById('business');
@@ -27,31 +30,29 @@ function initializeEditor() {
             business_subdirectory: JSON.parse(businessElement.textContent),
             pageSelector: pageSelectorElement
         };
-
         console.log('Initializing editor with context:', context);
-
         // Initialize all handlers
         try {
+            await loadPageData(context.pageSelector.value, context);
+            initializePublishToggle(context);
+            initializeHeroLayoutListener();
+            initializeBannerButtonEditors(context);
             initializeLayoutHandlers(context);
             initializeColorHandlers(context);
             initializeImageUploads(context);
             initializeTextInputs(context);
             initializeFontHandlers(context);
             initializeAlignmentHandlers(context);
+            initializeHeroSizeHandler(context);
+            context.pageSelector.addEventListener('change', function() {
+                loadPageData(this.value, context);
+            });
 
         } catch (handlerError) {
             console.error('Error initializing handlers:', handlerError);
             displayError('Failed to initialize editor components');
             throw handlerError;
         }
-
-        // Initialize page data
-        loadPageData(context.pageSelector.value, context);
-
-        // Add page selector change listener
-        context.pageSelector.addEventListener('change', function() {
-            loadPageData(this.value, context);
-        });
 
         return context;
     } catch (error) {
@@ -68,12 +69,10 @@ async function loadPageData(pageType, context) {
         
         const data = await response.json();
         updateFormValues(data);
-        await updatePreview(pageType, context);
-        
-        // Initialize slider after preview is updated
         if (data.hero_layout === 'banner-slider') {
-            reinitializeSlider();
+            handleBannerSliderVisibility('banner-slider');
         }
+        await updatePreview(pageType, context, true);
         
     } catch (error) {
         console.error('Error loading page data:', error);
@@ -83,12 +82,6 @@ async function loadPageData(pageType, context) {
 
 function updateFormValues(data) {
     try {
-        // Handle banner slider visibility
-        if (data.hero_layout === 'banner-slider') {
-            handleBannerSliderVisibility('banner-slider');
-            reinitializeSlider();
-        }
-
         // Update text fields
         const textFields = {
             'hero_heading': data.hero_heading || '',
@@ -115,9 +108,6 @@ function updateFormValues(data) {
             'hero-text-color': data.hero_text_color || '#000000',
             'hero-subtext-color': data.hero_subtext_color || '#6B7280'
         };
-        if (data.hero_layout === 'banner-slider') {
-            handleBannerSliderVisibility('banner-slider');
-        }
 
         Object.entries(colorInputs).forEach(([id, value]) => {
             const element = document.getElementById(id);
@@ -130,9 +120,9 @@ function updateFormValues(data) {
 }
 
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     try {
-        initializeEditor();
+        await initializeEditor();
         console.log('Editor initialized successfully');
     } catch (error) {
         console.error('Failed to initialize editor:', error);

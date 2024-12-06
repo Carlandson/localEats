@@ -3,14 +3,14 @@
 
 <div class="hero-section relative">
     <!-- Slider container -->
-    <div class="slider-container relative w-full h-screen overflow-hidden">
+    <div class="slider-container relative w-full overflow-hidden"
+        style="height: {% if subpage.hero_size == 'full-screen' %}100vh{% else %}50vh{% endif %}">
         <!-- First Slide -->
         {% if hero_primary %}
         <div class="slide absolute w-full h-full transition-opacity duration-500">
             <img src="{{ hero_primary.image.url }}" 
                  alt="{{ hero_primary.alt_text }}"
                  class="w-full h-screen object-cover">
-            
             <!-- Hero content overlay -->
             <div class="absolute inset-0 flex items-center">
                 <div class="w-full px-4 sm:px-6 lg:px-16 xl:px-24">
@@ -19,7 +19,7 @@
                                 {% if subpage.hero_text_align == 'center' %}mx-auto{% endif %}
                                 {% if subpage.hero_text_align != 'right' %}max-w-prose{% endif %}">
                         {% if subpage.show_hero_heading %}
-                        <h1 class="{{ subpage.hero_heading_size }} font-bold tracking-tight text-{{ subpage.hero_text_align }}"
+                        <h1 class="{{ subpage.hero_heading_size }} font-bold tracking-tight text-{{ subpage.hero_text_align }}" data-component="hero_heading"
                             style="font-family: {{ subpage.hero_heading_font }}; {% if subpage.hero_heading_color %}color: {{ subpage.hero_heading_color|safe }}{% endif %}">
                             {{ subpage.hero_heading|default:subpage.title }}
                         </h1>
@@ -30,6 +30,21 @@
                             style="font-family: {{ subpage.hero_subheading_font }}; {% if subpage.hero_subheading_color %}color: {{ subpage.hero_subheading_color|safe }}{% endif %}">
                             {{ subpage.hero_subheading }}
                         </p>
+                        {% endif %}
+                        {% if subpage.show_hero_button %}
+                        <div class="hero-button-container">
+                            <a  
+                                class="hero-button inline-flex items-center justify-center rounded-md 
+                                       {% if subpage.hero_button_size == 'sm' %}text-sm px-3 py-1{% endif %}
+                                       {% if subpage.hero_button_size == 'md' %}text-base px-4 py-2{% endif %}
+                                       {% if subpage.hero_button_size == 'lg' %}text-lg px-6 py-3{% endif %}"
+                                style="background-color: {{ subpage.hero_button_bg_color|default:'#3B82F6' }}; 
+                                       color: {{ subpage.hero_button_text_color|default:'#FFFFFF' }};"
+                                href="{{ subpage.hero_button_link|default:'#' }}"
+                            >
+                                {{ subpage.hero_button_text|default:'Button' }}
+                            </a>
+                        </div>
                         {% endif %}
                     </div>
                 </div>
@@ -64,6 +79,22 @@
                                     {{ subpage.banner_2_subheading }}
                                 </p>
                                 {% endif %}
+
+                                {% if subpage.show_banner_2_button %}
+                                <div class="banner_2-button-container">
+                                    <a  
+                                        class="banner_2-button inline-flex items-center justify-center rounded-md 
+                                               {% if subpage.banner_2_button_size == 'sm' %}text-sm px-3 py-1{% endif %}
+                                               {% if subpage.banner_2_button_size == 'md' %}text-base px-4 py-2{% endif %}
+                                               {% if subpage.banner_2_button_size == 'lg' %}text-lg px-6 py-3{% endif %}"
+                                        style="background-color: {{ subpage.banner_2_button_bg_color|default:'#3B82F6' }}; 
+                                               color: {{ subpage.banner_2_button_text_color|default:'#FFFFFF' }};"
+                                        href="{{ subpage.banner_2_button_link|default:'#' }}"
+                                    >
+                                        {{ subpage.banner_2_button_text|default:'Button' }}
+                                    </a>
+                                </div>
+                                {% endif %}
                     </div>
                 </div>
             </div>
@@ -96,6 +127,21 @@
                                     style="font-family: {{ subpage.banner_3_subheading_font }}; {% if subpage.banner_3_subheading_color %}color: {{ subpage.banner_3_subheading_color|safe }}{% endif %}">
                                     {{ subpage.banner_3_subheading }}
                                 </p>
+                                {% endif %}
+                                {% if subpage.show_banner_3_button %}
+                                <div class="_banner_3-button-container">
+                                    <a  
+                                        class="banner_3-button inline-flex items-center justify-center rounded-md 
+                                               {% if subpage.banner_3_button_size == 'sm' %}text-sm px-3 py-1{% endif %}
+                                               {% if subpage.banner_3_button_size == 'md' %}text-base px-4 py-3{% endif %}
+                                               {% if subpage.banner_3_button_size == 'lg' %}text-lg px-6 py-3{% endif %}"
+                                        style="background-color: {{ subpage.banner_3_button_bg_color|default:'#3B83F6' }}; 
+                                               color: {{ subpage.banner_3_button_text_color|default:'#FFFFFF' }};"
+                                        href="{{ subpage.banner_3_button_link|default:'#' }}"
+                                    >
+                                        {{ subpage.banner_3_button_text|default:'Button' }}
+                                    </a>
+                                </div>
                                 {% endif %}
                     </div>
                 </div>
@@ -136,7 +182,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Arrow Navigation -->
             <button class="absolute left-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/50 hover:bg-white/75 transition-colors duration-200" 
                 id="prev-slide" 
