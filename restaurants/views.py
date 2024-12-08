@@ -1592,7 +1592,9 @@ def update_hero(request, business_subdirectory):
             # hero fields
             'text_align': 'hero_text_align',
             'hero_heading': 'hero_heading',
+            'hero_heading_size': 'hero_heading_size',
             'hero_subheading': 'hero_subheading',
+            'hero_subheading_size': 'hero_subheading_size',
             'hero_heading_font': 'hero_heading_font',
             'hero_subheading_font': 'hero_subheading_font',
             'hero_heading_color': 'hero_heading_color',

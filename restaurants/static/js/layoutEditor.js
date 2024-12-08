@@ -105,13 +105,22 @@ function updateFormValues(data) {
 
         // Update colors
         const colorInputs = {
-            'hero-text-color': data.hero_text_color || '#000000',
-            'hero-subtext-color': data.hero_subtext_color || '#6B7280'
+            'hero_heading_color': data.hero_heading_color || '#000000',
+            'hero_subheading_color': data.hero_subheading_color || '#6B7280',
+            'hero_banner_2_heading_color': data.hero_banner_2_heading_color || '#000000',  // Changed from banner_2_heading_color
+            'hero_banner_2_subheading_color': data.hero_banner_2_subheading_color || '#6B7280',  // Changed from banner_2_subheading_color
+            'hero_banner_3_heading_color': data.hero_banner_3_heading_color || '#000000',  // Changed from banner_3_heading_color
+            'hero_banner_3_subheading_color': data.hero_banner_3_subheading_color || '#6B7280'  // Changed from banner_3_subheading_color
         };
 
         Object.entries(colorInputs).forEach(([id, value]) => {
             const element = document.getElementById(id);
-            if (element) element.value = value;
+            if (element) {
+                element.value = value;
+                console.log(`Setting ${id} to ${value}`); // Debug log
+            } else {
+                console.warn(`Color input element not found: ${id}`);
+            }
         });
     } catch (error) {
         console.error('Error updating form values:', error);

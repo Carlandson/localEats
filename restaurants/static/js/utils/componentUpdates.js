@@ -25,7 +25,7 @@ export async function updateGlobalComponent(component, value, context) {
         if (!data.success) {
             throw new Error(data.error || 'Component update failed');
         }
-
+        console.log('Component updated successfully', component);
         // Optionally update preview after component change
         await updatePreview(context.pageSelector.value, context, false);
     } catch (error) {
