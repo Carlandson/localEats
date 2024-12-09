@@ -11,7 +11,7 @@ function getAlignmentElements() {
 
 export function initializeAlignmentHandlers(context) {
     const elements = getAlignmentElements();
-
+    console.log('context', context);
     // Helper function to set up alignment handlers
     const setupAlignmentHandler = (radios, fieldName) => {
         radios.forEach(radio => {

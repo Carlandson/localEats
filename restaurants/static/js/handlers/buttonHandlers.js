@@ -5,8 +5,6 @@ import { debounce } from '../utils/debounce.js';
 import { updateHeroText } from './textHandlers.js';
 
 function initializeButtonEditor(prefix, context) {
-    console.log(`Initializing button editor for prefix: ${prefix}`);
-    
     // Get all button-related elements
     const elements = {
         showButton: document.getElementById(`show_${prefix}_button`),
@@ -17,12 +15,6 @@ function initializeButtonEditor(prefix, context) {
         buttonSize: document.getElementById(`${prefix}_button_size`),
         button: document.querySelector(`.${prefix}-button`)
     };
-
-    // Log all found elements
-    Object.entries(elements).forEach(([key, element]) => {
-        console.log(`${prefix} ${key}:`, element);
-    });
-
     // Initialize show/hide button checkbox
     if (elements.showButton) {
         elements.showButton.checked = elements.showButton.dataset.initialState === 'true';
@@ -73,11 +65,9 @@ function initializeButtonEditor(prefix, context) {
 }
 
 export function initializeBannerButtonEditors(context) {
-    console.log('Initializing banner button editors');
     const prefixes = ['hero', 'hero_banner_2', 'hero_banner_3'];
     
     prefixes.forEach(prefix => {
-        console.log(`Setting up button editor for: ${prefix}`);
         initializeButtonEditor(prefix, context);
     });
 }

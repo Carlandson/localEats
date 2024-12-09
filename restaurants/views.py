@@ -1168,7 +1168,7 @@ def get_page_data(request, business_subdirectory, page_type):
                 'button_link': subpage.banner_3_button_link,
             }
         }
-        print("get_page_data")
+        logger.debug(f"get_page_data data: {data}")
         return JsonResponse(data)
         
     except Exception as e:
@@ -1441,9 +1441,6 @@ def upload_hero_image(request, business_subdirectory):
             'hero_primary': 'hero_primary',
             'hero_banner_2': 'hero_banner_2',
             'hero_banner_3': 'hero_banner_3',
-            # Legacy support
-            '2': 'hero_banner_2',
-            '3': 'hero_banner_3'
         }
         alt_text = alt_text_map.get(banner_type)
         

@@ -4,6 +4,7 @@ import { updatePreview } from './previewUpdates.js';
 
 export async function updateGlobalComponent(component, value, context) {
     try {
+        console.log('Updating global component', component, value, context);
         const response = await fetch(`/${context.business_subdirectory}/update-global-component/`, {
             method: 'POST',
             headers: {
