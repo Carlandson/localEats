@@ -1,6 +1,4 @@
 import { displayError } from './utils/errors.js';
-import { debounce } from './utils/debounce.js';
-import { getCookie } from './utils/cookies.js';
 import { createHeroImageHTML, createUploadPlaceholderHTML } from './utils/placeholders.js';
 import { initializeImageUploads, handleImageUpload, removeHeroImage } from './handlers/imageHandlers.js';
 import { initializeTextInputs } from './handlers/textHandlers.js';
@@ -13,6 +11,7 @@ import { initializeAlignmentHandlers } from './handlers/alignmentHandlers.js';
 import { initializeHeroLayoutListener, initializeBannerButtonEditors } from './handlers/buttonHandlers.js';
 import { handleBannerSliderVisibility } from './components/heroComponents.js';
 import { initializePublishToggle } from './handlers/publishHandlers.js';
+import { updatePublishState } from './handlers/publishHandlers.js';
 
 async function initializeEditor() {
     try {
@@ -62,15 +61,75 @@ async function initializeEditor() {
     }
 }
 
+function initializeAccordions() {
+    document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+        // Remove any existing event listeners
+        const newTrigger = trigger.cloneNode(true);
+        trigger.parentNode.replaceChild(newTrigger, trigger);
+        
+        newTrigger.addEventListener('click', () => {
+            const target = document.getElementById(newTrigger.dataset.target);
+            const arrow = newTrigger.querySelector('svg');
+            
+            // Toggle panel visibility
+            target.classList.toggle('hidden');
+            
+            // Update trigger styles and arrow rotation
+            if (target.classList.contains('hidden')) {
+                newTrigger.classList.remove('bg-gray-100', 'hover:bg-gray-400');
+                newTrigger.classList.add('bg-white', 'hover:bg-gray-50');
+                arrow.classList.remove('rotate-90');
+            } else {
+                newTrigger.classList.remove('bg-white', 'hover:bg-gray-50');
+                newTrigger.classList.add('bg-gray-100', 'hover:bg-gray-400');
+                arrow.classList.add('rotate-90');
+            }
+        });
+    });
+}
+
+function wrapInAccordion(title, content, isOpen = false) {
+    // Generate consistent ID based on title
+    const accordionId = title.toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+
+    return `
+        <div class="border rounded-lg mb-4">
+            <button class="accordion-trigger w-full flex justify-between items-center p-4 ${isOpen ? 'bg-gray-100 hover:bg-gray-400' : 'bg-white hover:bg-gray-50'} rounded-t-lg" 
+                    data-target="${accordionId}-content">
+                <h2 class="text-lg font-bold">${title}</h2>
+                <svg class="w-5 h-5 transition-transform ${isOpen ? 'rotate-90' : ''}" 
+                     xmlns="http://www.w3.org/2000/svg" 
+                     fill="none" 
+                     viewBox="0 0 24 24" 
+                     stroke="currentColor">
+                    <path stroke-linecap="round" 
+                          stroke-linejoin="round" 
+                          stroke-width="2" 
+                          d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            <div id="${accordionId}-content" 
+                 class="accordion-content p-4 ${isOpen ? '' : 'hidden'}"
+                 data-section="${accordionId}">
+                ${content}
+            </div>
+        </div>
+    `;
+}
+
 async function loadPageData(pageType, context) {
     try {
         const response = await fetch(`/${context.business_subdirectory}/get-page-data/${pageType}/`);
         if (!response.ok) throw new Error('Failed to load page data');
-        
         const data = await response.json();
-        if (data.hero_layout === 'banner-slider') {
-            handleBannerSliderVisibility('banner-slider');
-        }
+        
+        // Update publish state using the handler
+        updatePublishState(data.is_published);
+        
+        console.log("Published state of ", pageType, " is: ", data.is_published);
+        handleBannerSliderVisibility(data.hero_layout);
         updateFormValues(data, context);
         await updatePreview(pageType, context, true);
         
@@ -82,6 +141,12 @@ async function loadPageData(pageType, context) {
 
 function updateFormValues(data, context) {
     try {
+        const accordionStates = {};
+        document.querySelectorAll('.accordion-content').forEach(content => {
+            accordionStates[content.id] = !content.classList.contains('hidden');
+        });
+
+
         // Update text fields for primary hero
         const textFields = {
             'hero_heading': data.hero_heading || '',
@@ -99,7 +164,6 @@ function updateFormValues(data, context) {
             'hero_banner_3_button_text': data.hero_banner_3.button_text || '',
             'hero_banner_3_button_link': data.hero_banner_3.button_link || ''
         };
-
         // Update all text inputs
         Object.entries(textFields).forEach(([id, value]) => {
             const element = document.getElementById(id);
@@ -206,6 +270,29 @@ function updateFormValues(data, context) {
                 containerId: 'hero_banner_3-container'  // Expected container ID
             }
         };
+        const editorSections = document.querySelectorAll('.editor-section');
+        editorSections.forEach(section => {
+            // Skip if section is already wrapped in accordion
+            if (section.closest('.accordion-trigger')) return;
+
+            const sectionTitle = section.querySelector('h1, h2').textContent;
+            const sectionContent = section.innerHTML;
+            const sectionId = section.dataset.section;
+            
+            // Create accordion wrapper, maintaining previous state if it existed
+            const wasOpen = accordionStates[`${sectionId}-content`] ?? (sectionId === 'global');
+            const accordionHTML = wrapInAccordion(
+                sectionTitle,
+                sectionContent,
+                wasOpen
+            );
+            
+            // Replace original section with accordion
+            section.outerHTML = accordionHTML;
+        });
+
+        // Reinitialize accordions
+        initializeAccordions();
 
         Object.entries(imageElements).forEach(([id, imageData]) => {
             const { url, prefix, containerId } = imageData;

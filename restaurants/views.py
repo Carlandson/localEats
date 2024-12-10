@@ -1079,14 +1079,27 @@ def preview_page(request, business_subdirectory, page_type):
             'text_color': business.text_color,
             'hover_color': business.hover_color,
             'navigation_style': business.navigation_style,
-            'footer_style': business.footer_style
+            'footer_style': business.footer_style,
+            'is_published': subpage.is_published
         }
         
-        # Debug log the context
-        logger.debug(f"Context keys: {context.keys()}")
+        # Map page_type to template name
+        template_mapping = {
+            'home': 'home',
+            'about': 'about',
+            'menu': 'menu',
+            'contact': 'contact',
+            'gallery': 'gallery',
+            'events': 'events',
+            'catering': 'catering',
+            'order': 'order',
+            'reservations': 'reservations'
+        }
         
-        # Use the full visitor page template instead of just the hero component
-        template_name = 'visitor_pages/home.html'
+        # Get the template name from mapping or default to home
+        template_page = template_mapping.get(page_type, 'home')
+        template_name = f'visitor_pages/{template_page}.html'
+        
         logger.debug(f"Using template: {template_name}")
         
         return render(request, template_name, context)
@@ -1278,7 +1291,14 @@ def update_global_component(request, business_subdirectory):
         data = json.loads(request.body)
         component = data.get('component')
         style = data.get('style')
-        page_type = request.GET.get('page_type', 'home')
+        page_type = request.GET.get('page_type')
+
+        if not page_type:
+            return JsonResponse({'error': 'Page type is required'}, status=400)
+        try:
+            subpage = SubPage.objects.get(business=business, page_type=page_type)
+        except SubPage.DoesNotExist:
+            return JsonResponse({'error': f'Page {page_type} not found'}, status=404)
 
         logger.debug(f"Updating component: {component} with style: {style} for page: {page_type}")
 
@@ -1342,7 +1362,7 @@ def update_global_component(request, business_subdirectory):
             'is_published': {
                 'model': SubPage,
                 'field': 'is_published',
-                'instance': SubPage.objects.get(business=business, page_type=page_type)
+                'instance': subpage,
             },
             
         }
@@ -1355,6 +1375,17 @@ def update_global_component(request, business_subdirectory):
         if component == 'is_published':
             if isinstance(style, str):
                 style = style.lower() == 'true'
+            logger.debug(f"Updating publish state for page {page_type} to {style}")
+            # Update the instance
+            instance = component_info['instance']
+            setattr(instance, component_info['field'], style)
+            instance.save(update_fields=[component_info['field']])
+            
+            # Log successful update
+            logger.debug(f"Successfully updated publish state for page {page_type} to {style}")
+            
+            return JsonResponse({'success': True})
+
         else:
             # Validate choices for all other components
             if component == 'main_font':

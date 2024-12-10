@@ -17,7 +17,7 @@
                     <div class="{% if subpage.hero_text_align == 'left' %}mr-auto{% endif %}
                                 {% if subpage.hero_text_align == 'right' %}ml-auto{% endif %}
                                 {% if subpage.hero_text_align == 'center' %}mx-auto{% endif %}
-                                {% if subpage.hero_text_align != 'right' %}max-w-prose{% endif %}">
+                                {% if subpage.hero_text_align %}max-w-prose{% endif %}">
                         {% if subpage.show_hero_heading %}
                         <h1 class="{{ subpage.hero_heading_size }} font-bold tracking-tight text-{{ subpage.hero_text_align }}" data-component="hero_heading"
                             style="font-family: {{ subpage.hero_heading_font }}; {% if subpage.hero_heading_color %}color: {{ subpage.hero_heading_color|safe }}{% endif %}">

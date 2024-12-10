@@ -22,12 +22,15 @@ export async function updateGlobalComponent(component, style, context) {
 
         const requestBody = {
             component: component,
-            style: style,
-            page_type: pageSelector.value
+            style: style
         };
-        console.log('Sending request with body:', requestBody);
+        
+        // Add page type to URL as query parameter
+        const url = `/${business_subdirectory}/update-global-component/?page_type=${pageSelector.value}`;
+        console.log('Sending request to:', url);
+        console.log('With body:', requestBody);
 
-        const response = await fetch(`/${business_subdirectory}/update-global-component/`, {
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -59,7 +62,6 @@ export async function updateGlobalComponent(component, style, context) {
         throw error;
     }
 }
-
 
 export async function togglePagePublish(isPublished, context) {
     const { business_subdirectory, pageSelector } = context;
