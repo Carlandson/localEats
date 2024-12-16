@@ -1,7 +1,8 @@
 import { displayError } from '../utils/errors.js';
-import { updatePreview } from '../utils/previewUpdates.js';
+import { smartUpdate } from '../utils/previewUpdates.js';
 import { getCookie } from '../utils/cookies.js';
 import { createHeroImageHTML, createUploadPlaceholderHTML } from '../utils/placeholders.js';
+
 
 function attachRemoveListeners(context) {
     document.querySelectorAll('[id^="remove-"]').forEach(button => {
@@ -70,31 +71,10 @@ export async function handleImageUpload(event, context) {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Get the prefix from the input ID
     const inputId = event.target.id;
     const prefix = inputId.replace('-upload', '');
-
-    // Map frontend prefix to backend format
-    let bannerType;
-    switch (prefix) {
-        case 'hero-image':
-            bannerType = 'hero_primary';
-            break;
-        case 'hero_banner_2':
-            bannerType = 'hero_banner_2';
-            break;
-        case 'hero_banner_3':
-            bannerType = 'hero_banner_3';
-            break;
-        default:
-            bannerType = 'hero_primary';
-    }
-
+    const bannerType = prefix === 'hero-image' ? 'hero_primary' : prefix;
     const uploadButton = document.getElementById(`upload-${prefix}-button`);
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('page_type', context.pageSelector.value);
-    formData.append('banner_type', bannerType);
 
     if (uploadButton) {
         uploadButton.textContent = 'Uploading...';
@@ -102,31 +82,28 @@ export async function handleImageUpload(event, context) {
     }
 
     try {
-        const response = await fetch(`/${context.business_subdirectory}/upload-hero-image/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken'),
-            },
-            body: formData
+        // For images, we'll use smartUpdate with a special image type
+        await smartUpdate(context, {
+            fieldType: 'image',
+            fieldName: bannerType,
+            value: file,  // Pass the file directly
+            previousValue: null, // Previous value not needed for images
+            page_type: context.pageSelector.value,
+            return_preview: true,
+            isFileUpload: true,  // Flag to indicate this is a file upload
+            isGlobal: false
         });
 
-        const data = await response.json();
-
-        if (data.success) {
-            const container = document.getElementById(`${prefix}-container`);
-            if (container) {
-                container.innerHTML = `
-                    ${createHeroImageHTML(data.image_url, prefix)}
-                    <input type="file" id="${prefix}-upload" accept="image/*" class="hidden">
-                `;
-
-                initializeImageUploads(context);
-            }
-
-            await updatePreview(context.pageSelector.value, context);
-        } else {
-            throw new Error(data.error || 'Upload failed');
+        // Update the UI with the new image
+        const container = document.getElementById(`${prefix}-container`);
+        if (container && context.lastUploadedImageUrl) {
+            container.innerHTML = `
+                ${createHeroImageHTML(context.lastUploadedImageUrl, prefix)}
+                <input type="file" id="${prefix}-upload" accept="image/*" class="hidden">
+            `;
+            initializeImageUploads(context);
         }
+
     } catch (error) {
         console.error('Error uploading image:', error);
         displayError('Failed to upload image: ' + error.message);
@@ -141,65 +118,47 @@ export async function handleImageUpload(event, context) {
 export async function removeHeroImage(prefix, context) {
     if (!confirm('Are you sure you want to remove this image?')) return;
 
-    // Match the IDs from the template
     const removeButton = document.getElementById(`remove-${prefix}`);
     const container = document.getElementById(`${prefix}-container`);
 
     if (!removeButton || !container) {
-        console.error('Required elements not found:', {
-            prefix,
-            removeButtonId: `remove-${prefix}`,
-            containerId: `${prefix}-container`
-        });
+        console.error('Required elements not found');
         return;
     }
 
     removeButton.disabled = true;
 
     try {
-        console.log('Removing image for prefix:', prefix);
-        const response = await fetch(`/${context.business_subdirectory}/remove-hero-image/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken'),
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                page_type: context.pageSelector.value,
-                banner_type: prefix === 'hero-image' ? 'hero_primary' : prefix
-            })
+        await smartUpdate(context, {
+            fieldType: 'image',
+            fieldName: prefix === 'hero-image' ? 'hero_primary' : prefix,
+            value: null,  // null indicates image removal
+            previousValue: container.querySelector('img')?.src || null,
+            page_type: context.pageSelector.value,
+            return_preview: true,
+            isImageRemoval: true,  // Flag to indicate this is an image removal
+            isGlobal: false
         });
 
-        const data = await response.json();
-        console.log('Remove response:', data);
+        // Update container with placeholder
+        container.innerHTML = createUploadPlaceholderHTML(prefix);
+        
+        // Reattach event listeners
+        const uploadButton = document.getElementById(`upload-${prefix}-button`);
+        const fileInput = document.getElementById(`${prefix}-upload`);
+        
+        if (uploadButton && fileInput) {
+            uploadButton.addEventListener('click', () => {
+                if (!uploadButton.disabled) {
+                    fileInput.click();
+                }
+            });
 
-        if (data.success) {
-            console.log('Image removed successfully');
-            
-            // Update container with placeholder
-            container.innerHTML = createUploadPlaceholderHTML(prefix);
-            
-            // Get the new elements with correct ID format
-            const uploadButton = document.getElementById(`upload-${prefix}-button`);
-            const fileInput = document.getElementById(`${prefix}-upload`);
-            
-            // Attach new listeners
-            if (uploadButton && fileInput) {
-                uploadButton.addEventListener('click', () => {
-                    if (!uploadButton.disabled) {
-                        fileInput.click();
-                    }
-                });
-
-                fileInput.addEventListener('change', async (event) => {
-                    await handleImageUpload(event, context);
-                });
-            }
-            
-            await updatePreview(context.pageSelector.value, context);
-        } else {
-            throw new Error(data.error || 'Remove failed');
+            fileInput.addEventListener('change', async (event) => {
+                await handleImageUpload(event, context);
+            });
         }
+
     } catch (error) {
         console.error('Error removing image:', error);
         displayError('Failed to remove image: ' + error.message);

@@ -1,25 +1,32 @@
-import { getCookie } from '../utils/cookies.js';
 import { displayError } from '../utils/errors.js';
-import { updatePreview } from '../utils/previewUpdates.js';
-import { debounce } from '../utils/debounce.js';
-import { updateHeroText } from './textHandlers.js';
+import { smartUpdate } from '../utils/previewUpdates.js';
 
 export function initializeColorHandlers(context) {
     // Initialize brand color pickers (Global Settings)
     const brandColorPickers = document.querySelectorAll('.color-picker[data-color-type]');
     brandColorPickers.forEach(picker => {
-        picker.addEventListener('input', debounce(async function() {
+        picker.addEventListener('input', async function() {
             try {
-                const colorType = this.dataset.colorType;
-                await handleBrandColorChange(colorType, this.value, context);
+                const colorType = this.dataset.colorType;  // e.g., 'primary', 'secondary'
+                console.log('Updating color:', colorType, 'to:', this.value); // Debug log
+                await smartUpdate(context, {
+                    fieldType: 'color',
+                    fieldName: colorType,  // Just send 'primary', 'secondary', etc.
+                    value: this.value,
+                    previousValue: this.defaultValue,
+                    page_type: context.pageSelector.value,
+                    isGlobal: true,  // Brand colors are global
+                    return_preview: true
+                });
+                this.defaultValue = this.value;
             } catch (error) {
                 console.error('Error updating brand color:', error);
                 displayError('Failed to update brand color');
             }
-        }, 100));
+        });
     });
 
-    // Initialize hero text color pickers (from banner_text_settings.html)
+    // Initialize hero text color pickers (Subpage specific)
     const heroColorInputs = [
         'hero_heading_color', 
         'hero_subheading_color',
@@ -32,46 +39,26 @@ export function initializeColorHandlers(context) {
     heroColorInputs.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
-            element.addEventListener('input', debounce(async function() {
+            element.addEventListener('input', async function() {
                 try {
-                    await updateHeroText(id, this.value, context);
+                    await smartUpdate(context, {
+                        fieldType: 'color',
+                        fieldName: id,
+                        value: this.value,
+                        previousValue: this.defaultValue,
+                        page_type: context.pageSelector.value,
+                        isGlobal: false,  // Hero colors are subpage-specific
+                        return_preview: true
+                    });
+                    // Update the defaultValue for future changes
+                    this.defaultValue = this.value;
                 } catch (error) {
-                    displayError(`Failed to update ${id.replace(/-/g, ' ')}`);
+                    console.error(`Error updating ${id}:`, error);
+                    displayError(`Failed to update ${id.replace(/_/g, ' ')}`);
                 }
-            }, 100));
+            });
         } else {
             console.warn(`Failed to find element: ${id}`);
         }
     });
-}
-
-async function handleBrandColorChange(colorType, value, context) {
-    try {
-        const response = await fetch(`/${context.business_subdirectory}/update-brand-colors/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken'),
-            },
-            body: JSON.stringify({
-                color_type: colorType,
-                color_value: value
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to update brand color');
-        }
-
-        const data = await response.json();
-        if (data.success) {
-            await updatePreview(context.pageSelector.value, context, false);
-        } else {
-            throw new Error(data.error || 'Update failed');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        displayError('Failed to update brand color: ' + error.message);
-        throw error;
-    }
 }

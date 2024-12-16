@@ -1,8 +1,6 @@
-import { updateGlobalComponent } from '../components/globalComponents.js';
 import { displayError } from '../utils/errors.js';
-import { updatePreview } from '../utils/previewUpdates.js';
+import { smartUpdate } from '../utils/previewUpdates.js';
 import { handleBannerSliderVisibility } from '../components/heroComponents.js';
-import { getCookie } from '../utils/cookies.js';
 
 function getLayoutElements() {
     // Get all component selectors
@@ -24,10 +22,19 @@ export function initializeLayoutHandlers(context) {
     elements.navStyleInputs.forEach(input => {
         input.addEventListener('change', async function() {
             try {
-                await updateGlobalComponent('navigation', this.value, context);
-                await updatePreview(context.pageSelector.value, context, false);
+                const previousValue = this.defaultValue;
+                await smartUpdate(context, {
+                    fieldType: 'layout',
+                    fieldName: 'navigation_style',
+                    value: this.value,
+                    previousValue: previousValue,
+                    page_type: context.pageSelector.value,
+                    isGlobal: true
+                });
+                this.defaultValue = this.value;
             } catch (error) {
                 displayError('Failed to update navigation style');
+                this.value = this.defaultValue; // Revert on error
             }
         });
     });
@@ -36,10 +43,19 @@ export function initializeLayoutHandlers(context) {
     elements.footerStyleInputs.forEach(input => {
         input.addEventListener('change', async function() {
             try {
-                await updateGlobalComponent('footer_style', this.value, context);
-                await updatePreview(context.pageSelector.value, context, false);
+                const previousValue = this.defaultValue;
+                await smartUpdate(context, {
+                    fieldType: 'layout',
+                    fieldName: 'footer_style',
+                    value: this.value,
+                    previousValue: previousValue,
+                    page_type: context.pageSelector.value,
+                    isGlobal: true
+                });
+                this.defaultValue = this.value;
             } catch (error) {
                 displayError('Failed to update footer style');
+                this.value = this.defaultValue; // Revert on error
             }
         });
     });
@@ -51,33 +67,20 @@ export function initializeLayoutHandlers(context) {
                 // Update banner slider visibility first
                 handleBannerSliderVisibility(this.value);
 
-                // Send update to server
-                const response = await fetch(`/${context.business_subdirectory}/update-hero/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken'),
-                    },
-                    body: JSON.stringify({
-                        field: 'hero_layout',
-                        value: this.value,
-                        page_type: context.pageSelector.value
-                    })
+                const previousValue = this.defaultValue;
+                await smartUpdate(context, {
+                    fieldType: 'layout',
+                    fieldName: 'hero_layout',
+                    value: this.value,
+                    previousValue: previousValue,
+                    page_type: context.pageSelector.value,
+                    isGlobal: false
                 });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Failed to update hero layout');
-                }
-
-                const data = await response.json();
-                if (data.success) {
-                    await updatePreview(context.pageSelector.value, context, false);
-                } else {
-                    throw new Error(data.error || 'Update failed');
-                }
+                this.defaultValue = this.value;
             } catch (error) {
                 displayError('Failed to update hero layout style');
+                this.value = this.defaultValue; // Revert on error
+                handleBannerSliderVisibility(this.defaultValue); // Revert visibility
             }
         });
     });

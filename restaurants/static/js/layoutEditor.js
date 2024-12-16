@@ -4,7 +4,7 @@ import { initializeImageUploads, handleImageUpload, removeHeroImage } from './ha
 import { initializeTextInputs } from './handlers/textHandlers.js';
 import { initializeHeroSizeHandler } from './handlers/sizeHandlers.js';
 import { initializeColorHandlers } from './handlers/colorHandlers.js';
-import { updatePreview } from './utils/previewUpdates.js';
+// import { updatePreview } from './utils/previewUpdates.js';
 import { initializeFontHandlers } from './handlers/fontHandlers.js';
 import { initializeLayoutHandlers } from './handlers/layoutHandlers.js';
 import { initializeAlignmentHandlers } from './handlers/alignmentHandlers.js';
@@ -12,27 +12,28 @@ import { initializeHeroLayoutListener, initializeBannerButtonEditors } from './h
 import { handleBannerSliderVisibility } from './components/heroComponents.js';
 import { initializePublishToggle } from './handlers/publishHandlers.js';
 import { updatePublishState } from './handlers/publishHandlers.js';
+import { smartUpdate } from './utils/previewUpdates.js';
 
 async function initializeEditor() {
     try {
         // Get required elements
-        const businessElement = document.getElementById('business');
+        const editorConfig = JSON.parse(document.getElementById('editor-config').textContent);
         const pageSelectorElement = document.getElementById('page-selector');
 
-
-        if (!businessElement || !pageSelectorElement) {
+        if (!editorConfig || !pageSelectorElement) {
             throw new Error('Required elements not found');
         }
-
+        console.log("editorConfig: ", editorConfig);
         // Create context object
         const context = {
-            business_subdirectory: JSON.parse(businessElement.textContent),
-            pageSelector: pageSelectorElement
+            business_subdirectory: editorConfig.business_subdirectory,
+            pageSelector: pageSelectorElement,
+            initialData: editorConfig
         };
-        console.log('Initializing editor with context:', context);
+        
         // Initialize all handlers
         try {
-            await loadPageData(context.pageSelector.value, context);
+            await initializePageData(context);
             initializePublishToggle(context);
             initializeHeroLayoutListener();
             initializeBannerButtonEditors(context);
@@ -43,16 +44,17 @@ async function initializeEditor() {
             initializeFontHandlers(context);
             initializeAlignmentHandlers(context);
             initializeHeroSizeHandler(context);
-            context.pageSelector.addEventListener('change', function() {
-                loadPageData(this.value, context);
+            
+            // Add page change listener
+            context.pageSelector.addEventListener('change', async function() {
+                await loadPageData(this.value, context);
             });
-
+            
         } catch (handlerError) {
             console.error('Error initializing handlers:', handlerError);
             displayError('Failed to initialize editor components');
             throw handlerError;
         }
-
         return context;
     } catch (error) {
         console.error('Error in editor initialization:', error);
@@ -121,151 +123,247 @@ function wrapInAccordion(title, content, isOpen = false) {
 
 async function loadPageData(pageType, context) {
     try {
-        const response = await fetch(`/${context.business_subdirectory}/get-page-data/${pageType}/`);
-        if (!response.ok) throw new Error('Failed to load page data');
-        const data = await response.json();
-        
-        // Update publish state using the handler
-        updatePublishState(data.is_published);
-        
-        console.log("Published state of ", pageType, " is: ", data.is_published);
-        handleBannerSliderVisibility(data.hero_layout);
-        updateFormValues(data, context);
-        await updatePreview(pageType, context, true);
+        const response = await smartUpdate(context, {
+            fieldType: 'load_page',
+            page_type: pageType,
+            return_preview: true
+        });
+
+        if (response.data) {
+            // Update publish state using the handler
+            updatePublishState(response.data.is_published);
+            
+            handleBannerSliderVisibility(response.data.hero_layout);
+            updateFormValues(response.data, context);
+
+            // Update preview if we got preview HTML
+            if (response.preview_html) {
+                const previewContainer = document.getElementById('page-content-preview');
+                if (previewContainer) {
+                    previewContainer.innerHTML = response.preview_html;
+                    reinitializeSlider();
+                }
+            }
+        }
         
     } catch (error) {
         console.error('Error loading page data:', error);
         displayError('Failed to load page data');
+        throw error;
+    }
+}
+
+// Update initializePageData to use smartUpdate
+async function initializePageData(context) {
+    try {
+        // Always set initial page to 'home' and use the initial data from context
+        context.pageSelector.value = 'home';
+        const data = context.initialData;
+        // Update publish state and banner visibility
+        updatePublishState(data.is_published);
+        handleBannerSliderVisibility(data.hero_layout);
+        // Ensure images object exists (though it should already be there from edit_layout)
+        if (!data.images) {
+            data.images = {
+                hero_primary: { url: null },
+                hero_banner_2: { url: null },
+                hero_banner_3: { url: null }
+            };
+        }
+
+        // Update form values with the initial data
+        updateFormValues(data, context);
+
+        // Update preview if it exists
+        const previewContainer = document.getElementById('page-content-preview');
+        if (previewContainer && data.preview_html) {
+            previewContainer.innerHTML = data.preview_html;
+            reinitializeSlider();
+        }
+        
+    } catch (error) {
+        console.error('Error initializing page data:', error);
+        displayError('Failed to initialize page data');
+        throw error;
     }
 }
 
 function updateFormValues(data, context) {
     try {
+        // accordion states
         const accordionStates = {};
         document.querySelectorAll('.accordion-content').forEach(content => {
             accordionStates[content.id] = !content.classList.contains('hidden');
         });
-
-
         // Update text fields for primary hero
         const textFields = {
+            // Primary hero
             'hero_heading': data.hero_heading || '',
             'hero_subheading': data.hero_subheading || '',
             'hero_button_text': data.hero_button_text || '',
             'hero_button_link': data.hero_button_link || '',
-            // Banner 2 text fields
-            'hero_banner_2_heading': data.hero_banner_2.heading || '',
-            'hero_banner_2_subheading': data.hero_banner_2.subheading || '',
-            'hero_banner_2_button_text': data.hero_banner_2.button_text || '',
-            'hero_banner_2_button_link': data.hero_banner_2.button_link || '',
-            // Banner 3 text fields
-            'hero_banner_3_heading': data.hero_banner_3.heading || '',
-            'hero_banner_3_subheading': data.hero_banner_3.subheading || '',
-            'hero_banner_3_button_text': data.hero_banner_3.button_text || '',
-            'hero_banner_3_button_link': data.hero_banner_3.button_link || ''
+            // Banner 2
+            'hero_banner_2_heading': data.hero_banner_2?.heading || '',
+            'hero_banner_2_subheading': data.hero_banner_2?.subheading || '',
+            'hero_banner_2_button_text': data.hero_banner_2?.button_text || '',
+            'hero_banner_2_button_link': data.hero_banner_2?.button_link || '',
+            // Banner 3
+            'hero_banner_3_heading': data.hero_banner_3?.heading || '',
+            'hero_banner_3_subheading': data.hero_banner_3?.subheading || '',
+            'hero_banner_3_button_text': data.hero_banner_3?.button_text || '',
+            'hero_banner_3_button_link': data.hero_banner_3?.button_link || ''
         };
+
+        // Update checkbox states
+        const checkboxFields = {
+            'show_hero_heading': data.show_hero_heading ?? true,
+            'show_hero_subheading': data.show_hero_subheading ?? true,
+            'show_hero_button': data.show_hero_button ?? true,
+            'show_banner_2_heading': data.hero_banner_2?.show_heading ?? true,
+            'show_banner_2_subheading': data.hero_banner_2?.show_subheading ?? true,
+            'show_banner_2_button': data.hero_banner_2?.show_button ?? true,
+            'show_banner_3_heading': data.hero_banner_3?.show_heading ?? true,
+            'show_banner_3_subheading': data.hero_banner_3?.show_subheading ?? true,
+            'show_banner_3_button': data.hero_banner_3?.show_button ?? true
+        };
+
+        // Update font selectors
+        const fontFields = {
+            // Primary hero fonts
+            'hero_heading_font': data.hero_heading_font || 'default',
+            'hero_subheading_font': data.hero_subheading_font || 'default',
+            // Banner 2 fonts
+            'hero_banner_2_heading_font': data.hero_banner_2?.heading_font || 'default',
+            'hero_banner_2_subheading_font': data.hero_banner_2?.subheading_font || 'default',
+            // Banner 3 fonts
+            'hero_banner_3_heading_font': data.hero_banner_3?.heading_font || 'default',
+            'hero_banner_3_subheading_font': data.hero_banner_3?.subheading_font || 'default'
+        };
+
+        // Update size selectors
+        const sizeFields = {
+            // Primary hero sizes
+            'hero_heading_size': data.hero_heading_size || 'default',
+            'hero_subheading_size': data.hero_subheading_size || 'default',
+            // Banner 2 sizes
+            'hero_banner_2_heading_size': data.hero_banner_2?.heading_size || 'default',
+            'hero_banner_2_subheading_size': data.hero_banner_2?.subheading_size || 'default',
+            // Banner 3 sizes
+            'hero_banner_3_heading_size': data.hero_banner_3?.heading_size || 'default',
+            'hero_banner_3_subheading_size': data.hero_banner_3?.subheading_size || 'default'
+        };
+        // Update colors
+        const colorInputs = {
+            'hero_heading_color': data.hero_heading_color || '#000000',
+            'hero_subheading_color': data.hero_subheading_color || '#6B7280',
+            'hero_banner_2_heading_color': data.hero_banner_2?.heading_color || '#000000',
+            'hero_banner_2_subheading_color': data.hero_banner_2.subheading_color,
+            'hero_banner_3_heading_color': data.hero_banner_3?.heading_color || '#000000',
+            'hero_banner_3_subheading_color': data.hero_banner_3?.subheading_color || '#6B7280'
+        };
+       
+        // Update alignments
+        const alignmentFields = {
+            'hero_text_align': data.hero_text_align || 'left',
+            'hero_banner_2_text_align': data.hero_banner_2?.text_align || 'left',
+            'hero_banner_3_text_align': data.hero_banner_3?.text_align || 'left'
+        };
+        // Update button styles
+        const buttonStyles = {
+            // Primary hero button
+            'hero_button_bg_color': data.hero_button_bg_color || '#000000',
+            'hero_button_text_color': data.hero_button_text_color || '#FFFFFF',
+            'hero_button_border_color': data.hero_button_border_color || '#000000',
+            'hero_button_hover_bg_color': data.hero_button_hover_bg_color || '#FFFFFF',
+            'hero_button_hover_text_color': data.hero_button_hover_text_color || '#000000',
+            'hero_button_hover_border_color': data.hero_button_hover_border_color || '#000000',
+            // Banner 2 button
+            'hero_banner_2_button_bg_color': data.hero_banner_2?.button_bg_color || '#000000',
+            'hero_banner_2_button_text_color': data.hero_banner_2?.button_text_color || '#FFFFFF',
+            'hero_banner_2_button_border_color': data.hero_banner_2?.button_border_color || '#000000',
+            'hero_banner_2_button_hover_bg_color': data.hero_banner_2?.button_hover_bg_color || '#FFFFFF',
+            'hero_banner_2_button_hover_text_color': data.hero_banner_2?.button_hover_text_color || '#000000',
+            'hero_banner_2_button_hover_border_color': data.hero_banner_2?.button_hover_border_color || '#000000',
+            // Banner 3 button
+            'hero_banner_3_button_bg_color': data.hero_banner_3?.button_bg_color || '#000000',
+            'hero_banner_3_button_text_color': data.hero_banner_3?.button_text_color || '#FFFFFF',
+            'hero_banner_3_button_border_color': data.hero_banner_3?.button_border_color || '#000000',
+            'hero_banner_3_button_hover_bg_color': data.hero_banner_3?.button_hover_bg_color || '#FFFFFF',
+            'hero_banner_3_button_hover_text_color': data.hero_banner_3?.button_hover_text_color || '#000000',
+            'hero_banner_3_button_hover_border_color': data.hero_banner_3?.button_hover_border_color || '#000000'
+        };
+
+        // Update button styles in the form
+        Object.entries(buttonStyles).forEach(([id, value]) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.value = value;
+            }
+        });
+        
         // Update all text inputs
         Object.entries(textFields).forEach(([id, value]) => {
             const element = document.getElementById(id);
-            if (element) element.value = value;
+            if (element) {
+                element.value = value;
+            }
         });
-
-        // Update all checkbox states
-        const checkboxFields = {
-            'show_hero_heading': data.show_hero_heading,
-            'show_hero_subheading': data.show_hero_subheading,
-            'show_hero_button': data.show_hero_button,
-            'show_banner_2_heading': data.hero_banner_2.show_heading,
-            'show_banner_2_subheading': data.hero_banner_2.show_subheading,
-            'show_banner_2_button': data.hero_banner_2.show_button,
-            'show_banner_3_heading': data.hero_banner_3.show_heading,
-            'show_banner_3_subheading': data.hero_banner_3.show_subheading,
-            'show_banner_3_button': data.hero_banner_3.show_button
-        };
 
         Object.entries(checkboxFields).forEach(([id, value]) => {
             const element = document.getElementById(id);
             if (element) element.checked = value;
         });
 
-        // Update all font selectors
-        const fontFields = {
-            'hero_heading_font': data.hero_heading_font,
-            'hero_subheading_font': data.hero_subheading_font,
-            'hero_banner_2_heading_font': data.hero_banner_2.heading_font,
-            'hero_banner_2_subheading_font': data.hero_banner_2.subheading_font,
-            'hero_banner_3_heading_font': data.hero_banner_3.heading_font,
-            'hero_banner_3_subheading_font': data.hero_banner_3.subheading_font
-        };
-
         Object.entries(fontFields).forEach(([id, value]) => {
             const element = document.getElementById(id);
-            if (element) element.value = value;
+            if (element) {
+                element.value = value;
+            }
         });
-
-        // Update all size selectors
-        const sizeFields = {
-            'hero_heading_size': data.hero_heading_size,
-            'hero_subheading_size': data.hero_subheading_size,
-            'hero_banner_2_heading_size': data.hero_banner_2.heading_size,
-            'hero_banner_2_subheading_size': data.hero_banner_2.subheading_size,
-            'hero_banner_3_heading_size': data.hero_banner_3.heading_size,
-            'hero_banner_3_subheading_size': data.hero_banner_3.subheading_size
-        };
 
         Object.entries(sizeFields).forEach(([id, value]) => {
             const element = document.getElementById(id);
-            if (element) element.value = value;
+            if (element) {
+                element.value = value;
+            }
         });
 
         // Update radio buttons for layout and alignment
         const layoutRadio = document.querySelector(`input[name="hero_layout"][value="${data.hero_layout}"]`);
         if (layoutRadio) layoutRadio.checked = true;
 
-        // Update text alignments
-        const alignmentFields = {
-            'hero_text_align': data.hero_text_align || 'left',
-            'hero_banner_2_text_align': data.hero_banner_2.text_align || 'left',
-            'hero_banner_3_text_align': data.hero_banner_3.text_align || 'left'
-        };
-
         Object.entries(alignmentFields).forEach(([name, value]) => {
             const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
             if (radio) radio.checked = true;
         });
 
-        // Update colors (existing code)
-        const colorInputs = {
-            'hero_heading_color': data.hero_heading_color || '#000000',
-            'hero_subheading_color': data.hero_subheading_color || '#6B7280',
-            'hero_banner_2_heading_color': data.hero_banner_2.heading_color || '#000000',
-            'hero_banner_2_subheading_color': data.hero_banner_2.subheading_color || '#6B7280',
-            'hero_banner_3_heading_color': data.hero_banner_3.heading_color || '#000000',
-            'hero_banner_3_subheading_color': data.hero_banner_3.subheading_color || '#6B7280'
-        };
-
         Object.entries(colorInputs).forEach(([id, value]) => {
             const element = document.getElementById(id);
             if (element) {
+                console.log('Setting color:', id, 'to:', value);
                 element.value = value;
-                console.log(`Setting ${id} to ${value}`);
+                element.defaultValue = value; // Set default value too
+                
+                // Trigger change event
+                const event = new Event('input', { bubbles: true });
+                element.dispatchEvent(event);
             }
         });
-
+        console.log('data', data);
         // Update images (existing code)
         const imageElements = {
             'hero-image': {
-                url: data.images.hero_primary.url,
-                prefix: 'hero-image',
+                url: data.hero_image.url,
+                prefix: 'hero_image',
                 containerId: 'hero-image-container'  // Match the actual container ID
             },
             'hero_banner_2': {
-                url: data.images.hero_banner_2.url,
+                url: data.hero_banner_2.url,
                 prefix: 'hero_banner_2',
                 containerId: 'hero_banner_2-container'  // Expected container ID
             },
             'hero_banner_3': {
-                url: data.images.hero_banner_3.url,
+                url: data.hero_banner_3.url,
                 prefix: 'hero_banner_3',
                 containerId: 'hero_banner_3-container'  // Expected container ID
             }
@@ -303,7 +401,6 @@ function updateFormValues(data, context) {
             if (container) {
                 if (url) {
                     container.innerHTML = createHeroImageHTML(url, prefix, data.hero_layout);
-                    console.log(`Updated ${prefix} with image:`, url);
                     const removeButton = document.getElementById(`remove-${prefix}`);
                     if (removeButton) {
                         removeButton.addEventListener('click', () => removeHeroImage(prefix, context));
@@ -343,7 +440,6 @@ function updateFormValues(data, context) {
 document.addEventListener('DOMContentLoaded', async function() {
     try {
         await initializeEditor();
-        console.log('Editor initialized successfully');
     } catch (error) {
         console.error('Failed to initialize editor:', error);
         displayError('Editor initialization failed');

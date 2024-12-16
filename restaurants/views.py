@@ -996,12 +996,10 @@ def edit_layout(request, business_subdirectory):
 
         # Get or create subpages for each type
         subpages = {}
-        current_page = request.GET.get('page', 'home')
+        current_page = 'home'
         
         for page_type, label in SubPage.PAGE_TYPES:
-            # Generate a unique slug for each page type
             slug = f"{business.subdirectory}-{page_type}"
-            
             subpage, created = SubPage.objects.get_or_create(
                 business=business,
                 page_type=page_type,
@@ -1015,13 +1013,96 @@ def edit_layout(request, business_subdirectory):
 
         # Get the current subpage for initial load
         current_subpage = subpages.get(current_page)
+        
+        # Get hero images
+        hero_primary = current_subpage.get_hero_primary()
+        hero_banner_2 = current_subpage.get_hero_banner_2()
+        hero_banner_3 = current_subpage.get_hero_banner_3()
+
+        page_data = {
+            'business_subdirectory': business_subdirectory,
+            'current_page': current_page,
+            
+            # Primary Hero Data
+            'hero_heading': current_subpage.hero_heading,
+            'hero_subheading': current_subpage.hero_subheading,
+            'hero_button_text': current_subpage.hero_button_text,
+            'hero_button_link': current_subpage.hero_button_link,
+            'hero_layout': current_subpage.hero_layout,
+            'hero_text_align': current_subpage.hero_text_align,
+            'hero_heading_color': current_subpage.hero_heading_color,
+            'hero_subheading_color': current_subpage.hero_subheading_color,
+            'hero_size': current_subpage.hero_size,
+            'show_hero_heading': current_subpage.show_hero_heading,
+            'show_hero_subheading': current_subpage.show_hero_subheading,
+            'show_hero_button': current_subpage.show_hero_button,
+            'hero_heading_font': current_subpage.hero_heading_font,
+            'hero_subheading_font': current_subpage.hero_subheading_font,
+            'hero_heading_size': current_subpage.hero_heading_size,
+            'hero_subheading_size': current_subpage.hero_subheading_size,
+            'hero_image': {
+                'url': hero_primary.image.url if hero_primary else None,
+                'alt_text': hero_primary.alt_text if hero_primary else None
+            },
+            # Button Styles
+            'hero_button_bg_color': current_subpage.hero_button_bg_color,
+            'hero_button_text_color': current_subpage.hero_button_text_color,
+            
+            # Banner 2 Data
+            'hero_banner_2': {
+                'heading': current_subpage.banner_2_heading,
+                'subheading': current_subpage.banner_2_subheading,
+                'show_heading': current_subpage.show_banner_2_heading,
+                'show_subheading': current_subpage.show_banner_2_subheading,
+                'heading_font': current_subpage.banner_2_heading_font,
+                'subheading_font': current_subpage.banner_2_subheading_font,
+                'heading_size': current_subpage.banner_2_heading_size,
+                'subheading_size': current_subpage.banner_2_subheading_size,
+                'heading_color': current_subpage.banner_2_heading_color,
+                'subheading_color': current_subpage.banner_2_subheading_color,
+                'button_text': current_subpage.banner_2_button_text,
+                'button_link': current_subpage.banner_2_button_link,
+                'text_align': current_subpage.banner_2_text_align,
+                'button_bg_color': current_subpage.banner_2_button_bg_color,
+                'button_text_color': current_subpage.banner_2_button_text_color,
+                'url': hero_banner_2.image.url if hero_banner_2 else None,
+                'alt_text': hero_banner_2.alt_text if hero_banner_2 else None
+            },
+            
+            # Banner 3 Data
+            'hero_banner_3': {
+                'heading': current_subpage.banner_3_heading,
+                'subheading': current_subpage.banner_3_subheading,
+                'show_heading': current_subpage.show_banner_3_heading,
+                'show_subheading': current_subpage.show_banner_3_subheading,
+                'heading_font': current_subpage.banner_3_heading_font,
+                'subheading_font': current_subpage.banner_3_subheading_font,
+                'heading_size': current_subpage.banner_3_heading_size,
+                'subheading_size': current_subpage.banner_3_subheading_size,
+                'heading_color': current_subpage.banner_3_heading_color,
+                'subheading_color': current_subpage.banner_3_subheading_color,
+                'button_text': current_subpage.banner_3_button_text,
+                'button_link': current_subpage.banner_3_button_link,
+                'text_align': current_subpage.banner_3_text_align,
+                'button_bg_color': current_subpage.banner_3_button_bg_color,
+                'button_text_color': current_subpage.banner_3_button_text_color,
+                'url': hero_banner_3.image.url if hero_banner_3 else None,
+                'alt_text': hero_banner_3.alt_text if hero_banner_3 else None
+            },
+            'is_published': current_subpage.is_published,
+        }
 
         context = {
+            # For JavaScript initialization
+            'page_data': page_data,
+            # For template rendering
             'business_details': business,
             'business_subdirectory': business_subdirectory,
-            'subpages': subpages,  # Dictionary of all subpages
-            'subpage': current_subpage,  # Current subpage for initial load
+            'subpages': subpages,
+            'subpage': current_subpage,
             'current_page': current_page,
+            
+            # Choices/Options for template dropdowns and selectors
             'hero_choices': SubPage.HERO_CHOICES,
             'nav_styles': business.NAV_CHOICES,
             'footer_styles': business.FOOTER_CHOICES,
@@ -1029,9 +1110,11 @@ def edit_layout(request, business_subdirectory):
             'font_choices': get_font_choices(),
             'heading_sizes': get_font_sizes('heading'),
             'subheading_sizes': get_font_sizes('subheading'),
-            'show_hero_heading': current_subpage.show_hero_heading,
-            'show_hero_subheading': current_subpage.show_hero_subheading,
             'hero_size_choices': SubPage.HERO_SIZE_CHOICES,
+            'hero_image': hero_primary,
+            'hero_banner_2': hero_banner_2,
+            'hero_banner_3': hero_banner_3,
+            'hero_heading_font': current_subpage.hero_heading_font,
         }
         
         return render(request, "edit_layout.html", context)
@@ -1039,6 +1122,78 @@ def edit_layout(request, business_subdirectory):
     except Exception as e:
         logger.error(f"Error in edit_layout: {str(e)}")
         return HttpResponse(f"Error loading layout editor: {str(e)}", status=500)
+
+
+@require_POST
+def update_layout(request, business_subdirectory):
+    try:
+        data = json.loads(request.body)
+        print("Received data:", data)
+        
+        field_type = data.get('fieldType')
+        field_name = data.get('fieldName')
+        value = data.get('value')
+        page_type = data.get('page_type')
+        is_global = data.get('isGlobal', False)  # Add this
+        return_preview = data.get('return_preview', False)
+
+        # Get the business and subpage
+        business = get_object_or_404(Business, subdirectory=business_subdirectory)
+        subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
+
+        # Handle brand color updates
+        if field_type == 'color' and field_name in ['primary', 'secondary', 'text-color', 'hover-color']:
+            color_field_map = {
+                'primary': 'primary_color',
+                'secondary': 'secondary_color',
+                'text-color': 'text_color',
+                'hover-color': 'hover_color'
+            }
+            actual_field_name = color_field_map.get(field_name)
+            if actual_field_name:
+                setattr(business, actual_field_name, value)
+                business.save()
+        elif is_global:  # Add this block for global components
+            # These are business-level settings
+            setattr(business, field_name, value)
+            business.save()
+        else:
+            # Handle regular subpage updates
+            setattr(subpage, field_name, value)
+            subpage.save()
+
+        response_data = {'success': True}
+
+        if return_preview:
+            preview_html = render_to_string(f'visitor_pages/{page_type}.html', {
+                'business_details': business,
+                'subpage': subpage,
+                'hero_primary': subpage.get_hero_primary(),
+                'hero_banner_2': subpage.get_hero_banner_2(),
+                'hero_banner_3': subpage.get_hero_banner_3(),
+                'hero_image': subpage.get_hero_primary(),
+                'preview_mode': True,
+                'business_subdirectory': business_subdirectory,
+                'debug': True,
+                'primary_color': business.primary_color,
+                'secondary_color': business.secondary_color,
+                'text_color': business.text_color,
+                'hover_color': business.hover_color,
+                'navigation_style': business.navigation_style,
+                'footer_style': business.footer_style,
+                'is_published': subpage.is_published
+            })
+            response_data['preview_html'] = preview_html
+
+        return JsonResponse(response_data)
+
+    except Exception as e:
+        print(f"Error in update_layout: {str(e)}")
+        print(f"Request body: {request.body}")
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=400)
 
 @login_required
 def preview_page(request, business_subdirectory, page_type):
@@ -1125,6 +1280,17 @@ def get_page_data(request, business_subdirectory, page_type):
         
         # Debug log to verify we have the images
         logger.debug(f"Images found - Primary: {hero_primary}, Banner2: {hero_banner_2}, Banner3: {hero_banner_3}")
+
+        def get_safe_image_url(image_obj):
+            if image_obj and hasattr(image_obj, 'image'):
+                try:
+                    image_url = image_obj.image.url
+                    logger.debug(f"Got image URL: {image_url}")
+                    return image_url
+                except Exception as e:
+                    logger.error(f"Error getting image URL: {e}")
+                    return None
+            return None
         
         data = {
             'subpage_id': subpage.id,
@@ -1140,16 +1306,16 @@ def get_page_data(request, business_subdirectory, page_type):
             'is_published': subpage.is_published,
             'images': {
                 'hero_primary': {
-                    'url': hero_primary.image.url if hero_primary else None,
-                    'alt_text': hero_primary.alt_text if hero_primary else None
+                    'url': get_safe_image_url(hero_primary),
+                    'alt': 'hero_primary'
                 },
                 'hero_banner_2': {
-                    'url': hero_banner_2.image.url if hero_banner_2 else None,
-                    'alt_text': hero_banner_2.alt_text if hero_banner_2 else None
+                    'url': get_safe_image_url(hero_banner_2),
+                    'alt': 'hero_banner_2'
                 },
                 'hero_banner_3': {
-                    'url': hero_banner_3.image.url if hero_banner_3 else None,
-                    'alt_text': hero_banner_3.alt_text if hero_banner_3 else None
+                    'url': get_safe_image_url(hero_banner_3),
+                    'alt': 'hero_banner_3'
                 }
             },
             'hero_banner_2': {
@@ -1451,6 +1617,7 @@ def upload_hero_image(request, business_subdirectory):
         page_type = request.POST.get('page_type', 'home')
         banner_type = request.POST.get('banner_type', 'primary')
         image_file = request.FILES.get('image')
+        return_preview = request.POST.get('return_preview') == 'true'
         
         if not image_file:
             return JsonResponse({'success': False, 'error': 'No image provided'})
@@ -1503,8 +1670,7 @@ def upload_hero_image(request, business_subdirectory):
 
         image_url = new_image.image.url
         logger.debug(f"New {banner_type} image created with URL: {image_url}")
-
-        return JsonResponse({
+        response_data = {
             'success': True,
             'image_url': image_url,
             'debug_info': {
@@ -1513,7 +1679,29 @@ def upload_hero_image(request, business_subdirectory):
                 'alt_text': new_image.alt_text,
                 'banner_type': banner_type
             }
-        })
+        }
+        if return_preview:
+            preview_html = render_to_string(f'visitor_pages/{page_type}.html', {
+                'business_details': business,
+                'subpage': subpage,
+                'hero_primary': subpage.get_hero_primary(),
+                'hero_banner_2': subpage.get_hero_banner_2(),
+                'hero_banner_3': subpage.get_hero_banner_3(),
+                'hero_image': subpage.get_hero_primary(),
+                'preview_mode': True,
+                'business_subdirectory': business_subdirectory,
+                'debug': True,
+                'primary_color': business.primary_color,
+                'secondary_color': business.secondary_color,
+                'text_color': business.text_color,
+                'hover_color': business.hover_color,
+                'navigation_style': business.navigation_style,
+                'footer_style': business.footer_style,
+                'is_published': subpage.is_published
+            })
+            response_data['preview_html'] = preview_html
+
+        return JsonResponse(response_data)
 
     except Exception as e:
         logger.error(f"Error in upload_hero_image: {str(e)}")
@@ -1525,11 +1713,14 @@ def remove_hero_image(request, business_subdirectory):
         return JsonResponse({'success': False, 'error': 'Invalid method'})
 
     try:
-        # Parse the JSON body to get page_type
+        # Parse the JSON body
         data = json.loads(request.body)
         page_type = data.get('page_type')
-        if not page_type:
-            return JsonResponse({'success': False, 'error': 'Page type not specified'})
+        banner_type = data.get('banner_type')  # Add this
+        return_preview = data.get('return_preview', False)  # Add this
+        
+        if not page_type or not banner_type:
+            return JsonResponse({'success': False, 'error': 'Page type and banner type required'})
 
         # Get the business and verify ownership
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
@@ -1539,27 +1730,47 @@ def remove_hero_image(request, business_subdirectory):
         # Get the specific subpage
         subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
         
-        # Get and delete the hero image
+        # Get and delete the specific banner image
         content_type = ContentType.objects.get_for_model(SubPage)
         hero_image = Image.objects.filter(
             content_type=content_type,
             object_id=subpage.id,
-            alt_text__startswith='hero_'
+            alt_text=banner_type  # Use the specific banner type
         ).first()
 
+        response_data = {'success': True}
+
         if hero_image:
-            print(f"Deleting hero image: {hero_image.id} for subpage: {subpage.id}")
+            print(f"Deleting {banner_type} image: {hero_image.id} for subpage: {subpage.id}")
             hero_image.delete()
-            return JsonResponse({
-                'success': True,
-                'message': 'Hero image removed successfully'
-            })
+            response_data['message'] = f'{banner_type} image removed successfully'
         else:
-            print(f"No hero image found for subpage: {subpage.id}")
-            return JsonResponse({
-                'success': False,
-                'error': 'No hero image found'
+            print(f"No {banner_type} image found for subpage: {subpage.id}")
+            response_data['message'] = f'No {banner_type} image found'
+
+        # Add preview HTML if requested
+        if return_preview:
+            preview_html = render_to_string(f'visitor_pages/{page_type}.html', {
+                'business_details': business,
+                'subpage': subpage,
+                'hero_primary': subpage.get_hero_primary(),
+                'hero_banner_2': subpage.get_hero_banner_2(),
+                'hero_banner_3': subpage.get_hero_banner_3(),
+                'hero_image': subpage.get_hero_primary(),
+                'preview_mode': True,
+                'business_subdirectory': business_subdirectory,
+                'debug': True,
+                'primary_color': business.primary_color,
+                'secondary_color': business.secondary_color,
+                'text_color': business.text_color,
+                'hover_color': business.hover_color,
+                'navigation_style': business.navigation_style,
+                'footer_style': business.footer_style,
+                'is_published': subpage.is_published
             })
+            response_data['preview_html'] = preview_html
+
+        return JsonResponse(response_data)
 
     except json.JSONDecodeError:
         return JsonResponse({'success': False, 'error': 'Invalid JSON data'})
@@ -1596,109 +1807,123 @@ def update_subpage_hero(request, business_subdirectory, subpage_id):
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
     
-@login_required
-def update_hero(request, business_subdirectory):
-    if request.method != 'POST':
-        return JsonResponse({'success': False, 'error': 'Invalid method'})
+# @login_required
+# def update_hero(request, business_subdirectory):
+#     if request.method != 'POST':
+#         return JsonResponse({'success': False, 'error': 'Invalid method'})
 
-    try:
-        data = json.loads(request.body)
-        field = data.get('field')
-        value = data.get('value', 'default')  # Provide a default value
-        page_type = data.get('page_type')
+#     try:
+#         data = json.loads(request.body)
+#         field = data.get('field')
+#         value = data.get('value', 'default')  # Provide a default value
+#         page_type = data.get('page_type')
 
-        logger.debug(f"Updating hero field: {field} to value: {value} for page: {page_type}")
+#         logger.debug(f"Updating hero field: {field} to value: {value} for page: {page_type}")
 
-        business = get_object_or_404(Business, subdirectory=business_subdirectory)
-        if request.user != business.owner:
-            return JsonResponse({'success': False, 'error': 'Unauthorized'})
+#         business = get_object_or_404(Business, subdirectory=business_subdirectory)
+#         if request.user != business.owner:
+#             return JsonResponse({'success': False, 'error': 'Unauthorized'})
 
-        subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
+#         subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
         
-        # Map of frontend field names to model field names
-        field_mapping = {
-            # hero fields
-            'text_align': 'hero_text_align',
-            'hero_heading': 'hero_heading',
-            'hero_heading_size': 'hero_heading_size',
-            'hero_subheading': 'hero_subheading',
-            'hero_subheading_size': 'hero_subheading_size',
-            'hero_heading_font': 'hero_heading_font',
-            'hero_subheading_font': 'hero_subheading_font',
-            'hero_heading_color': 'hero_heading_color',
-            'hero_subheading_color': 'hero_subheading_color',
-            'show_hero_heading': 'show_hero_heading',
-            'show_hero_subheading': 'show_hero_subheading',
-            'hero_layout': 'hero_layout',
-            'hero_size': 'hero_size',
-            'hero_button_text': 'hero_button_text',
-            # hero button fields
-            'hero_button_link': 'hero_button_link',
-            'show_hero_button': 'show_hero_button',
-            'hero_button_bg_color': 'hero_button_bg_color',
-            'hero_button_text_color': 'hero_button_text_color',
-            'hero_button_size': 'hero_button_size',
-            # Banner 2 fields
-            'hero_banner_2_heading': 'banner_2_heading',
-            'hero_banner_2_subheading': 'banner_2_subheading',
-            'show_hero_banner_2_heading': 'show_banner_2_heading',
-            'show_hero_banner_2_subheading': 'show_banner_2_subheading',
-            'hero_banner_2_heading_font': 'banner_2_heading_font',
-            'hero_banner_2_heading_size': 'banner_2_heading_size',
-            'hero_banner_2_heading_color': 'banner_2_heading_color',
-            'hero_banner_2_subheading_font': 'banner_2_subheading_font',
-            'hero_banner_2_subheading_size': 'banner_2_subheading_size',
-            'hero_banner_2_subheading_color': 'banner_2_subheading_color',
-            'hero_banner_2_text_align': 'banner_2_text_align',
-            # banner 2 button fields
-            'hero_banner_2_button_text': 'banner_2_button_text',
-            'hero_banner_2_button_link': 'banner_2_button_link',
-            'show_hero_banner_2_button': 'show_banner_2_button',
-            'hero_banner_2_button_bg_color': 'banner_2_button_bg_color',
-            'hero_banner_2_button_text_color': 'banner_2_button_text_color',
-            'hero_banner_2_button_size': 'banner_2_button_size',
-            # Banner 3 fields
-            'hero_banner_3_heading': 'banner_3_heading',
-            'hero_banner_3_subheading': 'banner_3_subheading',
-            'show_hero_banner_3_heading': 'show_banner_3_heading',
-            'show_hero_banner_3_subheading': 'show_banner_3_subheading',
-            'hero_banner_3_heading_font': 'banner_3_heading_font',
-            'hero_banner_3_heading_size': 'banner_3_heading_size',
-            'hero_banner_3_heading_color': 'banner_3_heading_color',
-            'hero_banner_3_subheading_font': 'banner_3_subheading_font',
-            'hero_banner_3_subheading_size': 'banner_3_subheading_size',
-            'hero_banner_3_subheading_color': 'banner_3_subheading_color',
-            'hero_banner_3_text_align': 'banner_3_text_align',
-            # banner 3 button fields
-            'hero_banner_3_button_text': 'banner_3_button_text',
-            'hero_banner_3_button_link': 'banner_3_button_link',
-            'show_hero_banner_3_button': 'show_banner_3_button',
-            'hero_banner_3_button_bg_color': 'banner_3_button_bg_color',
-            'hero_banner_3_button_text_color': 'banner_3_button_text_color',
-            'hero_banner_3_button_size': 'banner_3_button_size',
-        }
-        # Get the correct field name from the mapping
-        model_field = field_mapping.get(field)
-        print(f"Field mapping result: {model_field}")
-        logger.debug(f"Field mapping result: {model_field}")
-        logger.debug(f"Current value in database: {getattr(subpage, model_field, None)}")
-        logger.debug(f"New value being set: {value}")
-        if not model_field:
-            return JsonResponse({'success': False, 'error': f'Invalid field: {field}'})
+#         # Map of frontend field names to model field names
+#         field_mapping = {
+#             # hero fields
+#             'text_align': 'hero_text_align',
+#             'hero_heading': 'hero_heading',
+#             'hero_heading_size': 'hero_heading_size',
+#             'hero_subheading': 'hero_subheading',
+#             'hero_subheading_size': 'hero_subheading_size',
+#             'hero_heading_font': 'hero_heading_font',
+#             'hero_subheading_font': 'hero_subheading_font',
+#             'hero_heading_color': 'hero_heading_color',
+#             'hero_subheading_color': 'hero_subheading_color',
+#             'show_hero_heading': 'show_hero_heading',
+#             'show_hero_subheading': 'show_hero_subheading',
+#             'hero_layout': 'hero_layout',
+#             'hero_size': 'hero_size',
+#             'hero_button_text': 'hero_button_text',
+#             # hero button fields
+#             'hero_button_link': 'hero_button_link',
+#             'show_hero_button': 'show_hero_button',
+#             'hero_button_bg_color': 'hero_button_bg_color',
+#             'hero_button_text_color': 'hero_button_text_color',
+#             'hero_button_size': 'hero_button_size',
+#             # Banner 2 fields
+#             'hero_banner_2_heading': 'banner_2_heading',
+#             'hero_banner_2_subheading': 'banner_2_subheading',
+#             'show_hero_banner_2_heading': 'show_banner_2_heading',
+#             'show_hero_banner_2_subheading': 'show_banner_2_subheading',
+#             'hero_banner_2_heading_font': 'banner_2_heading_font',
+#             'hero_banner_2_heading_size': 'banner_2_heading_size',
+#             'hero_banner_2_heading_color': 'banner_2_heading_color',
+#             'hero_banner_2_subheading_font': 'banner_2_subheading_font',
+#             'hero_banner_2_subheading_size': 'banner_2_subheading_size',
+#             'hero_banner_2_subheading_color': 'banner_2_subheading_color',
+#             'hero_banner_2_text_align': 'banner_2_text_align',
+#             # banner 2 button fields
+#             'hero_banner_2_button_text': 'banner_2_button_text',
+#             'hero_banner_2_button_link': 'banner_2_button_link',
+#             'show_hero_banner_2_button': 'show_banner_2_button',
+#             'hero_banner_2_button_bg_color': 'banner_2_button_bg_color',
+#             'hero_banner_2_button_text_color': 'banner_2_button_text_color',
+#             'hero_banner_2_button_size': 'banner_2_button_size',
+#             # Banner 3 fields
+#             'hero_banner_3_heading': 'banner_3_heading',
+#             'hero_banner_3_subheading': 'banner_3_subheading',
+#             'show_hero_banner_3_heading': 'show_banner_3_heading',
+#             'show_hero_banner_3_subheading': 'show_banner_3_subheading',
+#             'hero_banner_3_heading_font': 'banner_3_heading_font',
+#             'hero_banner_3_heading_size': 'banner_3_heading_size',
+#             'hero_banner_3_heading_color': 'banner_3_heading_color',
+#             'hero_banner_3_subheading_font': 'banner_3_subheading_font',
+#             'hero_banner_3_subheading_size': 'banner_3_subheading_size',
+#             'hero_banner_3_subheading_color': 'banner_3_subheading_color',
+#             'hero_banner_3_text_align': 'banner_3_text_align',
+#             # banner 3 button fields
+#             'hero_banner_3_button_text': 'banner_3_button_text',
+#             'hero_banner_3_button_link': 'banner_3_button_link',
+#             'show_hero_banner_3_button': 'show_banner_3_button',
+#             'hero_banner_3_button_bg_color': 'banner_3_button_bg_color',
+#             'hero_banner_3_button_text_color': 'banner_3_button_text_color',
+#             'hero_banner_3_button_size': 'banner_3_button_size',
+#         }
+#         # Get the correct field name from the mapping
+#         model_field = field_mapping.get(field)
+#         print(f"Field mapping result: {model_field}")
+#         logger.debug(f"Field mapping result: {model_field}")
+#         logger.debug(f"Current value in database: {getattr(subpage, model_field, None)}")
+#         logger.debug(f"New value being set: {value}")
+#         if not model_field:
+#             return JsonResponse({'success': False, 'error': f'Invalid field: {field}'})
 
-        # Ensure value is not None before setting
-        if value is not None:
-            setattr(subpage, model_field, value)
-            subpage.save()
-            logger.debug(f"Successfully updated {model_field} to {value}")
-            return JsonResponse({'success': True})
-        else:
-            return JsonResponse({'success': False, 'error': 'Value cannot be null'})
+#         # Ensure value is not None before setting
+#         if value is not None:
+#             setattr(subpage, model_field, value)
+#             subpage.save()
+#             logger.debug(f"Successfully updated {model_field} to {value}")
+#             return JsonResponse({'success': True})
+#         else:
+#             return JsonResponse({'success': False, 'error': 'Value cannot be null'})
 
-    except Exception as e:
-        logger.error(f"Error in update_hero: {str(e)}")
-        return JsonResponse({'success': False, 'error': str(e)})
+#     except Exception as e:
+#         logger.error(f"Error in update_hero: {str(e)}")
+#         return JsonResponse({'success': False, 'error': str(e)})
     
+
+@require_POST
+def update_hero(request, business_subdirectory):
+    # Convert old format to new format
+    data = json.loads(request.body)
+    new_data = {
+        'fieldType': 'text',  # or appropriate type
+        'fieldName': data.get('field'),
+        'value': data.get('value'),
+        'page_type': data.get('page_type')
+    }
+    request._body = json.dumps(new_data).encode('utf-8')
+    return update_layout(request, business_subdirectory)
+
 def get_published_subpages(business, current_page_type):
     """Helper function to get published subpages excluding current page"""
     return SubPage.objects.filter(

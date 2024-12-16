@@ -4,15 +4,14 @@
         style="height: {% if subpage.hero_size == 'full-screen' %}100vh{% else %}50vh{% endif %}">
     {% if hero_image %}
         <img src="{{ hero_image.image.url }}" 
-             alt="{{ hero_image.alt_text }}"
-             class="w-full h-full object-cover"
-             >
-             
+            alt="{{ hero_image.alt_text|default:'' }}"
+            class="w-full h-full object-cover"
+        >
     {% else %}
         <!-- Optional: Default/placeholder state -->
         <div class="w-full h-screen bg-gray-100 flex items-center justify-center"
             style="height: {% if subpage.hero_size == 'full-screen' %}100vh{% else %}50vh{% endif %}">
-            <p class="text-gray-500">No hero image set</p>
+            <p class="text-gray-500">No hero image set test</p>
         </div>
     {% endif %}
     
@@ -25,14 +24,14 @@
                             {% if subpage.hero_text_align != 'right' %}max-w-prose{% endif %}">
                     {% if subpage.show_hero_heading %}
                     <h1 class="{{ subpage.hero_heading_size }} font-bold tracking-tight text-{{ subpage.hero_text_align }}"
-                        style="font-family: {{ subpage.hero_heading_font }}; {% if subpage.hero_text_color %}color: {{ subpage.hero_text_color|safe }}{% endif %}">
+                        style="font-family: {{ subpage.hero_heading_font }}; {% if subpage.hero_heading_color %}color: {{ subpage.hero_heading_color|safe }}{% endif %}">
                         {{ subpage.hero_heading|default:subpage.title }}
                     </h1>
                     {% endif %}
                     
                     {% if subpage.show_hero_subheading and subpage.hero_subheading %}
                     <p class="{{ subpage.hero_subheading_size }} mt-6 text-{{ subpage.hero_text_align }}"
-                        style="font-family: {{ subpage.hero_subheading_font }}; {% if subpage.hero_subtext_color %}color: {{ subpage.hero_subtext_color|safe }}{% endif %}">
+                        style="font-family: {{ subpage.hero_subheading_font }}; {% if subpage.hero_subheading_color %}color: {{ subpage.hero_subheading_color|safe }}{% endif %}">
                         {{ subpage.hero_subheading }}
                     </p>
                     {% endif %}
@@ -40,8 +39,8 @@
                     {% if subpage.hero_button_text %}
                         <div class="mt-8 sm:mt-10 text-{{ subpage.hero_text_align }}">
                             <a href="{{ subpage.hero_button_link|default:'#' }}" 
-                            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white"
-                            style="background-color: {{ secondary_color }}; hover:background-color: {{ hover_color }}">
+                            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow text-white"
+                            style="background-color: {{ subpage.hero_button_bg_color }}; hover:background-color: {{ subpage.hero_button_hover_bg_color }}">
                                 {{ subpage.hero_button_text }}
                             </a>
                         </div>

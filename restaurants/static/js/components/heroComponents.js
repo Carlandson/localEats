@@ -7,6 +7,7 @@ export function handleBannerSliderVisibility(layoutStyle) {
     const bannerSliderContainer = document.getElementById('banner-slider-images');
     if (!bannerSliderContainer) return;
     if (layoutStyle === 'banner-slider') {
+        const bannerSliderContainer = document.getElementById('banner-slider-images');
         bannerSliderContainer.style.display = 'block';
         
         // Initialize slider
@@ -54,7 +55,7 @@ export function handleBannerSliderVisibility(layoutStyle) {
             if (container) container.classList.add('opacity-50');
             if (removeButton) removeButton.disabled = true;
         });
-    }
+    } 
 }
 
 // Add this function to reinitialize the slider after content changes

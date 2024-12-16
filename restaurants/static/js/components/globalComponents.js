@@ -1,17 +1,15 @@
 import { getCookie } from '../utils/cookies.js';
 import { displayError } from '../utils/errors.js';
-import { updatePreview } from '../utils/previewUpdates.js';
+import { smartUpdate } from '../utils/previewUpdates.js';
 import { handleBannerSliderVisibility } from './heroComponents.js';
 
 export async function updateGlobalComponent(component, style, context) {
-    const { business_subdirectory, pageSelector } = context;
-    
     try {
         console.log('updateGlobalComponent called with:', {
             component,
             style,
-            business_subdirectory,
-            pageType: pageSelector.value
+            business_subdirectory: context.business_subdirectory,
+            pageType: context.pageSelector.value
         });
 
         // Handle banner slider visibility if this is a hero layout update
@@ -20,42 +18,48 @@ export async function updateGlobalComponent(component, style, context) {
             handleBannerSliderVisibility(style);
         }
 
-        const requestBody = {
-            component: component,
-            style: style
+        // Map component names to field names if needed
+        const fieldNameMap = {
+            'navigation': 'navigation_style',
+            'footer_style': 'footer_style',
+            'hero_layout': 'hero_layout',
+            'hero_size': 'hero_size'
         };
-        
-        // Add page type to URL as query parameter
-        const url = `/${business_subdirectory}/update-global-component/?page_type=${pageSelector.value}`;
-        console.log('Sending request to:', url);
-        console.log('With body:', requestBody);
 
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken'),
-            },
-            body: JSON.stringify(requestBody)
+        const fieldName = fieldNameMap[component] || component;
+
+        // Get the current value before updating
+        let previousValue;
+        const radioInput = document.querySelector(`input[name="${component}"]:checked`);
+        const selectInput = document.querySelector(`select[name="${component}"]`);
+        
+        if (radioInput) {
+            previousValue = radioInput.value;
+        } else if (selectInput) {
+            previousValue = selectInput.value;
+        }
+
+        console.log('Previous value:', previousValue); // Debug log
+
+        const response = await smartUpdate(context, {
+            fieldType: 'layout',
+            fieldName: fieldName,
+            value: style,
+            previousValue: previousValue,
+            page_type: context.pageSelector.value,
+            isGlobal: true,
+            return_preview: true
         });
 
-        console.log('Response status:', response.status);
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to update component');
+        // Update the input value after successful update
+        if (radioInput) {
+            radioInput.value = style;
+        } else if (selectInput) {
+            selectInput.value = style;
         }
-        
-        const data = await response.json();
-        console.log('Update response:', data);
-        
-        if (data.success) {
-            // Update preview after successful component change
-            await updatePreview(pageSelector.value, context, false);
-            return true;
-        } else {
-            throw new Error(data.error || 'Update failed');
-        }
+
+        return response;
+
     } catch (error) {
         console.error('Error in updateGlobalComponent:', error);
         displayError('Failed to update component: ' + error.message);
@@ -73,40 +77,28 @@ export async function togglePagePublish(isPublished, context) {
             pageType: pageSelector.value
         });
 
-        const response = await fetch(`/${business_subdirectory}/toggle-publish/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken'),
-            },
-            body: JSON.stringify({
-                page_type: pageSelector.value,
-                is_published: isPublished
-            })
+        // Use smartUpdate for publish status
+        await smartUpdate(context, {
+            fieldType: 'toggle',
+            fieldName: 'is_published',
+            value: isPublished,
+            previousValue: !isPublished,
+            page_type: pageSelector.value,
+            return_preview: true
         });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to update publish status');
+        // Update the status text and any UI elements
+        const publishStatus = document.getElementById('publish-status');
+        if (publishStatus) {
+            publishStatus.textContent = isPublished ? 'Published' : 'Draft';
+            publishStatus.classList.add('text-blue-600');
+            setTimeout(() => {
+                publishStatus.classList.remove('text-blue-600');
+            }, 1000);
         }
 
-        const data = await response.json();
-        console.log('Publish toggle response:', data);
+        return true;
 
-        if (data.success) {
-            // Update the status text and any UI elements
-            const publishStatus = document.getElementById('publish-status');
-            if (publishStatus) {
-                publishStatus.textContent = isPublished ? 'Published' : 'Draft';
-                publishStatus.classList.add('text-blue-600');
-                setTimeout(() => {
-                    publishStatus.classList.remove('text-blue-600');
-                }, 1000);
-            }
-            return true;
-        } else {
-            throw new Error(data.error || 'Update failed');
-        }
     } catch (error) {
         console.error('Error in togglePagePublish:', error);
         displayError('Failed to update publish status: ' + error.message);

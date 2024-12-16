@@ -1,4 +1,5 @@
-import { updateGlobalComponent } from '../components/globalComponents.js';
+import { smartUpdate } from '../utils/previewUpdates.js';
+import { displayError } from '../utils/errors.js';
 
 export function initializePublishToggle(context) {
     const publishToggle = document.getElementById('publish-toggle');
@@ -15,32 +16,28 @@ export function initializePublishToggle(context) {
 
     newToggle.addEventListener('change', async function() {
         try {
-            // Get current page type from the selector
-            const currentPage = context.pageSelector.value;
-            const updatedContext = {
-                ...context,
-                pageType: currentPage  // Add current page type to context
-            };
+            const previousValue = !this.checked;
+            await smartUpdate(context, {
+                fieldType: 'toggle',
+                fieldName: 'is_published',
+                value: this.checked,
+                previousValue: previousValue,
+                page_type: context.pageSelector.value,
+                return_preview: true,
+                isGlobal: false
+            });
 
-            const success = await updateGlobalComponent('is_published', this.checked, updatedContext);
-            if (success) {
-                if (publishStatus) {
-                    publishStatus.textContent = this.checked ? 'Published' : 'Draft';
-                }
-            } else {
-                // Revert on failure
-                this.checked = !this.checked;
-                if (publishStatus) {
-                    publishStatus.textContent = this.checked ? 'Published' : 'Draft';
-                }
-            }
-        } catch (error) {
-            console.error('Error updating publish state:', error);
-            // Revert on error
-            this.checked = !this.checked;
+            // Update status text after successful update
             if (publishStatus) {
                 publishStatus.textContent = this.checked ? 'Published' : 'Draft';
             }
+        } catch (error) {
+            console.error('Error updating publish state:', error);
+            // Revert on error (handled by smartUpdate)
+            if (publishStatus) {
+                publishStatus.textContent = !this.checked ? 'Published' : 'Draft';
+            }
+            displayError('Failed to update publish state');
         }
     });
 }

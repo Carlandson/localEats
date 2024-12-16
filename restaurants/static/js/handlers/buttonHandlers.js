@@ -1,8 +1,6 @@
-import { getCookie } from '../utils/cookies.js';
 import { displayError } from '../utils/errors.js';
-import { updatePreview } from '../utils/previewUpdates.js';
-import { debounce } from '../utils/debounce.js';
-import { updateHeroText } from './textHandlers.js';
+import { smartUpdate } from '../utils/previewUpdates.js';
+import { handleBannerSliderVisibility } from '../components/heroComponents.js';
 
 function initializeButtonEditor(prefix, context) {
     // Get all button-related elements
@@ -15,40 +13,61 @@ function initializeButtonEditor(prefix, context) {
         buttonSize: document.getElementById(`${prefix}_button_size`),
         button: document.querySelector(`.${prefix}-button`)
     };
+
     // Initialize show/hide button checkbox
     if (elements.showButton) {
         elements.showButton.checked = elements.showButton.dataset.initialState === 'true';
         
         elements.showButton.addEventListener('change', async function() {
-            // Enable/disable button-related inputs
-            [elements.buttonText, elements.buttonLink, elements.buttonBgColor, 
-             elements.buttonTextColor, elements.buttonSize].forEach(input => {
-                if (input) input.disabled = !this.checked;
-            });
+            try {
+                // Enable/disable button-related inputs
+                [elements.buttonText, elements.buttonLink, elements.buttonBgColor, 
+                 elements.buttonTextColor, elements.buttonSize].forEach(input => {
+                    if (input) input.disabled = !this.checked;
+                });
 
-            // Update show/hide state
-            await updateHeroText(`show_${prefix}_button`, this.checked, context);
-            
-            // If showing button, update all button settings
-            if (this.checked) {
-                const updates = [
-                    [elements.buttonText, `${prefix}_button_text`],
-                    [elements.buttonLink, `${prefix}_button_link`],
-                    [elements.buttonBgColor, `${prefix}_button_bg_color`],
-                    [elements.buttonTextColor, `${prefix}_button_text_color`],
-                    [elements.buttonSize, `${prefix}_button_size`]
-                ];
+                // Update show/hide state
+                await smartUpdate(context, {
+                    fieldType: 'toggle',
+                    fieldName: `show_${prefix}_button`,
+                    value: this.checked,
+                    previousValue: !this.checked,
+                    page_type: context.pageSelector.value,
+                    return_preview: true,
+                    isGlobal: false
+                });
 
-                for (const [element, fieldName] of updates) {
-                    if (element && element.value) {
-                        await updateHeroText(fieldName, element.value, context);
+                // If showing button, update all button settings
+                if (this.checked) {
+                    const updates = [
+                        [elements.buttonText, `${prefix}_button_text`],
+                        [elements.buttonLink, `${prefix}_button_link`],
+                        [elements.buttonBgColor, `${prefix}_button_bg_color`],
+                        [elements.buttonTextColor, `${prefix}_button_text_color`],
+                        [elements.buttonSize, `${prefix}_button_size`]
+                    ];
+
+                    for (const [element, fieldName] of updates) {
+                        if (element && element.value) {
+                            await smartUpdate(context, {
+                                fieldType: 'button',
+                                fieldName: fieldName,
+                                value: element.value,
+                                previousValue: element.defaultValue,
+                                page_type: context.pageSelector.value,
+                                return_preview: true
+                            });
+                        }
                     }
                 }
+            } catch (error) {
+                console.error('Error updating button visibility:', error);
+                displayError('Failed to update button visibility');
             }
         });
     }
 
-    // Initialize other button inputs with debounce
+    // Initialize other button inputs
     [
         [elements.buttonText, `${prefix}_button_text`],
         [elements.buttonLink, `${prefix}_button_link`],
@@ -57,16 +76,29 @@ function initializeButtonEditor(prefix, context) {
         [elements.buttonSize, `${prefix}_button_size`]
     ].forEach(([element, fieldName]) => {
         if (element) {
-            element.addEventListener('input', debounce(async function() {
-                await updateHeroText(fieldName, this.value, context);
-            }, 500));
+            element.addEventListener('input', async function() {
+                try {
+                    await smartUpdate(context, {
+                        fieldType: 'button',
+                        fieldName: fieldName,
+                        value: this.value,
+                        previousValue: this.defaultValue,
+                        page_type: context.pageSelector.value,
+                        return_preview: true
+                    });
+                    // Update the defaultValue for future changes
+                    this.defaultValue = this.value;
+                } catch (error) {
+                    console.error(`Error updating ${fieldName}:`, error);
+                    displayError(`Failed to update button ${fieldName.split('_').pop()}`);
+                }
+            });
         }
     });
 }
 
 export function initializeBannerButtonEditors(context) {
     const prefixes = ['hero', 'hero_banner_2', 'hero_banner_3'];
-    
     prefixes.forEach(prefix => {
         initializeButtonEditor(prefix, context);
     });
