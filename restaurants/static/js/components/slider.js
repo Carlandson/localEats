@@ -3,7 +3,7 @@ export function initializeSlider() {
     let slideInterval;
     let isPlaying = false;
 
-    function setup() {
+    function setup(startingSlide = 0) {
         // Get only slides that contain images
         const allSlides = document.querySelectorAll('.slide');
         const slides = Array.from(allSlides).filter(slide => slide.querySelector('img'));
@@ -138,8 +138,19 @@ export function initializeSlider() {
         });
 
         // Initialize slider
-        showSlide(0);
+        showSlide(startingSlide);
         startAutoSlide();
+        function getCurrentSlide() {
+            return currentSlide;
+        }
+    
+        return {
+            start: startAutoSlide,
+            stop: stopAutoSlide,
+            getCurrentSlide,
+            showSlide,
+            isPlaying: () => isPlaying,
+        }
     }
 
     return {

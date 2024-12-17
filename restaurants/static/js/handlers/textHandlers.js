@@ -110,8 +110,8 @@ function initializeBannerText(prefix, context) {
 
 export function initializeTextInputs(context) {
     initializeBannerText('hero', context);
-    initializeBannerText('hero_banner_2', context);
-    initializeBannerText('hero_banner_3', context);
+    initializeBannerText('banner_2', context);
+    initializeBannerText('banner_3', context);
 }
 
 // export async function updateHeroText(field, value, context) {

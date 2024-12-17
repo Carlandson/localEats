@@ -8,14 +8,14 @@ function getFontElements() {
         heroSubheadingFont: document.getElementById('hero_subheading_font'),
         heroHeadingSize: document.getElementById('hero_heading_size'),
         heroSubheadingSize: document.getElementById('hero_subheading_size'),
-        banner2HeadingFont: document.getElementById('hero_banner_2_heading_font'),
-        banner2SubheadingFont: document.getElementById('hero_banner_2_subheading_font'),
-        banner2HeadingSize: document.getElementById('hero_banner_2_heading_size'),
-        banner2SubheadingSize: document.getElementById('hero_banner_2_subheading_size'),
-        banner3HeadingFont: document.getElementById('hero_banner_3_heading_font'),
-        banner3SubheadingFont: document.getElementById('hero_banner_3_subheading_font'),
-        banner3HeadingSize: document.getElementById('hero_banner_3_heading_size'),
-        banner3SubheadingSize: document.getElementById('hero_banner_3_subheading_size')
+        banner2HeadingFont: document.getElementById('banner_2_heading_font'),
+        banner2SubheadingFont: document.getElementById('banner_2_subheading_font'),
+        banner2HeadingSize: document.getElementById('banner_2_heading_size'),
+        banner2SubheadingSize: document.getElementById('banner_2_subheading_size'),
+        banner3HeadingFont: document.getElementById('banner_3_heading_font'),
+        banner3SubheadingFont: document.getElementById('banner_3_subheading_font'),
+        banner3HeadingSize: document.getElementById('banner_3_heading_size'),
+        banner3SubheadingSize: document.getElementById('banner_3_subheading_size')
     };
 }
 
@@ -64,9 +64,9 @@ export function initializeFontHandlers(context) {
                 // Get the correct prefix
                 let prefix;
                 if (this.id.includes('banner_2')) {
-                    prefix = 'hero_banner_2';
+                    prefix = 'banner_2';
                 } else if (this.id.includes('banner_3')) {
-                    prefix = 'hero_banner_3';
+                    prefix = 'banner_3';
                 } else {
                     prefix = 'hero';
                 }

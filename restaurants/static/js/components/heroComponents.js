@@ -58,14 +58,29 @@ export function handleBannerSliderVisibility(layoutStyle) {
     } 
 }
 
-// Add this function to reinitialize the slider after content changes
 export function reinitializeSlider() {
     if (sliderInstance) {
+        // Store current state
+        const currentIndex = sliderInstance.getCurrentSlide();
+        const wasPlaying = sliderInstance.isPlaying();
+        
+        // Stop current instance
         sliderInstance.stop();
-    }
-    sliderInstance = slider.init();
-    if (sliderInstance && document.getElementById('banner-slider-images').style.display !== 'none') {
-        sliderInstance.start();
+        
+        // Reinitialize with stored position
+        sliderInstance = slider.init(currentIndex);
+        
+        if (sliderInstance && document.getElementById('banner-slider-images').style.display !== 'none') {
+            // Only start if it was playing before
+            if (wasPlaying) {
+                sliderInstance.start();
+            }
+        }
+    } else {
+        sliderInstance = slider.init(0);
+        if (sliderInstance && document.getElementById('banner-slider-images').style.display !== 'none') {
+            sliderInstance.start();
+        }
     }
 }
 

@@ -188,6 +188,7 @@ async function combinedUpdate(context, data) {
             console.log('Preview container found:', !!previewContainer); // Debug log
             if (previewContainer) {
                 previewContainer.innerHTML = responseData.preview_html;
+                console.log('Preview container updated');
                 reinitializeSlider();
             }
         } else {

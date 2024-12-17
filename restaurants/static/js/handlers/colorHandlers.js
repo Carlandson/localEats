@@ -30,10 +30,10 @@ export function initializeColorHandlers(context) {
     const heroColorInputs = [
         'hero_heading_color', 
         'hero_subheading_color',
-        'hero_banner_2_heading_color',
-        'hero_banner_2_subheading_color',
-        'hero_banner_3_heading_color',
-        'hero_banner_3_subheading_color'
+        'banner_2_heading_color',
+        'banner_2_subheading_color',
+        'banner_3_heading_color',
+        'banner_3_subheading_color'
     ];
     
     heroColorInputs.forEach(id => {

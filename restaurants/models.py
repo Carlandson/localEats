@@ -337,11 +337,11 @@ class SubPage(models.Model):
         logger.debug(f"Hero primary found: {hero.id if hero else 'None'}")
         return hero
 
-    def get_hero_banner_2(self):
+    def get_banner_2(self):
         """Get the second banner image"""
         content_type = ContentType.objects.get_for_model(self)
         logger.debug(f"""
-            Searching for hero_banner_2:
+            Searching for banner_2:
             - SubPage ID: {self.id}
             - Content Type: {content_type.app_label}.{content_type.model}
         """)
@@ -349,17 +349,17 @@ class SubPage(models.Model):
         banner = Image.objects.filter(
             content_type=content_type,
             object_id=self.id,
-            alt_text='hero_banner_2'
+            alt_text='banner_2'
         ).first()
         
         logger.debug(f"Banner 2 found: {banner.id if banner else 'None'}")
         return banner
 
-    def get_hero_banner_3(self):
+    def get_banner_3(self):
         """Get the third banner image"""
         content_type = ContentType.objects.get_for_model(self)
         logger.debug(f"""
-            Searching for hero_banner_3:
+            Searching for banner_3:
             - SubPage ID: {self.id}
             - Content Type: {content_type.app_label}.{content_type.model}
         """)
@@ -367,7 +367,7 @@ class SubPage(models.Model):
         banner = Image.objects.filter(
             content_type=content_type,
             object_id=self.id,
-            alt_text='hero_banner_3'
+            alt_text='banner_3'
         ).first()
         
         logger.debug(f"Banner 3 found: {banner.id if banner else 'None'}")

@@ -53,10 +53,10 @@
         {% endif %}
 
         <!-- Second Slide -->
-        {% if hero_banner_2 %}
+        {% if banner_2 %}
         <div class="slide absolute w-full h-full transition-opacity duration-500 opacity-0">
-            <img src="{{ hero_banner_2.image.url }}" 
-                 alt="{{ hero_banner_2.alt_text }}"
+            <img src="{{ banner_2.image.url }}" 
+                 alt="{{ banner_2.alt_text }}"
                  class="w-full h-screen object-cover">
             
             <!-- Banner 2 content overlay -->
@@ -81,7 +81,7 @@
                                 {% endif %}
 
                                 {% if subpage.show_banner_2_button %}
-                                <div class="banner_2-button-container">
+                                <div class="banner_2-button-container mt-6 text-{{ subpage.banner_2_text_align }}">
                                     <a  
                                         class="banner_2-button inline-flex items-center justify-center rounded-md 
                                                {% if subpage.banner_2_button_size == 'sm' %}text-sm px-3 py-1{% endif %}
@@ -102,10 +102,10 @@
         {% endif %}
 
         <!-- Third Slide -->
-        {% if hero_banner_3 %}
+        {% if banner_3 %}
         <div class="slide absolute w-full h-full transition-opacity duration-500 opacity-0">
-            <img src="{{ hero_banner_3.image.url }}" 
-                 alt="{{ hero_banner_3.alt_text }}"
+            <img src="{{ banner_3.image.url }}" 
+                 alt="{{ banner_3.alt_text }}"
                  class="w-full h-screen object-cover">
             
             <!-- Banner 3 content overlay -->
@@ -129,7 +129,7 @@
                                 </p>
                                 {% endif %}
                                 {% if subpage.show_banner_3_button %}
-                                <div class="_banner_3-button-container">
+                                <div class="_banner_3-button-container mt-6 text-{{ subpage.banner_3_text_align }}">
                                     <a  
                                         class="banner_3-button inline-flex items-center justify-center rounded-md 
                                                {% if subpage.banner_3_button_size == 'sm' %}text-sm px-3 py-1{% endif %}
@@ -150,7 +150,7 @@
         {% endif %}
 
         <!-- Only show navigation if we have multiple slides -->
-        {% if hero_image or hero_banner_2 or hero_banner_3 %}
+        {% if hero_image or banner_2 or banner_3 %}
             <!-- Navigation Dots -->
             <div class="absolute bottom-0 left-0 right-0 mb-8 z-20">
                 <div class="flex justify-center items-center">
@@ -172,10 +172,10 @@
                             {% if hero_image %}
                                 <button class="w-3 h-3 rounded-full bg-white opacity-100 transition-opacity duration-200 dot-nav"></button>
                             {% endif %}
-                            {% if hero_banner_2 %}
+                            {% if banner_2 %}
                                 <button class="w-3 h-3 rounded-full bg-white opacity-50 transition-opacity duration-200 dot-nav"></button>
                             {% endif %}
-                            {% if hero_banner_3 %}
+                            {% if banner_3 %}
                                 <button class="w-3 h-3 rounded-full bg-white opacity-50 transition-opacity duration-200 dot-nav"></button>
                             {% endif %}
                         </div>

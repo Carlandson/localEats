@@ -4,8 +4,8 @@ import { smartUpdate } from '../utils/previewUpdates.js';
 function getAlignmentElements() {
     return {
         heroAlignmentRadios: document.querySelectorAll('input[name="hero_text_align"]'),
-        banner2AlignmentRadios: document.querySelectorAll('input[name="hero_banner_2_text_align"]'),
-        banner3AlignmentRadios: document.querySelectorAll('input[name="hero_banner_3_text_align"]')
+        banner2AlignmentRadios: document.querySelectorAll('input[name="banner_2_text_align"]'),
+        banner3AlignmentRadios: document.querySelectorAll('input[name="banner_3_text_align"]')
     };
 }
 

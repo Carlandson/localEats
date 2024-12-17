@@ -1016,8 +1016,8 @@ def edit_layout(request, business_subdirectory):
         
         # Get hero images
         hero_primary = current_subpage.get_hero_primary()
-        hero_banner_2 = current_subpage.get_hero_banner_2()
-        hero_banner_3 = current_subpage.get_hero_banner_3()
+        banner_2 = current_subpage.get_banner_2()
+        banner_3 = current_subpage.get_banner_3()
 
         page_data = {
             'business_subdirectory': business_subdirectory,
@@ -1049,7 +1049,7 @@ def edit_layout(request, business_subdirectory):
             'hero_button_text_color': current_subpage.hero_button_text_color,
             
             # Banner 2 Data
-            'hero_banner_2': {
+            'banner_2': {
                 'heading': current_subpage.banner_2_heading,
                 'subheading': current_subpage.banner_2_subheading,
                 'show_heading': current_subpage.show_banner_2_heading,
@@ -1065,12 +1065,12 @@ def edit_layout(request, business_subdirectory):
                 'text_align': current_subpage.banner_2_text_align,
                 'button_bg_color': current_subpage.banner_2_button_bg_color,
                 'button_text_color': current_subpage.banner_2_button_text_color,
-                'url': hero_banner_2.image.url if hero_banner_2 else None,
-                'alt_text': hero_banner_2.alt_text if hero_banner_2 else None
+                'url': banner_2.image.url if banner_2 else None,
+                'alt_text': banner_2.alt_text if banner_2 else None
             },
             
             # Banner 3 Data
-            'hero_banner_3': {
+            'banner_3': {
                 'heading': current_subpage.banner_3_heading,
                 'subheading': current_subpage.banner_3_subheading,
                 'show_heading': current_subpage.show_banner_3_heading,
@@ -1086,8 +1086,8 @@ def edit_layout(request, business_subdirectory):
                 'text_align': current_subpage.banner_3_text_align,
                 'button_bg_color': current_subpage.banner_3_button_bg_color,
                 'button_text_color': current_subpage.banner_3_button_text_color,
-                'url': hero_banner_3.image.url if hero_banner_3 else None,
-                'alt_text': hero_banner_3.alt_text if hero_banner_3 else None
+                'url': banner_3.image.url if banner_3 else None,
+                'alt_text': banner_3.alt_text if banner_3 else None
             },
             'is_published': current_subpage.is_published,
         }
@@ -1112,8 +1112,8 @@ def edit_layout(request, business_subdirectory):
             'subheading_sizes': get_font_sizes('subheading'),
             'hero_size_choices': SubPage.HERO_SIZE_CHOICES,
             'hero_image': hero_primary,
-            'hero_banner_2': hero_banner_2,
-            'hero_banner_3': hero_banner_3,
+            'banner_2': banner_2,
+            'banner_3': banner_3,
             'hero_heading_font': current_subpage.hero_heading_font,
         }
         
@@ -1134,7 +1134,7 @@ def update_layout(request, business_subdirectory):
         field_name = data.get('fieldName')
         value = data.get('value')
         page_type = data.get('page_type')
-        is_global = data.get('isGlobal', False)  # Add this
+        is_global = data.get('isGlobal', False)
         return_preview = data.get('return_preview', False)
 
         # Get the business and subpage
@@ -1160,6 +1160,7 @@ def update_layout(request, business_subdirectory):
         else:
             # Handle regular subpage updates
             setattr(subpage, field_name, value)
+            print(field_name, value)
             subpage.save()
 
         response_data = {'success': True}
@@ -1169,8 +1170,8 @@ def update_layout(request, business_subdirectory):
                 'business_details': business,
                 'subpage': subpage,
                 'hero_primary': subpage.get_hero_primary(),
-                'hero_banner_2': subpage.get_hero_banner_2(),
-                'hero_banner_3': subpage.get_hero_banner_3(),
+                'banner_2': subpage.get_banner_2(),
+                'banner_3': subpage.get_banner_3(),
                 'hero_image': subpage.get_hero_primary(),
                 'preview_mode': True,
                 'business_subdirectory': business_subdirectory,
@@ -1181,7 +1182,26 @@ def update_layout(request, business_subdirectory):
                 'hover_color': business.hover_color,
                 'navigation_style': business.navigation_style,
                 'footer_style': business.footer_style,
-                'is_published': subpage.is_published
+                'is_published': subpage.is_published,
+                'banner_2_heading': subpage.banner_2_heading,
+                'banner_2_subheading': subpage.banner_2_subheading,
+                'banner_2_heading_color': subpage.banner_2_heading_color,
+                'banner_2_subheading_color': subpage.banner_2_subheading_color,
+                'banner_2_button_text': subpage.banner_2_button_text,
+                'banner_2_button_link': subpage.banner_2_button_link,
+                'banner_2_text_align': subpage.banner_2_text_align,
+                'banner_2_button_bg_color': subpage.banner_2_button_bg_color,
+                'banner_2_button_text_color': subpage.banner_2_button_text_color,
+                # Banner 3 specific data
+                'banner_3_heading': subpage.banner_3_heading,
+                'banner_3_subheading': subpage.banner_3_subheading,
+                'banner_3_heading_color': subpage.banner_3_heading_color,
+                'banner_3_subheading_color': subpage.banner_3_subheading_color,
+                'banner_3_button_text': subpage.banner_3_button_text,
+                'banner_3_button_link': subpage.banner_3_button_link,
+                'banner_3_text_align': subpage.banner_3_text_align,
+                'banner_3_button_bg_color': subpage.banner_3_button_bg_color,
+                'banner_3_button_text_color': subpage.banner_3_button_text_color,
             })
             response_data['preview_html'] = preview_html
 
@@ -1212,18 +1232,18 @@ def preview_page(request, business_subdirectory, page_type):
         
         # Get all hero images
         hero_primary = subpage.get_hero_primary()
-        hero_banner_2 = subpage.get_hero_banner_2()
-        hero_banner_3 = subpage.get_hero_banner_3()
+        banner_2 = subpage.get_banner_2()
+        banner_3 = subpage.get_banner_3()
         
         # Debug log the images
-        logger.debug(f"Hero images found: Primary={hero_primary}, Banner2={hero_banner_2}, Banner3={hero_banner_3}")
+        logger.debug(f"Hero images found: Primary={hero_primary}, Banner2={banner_2}, Banner3={banner_3}")
         
         context = {
             'business_details': business,
             'subpage': subpage,
             'hero_primary': hero_primary,
-            'hero_banner_2': hero_banner_2,
-            'hero_banner_3': hero_banner_3,
+            'banner_2': banner_2,
+            'banner_3': banner_3,
             'hero_image': hero_primary,  # For backwards compatibility
             'preview_mode': True,
             'business_subdirectory': business_subdirectory,
@@ -1275,11 +1295,11 @@ def get_page_data(request, business_subdirectory, page_type):
         
         # Get all images
         hero_primary = subpage.get_hero_primary()
-        hero_banner_2 = subpage.get_hero_banner_2()
-        hero_banner_3 = subpage.get_hero_banner_3()
+        banner_2 = subpage.get_banner_2()
+        banner_3 = subpage.get_banner_3()
         
         # Debug log to verify we have the images
-        logger.debug(f"Images found - Primary: {hero_primary}, Banner2: {hero_banner_2}, Banner3: {hero_banner_3}")
+        logger.debug(f"Images found - Primary: {hero_primary}, Banner2: {banner_2}, Banner3: {banner_3}")
 
         def get_safe_image_url(image_obj):
             if image_obj and hasattr(image_obj, 'image'):
@@ -1309,16 +1329,16 @@ def get_page_data(request, business_subdirectory, page_type):
                     'url': get_safe_image_url(hero_primary),
                     'alt': 'hero_primary'
                 },
-                'hero_banner_2': {
-                    'url': get_safe_image_url(hero_banner_2),
-                    'alt': 'hero_banner_2'
+                'banner_2': {
+                    'url': get_safe_image_url(banner_2),
+                    'alt': 'banner_2'
                 },
-                'hero_banner_3': {
-                    'url': get_safe_image_url(hero_banner_3),
-                    'alt': 'hero_banner_3'
+                'banner_3': {
+                    'url': get_safe_image_url(banner_3),
+                    'alt': 'banner_3'
                 }
             },
-            'hero_banner_2': {
+            'banner_2': {
                 'heading': subpage.banner_2_heading,
                 'subheading': subpage.banner_2_subheading,
                 'show_heading': subpage.show_banner_2_heading,
@@ -1332,7 +1352,7 @@ def get_page_data(request, business_subdirectory, page_type):
                 'button_text': subpage.banner_2_button_text,
                 'button_link': subpage.banner_2_button_link,
             },
-            'hero_banner_3': {
+            'banner_3': {
                 'heading': subpage.banner_3_heading,
                 'subheading': subpage.banner_3_subheading,
                 'show_heading': subpage.show_banner_3_heading,
@@ -1385,8 +1405,8 @@ def preview_component(request, business_subdirectory):
             # Add hero-specific context if needed
             context.update({
                 'hero_primary': subpage.get_hero_primary(),
-                'hero_banner_2': subpage.get_hero_banner_2(),
-                'hero_banner_3': subpage.get_hero_banner_3(),
+                'banner_2': subpage.get_banner_2(),
+                'banner_3': subpage.get_banner_3(),
             })
         elif component == 'navigation':
             template_name = f"components/navigation/top-nav/{business.navigation_style}.html"
@@ -1637,8 +1657,8 @@ def upload_hero_image(request, business_subdirectory):
         # Determine the alt_text based on banner type
         alt_text_map = {
             'hero_primary': 'hero_primary',
-            'hero_banner_2': 'hero_banner_2',
-            'hero_banner_3': 'hero_banner_3',
+            'banner_2': 'banner_2',
+            'banner_3': 'banner_3',
         }
         alt_text = alt_text_map.get(banner_type)
         
@@ -1685,8 +1705,8 @@ def upload_hero_image(request, business_subdirectory):
                 'business_details': business,
                 'subpage': subpage,
                 'hero_primary': subpage.get_hero_primary(),
-                'hero_banner_2': subpage.get_hero_banner_2(),
-                'hero_banner_3': subpage.get_hero_banner_3(),
+                'banner_2': subpage.get_banner_2(),
+                'banner_3': subpage.get_banner_3(),
                 'hero_image': subpage.get_hero_primary(),
                 'preview_mode': True,
                 'business_subdirectory': business_subdirectory,
@@ -1754,8 +1774,8 @@ def remove_hero_image(request, business_subdirectory):
                 'business_details': business,
                 'subpage': subpage,
                 'hero_primary': subpage.get_hero_primary(),
-                'hero_banner_2': subpage.get_hero_banner_2(),
-                'hero_banner_3': subpage.get_hero_banner_3(),
+                'banner_2': subpage.get_banner_2(),
+                'banner_3': subpage.get_banner_3(),
                 'hero_image': subpage.get_hero_primary(),
                 'preview_mode': True,
                 'business_subdirectory': business_subdirectory,
@@ -2009,19 +2029,19 @@ def page_content(request, business_subdirectory, page_type):
         hero_primary = subpage.get_hero_primary()
         logger.debug(f"get_hero_primary() returned: {hero_primary}")
         
-        hero_banner_2 = subpage.get_hero_banner_2()
-        logger.debug(f"get_hero_banner_2() returned: {hero_banner_2}")
+        banner_2 = subpage.get_banner_2()
+        logger.debug(f"get_banner_2() returned: {banner_2}")
         
-        hero_banner_3 = subpage.get_hero_banner_3()
-        logger.debug(f"get_hero_banner_3() returned: {hero_banner_3}")
+        banner_3 = subpage.get_banner_3()
+        logger.debug(f"get_banner_3() returned: {banner_3}")
         
         # Create context
         context = {
             'business_details': business,
             'subpage': subpage,
             'hero_primary': hero_primary,
-            'hero_banner_2': hero_banner_2,
-            'hero_banner_3': hero_banner_3,
+            'banner_2': banner_2,
+            'banner_3': banner_3,
             'business_subdirectory': business_subdirectory,
             'is_preview': True,
             'debug': True,

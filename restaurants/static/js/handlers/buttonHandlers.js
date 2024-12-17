@@ -67,19 +67,25 @@ function initializeButtonEditor(prefix, context) {
         });
     }
 
-    // Initialize other button inputs
-    [
-        [elements.buttonText, `${prefix}_button_text`],
-        [elements.buttonLink, `${prefix}_button_link`],
-        [elements.buttonBgColor, `${prefix}_button_bg_color`],
-        [elements.buttonTextColor, `${prefix}_button_text_color`],
-        [elements.buttonSize, `${prefix}_button_size`]
-    ].forEach(([element, fieldName]) => {
+    // Define input types and their update strategies
+    const inputConfigs = [
+        // Text inputs should be debounced
+        [elements.buttonText, `${prefix}_button_text`, 'text'],
+        // Links should update immediately
+        [elements.buttonLink, `${prefix}_button_link`, 'button'],
+        // Colors should be debounced
+        [elements.buttonBgColor, `${prefix}_button_bg_color`, 'color'],
+        [elements.buttonTextColor, `${prefix}_button_text_color`, 'color'],
+        // Size should update immediately
+        [elements.buttonSize, `${prefix}_button_size`, 'button']
+    ];
+
+    inputConfigs.forEach(([element, fieldName, fieldType]) => {
         if (element) {
             element.addEventListener('input', async function() {
                 try {
                     await smartUpdate(context, {
-                        fieldType: 'button',
+                        fieldType: fieldType,
                         fieldName: fieldName,
                         value: this.value,
                         previousValue: this.defaultValue,
@@ -98,7 +104,7 @@ function initializeButtonEditor(prefix, context) {
 }
 
 export function initializeBannerButtonEditors(context) {
-    const prefixes = ['hero', 'hero_banner_2', 'hero_banner_3'];
+    const prefixes = ['hero', 'banner_2', 'banner_3'];
     prefixes.forEach(prefix => {
         initializeButtonEditor(prefix, context);
     });

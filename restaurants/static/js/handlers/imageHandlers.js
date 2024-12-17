@@ -21,7 +21,7 @@ function attachRemoveListeners(context) {
 function getImageElements() {
     // Match the exact prefixes from the template
     const elements = {};
-    const prefixes = ['hero-image', 'hero_banner_2', 'hero_banner_3'];
+    const prefixes = ['hero-image', 'banner_2', 'banner_3'];
     
     prefixes.forEach(prefix => {
         elements[`${prefix}UploadButton`] = document.getElementById(`upload-${prefix}-button`);
@@ -33,7 +33,7 @@ function getImageElements() {
 
 export function initializeImageUploads(context) {
     const elements = getImageElements();
-    const prefixes = ['hero-image', 'hero_banner_2', 'hero_banner_3'];  // Match template prefixes
+    const prefixes = ['hero-image', 'banner_2', 'banner_3'];  // Match template prefixes
 
     attachRemoveListeners(context);
 

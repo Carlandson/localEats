@@ -166,8 +166,8 @@ async function initializePageData(context) {
         if (!data.images) {
             data.images = {
                 hero_primary: { url: null },
-                hero_banner_2: { url: null },
-                hero_banner_3: { url: null }
+                banner_2: { url: null },
+                banner_3: { url: null }
             };
         }
 
@@ -203,15 +203,15 @@ function updateFormValues(data, context) {
             'hero_button_text': data.hero_button_text || '',
             'hero_button_link': data.hero_button_link || '',
             // Banner 2
-            'hero_banner_2_heading': data.hero_banner_2?.heading || '',
-            'hero_banner_2_subheading': data.hero_banner_2?.subheading || '',
-            'hero_banner_2_button_text': data.hero_banner_2?.button_text || '',
-            'hero_banner_2_button_link': data.hero_banner_2?.button_link || '',
+            'banner_2_heading': data.banner_2?.heading || '',
+            'banner_2_subheading': data.banner_2?.subheading || '',
+            'banner_2_button_text': data.banner_2?.button_text || '',
+            'banner_2_button_link': data.banner_2?.button_link || '',
             // Banner 3
-            'hero_banner_3_heading': data.hero_banner_3?.heading || '',
-            'hero_banner_3_subheading': data.hero_banner_3?.subheading || '',
-            'hero_banner_3_button_text': data.hero_banner_3?.button_text || '',
-            'hero_banner_3_button_link': data.hero_banner_3?.button_link || ''
+            'banner_3_heading': data.banner_3?.heading || '',
+            'banner_3_subheading': data.banner_3?.subheading || '',
+            'banner_3_button_text': data.banner_3?.button_text || '',
+            'banner_3_button_link': data.banner_3?.button_link || ''
         };
 
         // Update checkbox states
@@ -219,12 +219,12 @@ function updateFormValues(data, context) {
             'show_hero_heading': data.show_hero_heading ?? true,
             'show_hero_subheading': data.show_hero_subheading ?? true,
             'show_hero_button': data.show_hero_button ?? true,
-            'show_banner_2_heading': data.hero_banner_2?.show_heading ?? true,
-            'show_banner_2_subheading': data.hero_banner_2?.show_subheading ?? true,
-            'show_banner_2_button': data.hero_banner_2?.show_button ?? true,
-            'show_banner_3_heading': data.hero_banner_3?.show_heading ?? true,
-            'show_banner_3_subheading': data.hero_banner_3?.show_subheading ?? true,
-            'show_banner_3_button': data.hero_banner_3?.show_button ?? true
+            'show_banner_2_heading': data.banner_2?.show_heading ?? true,
+            'show_banner_2_subheading': data.banner_2?.show_subheading ?? true,
+            'show_banner_2_button': data.banner_2?.show_button ?? true,
+            'show_banner_3_heading': data.banner_3?.show_heading ?? true,
+            'show_banner_3_subheading': data.banner_3?.show_subheading ?? true,
+            'show_banner_3_button': data.banner_3?.show_button ?? true
         };
 
         // Update font selectors
@@ -233,11 +233,11 @@ function updateFormValues(data, context) {
             'hero_heading_font': data.hero_heading_font || 'default',
             'hero_subheading_font': data.hero_subheading_font || 'default',
             // Banner 2 fonts
-            'hero_banner_2_heading_font': data.hero_banner_2?.heading_font || 'default',
-            'hero_banner_2_subheading_font': data.hero_banner_2?.subheading_font || 'default',
+            'banner_2_heading_font': data.banner_2?.heading_font || 'default',
+            'banner_2_subheading_font': data.banner_2?.subheading_font || 'default',
             // Banner 3 fonts
-            'hero_banner_3_heading_font': data.hero_banner_3?.heading_font || 'default',
-            'hero_banner_3_subheading_font': data.hero_banner_3?.subheading_font || 'default'
+            'banner_3_heading_font': data.banner_3?.heading_font || 'default',
+            'banner_3_subheading_font': data.banner_3?.subheading_font || 'default'
         };
 
         // Update size selectors
@@ -246,27 +246,27 @@ function updateFormValues(data, context) {
             'hero_heading_size': data.hero_heading_size || 'default',
             'hero_subheading_size': data.hero_subheading_size || 'default',
             // Banner 2 sizes
-            'hero_banner_2_heading_size': data.hero_banner_2?.heading_size || 'default',
-            'hero_banner_2_subheading_size': data.hero_banner_2?.subheading_size || 'default',
+            'banner_2_heading_size': data.banner_2?.heading_size || 'default',
+            'banner_2_subheading_size': data.banner_2?.subheading_size || 'default',
             // Banner 3 sizes
-            'hero_banner_3_heading_size': data.hero_banner_3?.heading_size || 'default',
-            'hero_banner_3_subheading_size': data.hero_banner_3?.subheading_size || 'default'
+            'banner_3_heading_size': data.banner_3?.heading_size || 'default',
+            'banner_3_subheading_size': data.banner_3?.subheading_size || 'default'
         };
         // Update colors
         const colorInputs = {
             'hero_heading_color': data.hero_heading_color || '#000000',
             'hero_subheading_color': data.hero_subheading_color || '#6B7280',
-            'hero_banner_2_heading_color': data.hero_banner_2?.heading_color || '#000000',
-            'hero_banner_2_subheading_color': data.hero_banner_2.subheading_color,
-            'hero_banner_3_heading_color': data.hero_banner_3?.heading_color || '#000000',
-            'hero_banner_3_subheading_color': data.hero_banner_3?.subheading_color || '#6B7280'
+            'banner_2_heading_color': data.banner_2?.heading_color || '#000000',
+            'banner_2_subheading_color': data.banner_2?.subheading_color,
+            'banner_3_heading_color': data.banner_3?.heading_color || '#000000',
+            'banner_3_subheading_color': data.banner_3?.subheading_color || '#6B7280'
         };
        
         // Update alignments
         const alignmentFields = {
             'hero_text_align': data.hero_text_align || 'left',
-            'hero_banner_2_text_align': data.hero_banner_2?.text_align || 'left',
-            'hero_banner_3_text_align': data.hero_banner_3?.text_align || 'left'
+            'banner_2_text_align': data.banner_2?.text_align || 'left',
+            'banner_3_text_align': data.banner_3?.text_align || 'left'
         };
         // Update button styles
         const buttonStyles = {
@@ -278,19 +278,19 @@ function updateFormValues(data, context) {
             'hero_button_hover_text_color': data.hero_button_hover_text_color || '#000000',
             'hero_button_hover_border_color': data.hero_button_hover_border_color || '#000000',
             // Banner 2 button
-            'hero_banner_2_button_bg_color': data.hero_banner_2?.button_bg_color || '#000000',
-            'hero_banner_2_button_text_color': data.hero_banner_2?.button_text_color || '#FFFFFF',
-            'hero_banner_2_button_border_color': data.hero_banner_2?.button_border_color || '#000000',
-            'hero_banner_2_button_hover_bg_color': data.hero_banner_2?.button_hover_bg_color || '#FFFFFF',
-            'hero_banner_2_button_hover_text_color': data.hero_banner_2?.button_hover_text_color || '#000000',
-            'hero_banner_2_button_hover_border_color': data.hero_banner_2?.button_hover_border_color || '#000000',
+            'banner_2_button_bg_color': data.banner_2?.button_bg_color || '#000000',
+            'banner_2_button_text_color': data.banner_2?.button_text_color || '#FFFFFF',
+            'banner_2_button_border_color': data.banner_2?.button_border_color || '#000000',
+            'banner_2_button_hover_bg_color': data.banner_2?.button_hover_bg_color || '#FFFFFF',
+            'banner_2_button_hover_text_color': data.banner_2?.button_hover_text_color || '#000000',
+            'banner_2_button_hover_border_color': data.banner_2?.button_hover_border_color || '#000000',
             // Banner 3 button
-            'hero_banner_3_button_bg_color': data.hero_banner_3?.button_bg_color || '#000000',
-            'hero_banner_3_button_text_color': data.hero_banner_3?.button_text_color || '#FFFFFF',
-            'hero_banner_3_button_border_color': data.hero_banner_3?.button_border_color || '#000000',
-            'hero_banner_3_button_hover_bg_color': data.hero_banner_3?.button_hover_bg_color || '#FFFFFF',
-            'hero_banner_3_button_hover_text_color': data.hero_banner_3?.button_hover_text_color || '#000000',
-            'hero_banner_3_button_hover_border_color': data.hero_banner_3?.button_hover_border_color || '#000000'
+            'banner_3_button_bg_color': data.banner_3?.button_bg_color || '#000000',
+            'banner_3_button_text_color': data.banner_3?.button_text_color || '#FFFFFF',
+            'banner_3_button_border_color': data.banner_3?.button_border_color || '#000000',
+            'banner_3_button_hover_bg_color': data.banner_3?.button_hover_bg_color || '#FFFFFF',
+            'banner_3_button_hover_text_color': data.banner_3?.button_hover_text_color || '#000000',
+            'banner_3_button_hover_border_color': data.banner_3?.button_hover_border_color || '#000000'
         };
 
         // Update button styles in the form
@@ -331,7 +331,9 @@ function updateFormValues(data, context) {
         // Update radio buttons for layout and alignment
         const layoutRadio = document.querySelector(`input[name="hero_layout"][value="${data.hero_layout}"]`);
         if (layoutRadio) layoutRadio.checked = true;
-
+        
+        console.log('Alignment data:', alignmentFields);
+        
         Object.entries(alignmentFields).forEach(([name, value]) => {
             const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
             if (radio) radio.checked = true;
@@ -357,15 +359,15 @@ function updateFormValues(data, context) {
                 prefix: 'hero_image',
                 containerId: 'hero-image-container'  // Match the actual container ID
             },
-            'hero_banner_2': {
-                url: data.hero_banner_2.url,
-                prefix: 'hero_banner_2',
-                containerId: 'hero_banner_2-container'  // Expected container ID
+            'banner_2': {
+                url: data.banner_2.url,
+                prefix: 'banner_2',
+                containerId: 'banner_2-container'  // Expected container ID
             },
-            'hero_banner_3': {
-                url: data.hero_banner_3.url,
-                prefix: 'hero_banner_3',
-                containerId: 'hero_banner_3-container'  // Expected container ID
+            'banner_3': {
+                url: data.banner_3.url,
+                prefix: 'banner_3',
+                containerId: 'banner_3-container'  // Expected container ID
             }
         };
         const editorSections = document.querySelectorAll('.editor-section');
