@@ -61,26 +61,54 @@
                         <ul class="space-y-4">
                             {% for field in create %}
                             <li>
-                                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+                                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                    {{ field.label }}
+                                </label>
+                                
                                 {% if field.name == 'business_type' %}
-                                    <div class="business-select mt-1 relative">
-                                        <input type="text" id="business-input" name="{{ field.name }}" 
-                                               class="form-input mt-1 w-full" 
-                                               placeholder="Type to search business types...">
-                                        <div id="business-suggestions"></div>
-                                        {{ field.as_hidden }}
-                                </div>
-                                <div id="cuisine-section" style="display: none;" class="mt-4">
-                                    <label class="block text-sm font-medium text-gray-700">Cuisines</label>
-                                    <div class="cuisine-select mt-1">
-                                        <input type="text" id="cuisine-input" name="cuisine" 
-                                               class="form-input mt-1 w-full" 
-                                               placeholder="Type to search cuisines...">
-                                        <div id="cuisine-suggestions"></div>
-                                        <div id="selected-cuisines"></div>
+                                    {# Business Category Select #}
+                                    <div class="mt-1">
+                                        <select id="business-category" name="business_category" 
+                                                class="form-select w-full rounded-md border-gray-300 shadow-sm 
+                                                       focus:border-teal-500 focus:ring-teal-500">
+                                            <option value="">Select a Category</option>
+                                        </select>
                                     </div>
-                                </div>
+    
+                                    {# Business Type Select #}
+                                    <div class="mt-4">
+                                        <select id="business-type" name="business_type" 
+                                                class="form-select w-full rounded-md border-gray-300 shadow-sm 
+                                                       focus:border-teal-500 focus:ring-teal-500" 
+                                                style="display: none;">
+                                            <option value="">Select a Business Type</option>
+                                        </select>
+                                    </div>
+    
+                                    {# Custom Business Type Input #}
+                                    <div id="custom-business-type" class="mt-4" style="display: none;">
+                                        <input type="text" id="custom-business" name="custom_business_type" 
+                                               class="form-input w-full rounded-md border-gray-300 shadow-sm 
+                                                      focus:border-teal-500 focus:ring-teal-500"
+                                               placeholder="Enter custom business type...">
+                                    </div>
+    
+                                    {# Cuisine Section #}
+                                    <div id="cuisine-section" style="display: none;" class="mt-4">
+                                        <label class="block text-sm font-medium text-gray-700">Cuisines</label>
+                                        <div class="cuisine-select mt-1">
+                                            <input type="text" id="cuisine-input" name="cuisine" 
+                                                   class="form-input w-full" 
+                                                   placeholder="Type to search cuisines...">
+                                            <div id="cuisine-suggestions" 
+                                                 class="suggestions-dropdown"></div>
+                                            <div id="selected-cuisines" 
+                                                 class="selected-items mt-2"></div>
+                                        </div>
+                                    </div>
+    
                                 {% elif field.name == 'cuisine' %}
+                                    {# Skip cuisine field as it's handled above #}
                                 {% elif field.name == 'subdirectory' %}
                                     <div class="flex items-center mt-1">
                                         <span class="text-gray-500 mr-2">patrons.love/</span>
@@ -92,14 +120,23 @@
                                     {{ field|add_class:"form-input mt-1" }}
                                 {% endif %}
                             </li>
-                        {% endfor %}
-                        <input type="hidden" id="cuisine-hidden" name="cuisine">
-                        <input type="hidden" id="business-hidden" name="business_type">
-                        <button type="submit" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 mt-8 rounded-md inline w-full">Register Business</button>
+                            {% endfor %}
+                            
+                            <input type="hidden" id="cuisine-hidden" name="cuisine">
+                            <input type="hidden" id="business-hidden" name="business_type">
+                            
+                            <button type="submit" 
+                                    class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 mt-8 
+                                           rounded-md inline w-full">
+                                Register Business
+                            </button>
+                        </ul>
                     </form>
                 </div>
+    
                 <div class="w-full md:w-2/3">
-                    <img src="{% static 'images/createimage.jpg' %}" alt="Restaurant Image" class="w-full object-cover">
+                    <img src="{% static 'images/createimage.jpg' %}" alt="Restaurant Image" 
+                         class="w-full object-cover">
                 </div>
             </div>
         </div>
@@ -108,7 +145,8 @@
 
 {% block script %}             
     {{ block.super }}
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
-    <script src="{% static 'js/cuisineSelect.js' %}"></script>
-    <script src="{% static 'js/addressValidate.js' %}"></script>
+    <script type="module" src="{% static 'js/auth/addressValidate.js' %}" 
+        data-maps-api-key="{{ google_maps_api_key }}">
+    </script>
+    <script type="module" src="{% static 'js/constants/businessTypes.js' %}"></script>
 {% endblock %}

@@ -3,17 +3,33 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{% block title %}Restaurant Website{% endblock %}</title>
-        <link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="{% static 'css/animations.css' %}" rel="stylesheet">
-        <script src="{% static 'js/index.js' %}"></script>
-        <script src="{% static 'js/logout.js' %}"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token" content="{{ csrf_token }}">
-        <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+        
+        <title>{% block title %}Restaurant Website{% endblock %}</title>
+        
+        <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+        
+        <!-- Stylesheets -->
+        <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+        <link rel="stylesheet" href="{% static 'css/animations.css' %}">
+        
+        <!-- Scripts -->
+        {% if debug %}
+            <script type="module" src="{% static 'js/index.js' %}"></script>
+            <script type="module" src="{% static 'js/auth/logout.js' %}"></script>
+        {% else %}
+            <script defer src="{% static 'dist/auth.bundle.js' %}"></script>
+            {% block prod_scripts %}{% endblock %}
+        {% endif %}
+        
+        <!-- Additional head elements -->
         {% block extra_head %}{% endblock %}
-        {% block script %}
-        {% endblock %}
+        
+        <!-- Page-specific scripts -->
+        {% block script %}{% endblock %}
     </head>
     <body>
         <header>

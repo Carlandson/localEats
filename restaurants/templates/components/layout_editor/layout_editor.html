@@ -1,0 +1,135 @@
+<div class="space-y-8">
+    <!-- Global Settings -->
+    <div class="editor-section" data-section="global">
+        <div class="accordion-section" id="global-settings">
+        <h1 class="text-lg font-bold mb-4 hidden">Global Components</h1>
+        
+        <!-- Navigation Style -->
+        <div class="mb-8">
+            <h3 class="text-md font-semibold mb-4">Navigation Style</h3>
+            <div class="space-y-2">
+                {% for value, label in nav_styles %}
+                    <label class="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="nav_style" value="{{ value }}" {% if business_details.navigation_style == value %}checked{% endif %} class="component-selector" data-component="navigation">
+                        <span>{{ label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Brand Colors -->
+        <div class="mb-8">
+            <h3 class="text-md font-semibold mb-4">Brand Colors</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Primary Color</label>
+                    <input type="color" value="{{ business_details.primary_color }}" class="color-picker w-full h-10 rounded border" data-color-type="primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Secondary Color</label>
+                    <input type="color" value="{{ business_details.secondary_color }}" class="color-picker w-full h-10 rounded border" data-color-type="secondary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Text Color</label>
+                    <input type="color" value="{{ business_details.text_color }}" class="color-picker w-full h-10 rounded border" data-color-type="text-color">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Hover Color</label>
+                    <input type="color" value="{{ business_details.hover_color }}" class="color-picker w-full h-10 rounded border" data-color-type="hover-color">
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Font -->
+        <div class="mb-8">
+            <h3 class="text-md font-semibold mb-4">Main Font</h3>
+            <select id="main-font" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                {% for value, label in font_choices %}
+                    <option value="{{ value }}" style="font-family: {{ value }}" {% if business_details.main_font == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Footer Style -->
+        <div class="mb-8">
+            <h3 class="text-md font-semibold mb-4">Footer Style</h3>
+            <div class="space-y-2">
+                {% for value, label in footer_styles %}
+                    <label class="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="footer_style" value="{{ value }}" {% if business_details.footer_style == value %}checked{% endif %} class="component-selector" data-component="footer_style">
+                        <span>{{ label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Hero Section -->
+    <div class="editor-section" data-section="hero" data-subpage-id="{{ subpage.id }}">
+        <h2 class="text-lg font-bold mb-4 hidden">Hero Section</h2>
+        
+        <!-- Layout Selection -->
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Layout Style</label>
+            <div class="space-y-2">
+                {% for value, label in hero_choices %}
+                    <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="hero_layout" class="component-selector" data-component="hero_layout" value="{{ value }}" {% if subpage.hero_layout == value %}checked{% endif %}>
+                        <span class="ml-2">{{ label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Size</label>
+                <select name="hero_size" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    {% for value, label in hero_size_choices %}
+                        <option value="{{ value }}" {% if subpage.hero_size == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Hero Image Editor -->
+        <div class="pt-4 border-t border-gray-200">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Hero Images</label>
+            <div class="space-y-8">
+                <!-- Primary Banner Section -->
+                <div class="banner-section">
+                    <h3 class="text-md font-semibold mb-4">Primary Banner</h3>
+                    {% include "components/layout_editor/banner_image_upload.html" with prefix="hero-image" image=subpage.get_hero_primary placeholder_text="Add Primary Image" layout=subpage.hero_layout %}
+
+                    <!-- Text Settings -->
+                    {% include "components/layout_editor/banner_text_settings.html" with prefix="hero" published_pages=available_pages text_align=subpage.hero_text_align heading_value=subpage.hero_heading subheading_value=subpage.hero_subheading show_heading=subpage.show_hero_heading show_subheading=subpage.show_hero_subheading heading_font=subpage.hero_heading_font subheading_font=subpage.hero_subheading_font heading_size=subpage.hero_heading_size subheading_size=subpage.hero_subheading_size font_choices=font_choices heading_sizes=heading_sizes subheading_sizes=subheading_sizes show_button=subpage.show_hero_button button_text=subpage.hero_button_text button_link=subpage.hero_button_link button_bg_color=subpage.hero_button_bg_color button_text_color=subpage.hero_button_text_color button_size=subpage.hero_button_size available_pages=available_pages business_subdirectory=business_subdirectory %}
+                </div>
+
+                <!-- Banner Slider Additional Images -->
+                <div id="banner-slider-images" class="space-y-8" {% if subpage.hero_layout != 'banner_slider' %}style="display: none;"{% endif %}>
+                    <!-- Second Banner Section -->
+                    <div class="banner-section">
+                        <h3 class="text-md font-semibold mb-4">Second Banner</h3>
+                        {% include "components/layout_editor/banner_image_upload.html" with prefix="banner_2" image=subpage.get_banner_2 placeholder_text="Add Second Image" layout=subpage.hero_layout %}
+
+                        <!-- Text Settings -->
+                        {% include "components/layout_editor/banner_text_settings.html" with prefix="banner_2" published_pages=available_pages text_align=subpage.banner_2_text_align heading_value=subpage.banner_2_heading subheading_value=subpage.banner_2_subheading show_heading=subpage.show_banner_2_heading show_subheading=subpage.show_banner_2_subheading heading_font=subpage.banner_2_heading_font subheading_font=subpage.banner_2_subheading_font heading_size=subpage.banner_2_heading_size subheading_size=subpage.banner_2_subheading_size font_choices=font_choices heading_sizes=heading_sizes subheading_sizes=subheading_sizes show_button=subpage.show_banner_2_button button_text=subpage.banner_2_button_text button_link=subpage.banner_2_button_link button_bg_color=subpage.banner_2_button_bg_color button_text_color=subpage.banner_2_button_text_color button_size=subpage.banner_2_button_size available_pages=available_pages business_subdirectory=business_subdirectory %}
+                    </div>
+
+                    <!-- Third Banner Section -->
+                    <div class="banner-section">
+                        <h3 class="text-md font-semibold mb-4">Third Banner</h3>
+                        {% include "components/layout_editor/banner_image_upload.html" with prefix="banner_3" image=subpage.get_banner_3 placeholder_text="Add Third Image" layout=subpage.hero_layout %}
+
+                        <!-- Text Settings -->
+                        {% include "components/layout_editor/banner_text_settings.html" with prefix="banner_3" published_pages=available_pages text_align=subpage.banner_3_text_align heading_value=subpage.banner_3_heading subheading_value=subpage.banner_3_subheading show_heading=subpage.show_banner_3_heading show_subheading=subpage.show_banner_3_subheading heading_font=subpage.banner_3_heading_font subheading_font=subpage.banner_3_subheading_font heading_size=subpage.banner_3_heading_size subheading_size=subpage.banner_3_subheading_size font_choices=font_choices heading_sizes=heading_sizes subheading_sizes=subheading_sizes show_button=subpage.show_banner_3_button button_text=subpage.banner_3_button_text button_link=subpage.banner_3_button_link button_bg_color=subpage.banner_3_button_bg_color button_text_color=subpage.banner_3_button_text_color button_size=subpage.banner_3_button_size available_pages=available_pages business_subdirectory=business_subdirectory %}                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Page Content-->
+        <div class="pt-4 border-t border-gray-200">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Page Content</label>
+            <div class="space-y-8">
+                {% include "components/layout_editor/page_content.html" %}
+            </div>
+        </div>
+    </div>  
+</div>

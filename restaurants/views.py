@@ -196,8 +196,12 @@ def create(request):
         if form.is_valid():
             new_business = form.save(commit=False)
             new_business.owner = user
-            cuisine_names = request.POST.get('cuisine', '').split(',')
-            cuisine_names = [name.strip() for name in cuisine_names if name.strip()]
+            cuisine_data = request.POST.get('cuisine', '')
+            if cuisine_data:
+                cuisine_names = cuisine_data.split(',')
+                cuisine_names = [name.strip() for name in cuisine_names if name.strip()]
+            else:
+                cuisine_names = []
             # Combine address components for geocoding
             full_address = f"{new_business.address}, {new_business.city}, {new_business.state} {new_business.zip_code}"
 
@@ -216,11 +220,13 @@ def create(request):
                     new_business.address = formatted_address
 
                     new_business.save()
-                    for cuisine_name in cuisine_names:
-                        cuisine_category, created = CuisineCategory.objects.get_or_create(
-                            cuisine=cuisine_name
-                        )
-                        new_business.cuisine.add(cuisine_category)
+                    # Only add cuisines if there are any
+                    if cuisine_names:
+                        for cuisine_name in cuisine_names:
+                            cuisine_category, created = CuisineCategory.objects.get_or_create(
+                                cuisine=cuisine_name
+                            )
+                            new_business.cuisine.add(cuisine_category)
 
                     messages.success(request, 'business created successfully!')
                     return redirect(reverse('business_subdirectory', kwargs={'business_subdirectory': new_business.subdirectory}))
@@ -1018,7 +1024,8 @@ def edit_layout(request, business_subdirectory):
         hero_primary = current_subpage.get_hero_primary()
         banner_2 = current_subpage.get_banner_2()
         banner_3 = current_subpage.get_banner_3()
-
+        published_pages = SubPage.get_published_subpages(business, current_page)
+        print(published_pages)
         page_data = {
             'business_subdirectory': business_subdirectory,
             'current_page': current_page,
@@ -1101,7 +1108,7 @@ def edit_layout(request, business_subdirectory):
             'subpages': subpages,
             'subpage': current_subpage,
             'current_page': current_page,
-            
+            'available_pages': published_pages,
             # Choices/Options for template dropdowns and selectors
             'hero_choices': SubPage.HERO_CHOICES,
             'nav_styles': business.NAV_CHOICES,
@@ -1169,10 +1176,9 @@ def update_layout(request, business_subdirectory):
             preview_html = render_to_string(f'visitor_pages/{page_type}.html', {
                 'business_details': business,
                 'subpage': subpage,
-                'hero_primary': subpage.get_hero_primary(),
+                'hero_image': subpage.get_hero_primary(),
                 'banner_2': subpage.get_banner_2(),
                 'banner_3': subpage.get_banner_3(),
-                'hero_image': subpage.get_hero_primary(),
                 'preview_mode': True,
                 'business_subdirectory': business_subdirectory,
                 'debug': True,
@@ -1301,16 +1307,16 @@ def get_page_data(request, business_subdirectory, page_type):
         # Debug log to verify we have the images
         logger.debug(f"Images found - Primary: {hero_primary}, Banner2: {banner_2}, Banner3: {banner_3}")
 
-        def get_safe_image_url(image_obj):
-            if image_obj and hasattr(image_obj, 'image'):
-                try:
-                    image_url = image_obj.image.url
-                    logger.debug(f"Got image URL: {image_url}")
-                    return image_url
-                except Exception as e:
-                    logger.error(f"Error getting image URL: {e}")
-                    return None
-            return None
+        # def get_safe_image_url(image_obj):
+        #     if image_obj and hasattr(image_obj, 'image'):
+        #         try:
+        #             image_url = image_obj.image.url
+        #             logger.debug(f"Got image URL: {image_url}")
+        #             return image_url
+        #         except Exception as e:
+        #             logger.error(f"Error getting image URL: {e}")
+        #             return None
+        #     return None
         
         data = {
             'subpage_id': subpage.id,
@@ -1324,20 +1330,36 @@ def get_page_data(request, business_subdirectory, page_type):
             'hero_button_link': subpage.hero_button_link,
             'hero_size': subpage.hero_size,
             'is_published': subpage.is_published,
-            'images': {
-                'hero_primary': {
-                    'url': get_safe_image_url(hero_primary),
-                    'alt': 'hero_primary'
-                },
-                'banner_2': {
-                    'url': get_safe_image_url(banner_2),
-                    'alt': 'banner_2'
-                },
-                'banner_3': {
-                    'url': get_safe_image_url(banner_3),
-                    'alt': 'banner_3'
-                }
+            'hero_image': {
+                'url': hero_primary.image.url if hero_primary else None,
+                'alt_text': hero_primary.alt_text if hero_primary else None
             },
+            # 'hero_image': {
+            #     'url': get_safe_image_url(hero_primary),
+            #     'alt': 'hero_primary'
+            # },
+            # 'banner_2': {
+            #     'url': get_safe_image_url(banner_2),
+            #     'alt': 'banner_2'
+            # },
+            # 'banner_3': {
+            #     'url': get_safe_image_url(banner_3),
+            #     'alt': 'banner_3'
+            # },
+            # 'images': {
+            #     'hero_primary': {
+            #         'url': get_safe_image_url(hero_primary),
+            #         'alt': 'hero_primary'
+            #     },
+            #     'banner_2': {
+            #         'url': get_safe_image_url(banner_2),
+            #         'alt': 'banner_2'
+            #     },
+            #     'banner_3': {
+            #         'url': get_safe_image_url(banner_3),
+            #         'alt': 'banner_3'
+            #     }
+            # },
             'banner_2': {
                 'heading': subpage.banner_2_heading,
                 'subheading': subpage.banner_2_subheading,
@@ -1351,6 +1373,14 @@ def get_page_data(request, business_subdirectory, page_type):
                 'subheading_color': subpage.banner_2_subheading_color,
                 'button_text': subpage.banner_2_button_text,
                 'button_link': subpage.banner_2_button_link,
+                'button_bg_color': subpage.banner_2_button_bg_color,
+                'button_text_color': subpage.banner_2_button_text_color,
+                'button_size': subpage.banner_2_button_size,
+                'show_button': subpage.show_banner_2_button,
+                'text_align': subpage.banner_2_text_align,
+                'url': banner_2.image.url if banner_2 else None,
+                'alt_text': banner_2.alt_text if banner_2 else None
+
             },
             'banner_3': {
                 'heading': subpage.banner_3_heading,
@@ -1365,6 +1395,13 @@ def get_page_data(request, business_subdirectory, page_type):
                 'subheading_color': subpage.banner_3_subheading_color,
                 'button_text': subpage.banner_3_button_text,
                 'button_link': subpage.banner_3_button_link,
+                'button_bg_color': subpage.banner_3_button_bg_color,
+                'button_text_color': subpage.banner_3_button_text_color,
+                'button_size': subpage.banner_3_button_size,
+                'show_button': subpage.show_banner_3_button,
+                'text_align': subpage.banner_3_text_align,
+                'url': banner_3.image.url if banner_3 else None,
+                'alt_text': banner_3.alt_text if banner_3 else None
             }
         }
         logger.debug(f"get_page_data data: {data}")
@@ -1944,15 +1981,6 @@ def update_hero(request, business_subdirectory):
     request._body = json.dumps(new_data).encode('utf-8')
     return update_layout(request, business_subdirectory)
 
-def get_published_subpages(business, current_page_type):
-    """Helper function to get published subpages excluding current page"""
-    return SubPage.objects.filter(
-        business=business,
-        is_published=True  # Assuming you have this field
-    ).exclude(
-        page_type=current_page_type
-    ).values('page_type', 'title')
-    
 @login_required
 def layout_editor(request, business_subdirectory):
     try:
@@ -1963,7 +1991,7 @@ def layout_editor(request, business_subdirectory):
         # Get current page type from query params or default to 'home'
         current_page = request.GET.get('page_type', 'home')
         # Get available pages for the button links
-        available_pages = get_published_subpages(business, current_page)
+        available_pages = SubPage.get_published_subpages(business, current_page)
 
         # Get all subpages for this Business
         subpages = {
@@ -1991,7 +2019,7 @@ def layout_editor(request, business_subdirectory):
         }
 
         logger.debug(f"Layout editor context: {context}")
-        return render(request, 'components/layout_editor.html', context)
+        return render(request, 'components/layout_editor/layout_editor.html', context)
 
     except Exception as e:
         logger.error(f"Error in layout_editor: {str(e)}")

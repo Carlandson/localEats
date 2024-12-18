@@ -56,7 +56,7 @@ class BusinessCreateForm(forms.ModelForm):
     phone_number = PhoneNumberField(
         widget=PhoneNumberPrefixWidget(initial='US')
     )
-    cuisine = forms.CharField(max_length=64) 
+    cuisine = forms.CharField(max_length=64, required=False) 
     subdirectory = forms.SlugField(
         max_length=64, 
         required=False,

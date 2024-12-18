@@ -373,6 +373,13 @@ class SubPage(models.Model):
         logger.debug(f"Banner 3 found: {banner.id if banner else 'None'}")
         return banner
 
+    def serialize(self):
+        """Return a dictionary representation of the subpage"""
+        return {
+            'page_type': self.page_type,
+            'title': self.title,
+            'slug': self.slug
+        }
     
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -392,9 +399,21 @@ class SubPage(models.Model):
                 
         super().save(*args, **kwargs)
 
+    @classmethod
+    def get_published_subpages(cls, business, current_page_type):
+        """Class method to get serialized published subpages"""
+        subpages = cls.objects.filter(
+            business=business,
+            is_published=True
+        ).exclude(
+            page_type=current_page_type
+        )
+        return [page.serialize() for page in subpages]
     class Meta:
         unique_together = ['business', 'page_type']  # Ensure one page type per business
         ordering = ['order']
+
+
 
 class Menu(models.Model):
 

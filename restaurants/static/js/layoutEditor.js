@@ -4,15 +4,14 @@ import { initializeImageUploads, handleImageUpload, removeHeroImage } from './ha
 import { initializeTextInputs } from './handlers/textHandlers.js';
 import { initializeHeroSizeHandler } from './handlers/sizeHandlers.js';
 import { initializeColorHandlers } from './handlers/colorHandlers.js';
-// import { updatePreview } from './utils/previewUpdates.js';
 import { initializeFontHandlers } from './handlers/fontHandlers.js';
 import { initializeLayoutHandlers } from './handlers/layoutHandlers.js';
 import { initializeAlignmentHandlers } from './handlers/alignmentHandlers.js';
 import { initializeHeroLayoutListener, initializeBannerButtonEditors } from './handlers/buttonHandlers.js';
-import { handleBannerSliderVisibility } from './components/heroComponents.js';
 import { initializePublishToggle } from './handlers/publishHandlers.js';
 import { updatePublishState } from './handlers/publishHandlers.js';
 import { smartUpdate } from './utils/previewUpdates.js';
+import { reinitializeSlider, handleBannerSliderVisibility } from './components/heroComponents.js';
 
 async function initializeEditor() {
     try {
@@ -23,14 +22,12 @@ async function initializeEditor() {
         if (!editorConfig || !pageSelectorElement) {
             throw new Error('Required elements not found');
         }
-        console.log("editorConfig: ", editorConfig);
         // Create context object
         const context = {
             business_subdirectory: editorConfig.business_subdirectory,
             pageSelector: pageSelectorElement,
             initialData: editorConfig
         };
-        
         // Initialize all handlers
         try {
             await initializePageData(context);
@@ -44,7 +41,7 @@ async function initializeEditor() {
             initializeFontHandlers(context);
             initializeAlignmentHandlers(context);
             initializeHeroSizeHandler(context);
-            
+            console.log('initializers set');
             // Add page change listener
             context.pageSelector.addEventListener('change', async function() {
                 await loadPageData(this.value, context);
@@ -128,13 +125,14 @@ async function loadPageData(pageType, context) {
             page_type: pageType,
             return_preview: true
         });
-
-        if (response.data) {
+        console.log('response', response);
+        console.log('response.data', response.is_published);
+        if (response) {
             // Update publish state using the handler
-            updatePublishState(response.data.is_published);
+            updatePublishState(response.is_published);
             
-            handleBannerSliderVisibility(response.data.hero_layout);
-            updateFormValues(response.data, context);
+            handleBannerSliderVisibility(response.hero_layout);
+            updateFormValues(response, context);
 
             // Update preview if we got preview HTML
             if (response.preview_html) {
@@ -162,14 +160,14 @@ async function initializePageData(context) {
         // Update publish state and banner visibility
         updatePublishState(data.is_published);
         handleBannerSliderVisibility(data.hero_layout);
-        // Ensure images object exists (though it should already be there from edit_layout)
-        if (!data.images) {
-            data.images = {
-                hero_primary: { url: null },
-                banner_2: { url: null },
-                banner_3: { url: null }
-            };
-        }
+        // // Ensure images object exists (though it should already be there from edit_layout)
+        // if (!data.images) {
+        //     data.images = {
+        //         hero_primary: { url: null },
+        //         banner_2: { url: null },
+        //         banner_3: { url: null }
+        //     };
+        // }
 
         // Update form values with the initial data
         updateFormValues(data, context);
@@ -189,6 +187,7 @@ async function initializePageData(context) {
 }
 
 function updateFormValues(data, context) {
+    console.log('updateFormValues', data, context);
     try {
         // accordion states
         const accordionStates = {};
@@ -333,7 +332,7 @@ function updateFormValues(data, context) {
         if (layoutRadio) layoutRadio.checked = true;
         
         console.log('Alignment data:', alignmentFields);
-        
+
         Object.entries(alignmentFields).forEach(([name, value]) => {
             const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
             if (radio) radio.checked = true;
@@ -351,7 +350,7 @@ function updateFormValues(data, context) {
                 element.dispatchEvent(event);
             }
         });
-        console.log('data', data);
+        console.log('hero_primary', data.hero_image.url);
         // Update images (existing code)
         const imageElements = {
             'hero-image': {
@@ -370,6 +369,7 @@ function updateFormValues(data, context) {
                 containerId: 'banner_3-container'  // Expected container ID
             }
         };
+        console.log('imageElements', imageElements);
         const editorSections = document.querySelectorAll('.editor-section');
         editorSections.forEach(section => {
             // Skip if section is already wrapped in accordion
