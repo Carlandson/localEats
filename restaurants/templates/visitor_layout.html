@@ -3,7 +3,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{ restaurant_details.restaurant_name }}</title>
+        {% if not preview_mode %}
+        <title>{{ business_details.business_name }}</title>
         <link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="{% static 'css/animations.css' %}" rel="stylesheet">
@@ -12,21 +13,50 @@
         <meta name="csrf-token" content="{{ csrf_token }}">
         <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        {% endif %}
     </head>
-<body>
-    {% if is_preview %}
-        <div class="bg-blue-500 text-white text-center py-2">Preview Mode</div>
-    {% endif %}
+    <body {% if preview_mode %}class="preview-mode"{% endif %}>
+        {% if is_preview %}
+            <div class="bg-blue-500 text-white text-center py-2">Preview Mode</div>
+        {% endif %}
 
-    {% include "components/navigation/top-nav/"|add:restaurant_details.navigation_style|add:".html" %}
+        <!-- Navigation -->
+        {% with nav_colors=business_details %}
+            {% include "components/navigation/top-nav/"|add:business_details.navigation_style|add:".html" with business_subdirectory=business_details.subdirectory primary_color=nav_colors.primary_color secondary_color=nav_colors.secondary_color text_color=nav_colors.text_color hover_color=nav_colors.hover_color %}
+        {% endwith %}
 
-    {% block content %}{% endblock %}
+        <!-- Main Content -->
+        <main>
+            {% if preview_mode %}
+                {% with template_name="visitor_pages/"|add:current_page|add:".html" %}
+                    {% include template_name %}
+                {% endwith %}
+            {% else %}
+                {% block content %}{% endblock %}
+            {% endif %}
+        </main>
 
-    <script>
-        // Mobile menu toggle
-        document.querySelector('.mobile-menu-button')?.addEventListener('click', function() {
-            document.querySelector('.mobile-menu').classList.toggle('hidden');
-        });
-    </script>
-</body>
+
+        <!-- Footer -->
+        {% with footer_colors=business_details %}
+            {% include "components/footer/"|add:business_details.footer_style|add:".html" with primary_color=business_details.primary_color secondary_color=business_details.secondary_color text_color=business_details.text_color hover_color=business_details.hover_color %}
+        {% endwith %}
+
+        <script>
+            // Mobile menu toggle
+            document.querySelector('.mobile-menu-button')?.addEventListener('click', function() {
+                document.querySelector('.mobile-menu').classList.toggle('hidden');
+            });
+        </script>
+        
+        {% if debug %}
+            {% block dev_scripts %}
+                <script type="module" src="{% static 'js/layoutEditor.js' %}"></script>
+            {% endblock %}
+        {% else %}
+            {% block prod_scripts %}
+                {# <script src="{% static 'dist/layoutEditor.bundle.js' %}"></script> #}
+            {% endblock %}
+        {% endif %}
+    </body>
 </html>

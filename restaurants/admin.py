@@ -17,6 +17,21 @@ class BusinessAdmin(admin.ModelAdmin):
     list_display = ['business_name', 'owner', 'is_verified', 'subdirectory']
     list_filter = ['is_verified', 'cuisine']
     search_fields = ['business_name', 'owner__username']
+    fields = [
+        'business_name',
+        'business_type',
+        'owner',
+        'address',
+        'city',
+        'state',
+        'zip_code',
+        'phone_number',
+        'subdirectory',
+        'description',
+        'cuisine',
+        'is_verified',
+    ]
+    
     actions = ['verify_businesses']
     inlines = [SubPageInline, MenuInline]
     formfield_overrides = {
@@ -29,8 +44,18 @@ class BusinessAdmin(admin.ModelAdmin):
     }
 
     def verify_businesses(self, request, queryset):
-        queryset.update(is_verified=True)
+        updated = queryset.update(is_verified=True)
+        self.message_user(request, f'{updated} businesses were successfully verified.')
+        
     verify_businesses.short_description = "Verify selected businesses"
+    def save_model(self, request, obj, form, change):
+        try:
+            super().save_model(request, obj, form, change)
+        except Exception as e:
+            # Add error logging
+            print(f"Error saving business: {str(e)}")
+            print(f"Form errors: {form.errors}")
+            raise
 
 class AboutUsPageInline(admin.StackedInline):
     model = AboutUsPage

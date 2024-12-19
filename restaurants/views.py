@@ -227,7 +227,18 @@ def create(request):
                                 cuisine=cuisine_name
                             )
                             new_business.cuisine.add(cuisine_category)
-
+                    slug = f"{new_business.subdirectory}-home"
+                    home_page = SubPage.objects.create(
+                        business=new_business,
+                        page_type='home',
+                        title=f"{new_business.business_name} Home",
+                        slug=slug,
+                        is_published=True,
+                        hero_heading=f"Welcome to {new_business.business_name}",
+                        hero_subheading="We're excited to serve you!",
+                        show_hero_heading=True,
+                        show_hero_subheading=True
+                    )
                     messages.success(request, 'business created successfully!')
                     return redirect(reverse('business_subdirectory', kwargs={'business_subdirectory': new_business.subdirectory}))
                 else:
@@ -267,6 +278,131 @@ def get_business_context(business, user, is_preview=False):
         "is_preview": is_preview
     }
 
+#feed any page type to this function to get the context for that page
+def get_business_context(business, user, page_type='home'):
+    """
+    Get context for any business subpage
+    page_type can be: 'home', 'about', 'menu', 'services', 'products', 'gallery', 'contact'
+    """
+    from django.utils import timezone
+    
+    # Get the requested subpage and its images
+    subpage = SubPage.objects.filter(
+        business=business, 
+        page_type=page_type
+    ).first()
+
+    # Get all published subpages for navigation
+    published_pages = SubPage.get_published_subpages(business)
+
+    # Get images for the current subpage
+    hero_primary = subpage.get_hero_primary() if subpage else None
+    hero_banner_2 = subpage.get_banner_2() if subpage else None
+    hero_banner_3 = subpage.get_banner_3() if subpage else None
+
+    # Get menu items if they exist
+    menu_items = {
+        'exists': Menu.objects.filter(business=business).exists(),
+        'featured': Dish.objects.filter(
+            menu__business=business, 
+            is_special=True
+        ).select_related('menu').prefetch_related('images')[:3]
+    }
+
+    # Get upcoming events if they exist
+    events = {
+        'exists': Event.objects.filter(
+            events_page__subpage__business=business, 
+            date__gte=timezone.now()
+        ).exists(),
+        'upcoming': Event.objects.filter(
+            events_page__subpage__business=business,
+            date__gte=timezone.now()
+        ).order_by('date')[:2]
+    }
+
+    # Get page-specific content
+    page_content = {}
+    if page_type == 'about':
+        about_page = getattr(subpage, 'aboutuspage', None)
+        if about_page:
+            page_content = {
+                'team_members': about_page.team_members.all() if hasattr(about_page, 'team_members') else [],
+                'history': about_page.history,
+                'mission': about_page.mission,
+            }
+    elif page_type == 'menu':
+        page_content = {
+            'menus': Menu.objects.filter(business=business).prefetch_related(
+                'courses', 
+                'courses__dishes'
+            ),
+            'specials': Dish.objects.filter(menu__business=business, is_special=True),
+        }
+    elif page_type == 'events':
+        events_page = getattr(subpage, 'eventspage', None)
+        if events_page:
+            page_content = {
+                'upcoming_events': events_page.events.filter(date__gte=timezone.now()).order_by('date'),
+                'past_events': events_page.events.filter(date__lt=timezone.now()).order_by('-date'),
+            }
+
+    context = {
+        'business_details': {
+            'business_name': business.business_name,
+            'subdirectory': business.subdirectory,
+            'description': business.description,
+            'navigation_style': business.navigation_style or 'default',
+            'footer_style': business.footer_style or 'default',
+            'primary_color': business.primary_color or '#000000',
+            'secondary_color': business.secondary_color or '#666666',
+            'text_color': business.text_color or '#000000',
+            'hover_color': business.hover_color or '#333333',
+            'menu_items': menu_items,
+            'events': events,
+            'contact_info': {
+                'phone': business.phone_number,
+                'address': business.address,
+                'city': business.city,
+                'state': business.state,
+                'zip_code': business.zip_code,
+            }
+        },
+        'subpage': subpage,
+        'page_type': page_type,
+        'published_pages': published_pages,
+        'hero_primary': hero_primary,
+        'hero_banner_2': hero_banner_2,
+        'hero_banner_3': hero_banner_3,
+        'page_content': page_content,
+        'user': user,
+        'is_owner': user == business.owner,
+        'is_verified': business.is_verified,
+    }
+
+    return context
+
+# new business page view
+def business_page(request, business_subdirectory, page_type='home'):
+    business = get_object_or_404(Business, subdirectory=business_subdirectory)
+    
+    if request.method != "GET":
+        return JsonResponse({"error": "GET request required."}, status=400)
+
+    # Get context with specified page type
+    context = get_business_context(business, request.user, page_type)
+    
+    # Check verification status
+    if not business.is_verified and request.user != business.owner:
+        return render(request, "business_under_construction.html", context)
+
+    # Determine which template to use
+    if request.user == business.owner:
+        template = f"owner_pages/{page_type}.html"
+    else:
+        template = f"visitor_pages/{page_type}.html"
+
+    return render(request, template, context)
 def business_main(request, business_subdirectory):
     business = get_object_or_404(Business, subdirectory=business_subdirectory)
     
@@ -292,6 +428,7 @@ def business_main(request, business_subdirectory):
         'subpage': subpage,
         'is_home': True
     })
+    print(business.is_verified)
 
     if not business.is_verified and request.user != business.owner:
         return render(request, "business_under_construction.html", context)
@@ -299,7 +436,7 @@ def business_main(request, business_subdirectory):
     if request.user == business.owner:
         return render(request, "eatery_owner.html", context)
     else:
-        return render(request, "visitor_layout.html", context)
+        return render(request, "visitor_pages/home.html", context)
     
 def create_subpage(request, business_subdirectory, page_type):
     if request.method != "POST":
@@ -998,38 +1135,38 @@ def edit_layout(request, business_subdirectory):
     try:
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
         if request.user != business.owner:
-            return HttpResponseForbidden()
+            messages.error(request, "You don't have permission to access this page.")  # Optional: add an error message
+            return redirect('index')  # Replace 'index' with your index URL name
 
         # Get or create subpages for each type
-        subpages = {}
         current_page = 'home'
-        
+        available_pages = []
         for page_type, label in SubPage.PAGE_TYPES:
-            slug = f"{business.subdirectory}-{page_type}"
-            subpage, created = SubPage.objects.get_or_create(
-                business=business,
-                page_type=page_type,
-                defaults={
-                    'title': f"{Business.business_name} {label}",
-                    'slug': slug,
-                    'is_published': True
-                }
-            )
-            subpages[page_type] = subpage
+            available_pages.append(page_type)
+        current_subpage = SubPage.objects.filter(
+            business=business,
+            page_type=current_page
+        ).first()
 
-        # Get the current subpage for initial load
-        current_subpage = subpages.get(current_page)
+        published_pages = SubPage.get_published_subpages(business)
+        print('published_pages', published_pages)
+        existing_page_types = set([page.get('page_type') for page in published_pages])
+        print('existing_page_types', existing_page_types)
+        existing_page_types.add(current_page)  # Add current page to existing set
         
-        # Get hero images
+        available_pages = []
+        for page_type, label in SubPage.PAGE_TYPES:
+            if page_type not in existing_page_types:
+                available_pages.append({
+                    'page_type': page_type,
+                    'label': label
+                })
         hero_primary = current_subpage.get_hero_primary()
         banner_2 = current_subpage.get_banner_2()
         banner_3 = current_subpage.get_banner_3()
-        published_pages = SubPage.get_published_subpages(business, current_page)
-        print(published_pages)
         page_data = {
             'business_subdirectory': business_subdirectory,
             'current_page': current_page,
-            
             # Primary Hero Data
             'hero_heading': current_subpage.hero_heading,
             'hero_subheading': current_subpage.hero_subheading,
@@ -1105,10 +1242,11 @@ def edit_layout(request, business_subdirectory):
             # For template rendering
             'business_details': business,
             'business_subdirectory': business_subdirectory,
-            'subpages': subpages,
+            # changed to published_pages
+            'subpages': published_pages,
             'subpage': current_subpage,
             'current_page': current_page,
-            'available_pages': published_pages,
+            'available_pages': available_pages,
             # Choices/Options for template dropdowns and selectors
             'hero_choices': SubPage.HERO_CHOICES,
             'nav_styles': business.NAV_CHOICES,
@@ -1991,7 +2129,11 @@ def layout_editor(request, business_subdirectory):
         # Get current page type from query params or default to 'home'
         current_page = request.GET.get('page_type', 'home')
         # Get available pages for the button links
-        available_pages = SubPage.get_published_subpages(business, current_page)
+        published_pages = SubPage.get_published_subpages(business)
+        available_pages = [
+            page for page in published_pages 
+            if page['page_type'] != current_page
+        ]
 
         # Get all subpages for this Business
         subpages = {

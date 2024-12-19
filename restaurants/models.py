@@ -232,6 +232,8 @@ class SubPage(models.Model):
         ('products', 'Products'),  # For retail
         ('gallery', 'Gallery'),
         ('contact', 'Contact'),
+        ('specials', 'Specials'),
+        ('events', 'Events'),
     ]
     
     page_type = models.CharField(max_length=10, choices=PAGE_TYPES)
@@ -378,7 +380,8 @@ class SubPage(models.Model):
         return {
             'page_type': self.page_type,
             'title': self.title,
-            'slug': self.slug
+            'slug': self.slug,  
+            'is_published': self.is_published
         }
     
     def save(self, *args, **kwargs):
@@ -400,13 +403,11 @@ class SubPage(models.Model):
         super().save(*args, **kwargs)
 
     @classmethod
-    def get_published_subpages(cls, business, current_page_type):
+    def get_published_subpages(cls, business):
         """Class method to get serialized published subpages"""
         subpages = cls.objects.filter(
             business=business,
             is_published=True
-        ).exclude(
-            page_type=current_page_type
         )
         return [page.serialize() for page in subpages]
     class Meta:

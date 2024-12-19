@@ -18,7 +18,8 @@ async function initializeEditor() {
         // Get required elements
         const editorConfig = JSON.parse(document.getElementById('editor-config').textContent);
         const pageSelectorElement = document.getElementById('page-selector');
-
+        console.log('editorConfig', editorConfig);
+        console.log('pageSelectorElement', pageSelectorElement);
         if (!editorConfig || !pageSelectorElement) {
             throw new Error('Required elements not found');
         }

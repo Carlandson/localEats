@@ -13,16 +13,31 @@
             <div class="flex flex-col gap-4 mb-6">
                 <!-- Page Selector -->
                 <div class="flex items-center">
-                    <span class="text-sm font-medium text-gray-700 w-24">Page Type</span>
+                    <span class="text-sm font-medium text-gray-700 w-24">Your Pages</span>
                     <select id="page-selector" class="form-select flex-1 rounded-md border-gray-300 px-2">
-                        {% for page_type, page_data in subpages.items %}
-                            <option value="{{ page_type }}" {% if current_page == page_type %}selected{% endif %} class="px-2">
-                                {{ page_type|title }} Page
-                            </option>
+                        <option value="home" {% if current_page == 'home' or not current_page %}selected{% endif %} class="px-2">
+                            Home Page
+                        </option>
+                        {% for page in subpages %}
+                                <option value="{{ page.page_type }}" {% if current_page == page.page_type %}selected{% endif %} class="px-2">
+                                    {{ page.page_type|title }} Page
+                                </option>
                         {% endfor %}
                     </select>
                 </div>
-
+                <div class="flex items-center mt-4">
+                    <span class="text-sm font-medium text-gray-700 w-24">Add New Page</span>
+                    <select id="available-pages" class="form-select flex-1 rounded-md border-gray-300 px-2">
+                        <option value="">Select a Page Type</option>
+                        {% for page_type, display_name in PAGE_TYPES %}
+                            {% if page_type not in subpages %}  {# Check if page doesn't exist yet #}
+                                <option value="{{ page_type }}" class="px-2">
+                                    {{ display_name }} Page
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
                 <!-- Publish Toggle -->
                 <div class="flex items-center">
                     <span class="text-sm font-medium text-gray-700 w-24">Status</span>
@@ -62,9 +77,7 @@
         <div id="preview-container">
             <!-- Page Content Preview -->
             <div id="page-content-preview">
-                {% with template_name="visitor_pages/"|add:current_page|add:".html" %}
-                    {% include template_name %}
-                {% endwith %}
+                {% include "preview_wrapper.html" %}
             </div>
         </div>
     </div>
