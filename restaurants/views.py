@@ -29,6 +29,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Max
 from django.core.files.base import ContentFile
 from django.template.loader import render_to_string
+from django.utils import timezone
 from .constants import get_font_choices, get_font_sizes
 import base64, uuid
 import googlemaps
@@ -258,25 +259,25 @@ def create(request):
         }
         return render(request, "create.html", context)
 
-def get_business_context(business, user, is_preview=False):
-    """Helper function to create consistent context for both views"""
-    # Get subpage information
-    menu_page = SubPage.objects.filter(business=business, page_type='menu').exists()
-    about_page = SubPage.objects.filter(business=business, page_type='about').exists()
-    events_page = SubPage.objects.filter(business=business, page_type='events').exists()
-    specials_page = SubPage.objects.filter(business=business, page_type='specials').exists()
+# def get_business_context(business, user, is_preview=False):
+#     """Helper function to create consistent context for both views"""
+#     # Get subpage information
+#     menu_page = SubPage.objects.filter(business=business, page_type='menu').exists()
+#     about_page = SubPage.objects.filter(business=business, page_type='about').exists()
+#     events_page = SubPage.objects.filter(business=business, page_type='events').exists()
+#     specials_page = SubPage.objects.filter(business=business, page_type='specials').exists()
     
-    return {
-        "business_subdirectory": business.subdirectory,
-        "business_details": business,
-        "owner": user == business.owner,
-        "is_verified": business.is_verified,
-        "menu_page": menu_page,
-        "about_page": about_page,
-        "events_page": events_page,
-        "specials_page": specials_page,
-        "is_preview": is_preview
-    }
+#     return {
+#         "business_subdirectory": business.subdirectory,
+#         "business_details": business,
+#         "owner": user == business.owner,
+#         "is_verified": business.is_verified,
+#         "menu_page": menu_page,
+#         "about_page": about_page,
+#         "events_page": events_page,
+#         "specials_page": specials_page,
+#         "is_preview": is_preview
+#     }
 
 #feed any page type to this function to get the context for that page
 def get_business_context(business, user, page_type='home'):
@@ -284,8 +285,6 @@ def get_business_context(business, user, page_type='home'):
     Get context for any business subpage
     page_type can be: 'home', 'about', 'menu', 'services', 'products', 'gallery', 'contact'
     """
-    from django.utils import timezone
-    
     # Get the requested subpage and its images
     subpage = SubPage.objects.filter(
         business=business, 
@@ -297,8 +296,8 @@ def get_business_context(business, user, page_type='home'):
 
     # Get images for the current subpage
     hero_primary = subpage.get_hero_primary() if subpage else None
-    hero_banner_2 = subpage.get_banner_2() if subpage else None
-    hero_banner_3 = subpage.get_banner_3() if subpage else None
+    banner_2 = subpage.get_banner_2() if subpage else None
+    banner_3 = subpage.get_banner_3() if subpage else None
 
     # Get menu items if they exist
     menu_items = {
@@ -346,39 +345,127 @@ def get_business_context(business, user, page_type='home'):
                 'upcoming_events': events_page.events.filter(date__gte=timezone.now()).order_by('date'),
                 'past_events': events_page.events.filter(date__lt=timezone.now()).order_by('-date'),
             }
+    print(business)
+    page_data = {
+        'business_subdirectory': business.subdirectory,
+        'current_page': subpage,
+        # Primary Hero Data
+        'hero_heading': subpage.hero_heading,
+        'hero_subheading': subpage.hero_subheading,
+        'hero_button_text': subpage.hero_button_text,
+        'hero_button_link': subpage.hero_button_link,
+        'hero_layout': subpage.hero_layout,
+        'hero_text_align': subpage.hero_text_align,
+        'hero_heading_color': subpage.hero_heading_color,
+        'hero_subheading_color': subpage.hero_subheading_color,
+        'hero_size': subpage.hero_size,
+        'show_hero_heading': subpage.show_hero_heading,
+        'show_hero_subheading': subpage.show_hero_subheading,
+        'show_hero_button': subpage.show_hero_button,
+        'hero_heading_font': subpage.hero_heading_font,
+        'hero_subheading_font': subpage.hero_subheading_font,
+        'hero_heading_size': subpage.hero_heading_size,
+        'hero_subheading_size': subpage.hero_subheading_size,
+        'hero_image': {
+            'url': hero_primary.image.url if hero_primary else None,
+            'alt_text': hero_primary.alt_text if hero_primary else None
+        },
+        # Button Styles
+        'hero_button_bg_color': subpage.hero_button_bg_color,
+        'hero_button_text_color': subpage.hero_button_text_color,
+        
+        # Banner 2 Data
+        'banner_2': {
+            'heading': subpage.banner_2_heading,
+            'subheading': subpage.banner_2_subheading,
+            'show_heading': subpage.show_banner_2_heading,
+            'show_subheading': subpage.show_banner_2_subheading,
+            'heading_font': subpage.banner_2_heading_font,
+            'subheading_font': subpage.banner_2_subheading_font,
+            'heading_size': subpage.banner_2_heading_size,
+            'subheading_size': subpage.banner_2_subheading_size,
+            'heading_color': subpage.banner_2_heading_color,
+            'subheading_color': subpage.banner_2_subheading_color,
+            'button_text': subpage.banner_2_button_text,
+            'button_link': subpage.banner_2_button_link,
+            'text_align': subpage.banner_2_text_align,
+            'button_bg_color': subpage.banner_2_button_bg_color,
+            'button_text_color': subpage.banner_2_button_text_color,
+            'url': banner_2.image.url if banner_2 else None,
+            'alt_text': banner_2.alt_text if banner_2 else None
+        },
+        
+        # Banner 3 Data
+        'banner_3': {
+            'heading': subpage.banner_3_heading,
+            'subheading': subpage.banner_3_subheading,
+            'show_heading': subpage.show_banner_3_heading,
+            'show_subheading': subpage.show_banner_3_subheading,
+            'heading_font': subpage.banner_3_heading_font,
+            'subheading_font': subpage.banner_3_subheading_font,
+            'heading_size': subpage.banner_3_heading_size,
+            'subheading_size': subpage.banner_3_subheading_size,
+            'heading_color': subpage.banner_3_heading_color,
+            'subheading_color': subpage.banner_3_subheading_color,
+            'button_text': subpage.banner_3_button_text,
+            'button_link': subpage.banner_3_button_link,
+            'text_align': subpage.banner_3_text_align,
+            'button_bg_color': subpage.banner_3_button_bg_color,
+            'button_text_color': subpage.banner_3_button_text_color,
+            'url': banner_3.image.url if banner_3 else None,
+            'alt_text': banner_3.alt_text if banner_3 else None
+        },
+        'is_published': subpage.is_published,
+    }
 
     context = {
-        'business_details': {
-            'business_name': business.business_name,
-            'subdirectory': business.subdirectory,
-            'description': business.description,
-            'navigation_style': business.navigation_style or 'default',
-            'footer_style': business.footer_style or 'default',
-            'primary_color': business.primary_color or '#000000',
-            'secondary_color': business.secondary_color or '#666666',
-            'text_color': business.text_color or '#000000',
-            'hover_color': business.hover_color or '#333333',
-            'menu_items': menu_items,
-            'events': events,
-            'contact_info': {
-                'phone': business.phone_number,
-                'address': business.address,
-                'city': business.city,
-                'state': business.state,
-                'zip_code': business.zip_code,
-            }
-        },
+        # For JavaScript initialization
+        'page_data': page_data,
+        # For template rendering
+        'business_details': business,
+        'business_subdirectory': business.subdirectory,
+        # changed to published_pages
+        'subpages': published_pages,
         'subpage': subpage,
-        'page_type': page_type,
-        'published_pages': published_pages,
-        'hero_primary': hero_primary,
-        'hero_banner_2': hero_banner_2,
-        'hero_banner_3': hero_banner_3,
-        'page_content': page_content,
-        'user': user,
-        'is_owner': user == business.owner,
-        'is_verified': business.is_verified,
+        'current_page': subpage,
+        # Choices/Options for template dropdowns and selectors
+        'hero_image': hero_primary,
+        'banner_2': banner_2,
+        'banner_3': banner_3,
+        'hero_heading_font': subpage.hero_heading_font,
     }
+    # context = {
+    #     'business_details': {
+    #         'business_name': business.business_name,
+    #         'subdirectory': business.subdirectory,
+    #         'description': business.description,
+    #         'navigation_style': business.navigation_style or 'default',
+    #         'footer_style': business.footer_style or 'default',
+    #         'primary_color': business.primary_color or '#000000',
+    #         'secondary_color': business.secondary_color or '#666666',
+    #         'text_color': business.text_color or '#000000',
+    #         'hover_color': business.hover_color or '#333333',
+    #         'menu_items': menu_items,
+    #         'events': events,
+    #         'contact_info': {
+    #             'phone': business.phone_number,
+    #             'address': business.address,
+    #             'city': business.city,
+    #             'state': business.state,
+    #             'zip_code': business.zip_code,
+    #         }
+    #     },
+    #     'subpage': subpage,
+    #     'page_type': page_type,
+    #     'published_pages': published_pages,
+    #     'hero_image': hero_primary,
+    #     'banner_2': banner_2,
+    #     'banner_3': banner_3,
+    #     'page_content': page_content,
+    #     'user': user,
+    #     'is_owner': user == business.owner,
+    #     'is_verified': business.is_verified,
+    # }
 
     return context
 
@@ -391,18 +478,18 @@ def business_page(request, business_subdirectory, page_type='home'):
 
     # Get context with specified page type
     context = get_business_context(business, request.user, page_type)
-    
     # Check verification status
     if not business.is_verified and request.user != business.owner:
         return render(request, "business_under_construction.html", context)
 
     # Determine which template to use
     if request.user == business.owner:
-        template = f"owner_pages/{page_type}.html"
+        template = "eatery_owner.html" 
     else:
         template = f"visitor_pages/{page_type}.html"
 
     return render(request, template, context)
+
 def business_main(request, business_subdirectory):
     business = get_object_or_404(Business, subdirectory=business_subdirectory)
     
@@ -1259,13 +1346,16 @@ def edit_layout(request, business_subdirectory):
             'hero_image': hero_primary,
             'banner_2': banner_2,
             'banner_3': banner_3,
+            'preview_mode': True,
             'hero_heading_font': current_subpage.hero_heading_font,
         }
         
         return render(request, "edit_layout.html", context)
         
     except Exception as e:
-        logger.error(f"Error in edit_layout: {str(e)}")
+        import traceback
+        logger.error(f"Error in edit_layout: {str(e)}\n{traceback.format_exc()}")
+
         return HttpResponse(f"Error loading layout editor: {str(e)}", status=500)
 
 

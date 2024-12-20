@@ -6,6 +6,7 @@
     <div class="slider-container relative w-full overflow-hidden"
         style="height: {% if subpage.hero_size == 'full-screen' %}100vh{% else %}50vh{% endif %}">
         <!-- First Slide -->
+        
         {% if hero_image %}
         <div class="slide absolute w-full h-full transition-opacity duration-500">
             <img src="{{ hero_image.image.url }}" 

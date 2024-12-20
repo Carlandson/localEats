@@ -1,6 +1,6 @@
 {% for business in page_obj %}
     <div class="p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-        <a href="{% url 'business_subdirectory' business_subdirectory=business.subdirectory %}" class="block">
+        <a href="{% url 'business_home' business_subdirectory=business.subdirectory %}" class="block">
             <h2 class="text-xl font-bold mb-2">{{business.business_name}}</h2>
             <p class="text-gray-600">{{business.city}}, {{business.state}}</p>
             <p class="text-gray-600">{{business.cuisine}} cuisine</p>

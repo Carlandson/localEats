@@ -8,8 +8,8 @@
         <link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="{% static 'css/animations.css' %}" rel="stylesheet">
-        <script src="{% static 'index.js' %}"></script>
-        <script src="{% static 'logout.js' %}"></script>
+        <script src="{% static 'js/index.js' %}"></script>
+        <script src="{% static 'js/auth/logout.js' %}"></script>
         <meta name="csrf-token" content="{{ csrf_token }}">
         <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -51,7 +51,7 @@
         
         {% if debug %}
             {% block dev_scripts %}
-                <script type="module" src="{% static 'js/layoutEditor.js' %}"></script>
+                <script type="module" src="{% static 'js/visitorComponents.js' %}"></script>
             {% endblock %}
         {% else %}
             {% block prod_scripts %}

@@ -1,1 +1,5 @@
-{% include "visitor_layout.html" with preview_mode=True content_template=current_page %}
+<div class="preview-wrapper">
+    {% with preview_mode=True current_page=current_page %}
+        {% include "visitor_layout.html" %}
+    {% endwith %}
+</div>
