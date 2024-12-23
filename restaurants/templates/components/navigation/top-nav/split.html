@@ -34,13 +34,13 @@
         <div class="flex justify-between items-center h-20">
             <!-- Left Navigation -->
             <div class="hidden md:flex items-center space-x-8">
-                <a href="{% url 'business_home' business_subdirectory=business_subdirectory %}" 
+                <a href="/{{ business_details.subdirectory }}/" 
                    class="text-sm font-medium hover:text-primary-600 transition-colors {% if request.resolver_match.url_name == 'business_subdirectory' %}text-primary-600{% endif %}"                   style="color: {{ text_color }}"
                    class="transition-colors duration-200"
                    onmouseover="this.style.color='{{ hover_color }}'"
                    onmouseout="this.style.color='{{ text_color }}'">Home</a>
                 {% if menu_page %}
-                    <a href="{% url 'menu' business_subdirectory=business_subdirectory %}" 
+                    <a href="/{{ business_details.subdirectory }}/menu/" 
                        class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'menu' in request.path %}text-primary-600{% endif %}"                   style="color: {{ text_color }}"
                        class="transition-colors duration-200"
                        onmouseover="this.style.color='{{ hover_color }}'"
@@ -62,7 +62,7 @@
             <!-- Right Navigation -->
             <div class="hidden md:flex items-center space-x-8">
                 {% if about_page %}
-                    <a href="{% url 'about' business_subdirectory=business_subdirectory %}" 
+                    <a href="/{{ business_details.subdirectory }}/about/"
                        class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'about' in request.path %}text-primary-600{% endif %}"
     
                        class="transition-colors duration-200"
@@ -70,7 +70,7 @@
                        onmouseout="this.style.color='{{ text_color }}'">About</a>
                 {% endif %}
                 {% if events_page %}
-                    <a href="{% url 'events' business_subdirectory=business_subdirectory %}" 
+                    <a href="/{{ business_details.subdirectory }}/events/"
                        class="text-sm font-medium hover:text-primary-600 transition-colors {% if 'events' in request.path %}text-primary-600{% endif %}"                   style="color: {{ text_color }}"
                        onmouseover="this.style.color='{{ hover_color }}'"
                        onmouseout="this.style.color='{{ text_color }}'">Events</a>
@@ -91,24 +91,24 @@
         <!-- Mobile Menu -->
         <div class="hidden mobile-menu md:hidden py-2">
             <div class="space-y-1">
-                <a href="{% url 'business_home' business_subdirectory=business_subdirectory %}" 
+                <a href="/{{ business_details.subdirectory }}/" 
                    class="block px-3 py-2 text-base font-medium rounded-md hover:bg-gray-100">
                     Home
                 </a>
                 {% if menu_page %}
-                    <a href="{% url 'menu' business_subdirectory=business_subdirectory %}" 
+                    <a href="/{{ business_details.subdirectory }}/menu/" 
                        class="block px-3 py-2 text-base font-medium rounded-md hover:bg-gray-100">
                         Menu
                     </a>
                 {% endif %}
                 {% if about_page %}
-                    <a href="{% url 'about' business_subdirectory=business_subdirectory %}" 
+                    <a href="/{{ business_details.subdirectory }}/about/"
                        class="block px-3 py-2 text-base font-medium rounded-md hover:bg-gray-100">
                         About
                     </a>
                 {% endif %}
                 {% if events_page %}
-                    <a href="{% url 'events' business_subdirectory=business_subdirectory %}" 
+                    <a href="/{{ business_details.subdirectory }}/events/"
                        class="block px-3 py-2 text-base font-medium rounded-md hover:bg-gray-100">
                         Events
                     </a>

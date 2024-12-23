@@ -137,7 +137,7 @@ async function loadPageData(pageType, context) {
 
             // Update preview if we got preview HTML
             if (response.preview_html) {
-                const previewContainer = document.getElementById('page-content-preview');
+                const previewContainer = document.getElementById('preview-container');
                 if (previewContainer) {
                     previewContainer.innerHTML = response.preview_html;
                     reinitializeSlider();
@@ -174,7 +174,7 @@ async function initializePageData(context) {
         updateFormValues(data, context);
 
         // Update preview if it exists
-        const previewContainer = document.getElementById('page-content-preview');
+        const previewContainer = document.getElementById('preview-container');
         if (previewContainer && data.preview_html) {
             previewContainer.innerHTML = data.preview_html;
             reinitializeSlider();

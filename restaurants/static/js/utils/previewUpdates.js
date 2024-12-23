@@ -137,7 +137,7 @@ async function optimisticUpdate(context, data) {
         // Process the response and update preview
         const responseData = await response.json();
         if (responseData.preview_html) {
-            const previewContainer = document.getElementById('page-content-preview');
+            const previewContainer = document.getElementById('preview-container');
             if (previewContainer) {
                 previewContainer.innerHTML = responseData.preview_html;
                 reinitializeSlider();
@@ -184,7 +184,7 @@ async function combinedUpdate(context, data) {
         console.log('Combined update response:', responseData); // Debug log
         
         if (responseData.preview_html) {
-            const previewContainer = document.getElementById('page-content-preview');
+            const previewContainer = document.getElementById('preview-container');
             console.log('Preview container found:', !!previewContainer); // Debug log
             if (previewContainer) {
                 previewContainer.innerHTML = responseData.preview_html;
@@ -255,7 +255,7 @@ async function immediateUpdate(context, data) {
         
         // Update preview if available
         if (responseData.preview_html) {
-            const previewContainer = document.getElementById('page-content-preview');
+            const previewContainer = document.getElementById('preview-container');
             if (previewContainer) {
                 previewContainer.innerHTML = responseData.preview_html;
                 reinitializeSlider();
@@ -420,7 +420,7 @@ export async function updatePreview(pageType, context, isInitialLoad = false) {
     try {
         // If it's the initial load and we have initialHtml in the context, use that
         if (isInitialLoad && context.initialHtml) {
-            const previewContainer = document.getElementById('page-content-preview');
+            const previewContainer = document.getElementById('preview-container');
             if (!previewContainer) {
                 throw new Error('Preview container not found in DOM');
             }
@@ -437,7 +437,7 @@ export async function updatePreview(pageType, context, isInitialLoad = false) {
             return_preview: true
         });
 
-        const previewContainer = document.getElementById('page-content-preview');
+        const previewContainer = document.getElementById('preview-container');
         if (!previewContainer) {
             throw new Error('Preview container not found in DOM');
         }

@@ -1401,41 +1401,55 @@ def update_layout(request, business_subdirectory):
         response_data = {'success': True}
 
         if return_preview:
-            preview_html = render_to_string(f'visitor_pages/{page_type}.html', {
+            # First render the content template
+            content_html = render_to_string(f'components/preview/{page_type}.html', {
                 'business_details': business,
                 'subpage': subpage,
                 'hero_image': subpage.get_hero_primary(),
                 'banner_2': subpage.get_banner_2(),
                 'banner_3': subpage.get_banner_3(),
                 'preview_mode': True,
+                'current_page': page_type,
+            })
+
+            # Then render the navigation
+            nav_html = render_to_string(
+                f'components/navigation/top-nav/{business.navigation_style}.html',
+                {
+                    'business_details': business,
+                    'subdirectory': business_subdirectory,
+                    'primary_color': business.primary_color,
+                    'secondary_color': business.secondary_color,
+                    'text_color': business.text_color,
+                    'hover_color': business.hover_color,
+                }
+            )
+
+            # Render the footer
+            footer_html = render_to_string(
+                f'components/footer/{business.footer_style}.html',
+                {
+                    'business_details': business,
+                    'primary_color': business.primary_color,
+                    'secondary_color': business.secondary_color,
+                    'text_color': business.text_color,
+                    'hover_color': business.hover_color,
+                }
+            )
+
+            # Combine all parts in the preview layout
+            preview_html = render_to_string('components/preview/preview_layout.html', {
+                'navigation_html': nav_html,
+                'content_html': content_html,
+                'footer_html': footer_html,
+                'business_details': business,
+                'subpage': subpage,
+                'current_page': page_type,
+                'preview_mode': True,
+                'hero_image': subpage.get_hero_primary(),
+                'banner_2': subpage.get_banner_2(),
+                'banner_3': subpage.get_banner_3(),
                 'business_subdirectory': business_subdirectory,
-                'debug': True,
-                'primary_color': business.primary_color,
-                'secondary_color': business.secondary_color,
-                'text_color': business.text_color,
-                'hover_color': business.hover_color,
-                'navigation_style': business.navigation_style,
-                'footer_style': business.footer_style,
-                'is_published': subpage.is_published,
-                'banner_2_heading': subpage.banner_2_heading,
-                'banner_2_subheading': subpage.banner_2_subheading,
-                'banner_2_heading_color': subpage.banner_2_heading_color,
-                'banner_2_subheading_color': subpage.banner_2_subheading_color,
-                'banner_2_button_text': subpage.banner_2_button_text,
-                'banner_2_button_link': subpage.banner_2_button_link,
-                'banner_2_text_align': subpage.banner_2_text_align,
-                'banner_2_button_bg_color': subpage.banner_2_button_bg_color,
-                'banner_2_button_text_color': subpage.banner_2_button_text_color,
-                # Banner 3 specific data
-                'banner_3_heading': subpage.banner_3_heading,
-                'banner_3_subheading': subpage.banner_3_subheading,
-                'banner_3_heading_color': subpage.banner_3_heading_color,
-                'banner_3_subheading_color': subpage.banner_3_subheading_color,
-                'banner_3_button_text': subpage.banner_3_button_text,
-                'banner_3_button_link': subpage.banner_3_button_link,
-                'banner_3_text_align': subpage.banner_3_text_align,
-                'banner_3_button_bg_color': subpage.banner_3_button_bg_color,
-                'banner_3_button_text_color': subpage.banner_3_button_text_color,
             })
             response_data['preview_html'] = preview_html
 
@@ -1511,7 +1525,7 @@ def preview_page(request, business_subdirectory, page_type):
         
         logger.debug(f"Using template: {template_name}")
         
-        return render(request, template_name, context)
+        return render(request, 'components/preview/preview_layout.html', context)
         
     except Exception as e:
         logger.error(f"Error in preview_page: {str(e)}")

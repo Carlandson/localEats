@@ -1,0 +1,12 @@
+<!-- Navigation -->
+{% with nav_colors=business_details %}
+    {% include "components/navigation/top-nav/"|add:business_details.navigation_style|add:".html" with business_details=business_details subdirectory=business_subdirectory primary_color=nav_colors.primary_color secondary_color=nav_colors.secondary_color text_color=nav_colors.text_color hover_color=nav_colors.hover_color %}
+{% endwith %}
+
+<!-- Page Content -->
+{% include "components/preview/"|add:current_page|add:".html" with business_details=business_details subpage=subpage hero_image=hero_image banner_2=banner_2 banner_3=banner_3 current_page=current_page %}
+
+<!-- Footer -->
+{% with footer_colors=business_details %}
+    {% include "components/footer/"|add:business_details.footer_style|add:".html" with business_details=business_details primary_color=business_details.primary_color secondary_color=business_details.secondary_color text_color=business_details.text_color hover_color=business_details.hover_color %}
+{% endwith %}

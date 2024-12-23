@@ -15,14 +15,14 @@
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
-                <a href="{% url 'business_subdirectory' business_subdirectory=business_subdirectory %}" 
+                <a href="/{{ business_details.subdirectory }}/" 
                     style="color: {{ text_color }}"
                     class="transition-colors duration-200"
                     onmouseover="this.style.color='{{ hover_color }}'"
                     onmouseout="this.style.color='{{ text_color }}'">Home</a>
                 
                 {% if menu_page %}
-                    <a href="{% url 'menu' business_subdirectory=business_subdirectory %}" 
+                    <a href="/{{ business_details.subdirectory }}/menu/" 
                     style="color: {{ text_color }}"
                     class="transition-colors duration-200"
                     onmouseover="this.style.color='{{ hover_color }}'"
@@ -30,7 +30,7 @@
                 {% endif %}
                 
                 {% if about_page %}
-                    <a href="{% url 'about' business_subdirectory=business_subdirectory %}" 
+                    <a href="/{{ business_details.subdirectory }}/about/"
                     style="color: {{ text_color }}"
                     class="transition-colors duration-200"
                     onmouseover="this.style.color='{{ hover_color }}'"
@@ -38,7 +38,7 @@
                 {% endif %}
                 
                 {% if events_page %}
-                    <a href="{% url 'events' business_subdirectory=business_subdirectory %}" 
+                    <a href="/{{ business_details.subdirectory }}/events/"
                         style="color: {{ text_color }}"
                         class="transition-colors duration-200"
                         onmouseover="this.style.color='{{ hover_color }}'"
@@ -69,7 +69,7 @@
         <!-- Mobile Menu -->
         <div class="hidden mobile-menu md:hidden py-2">
             <div class="space-y-1">
-                <a href="{% url 'business_subdirectory' business_subdirectory=business_subdirectory %}" 
+                <a href="/{{ business_details.subdirectory }}/" 
                 class="block px-3 py-2 text-base font-medium rounded-md transition-colors duration-200"
                 style="color: {{ secondary_color }}"
                 onmouseover="this.style.color='{{ hover_color }}'"
@@ -78,7 +78,7 @@
                 </a>
                 
                 {% if menu_page %}
-                    <a href="{% url 'menu' business_subdirectory=business_subdirectory %}" 
+                    <a href="/{{ business_details.subdirectory }}/menu/" 
                     class="block px-3 py-2 text-base font-medium rounded-md transition-colors duration-200"
                     style="color: {{ secondary_color }}"
                     onmouseover="this.style.color='{{ hover_color }}'"
@@ -88,7 +88,7 @@
                 {% endif %}
                 
                 {% if about_page %}
-                    <a href="{% url 'about' business_subdirectory=business_subdirectory %}" 
+                    <a href="/{{ business_details.subdirectory }}/about/"
                     class="block px-3 py-2 text-base font-medium rounded-md transition-colors duration-200"
                     style="color: {{ secondary_color }}"
                     onmouseover="this.style.color='{{ hover_color }}'"
@@ -98,7 +98,7 @@
                 {% endif %}
                 
                 {% if events_page %}
-                    <a href="{% url 'events' business_subdirectory=business_subdirectory %}" 
+                    <a href="/{{ business_details.subdirectory }}/events/"
                     class="block px-3 py-2 text-base font-medium rounded-md transition-colors duration-200"
                     style="color: {{ secondary_color }}"
                     onmouseover="this.style.color='{{ hover_color }}'"

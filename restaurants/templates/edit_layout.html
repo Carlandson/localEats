@@ -75,10 +75,7 @@
     <!-- Right Content Area - Preview -->
     <div class="flex-1 overflow-y-auto bg-gray-50">
         <div id="preview-container">
-            <!-- Page Content Preview -->
-            <div id="page-content-preview">
-                {% include "components/preview/preview_wrapper.html" %}
-            </div>
+            {% include "components/preview/preview_layout.html" %}
         </div>
     </div>
 </div>
@@ -86,6 +83,7 @@
 
 {% block dev_scripts %}
     <script type="module" src="{% static 'js/layoutEditor.js' %}"></script>
+    
 {% endblock %}
 
 {% block prod_scripts %}
