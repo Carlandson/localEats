@@ -19,9 +19,11 @@
                             Home Page
                         </option>
                         {% for page in subpages %}
+                            {% if page.page_type != 'home' %}
                                 <option value="{{ page.page_type }}" {% if current_page == page.page_type %}selected{% endif %} class="px-2">
                                     {{ page.page_type|title }} Page
                                 </option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </div>

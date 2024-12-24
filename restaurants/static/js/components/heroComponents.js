@@ -61,6 +61,9 @@ export function handleBannerSliderVisibility(layoutStyle) {
 export function reinitializeSlider() {
     if (sliderInstance) {
         // Store current state
+        const slides = sliderContainer.querySelectorAll('.slide');
+        console.log(slides.length)
+        console.log('ttttttttttttttttttttttttttttttttttttttttttttttttttttttt')
         const currentIndex = sliderInstance.getCurrentSlide();
         const wasPlaying = sliderInstance.isPlaying();
         
@@ -77,6 +80,7 @@ export function reinitializeSlider() {
             }
         }
     } else {
+        console.log('tttttttttttttttttttttttttttttttttttttttttttttttttttttttttt')
         sliderInstance = slider.init(0);
         if (sliderInstance && document.getElementById('banner-slider-images').style.display !== 'none') {
             sliderInstance.start();

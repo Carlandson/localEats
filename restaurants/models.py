@@ -234,9 +234,12 @@ class SubPage(models.Model):
         ('contact', 'Contact'),
         ('specials', 'Specials'),
         ('events', 'Events'),
+        ('merch', 'Merch'),
+        ('contact', 'Contact'),
+        ('testimonials', 'Testimonials'),
     ]
     
-    page_type = models.CharField(max_length=10, choices=PAGE_TYPES)
+    page_type = models.CharField(max_length=14, choices=PAGE_TYPES)
 
     HERO_CHOICES = [
         ('full-image', 'Full Image'),
