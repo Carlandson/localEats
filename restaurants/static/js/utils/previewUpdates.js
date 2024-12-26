@@ -189,7 +189,12 @@ async function combinedUpdate(context, data) {
             if (previewContainer) {
                 previewContainer.innerHTML = responseData.preview_html;
                 console.log('Preview container updated');
-                reinitializeSlider();
+                setTimeout(() => {
+                    const sliderContainer = document.querySelector('.slider-container');
+                    if (sliderContainer) {
+                        reinitializeSlider(sliderContainer);
+                    }
+                }, 0);
             }
         } else {
             console.log('No preview HTML in response'); // Debug log

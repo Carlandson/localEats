@@ -18,8 +18,6 @@ async function initializeEditor() {
         // Get required elements
         const editorConfig = JSON.parse(document.getElementById('editor-config').textContent);
         const pageSelectorElement = document.getElementById('page-selector');
-        console.log('editorConfig', editorConfig);
-        console.log('pageSelectorElement', pageSelectorElement);
         if (!editorConfig || !pageSelectorElement) {
             throw new Error('Required elements not found');
         }
@@ -42,7 +40,6 @@ async function initializeEditor() {
             initializeFontHandlers(context);
             initializeAlignmentHandlers(context);
             initializeHeroSizeHandler(context);
-            console.log('initializers set');
             // Add page change listener
             context.pageSelector.addEventListener('change', async function() {
                 await loadPageData(this.value, context);
@@ -126,8 +123,6 @@ async function loadPageData(pageType, context) {
             page_type: pageType,
             return_preview: true
         });
-        console.log('response', response);
-        console.log('response.data', response.is_published);
         if (response) {
             // Update publish state using the handler
             updatePublishState(response.is_published);
@@ -140,6 +135,7 @@ async function loadPageData(pageType, context) {
                 const previewContainer = document.getElementById('preview-container');
                 if (previewContainer) {
                     previewContainer.innerHTML = response.preview_html;
+                    console.log('reinitializing slider');
                     reinitializeSlider();
                 }
             }
@@ -188,7 +184,6 @@ async function initializePageData(context) {
 }
 
 function updateFormValues(data, context) {
-    console.log('updateFormValues', data, context);
     try {
         // accordion states
         const accordionStates = {};
@@ -331,9 +326,6 @@ function updateFormValues(data, context) {
         // Update radio buttons for layout and alignment
         const layoutRadio = document.querySelector(`input[name="hero_layout"][value="${data.hero_layout}"]`);
         if (layoutRadio) layoutRadio.checked = true;
-        
-        console.log('Alignment data:', alignmentFields);
-
         Object.entries(alignmentFields).forEach(([name, value]) => {
             const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
             if (radio) radio.checked = true;
@@ -342,7 +334,6 @@ function updateFormValues(data, context) {
         Object.entries(colorInputs).forEach(([id, value]) => {
             const element = document.getElementById(id);
             if (element) {
-                console.log('Setting color:', id, 'to:', value);
                 element.value = value;
                 element.defaultValue = value; // Set default value too
                 
@@ -351,7 +342,6 @@ function updateFormValues(data, context) {
                 element.dispatchEvent(event);
             }
         });
-        console.log('hero_primary', data.hero_image.url);
         // Update images (existing code)
         const imageElements = {
             'hero-image': {
@@ -370,7 +360,6 @@ function updateFormValues(data, context) {
                 containerId: 'banner_3-container'  // Expected container ID
             }
         };
-        console.log('imageElements', imageElements);
         const editorSections = document.querySelectorAll('.editor-section');
         editorSections.forEach(section => {
             // Skip if section is already wrapped in accordion

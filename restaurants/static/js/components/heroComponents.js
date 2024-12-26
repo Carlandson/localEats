@@ -58,13 +58,27 @@ export function handleBannerSliderVisibility(layoutStyle) {
     } 
 }
 
-export function reinitializeSlider() {
+export function reinitializeSlider(sliderContainer) {
+    const bannerSliderContainer = document.getElementById('banner-slider-images');
+    if (!bannerSliderContainer) return;
+
+    // Use the passed container if available, otherwise use banner-slider-images
+    const container = sliderContainer || bannerSliderContainer;
+    const slides = Array.from(container.querySelectorAll('.slide'))
+        .filter(slide => slide.querySelector('img'));
+
+    // If there's only one or zero slides, stop the slider and return
+    if (slides.length <= 1) {
+        if (sliderInstance) {
+            sliderInstance.stop();
+            sliderInstance = null;
+        }
+        return;
+    }
+
     if (sliderInstance) {
         // Store current state
-        const slides = sliderContainer.querySelectorAll('.slide');
-        console.log(slides.length)
-        console.log('ttttttttttttttttttttttttttttttttttttttttttttttttttttttt')
-        const currentIndex = sliderInstance.getCurrentSlide();
+        const currentIndex = Math.min(sliderInstance.getCurrentSlide(), slides.length - 1);
         const wasPlaying = sliderInstance.isPlaying();
         
         // Stop current instance
@@ -73,16 +87,15 @@ export function reinitializeSlider() {
         // Reinitialize with stored position
         sliderInstance = slider.init(currentIndex);
         
-        if (sliderInstance && document.getElementById('banner-slider-images').style.display !== 'none') {
+        if (sliderInstance && bannerSliderContainer.style.display !== 'none') {
             // Only start if it was playing before
             if (wasPlaying) {
                 sliderInstance.start();
             }
         }
     } else {
-        console.log('tttttttttttttttttttttttttttttttttttttttttttttttttttttttttt')
         sliderInstance = slider.init(0);
-        if (sliderInstance && document.getElementById('banner-slider-images').style.display !== 'none') {
+        if (sliderInstance && bannerSliderContainer.style.display !== 'none') {
             sliderInstance.start();
         }
     }
