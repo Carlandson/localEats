@@ -344,10 +344,10 @@ function updateFormValues(data, context) {
         });
         // Update images (existing code)
         const imageElements = {
-            'hero-image': {
-                url: data.hero_image.url,
-                prefix: 'hero_image',
-                containerId: 'hero-image-container'  // Match the actual container ID
+            'hero_primary': {
+                url: data.hero_primary.url,
+                prefix: 'hero_primary',
+                containerId: 'hero_primary-container'  // Match the actual container ID
             },
             'banner_2': {
                 url: data.banner_2.url,
@@ -395,6 +395,7 @@ function updateFormValues(data, context) {
                     container.innerHTML = createHeroImageHTML(url, prefix, data.hero_layout);
                     const removeButton = document.getElementById(`remove-${prefix}`);
                     if (removeButton) {
+                        console.log('prefix', prefix);
                         removeButton.addEventListener('click', () => removeHeroImage(prefix, context));
                     }
                 } else {

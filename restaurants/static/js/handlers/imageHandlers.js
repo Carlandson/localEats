@@ -2,6 +2,7 @@ import { displayError } from '../utils/errors.js';
 import { smartUpdate } from '../utils/previewUpdates.js';
 import { getCookie } from '../utils/cookies.js';
 import { createHeroImageHTML, createUploadPlaceholderHTML } from '../utils/placeholders.js';
+import { reinitializeSlider } from '../components/heroComponents.js';
 
 
 function attachRemoveListeners(context) {
@@ -21,7 +22,7 @@ function attachRemoveListeners(context) {
 function getImageElements() {
     // Match the exact prefixes from the template
     const elements = {};
-    const prefixes = ['hero-image', 'banner_2', 'banner_3'];
+    const prefixes = ['hero_primary', 'banner_2', 'banner_3'];
     
     prefixes.forEach(prefix => {
         elements[`${prefix}UploadButton`] = document.getElementById(`upload-${prefix}-button`);
@@ -33,7 +34,7 @@ function getImageElements() {
 
 export function initializeImageUploads(context) {
     const elements = getImageElements();
-    const prefixes = ['hero-image', 'banner_2', 'banner_3'];  // Match template prefixes
+    const prefixes = ['hero_primary', 'banner_2', 'banner_3'];  // Match template prefixes
 
     attachRemoveListeners(context);
 
@@ -73,7 +74,7 @@ export async function handleImageUpload(event, context) {
 
     const inputId = event.target.id;
     const prefix = inputId.replace('-upload', '');
-    const bannerType = prefix === 'hero-image' ? 'hero_primary' : prefix;
+    const bannerType = prefix;
     const uploadButton = document.getElementById(`upload-${prefix}-button`);
 
     if (uploadButton) {
@@ -82,26 +83,21 @@ export async function handleImageUpload(event, context) {
     }
 
     try {
-        // For images, we'll use smartUpdate with a special image type
-        await smartUpdate(context, {
+        const result = await smartUpdate(context, {
             fieldType: 'image',
             fieldName: bannerType,
-            value: file,  // Pass the file directly
-            previousValue: null, // Previous value not needed for images
+            value: file,
             page_type: context.pageSelector.value,
             return_preview: true,
-            isFileUpload: true,  // Flag to indicate this is a file upload
-            isGlobal: false
+            isFileUpload: true
         });
 
-        // Update the UI with the new image
-        const container = document.getElementById(`${prefix}-container`);
-        if (container && context.lastUploadedImageUrl) {
-            container.innerHTML = `
-                ${createHeroImageHTML(context.lastUploadedImageUrl, prefix)}
-                <input type="file" id="${prefix}-upload" accept="image/*" class="hidden">
-            `;
-            initializeImageUploads(context);
+        if (result.success && result.preview_html) {
+            const previewContainer = document.getElementById('preview-container');
+            if (previewContainer) {
+                previewContainer.innerHTML = result.preview_html;
+                reinitializeSlider();
+            }
         }
 
     } catch (error) {
@@ -128,16 +124,15 @@ export async function removeHeroImage(prefix, context) {
 
     removeButton.disabled = true;
 
+    console.log('Removing image with prefix:', prefix);
     try {
-        await smartUpdate(context, {
+        const result = await smartUpdate(context, {
             fieldType: 'image',
-            fieldName: prefix === 'hero-image' ? 'hero_primary' : prefix,
-            value: null,  // null indicates image removal
-            previousValue: container.querySelector('img')?.src || null,
+            fieldName: prefix,
+            value: null,
             page_type: context.pageSelector.value,
             return_preview: true,
-            isImageRemoval: true,  // Flag to indicate this is an image removal
-            isGlobal: false
+            isImageRemoval: true
         });
 
         // Update container with placeholder

@@ -366,7 +366,7 @@ def get_business_context(business, user, page_type='home'):
         'hero_subheading_font': subpage.hero_subheading_font,
         'hero_heading_size': subpage.hero_heading_size,
         'hero_subheading_size': subpage.hero_subheading_size,
-        'hero_image': {
+        'hero_primary': {
             'url': hero_primary.image.url if hero_primary else None,
             'alt_text': hero_primary.alt_text if hero_primary else None
         },
@@ -429,7 +429,7 @@ def get_business_context(business, user, page_type='home'):
         'subpage': subpage,
         'current_page': subpage,
         # Choices/Options for template dropdowns and selectors
-        'hero_image': hero_primary,
+        'hero_primary': hero_primary,
         'banner_2': banner_2,
         'banner_3': banner_3,
         'hero_heading_font': subpage.hero_heading_font,
@@ -1271,7 +1271,7 @@ def edit_layout(request, business_subdirectory):
             'hero_subheading_font': current_subpage.hero_subheading_font,
             'hero_heading_size': current_subpage.hero_heading_size,
             'hero_subheading_size': current_subpage.hero_subheading_size,
-            'hero_image': {
+            'hero_primary': {
                 'url': hero_primary.image.url if hero_primary else None,
                 'alt_text': hero_primary.alt_text if hero_primary else None
             },
@@ -1343,7 +1343,7 @@ def edit_layout(request, business_subdirectory):
             'heading_sizes': get_font_sizes('heading'),
             'subheading_sizes': get_font_sizes('subheading'),
             'hero_size_choices': SubPage.HERO_SIZE_CHOICES,
-            'hero_image': hero_primary,
+            'hero_primary': hero_primary,
             'banner_2': banner_2,
             'banner_3': banner_3,
             'preview_mode': True,
@@ -1405,7 +1405,7 @@ def update_layout(request, business_subdirectory):
             content_html = render_to_string(f'components/preview/{page_type}.html', {
                 'business_details': business,
                 'subpage': subpage,
-                'hero_image': subpage.get_hero_primary(),
+                'hero_primary': subpage.get_hero_primary(),
                 'banner_2': subpage.get_banner_2(),
                 'banner_3': subpage.get_banner_3(),
                 'preview_mode': True,
@@ -1446,7 +1446,7 @@ def update_layout(request, business_subdirectory):
                 'subpage': subpage,
                 'current_page': page_type,
                 'preview_mode': True,
-                'hero_image': subpage.get_hero_primary(),
+                'hero_primary': subpage.get_hero_primary(),
                 'banner_2': subpage.get_banner_2(),
                 'banner_3': subpage.get_banner_3(),
                 'business_subdirectory': business_subdirectory,
@@ -1492,7 +1492,6 @@ def preview_page(request, business_subdirectory, page_type):
             'hero_primary': hero_primary,
             'banner_2': banner_2,
             'banner_3': banner_3,
-            'hero_image': hero_primary,  # For backwards compatibility
             'preview_mode': True,
             'business_subdirectory': business_subdirectory,
             'debug': True,  # Make sure debug is True
@@ -1503,6 +1502,7 @@ def preview_page(request, business_subdirectory, page_type):
             'hover_color': business.hover_color,
             'navigation_style': business.navigation_style,
             'footer_style': business.footer_style,
+            'current_page': page_type,
             'is_published': subpage.is_published
         }
         
@@ -1572,7 +1572,7 @@ def get_page_data(request, business_subdirectory, page_type):
             'hero_button_link': subpage.hero_button_link,
             'hero_size': subpage.hero_size,
             'is_published': subpage.is_published,
-            'hero_image': {
+            'hero_primary': {
                 'url': hero_primary.image.url if hero_primary else None,
                 'alt_text': hero_primary.alt_text if hero_primary else None
             },
@@ -1986,7 +1986,7 @@ def upload_hero_image(request, business_subdirectory):
                 'hero_primary': subpage.get_hero_primary(),
                 'banner_2': subpage.get_banner_2(),
                 'banner_3': subpage.get_banner_3(),
-                'hero_image': subpage.get_hero_primary(),
+                'hero_primary': subpage.get_hero_primary(),
                 'preview_mode': True,
                 'business_subdirectory': business_subdirectory,
                 'debug': True,
@@ -2014,6 +2014,7 @@ def remove_hero_image(request, business_subdirectory):
     try:
         # Parse the JSON body
         data = json.loads(request.body)
+        print(f"data={data}")
         page_type = data.get('page_type')
         banner_type = data.get('banner_type')  # Add this
         return_preview = data.get('return_preview', False)  # Add this
@@ -2028,9 +2029,10 @@ def remove_hero_image(request, business_subdirectory):
 
         # Get the specific subpage
         subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
-        
+
         # Get and delete the specific banner image
         content_type = ContentType.objects.get_for_model(SubPage)
+        print(f"page_type={page_type},banner_type={banner_type}, content_type={content_type}")
         hero_image = Image.objects.filter(
             content_type=content_type,
             object_id=subpage.id,
@@ -2038,7 +2040,7 @@ def remove_hero_image(request, business_subdirectory):
         ).first()
 
         response_data = {'success': True}
-
+        print(hero_image)
         if hero_image:
             print(f"Deleting {banner_type} image: {hero_image.id} for subpage: {subpage.id}")
             hero_image.delete()
@@ -2052,10 +2054,9 @@ def remove_hero_image(request, business_subdirectory):
             preview_html = render_to_string(f'visitor_pages/{page_type}.html', {
                 'business_details': business,
                 'subpage': subpage,
-                'hero_primary': subpage.get_hero_primary(),
                 'banner_2': subpage.get_banner_2(),
                 'banner_3': subpage.get_banner_3(),
-                'hero_image': subpage.get_hero_primary(),
+                'hero_primary': subpage.get_hero_primary(),
                 'preview_mode': True,
                 'business_subdirectory': business_subdirectory,
                 'debug': True,
@@ -2282,7 +2283,7 @@ def page_view(request, business_subdirectory, page_type):
     context = {
         'business': business,
         'subpage': subpage,
-        'hero_image': subpage.get_hero_image(),
+        'hero_primary': subpage.get_hero_image(),
     }
     
     template_name = f'pages/{page_type}.html'

@@ -10,7 +10,7 @@
         {% if is_home %}
             <!-- Home Page Components -->
             <div class="home-preview">
-                {% if hero_image and subpage.hero_layout %}
+                {% if hero_primary and subpage.hero_layout %}
                     {% with template_name="components/hero/"|add:subpage.hero_layout|add:".html" %}
                         {% include template_name %}
                     {% endwith %}
@@ -21,7 +21,7 @@
         {% elif menu_page %}
             <!-- Menu Page Components -->
             <div class="menu-preview">
-                {% if hero_image and subpage.hero_layout %}
+                {% if hero_primary and subpage.hero_layout %}
                     {% with template_name="components/hero/"|add:subpage.hero_layout|add:".html" %}
                         {% include template_name %}
                     {% endwith %}
@@ -32,7 +32,7 @@
         {% elif about_page %}
             <!-- About Page Components -->
             <div class="about-preview">
-                {% if hero_image and subpage.hero_layout %}
+                {% if hero_primary and subpage.hero_layout %}
                     {% with template_name="components/hero/"|add:subpage.hero_layout|add:".html" %}
                         {% include template_name %}
                     {% endwith %}
