@@ -76,6 +76,7 @@ export async function handleImageUpload(event, context) {
     const prefix = inputId.replace('-upload', '');
     const bannerType = prefix;
     const uploadButton = document.getElementById(`upload-${prefix}-button`);
+    const imageContainer = document.getElementById(`${prefix}-container`); // Add this
 
     if (uploadButton) {
         uploadButton.textContent = 'Uploading...';
@@ -92,7 +93,27 @@ export async function handleImageUpload(event, context) {
             isFileUpload: true
         });
 
-        if (result.success && result.preview_html) {
+        if (!result.success) {
+            throw new Error(result.error || 'Upload failed');
+        }
+
+        // Update the editor image container
+        if (imageContainer && result.image_url) {
+            imageContainer.innerHTML = createHeroImageHTML(
+                result.image_url, 
+                prefix, 
+                context.heroLayout // Make sure this is available in your context
+            );
+            
+            // Reattach remove button listener
+            const removeButton = document.getElementById(`remove-${prefix}`);
+            if (removeButton) {
+                removeButton.addEventListener('click', () => removeHeroImage(prefix, context));
+            }
+        }
+
+        // Update the preview
+        if (result.preview_html) {
             const previewContainer = document.getElementById('preview-container');
             if (previewContainer) {
                 previewContainer.innerHTML = result.preview_html;
@@ -102,12 +123,13 @@ export async function handleImageUpload(event, context) {
 
     } catch (error) {
         console.error('Error uploading image:', error);
-        displayError('Failed to upload image: ' + error.message);
+        displayError(typeof error === 'string' ? error : error.message || 'Failed to upload image');
     } finally {
         if (uploadButton) {
             uploadButton.textContent = 'Upload Image';
             uploadButton.disabled = false;
         }
+        event.target.value = '';
     }
 }
 

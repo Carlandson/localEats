@@ -140,7 +140,10 @@ async function optimisticUpdate(context, data) {
             const previewContainer = document.getElementById('preview-container');
             if (previewContainer) {
                 previewContainer.innerHTML = responseData.preview_html;
-                reinitializeSlider();
+                const sliderContainer = document.querySelector('.slider-container');
+                if (sliderContainer) {
+                    reinitializeSlider(sliderContainer);
+                }
             }
         }
 

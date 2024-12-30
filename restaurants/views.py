@@ -1,6 +1,7 @@
 import json
 import geopy.distance
 import logging
+from PIL import Image as PILImage
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
@@ -1916,11 +1917,40 @@ def upload_hero_image(request, business_subdirectory):
         page_type = request.POST.get('page_type', 'home')
         banner_type = request.POST.get('banner_type', 'primary')
         image_file = request.FILES.get('image')
-        return_preview = request.POST.get('return_preview') == 'true'
-        
         if not image_file:
             return JsonResponse({'success': False, 'error': 'No image provided'})
 
+        return_preview = request.POST.get('return_preview') == 'true'
+
+        # validate image file
+        if not image_file:
+            return JsonResponse({'success': False, 'error': 'No image provided'})
+
+        # Check file size
+        if image_file.size > settings.FILE_UPLOAD_MAX_MEMORY_SIZE:
+            return JsonResponse({
+                'success': False, 
+                'error': f'File size cannot exceed {settings.FILE_UPLOAD_MAX_MEMORY_SIZE // (1024*1024)}MB'
+            })
+
+        # Check file extension
+        ext = image_file.name.split('.')[-1].lower()
+        if ext not in Image.ALLOWED_EXTENSIONS:
+            return JsonResponse({
+                'success': False,
+                'error': f'Unsupported file extension. Allowed types: {", ".join(Image.ALLOWED_EXTENSIONS)}'
+            })
+        
+        try:
+            with PILImage.open(image_file) as img:
+                img.verify()
+                # Reset file pointer after verify
+                image_file.seek(0)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': 'Invalid image file'
+            })
         logger.debug(f"Processing {banner_type} image upload for {business_subdirectory}, page type: {page_type}")
         logger.debug(f"Image file: {image_file.name}, size: {image_file.size}")
 
@@ -1958,14 +1988,26 @@ def upload_hero_image(request, business_subdirectory):
             old_image.delete()
 
         # Create new image
-        new_image = Image.objects.create(
-            image=image_file,
-            uploaded_by=request.user,
-            content_type=content_type,
-            object_id=subpage.id,
-            alt_text=alt_text,
-            caption=f'{banner_type.title()} image for {business.business_name} {page_type} page'
-        )
+        try:
+            new_image = Image.objects.create(
+                image=image_file,
+                uploaded_by=request.user,
+                content_type=content_type,
+                object_id=subpage.id,
+                alt_text=alt_text,
+                caption=f'{banner_type.title()} image for {business.business_name} {page_type} page'
+            )
+        except ValidationError as e:
+            logger.error(f"Validation error during image upload: {str(e)}")
+            # Convert ValidationError to a more readable format
+            if hasattr(e, 'message_dict'):
+                error_message = '; '.join([f"{k}: {', '.join(v)}" for k, v in e.message_dict.items()])
+            else:
+                error_message = str(e)
+            return JsonResponse({
+                'success': False,
+                'error': error_message
+            })
 
         image_url = new_image.image.url
         logger.debug(f"New {banner_type} image created with URL: {image_url}")
