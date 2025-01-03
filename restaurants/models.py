@@ -449,22 +449,24 @@ class SubPage(models.Model):
         }
     
     def save(self, *args, **kwargs):
+        logger.debug(f"Saving SubPage: {self.business.business_name} - {self.page_type}")
         if not self.slug:
             if self.page_type == 'home':
-                # For home page, use just the business subdirectory
                 self.slug = self.business.subdirectory
             else:
-                # For other pages, append the page type
                 base_slug = f"{self.business.subdirectory}-{self.page_type}"
                 self.slug = base_slug
                 
-                # If the slug exists, append a number
                 counter = 1
                 while SubPage.objects.filter(slug=self.slug).exists():
                     self.slug = f"{base_slug}-{counter}"
                     counter += 1
-                
+        
+        logger.debug(f"Generated slug: {self.slug}")
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.business.business_name} - {self.page_type}"
 
     @classmethod
     def get_published_subpages(cls, business):

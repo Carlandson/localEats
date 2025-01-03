@@ -33,7 +33,7 @@ class BusinessAdmin(admin.ModelAdmin):
     ]
     
     actions = ['verify_businesses']
-    inlines = [SubPageInline, MenuInline]
+    inlines = [MenuInline]
     formfield_overrides = {
         map_fields.AddressField: {'widget': map_widgets.GoogleMapsAddressWidget(attrs={
             'data-autocomplete-options': json.dumps({
@@ -71,7 +71,7 @@ class SubPageAdmin(admin.ModelAdmin):
     list_display = ['title', 'business', 'page_type', 'order', 'is_published']
     list_filter = ['page_type', 'is_published']
     search_fields = ['title', 'business__business_name']
-    prepopulated_fields = {'slug': ('title',)}
+    readonly_fields = ['slug']
     inlines = [AboutUsPageInline, EventsPageInline, SpecialsPageInline]
 
 @admin.register(Menu)

@@ -34,6 +34,7 @@ from django.utils import timezone
 from .constants import get_font_choices, get_font_sizes
 import base64, uuid
 import googlemaps
+import traceback
 
 User = get_user_model()
 
@@ -234,15 +235,15 @@ def create(request):
                         business=new_business,
                         page_type='home',
                         title=f"{new_business.business_name} Home",
-                        slug=slug,
                         is_published=True,
                         hero_heading=f"Welcome to {new_business.business_name}",
                         hero_subheading="We're excited to serve you!",
                         show_hero_heading=True,
                         show_hero_subheading=True
                     )
+                    print(new_business.subdirectory)
                     messages.success(request, 'business created successfully!')
-                    return redirect(reverse('business_subdirectory', kwargs={'business_subdirectory': new_business.subdirectory}))
+                    return redirect(reverse('business_home', kwargs={'business_subdirectory': new_business.subdirectory}))
                 else:
                     messages.error(request, 'Unable to validate the address. Please check and try again.')
             except Exception as e:
@@ -542,15 +543,16 @@ def create_subpage(request, business_subdirectory, page_type):
         return redirect('business_subdirectory', business_subdirectory=business_subdirectory)
 
     # Create a unique slug by adding a timestamp
-    from django.utils import timezone
     timestamp = timezone.now().strftime('%Y%m%d-%H%M%S')
     unique_slug = f"{business.subdirectory}-{page_type}-{timestamp}"
+
+    page_type_display = dict(SubPage.PAGE_TYPES).get(page_type, page_type.title())
 
     # Create the subpage
     subpage = SubPage.objects.create(
         business=business,
         page_type=page_type,
-        title=f"{business.business_name} {page_type.title()}",
+        title=f"{business.business_name} {page_type_display}",
         slug=unique_slug,
         is_published=True
     )
@@ -1354,9 +1356,7 @@ def edit_layout(request, business_subdirectory):
         return render(request, "edit_layout.html", context)
         
     except Exception as e:
-        import traceback
         logger.error(f"Error in edit_layout: {str(e)}\n{traceback.format_exc()}")
-
         return HttpResponse(f"Error loading layout editor: {str(e)}", status=500)
 
 
