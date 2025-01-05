@@ -80,6 +80,7 @@ function getUpdateStrategy(fieldType) {
         case 'preview':
         case 'load_page':
         case 'initialize':
+        case 'new_page':
             return UPDATE_STRATEGIES.IMMEDIATE;
         default:
             return UPDATE_STRATEGIES.IMMEDIATE;
@@ -146,7 +147,6 @@ async function optimisticUpdate(context, data) {
                 }
             }
         }
-
         return responseData;
 
     } catch (error) {
@@ -242,6 +242,23 @@ async function immediateUpdate(context, data) {
             return responseData;
         }
         
+        // Special handling for new page creation
+        if (data.fieldType === 'new_page') {
+            const response = await fetch(`/api/${context.business_subdirectory}/layout/update/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create new page');
+            }
+
+            return await response.json();
+        }
+
         // Regular immediate updates
         const response = await fetch(`/api/${context.business_subdirectory}/layout/update/`, {
             method: 'POST',

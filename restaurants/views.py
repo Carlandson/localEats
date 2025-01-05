@@ -539,48 +539,61 @@ def create_subpage(request, business_subdirectory, page_type):
 
     # Check if subpage already exists
     if SubPage.objects.filter(business=business, page_type=page_type).exists():
-        messages.error(request, f'A {page_type} page already exists for this business.')
-        return redirect('business_subdirectory', business_subdirectory=business_subdirectory)
+        return JsonResponse({
+            "success": False,
+            "error": f'A {page_type} page already exists for this business.'
+        }, status=400)
 
-    # Create a unique slug by adding a timestamp
-    timestamp = timezone.now().strftime('%Y%m%d-%H%M%S')
-    unique_slug = f"{business.subdirectory}-{page_type}-{timestamp}"
+    try:
+        # Create a unique slug by adding a timestamp
+        timestamp = timezone.now().strftime('%Y%m%d-%H%M%S')
+        unique_slug = f"{business.subdirectory}-{page_type}-{timestamp}"
 
-    page_type_display = dict(SubPage.PAGE_TYPES).get(page_type, page_type.title())
+        page_type_display = dict(SubPage.PAGE_TYPES).get(page_type, page_type.title())
 
-    # Create the subpage
-    subpage = SubPage.objects.create(
-        business=business,
-        page_type=page_type,
-        title=f"{business.business_name} {page_type_display}",
-        slug=unique_slug,
-        is_published=True
-    )
-
-    # Create the corresponding page content based on type
-    if page_type == 'menu':
-        Menu.objects.create(
+        # Create the subpage
+        subpage = SubPage.objects.create(
             business=business,
-            name=f"{business.business_name} Menu",
-            subpage=subpage
-        )
-    elif page_type == 'about':
-        AboutUsPage.objects.create(
-            subpage=subpage,
-            content=""
-        )
-    elif page_type == 'events':
-        EventsPage.objects.create(
-            subpage=subpage
-        )
-    elif page_type == 'specials':
-        SpecialsPage.objects.create(
-            subpage=subpage
+            page_type=page_type,
+            title=f"{business.business_name} {page_type_display}",
+            slug=unique_slug,
+            is_published=True
         )
 
-    messages.success(request, f'{page_type.title()} page created successfully!')
-    # Redirect to the appropriate page
-    return redirect(reverse(page_type, kwargs={'business_subdirectory': business_subdirectory}))
+        # Create the corresponding page content based on type
+        if page_type == 'menu':
+            Menu.objects.create(
+                business=business,
+                name=f"{business.business_name} Menu",
+                subpage=subpage
+            )
+        elif page_type == 'about':
+            AboutUsPage.objects.create(
+                subpage=subpage,
+                content=""
+            )
+        elif page_type == 'events':
+            EventsPage.objects.create(
+                subpage=subpage
+            )
+        elif page_type == 'specials':
+            SpecialsPage.objects.create(
+                subpage=subpage
+            )
+
+        return JsonResponse({
+            "success": True,
+            "message": f'{page_type.title()} page created successfully!',
+            "page_type": page_type,
+            "slug": subpage.slug,
+            "url": reverse(page_type, kwargs={'business_subdirectory': business_subdirectory})
+        })
+
+    except Exception as e:
+        return JsonResponse({
+            "success": False,
+            "error": str(e)
+        }, status=400)
 
 def menu(request, business_subdirectory):
     business = get_object_or_404(Business, subdirectory=business_subdirectory)
@@ -1230,27 +1243,16 @@ def edit_layout(request, business_subdirectory):
 
         # Get or create subpages for each type
         current_page = 'home'
-        available_pages = []
-        for page_type, label in SubPage.PAGE_TYPES:
-            available_pages.append(page_type)
         current_subpage = SubPage.objects.filter(
             business=business,
             page_type=current_page
         ).first()
 
+        # for links
         published_pages = SubPage.get_published_subpages(business)
-        print('published_pages', published_pages)
         existing_page_types = set([page.get('page_type') for page in published_pages])
-        print('existing_page_types', existing_page_types)
         existing_page_types.add(current_page)  # Add current page to existing set
-        
-        available_pages = []
-        for page_type, label in SubPage.PAGE_TYPES:
-            if page_type not in existing_page_types:
-                available_pages.append({
-                    'page_type': page_type,
-                    'label': label
-                })
+        available_pages = SubPage.get_available_subpages(business)
         hero_primary = current_subpage.get_hero_primary()
         banner_2 = current_subpage.get_banner_2()
         banner_3 = current_subpage.get_banner_3()
@@ -1372,11 +1374,44 @@ def update_layout(request, business_subdirectory):
         page_type = data.get('page_type')
         is_global = data.get('isGlobal', False)
         return_preview = data.get('return_preview', False)
-
         # Get the business and subpage
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
-        subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
 
+        # Handle new page creation
+        if field_type == 'new_page':
+            timestamp = timezone.now().strftime('%Y%m%d-%H%M%S')
+            unique_slug = f"{business.subdirectory}-{page_type}-{timestamp}"
+            page_type_display = dict(SubPage.PAGE_TYPES).get(page_type, page_type.title())
+            # Create the subpage
+            subpage = SubPage.objects.create(
+                business=business,
+                page_type=page_type,
+                title=f"{business.business_name} {page_type_display}",
+                slug=unique_slug,
+                is_published=True
+            )
+            # Create the corresponding page content based on type
+            if page_type == 'menu':
+                Menu.objects.create(
+                    business=business,
+                    name=f"{business.business_name} Menu",
+                    subpage=subpage
+                )
+            elif page_type == 'about':
+                AboutUsPage.objects.create(
+                    subpage=subpage,
+                    content=""
+                )
+            elif page_type == 'events':
+                EventsPage.objects.create(
+                    subpage=subpage
+                )
+            elif page_type == 'specials':
+                SpecialsPage.objects.create(
+                    subpage=subpage
+                )
+        
+        subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
         # Handle brand color updates
         if field_type == 'color' and field_name in ['primary', 'secondary', 'text-color', 'hover-color']:
             color_field_map = {

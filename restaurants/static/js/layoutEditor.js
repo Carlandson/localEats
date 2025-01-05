@@ -8,7 +8,7 @@ import { initializeFontHandlers } from './handlers/fontHandlers.js';
 import { initializeLayoutHandlers } from './handlers/layoutHandlers.js';
 import { initializeAlignmentHandlers } from './handlers/alignmentHandlers.js';
 import { initializeHeroLayoutListener, initializeBannerButtonEditors } from './handlers/buttonHandlers.js';
-import { initializePublishToggle } from './handlers/publishHandlers.js';
+import { initializePublishToggle, initializeAddPageDropdown } from './handlers/publishHandlers.js';
 import { updatePublishState } from './handlers/publishHandlers.js';
 import { smartUpdate } from './utils/previewUpdates.js';
 import { reinitializeSlider, handleBannerSliderVisibility } from './components/heroComponents.js';
@@ -31,6 +31,7 @@ async function initializeEditor() {
         try {
             await initializePageData(context);
             initializePublishToggle(context);
+            initializeAddPageDropdown(context);
             initializeHeroLayoutListener();
             initializeBannerButtonEditors(context);
             initializeLayoutHandlers(context);
@@ -190,6 +191,8 @@ function updateFormValues(data, context) {
         document.querySelectorAll('.accordion-content').forEach(content => {
             accordionStates[content.id] = !content.classList.contains('hidden');
         });
+        // Update new pages
+        const addPageDropdown = document.getElementById('available-pages');
         // Update text fields for primary hero
         const textFields = {
             // Primary hero

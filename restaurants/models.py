@@ -476,6 +476,32 @@ class SubPage(models.Model):
             is_published=True
         )
         return [page.serialize() for page in subpages]
+    
+    @classmethod
+    def get_available_subpages(cls, business):
+        """Class method to get available page types that haven't been created yet"""
+        # Get existing page types for this business
+        existing_page_types = set(
+            cls.objects.filter(business=business).values_list('page_type', flat=True)
+        )
+        
+        # Get all possible page types from PAGE_TYPES
+        all_page_types = set(page_type for page_type, _ in cls.PAGE_TYPES)
+        
+        # Find page types that don't exist yet
+        available_page_types = all_page_types - existing_page_types
+        
+        # Return formatted available pages
+        return [
+            {
+                'page_type': page_type,
+                'title': dict(cls.PAGE_TYPES)[page_type],
+                'slug': f"{business.subdirectory}-{page_type}",
+                'is_published': False
+            }
+            for page_type in available_page_types
+        ]
+    
     class Meta:
         unique_together = ['business', 'page_type']  # Ensure one page type per business
         ordering = ['order']

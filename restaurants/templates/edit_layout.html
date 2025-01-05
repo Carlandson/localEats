@@ -31,13 +31,11 @@
                     <span class="text-sm font-medium text-gray-700 w-24">Add New Page</span>
                     <select id="available-pages" class="form-select flex-1 rounded-md border-gray-300 px-2">
                         <option value="">Select a Page Type</option>
-                        {% for page_type, display_name in PAGE_TYPES %}
-                            {% if page_type not in subpages %}  {# Check if page doesn't exist yet #}
-                                <option value="{{ page_type }}" class="px-2">
-                                    {{ display_name }} Page
-                                </option>
-                            {% endif %}
-                        {% endfor %}
+                        {% for page in available_pages %}
+                        <option value="{{ page.page_type }}" class="px-2">
+                            {{ page.title }} Page
+                        </option>
+                    {% endfor %}
                     </select>
                 </div>
                 <!-- Publish Toggle -->

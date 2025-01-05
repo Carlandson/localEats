@@ -54,3 +54,45 @@ export function updatePublishState(isPublished) {
         publishStatus.textContent = isPublished ? 'Published' : 'Draft';
     }
 }
+
+export function initializeAddPageDropdown(context) {
+    const addPageDropdown = document.getElementById('available-pages');
+    const pageSelector = document.getElementById('page-selector');
+    
+    if (addPageDropdown) {
+        addPageDropdown.addEventListener('change', async function() {
+            const selectedPageType = this.value;
+            if (!selectedPageType) return;
+
+            try {
+                // Use smartUpdate to create the new page
+                const response = await smartUpdate(context, {
+                    fieldType: 'new_page',
+                    page_type: selectedPageType,
+                    return_preview: true
+                });
+
+                if (response.success) {
+                    // Reset the add page dropdown
+                    this.value = '';
+                    
+                    // Update the page selector to show the new page
+                    if (pageSelector) {
+                        pageSelector.value = selectedPageType;
+                        
+                        // Trigger the change event on the page selector
+                        const event = new Event('change');
+                        pageSelector.dispatchEvent(event);
+                    }
+
+                } else {
+                    console.error('Failed to create page:', response.error);
+                }
+            } catch (error) {
+                console.error('Error creating new page:', error);
+                // Reset the dropdown on error
+                this.value = '';
+            }
+        });
+    }
+}
