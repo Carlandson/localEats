@@ -1,6 +1,7 @@
 import { smartUpdate } from '../utils/previewUpdates.js';
 import { displayError } from '../utils/errors.js';
 
+
 export function initializePublishToggle(context) {
     const publishToggle = document.getElementById('publish-toggle');
     const publishStatus = document.getElementById('publish-status');
@@ -62,6 +63,7 @@ export function initializeAddPageDropdown(context) {
     if (addPageDropdown) {
         addPageDropdown.addEventListener('change', async function() {
             const selectedPageType = this.value;
+            console.log('Selected page type:', selectedPageType);
             if (!selectedPageType) return;
 
             try {
@@ -76,15 +78,12 @@ export function initializeAddPageDropdown(context) {
                     // Reset the add page dropdown
                     this.value = '';
                     
-                    // Update the page selector to show the new page
+                    // Update the page selector and load the new page directly
                     if (pageSelector) {
                         pageSelector.value = selectedPageType;
-                        
-                        // Trigger the change event on the page selector
-                        const event = new Event('change');
-                        pageSelector.dispatchEvent(event);
+                        // Load the page data directly instead of triggering change event
+                        await loadPageData(selectedPageType, context);
                     }
-
                 } else {
                     console.error('Failed to create page:', response.error);
                 }

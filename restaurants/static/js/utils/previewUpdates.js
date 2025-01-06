@@ -214,15 +214,13 @@ async function immediateUpdate(context, data) {
     try {
         console.log('Performing immediate update with:', data);
         
+        let responseData;
+        
         // Special handling for initialization and page loading
         if (data.fieldType === 'initialize' || data.fieldType === 'load_page') {
             const response = await fetch(`/${context.business_subdirectory}/get-page-data/${data.page_type}/`);
-            
-            if (!response.ok) {
-                throw new Error('Failed to load page data');
-            }
-
-            const responseData = await response.json();
+            if (!response.ok) throw new Error('Failed to load page data');
+            responseData = await response.json();
             
             // If we need preview HTML, fetch it separately
             if (data.return_preview) {
@@ -233,58 +231,39 @@ async function immediateUpdate(context, data) {
                         'Accept': 'text/html'
                     }
                 });
-
                 if (previewResponse.ok) {
                     responseData.preview_html = await previewResponse.text();
                 }
             }
-
-            return responseData;
-        }
-        
-        // Special handling for new page creation
-        if (data.fieldType === 'new_page') {
+        } else {
+            // Handle both new_page and regular updates
             const response = await fetch(`/api/${context.business_subdirectory}/layout/update/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCookie('csrftoken')
-                }
+                },
+                body: JSON.stringify({
+                    ...data,
+                    return_preview: true
+                })
             });
-
+            
             if (!response.ok) {
-                throw new Error('Failed to create new page');
+                throw new Error(data.fieldType === 'new_page' ? 'Failed to create new page' : 'Server update failed');
             }
-
-            return await response.json();
+            
+            responseData = await response.json();
+            
+            // Special handling for new page success message
+            if (data.fieldType === 'new_page') {
+                showSuccessAlert(responseData.message);
+            }
         }
 
-        // Regular immediate updates
-        const response = await fetch(`/api/${context.business_subdirectory}/layout/update/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify({
-                ...data,
-                return_preview: true
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Server update failed');
-        }
-
-        const responseData = await response.json();
-        
-        // Update preview if available
+        // Unified preview update logic
         if (responseData.preview_html) {
-            const previewContainer = document.getElementById('preview-container');
-            if (previewContainer) {
-                previewContainer.innerHTML = responseData.preview_html;
-                reinitializeSlider();
-            }
+            updatePreviewContent(responseData.preview_html);
         }
 
         return responseData;
@@ -292,6 +271,35 @@ async function immediateUpdate(context, data) {
         console.error('Immediate update failed:', error);
         displayError('Failed to update content');
         throw error;
+    }
+}
+
+// Helper functions
+function showSuccessAlert(message) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded z-50';
+    alertDiv.role = 'alert';
+    alertDiv.innerHTML = `
+        <strong class="font-bold">Success!</strong>
+        <span class="block sm:inline"> ${message}</span>
+    `;
+    document.body.appendChild(alertDiv);
+    setTimeout(() => alertDiv.remove(), 3000);
+}
+
+function updatePageSelector(pageType) {
+    const pageSelector = document.getElementById('page-selector');
+    if (pageSelector) {
+        pageSelector.value = pageType;
+        pageSelector.dispatchEvent(new Event('change'));
+    }
+}
+
+function updatePreviewContent(previewHtml) {
+    const previewContainer = document.getElementById('preview-container');
+    if (previewContainer) {
+        previewContainer.innerHTML = previewHtml;
+        reinitializeSlider();
     }
 }
 

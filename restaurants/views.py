@@ -1364,26 +1364,29 @@ def edit_layout(request, business_subdirectory):
 
 @require_POST
 def update_layout(request, business_subdirectory):
+    print("update_layout called")
     try:
         data = json.loads(request.body)
         print("Received data:", data)
         
         field_type = data.get('fieldType')
-        field_name = data.get('fieldName')
-        value = data.get('value')
+        field_name = data.get('fieldName', '')
+        value = data.get('value', '')
         page_type = data.get('page_type')
         is_global = data.get('isGlobal', False)
         return_preview = data.get('return_preview', False)
+        print(f"Parsed values: field_type={field_type}, field_name={field_name}, value={value}, page_type={page_type}")
+
         # Get the business and subpage
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
-
+        response_data = {'success': True}
         # Handle new page creation
         if field_type == 'new_page':
             timestamp = timezone.now().strftime('%Y%m%d-%H%M%S')
             unique_slug = f"{business.subdirectory}-{page_type}-{timestamp}"
             page_type_display = dict(SubPage.PAGE_TYPES).get(page_type, page_type.title())
             # Create the subpage
-            subpage = SubPage.objects.create(
+            new_subpage = SubPage.objects.create(
                 business=business,
                 page_type=page_type,
                 title=f"{business.business_name} {page_type_display}",
@@ -1395,46 +1398,47 @@ def update_layout(request, business_subdirectory):
                 Menu.objects.create(
                     business=business,
                     name=f"{business.business_name} Menu",
-                    subpage=subpage
+                    subpage=new_subpage
                 )
             elif page_type == 'about':
                 AboutUsPage.objects.create(
-                    subpage=subpage,
+                    subpage=new_subpage,
                     content=""
                 )
             elif page_type == 'events':
                 EventsPage.objects.create(
-                    subpage=subpage
+                    subpage=new_subpage
                 )
             elif page_type == 'specials':
                 SpecialsPage.objects.create(
-                    subpage=subpage
+                    subpage=new_subpage
                 )
-        
-        subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
-        # Handle brand color updates
-        if field_type == 'color' and field_name in ['primary', 'secondary', 'text-color', 'hover-color']:
-            color_field_map = {
-                'primary': 'primary_color',
-                'secondary': 'secondary_color',
-                'text-color': 'text_color',
-                'hover-color': 'hover_color'
-            }
-            actual_field_name = color_field_map.get(field_name)
-            if actual_field_name:
-                setattr(business, actual_field_name, value)
-                business.save()
-        elif is_global:  # Add this block for global components
-            # These are business-level settings
-            setattr(business, field_name, value)
-            business.save()
-        else:
-            # Handle regular subpage updates
-            setattr(subpage, field_name, value)
-            print(field_name, value)
-            subpage.save()
+            subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
+            response_data['message'] = f'Created new {page_type} page'
 
-        response_data = {'success': True}
+        # Handle brand color updates
+        else:
+            subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
+            if field_type == 'color' and field_name in ['primary', 'secondary', 'text-color', 'hover-color']:
+                color_field_map = {
+                    'primary': 'primary_color',
+                    'secondary': 'secondary_color',
+                    'text-color': 'text_color',
+                    'hover-color': 'hover_color'
+                }
+                actual_field_name = color_field_map.get(field_name)
+                if actual_field_name:
+                    setattr(business, actual_field_name, value)
+                    business.save()
+            elif is_global:  # Add this block for global components
+                # These are business-level settings
+                setattr(business, field_name, value)
+                business.save()
+            else:
+                # Handle regular subpage updates
+                setattr(subpage, field_name, value)
+                print(field_name, value)
+                subpage.save()
 
         if return_preview:
             # First render the content template
@@ -1501,6 +1505,7 @@ def update_layout(request, business_subdirectory):
 
 @login_required
 def preview_page(request, business_subdirectory, page_type):
+    print("preview_page called")
     try:
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
         if request.user != business.owner:
@@ -1570,6 +1575,7 @@ def preview_page(request, business_subdirectory, page_type):
     
 @login_required
 def get_page_data(request, business_subdirectory, page_type):
+    print("get_page_data called")
     try:
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
         if request.user != business.owner:
@@ -1692,6 +1698,7 @@ def get_page_data(request, business_subdirectory, page_type):
         
 @login_required
 def preview_component(request, business_subdirectory):
+    print("preview_component called")
     try:
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
         if request.user != business.owner:
@@ -1762,6 +1769,7 @@ def preview_component(request, business_subdirectory):
 
 @login_required
 def preview_navigation(request, business_subdirectory, style):
+    print("preview_navigation called")
     try:
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
         if request.user != business.owner:
@@ -1784,6 +1792,7 @@ def preview_navigation(request, business_subdirectory, style):
         return HttpResponse(f"Error: {str(e)}", status=500)
 
 def update_global_component(request, business_subdirectory):
+    print("update_global_component called")
     try:
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
         if request.user != business.owner:
@@ -1923,6 +1932,7 @@ def update_global_component(request, business_subdirectory):
 @require_POST
 @login_required
 def save_layout(request, business_subdirectory):
+    print("save_layout called")
     """Save layout preferences"""
     business = get_object_or_404(Business, subdirectory=business_subdirectory, owner=request.user)
     
@@ -1941,6 +1951,7 @@ def save_layout(request, business_subdirectory):
 @login_required
 @require_POST
 def upload_hero_image(request, business_subdirectory):
+    print("upload_hero_image called")
     if request.method != 'POST':
         return JsonResponse({'success': False, 'error': 'Invalid method'})
 
@@ -2085,6 +2096,7 @@ def upload_hero_image(request, business_subdirectory):
 
 @login_required
 def remove_hero_image(request, business_subdirectory):
+    print("remove_hero_image called")
     if request.method != 'POST':
         return JsonResponse({'success': False, 'error': 'Invalid method'})
 
@@ -2159,6 +2171,7 @@ def remove_hero_image(request, business_subdirectory):
 @login_required
 @require_http_methods(["POST"])
 def update_subpage_hero(request, business_subdirectory, subpage_id):
+    print("update_subpage_hero called")
     try:
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
         if request.user != business.owner:

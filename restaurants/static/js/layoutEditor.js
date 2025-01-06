@@ -18,6 +18,7 @@ async function initializeEditor() {
         // Get required elements
         const editorConfig = JSON.parse(document.getElementById('editor-config').textContent);
         const pageSelectorElement = document.getElementById('page-selector');
+        
         if (!editorConfig || !pageSelectorElement) {
             throw new Error('Required elements not found');
         }
@@ -43,6 +44,7 @@ async function initializeEditor() {
             initializeHeroSizeHandler(context);
             // Add page change listener
             context.pageSelector.addEventListener('change', async function() {
+                console.log(this.value)
                 await loadPageData(this.value, context);
             });
             
@@ -119,6 +121,7 @@ function wrapInAccordion(title, content, isOpen = false) {
 
 async function loadPageData(pageType, context) {
     try {
+        console.log(pageType)
         const response = await smartUpdate(context, {
             fieldType: 'load_page',
             page_type: pageType,
