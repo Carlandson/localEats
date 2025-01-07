@@ -73,17 +73,29 @@ export function initializeAddPageDropdown(context) {
                     page_type: selectedPageType,
                     return_preview: true
                 });
-
+                console.log("smartupdate", response)
                 if (response.success) {
-                    // Reset the add page dropdown
-                    this.value = '';
+                    // Get both dropdowns
+                    const addPagesDropdown = document.getElementById('available-pages');
+                    const yourPagesDropdown = document.getElementById('page-selector');
                     
-                    // Update the page selector and load the new page directly
-                    if (pageSelector) {
-                        pageSelector.value = selectedPageType;
-                        // Load the page data directly instead of triggering change event
-                        await loadPageData(selectedPageType, context);
+                    // Remove the selected option from available pages
+                    const selectedOption = addPagesDropdown.querySelector(`option[value="${selectedPageType}"]`);
+                    if (selectedOption) {
+                        selectedOption.remove();
                     }
+                    
+                    // Add the new page to your pages dropdown
+                    const newOption = document.createElement('option');
+                    newOption.value = selectedPageType;
+                    newOption.className = 'px-2';
+                    newOption.textContent = `${selectedPageType.charAt(0).toUpperCase() + selectedPageType.slice(1)} Page`;
+                    yourPagesDropdown.appendChild(newOption);
+                    yourPagesDropdown.value = selectedPageType;
+                    // Reset the add page dropdown
+                    addPagesDropdown.value = '';
+                    showToast(`${selectedPageType.charAt(0).toUpperCase() + selectedPageType.slice(1)} page successfully added!`);
+
                 } else {
                     console.error('Failed to create page:', response.error);
                 }
@@ -94,4 +106,18 @@ export function initializeAddPageDropdown(context) {
             }
         });
     }
+}
+
+function showToast(message, duration = 3000) {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    toastMessage.textContent = message;
+    
+    // Show the toast
+    toast.classList.add('toast-show');
+    
+    // Hide the toast after duration
+    setTimeout(() => {
+        toast.classList.remove('toast-show');
+    }, duration);
 }

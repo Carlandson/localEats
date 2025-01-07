@@ -38,6 +38,9 @@
   background-color: rgba(0,0,0,0.6);
 }
 
+.toast-show {
+  transform: translateX(0) !important;
+}
 /* Caption text */
 .text {
   color: #f2f2f2;

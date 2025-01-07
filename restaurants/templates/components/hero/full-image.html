@@ -2,9 +2,9 @@
 <div class="hero-section relative">
     <div class="hero-section-container"
         style="height: {% if subpage.hero_size == 'full-screen' %}100vh{% else %}50vh{% endif %}">
-    {% if hero_image %}
-        <img src="{{ hero_image.image.url }}" 
-            alt="{{ hero_image.alt_text|default:'' }}"
+    {% if hero_primary %}
+        <img src="{{ hero_primary.image.url }}" 
+            alt="{{ hero_primary.alt_text|default:'' }}"
             class="w-full h-full object-cover"
         >
     {% else %}

@@ -347,7 +347,7 @@ def get_business_context(business, user, page_type='home'):
                 'upcoming_events': events_page.events.filter(date__gte=timezone.now()).order_by('date'),
                 'past_events': events_page.events.filter(date__lt=timezone.now()).order_by('-date'),
             }
-    print(business)
+    has_menu = SubPage.objects.filter(business=business, page_type='menu').exists()
     page_data = {
         'business_subdirectory': business.subdirectory,
         'current_page': subpage,
@@ -422,6 +422,7 @@ def get_business_context(business, user, page_type='home'):
 
     context = {
         # For JavaScript initialization
+        'has_menu': has_menu,
         'page_data': page_data,
         # For template rendering
         'business_details': business,
@@ -1391,7 +1392,7 @@ def update_layout(request, business_subdirectory):
                 page_type=page_type,
                 title=f"{business.business_name} {page_type_display}",
                 slug=unique_slug,
-                is_published=True
+                is_published=False
             )
             # Create the corresponding page content based on type
             if page_type == 'menu':

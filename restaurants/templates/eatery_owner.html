@@ -16,9 +16,9 @@
                 </div>
                 <div class="grid md:grid-cols-3 gap-4 grid-cols-1">
                     <!-- Menu Box -->
-                    <div class="bg-white rounded-lg shadow-md p-4 min-h-[300px]">
-                        <h2 class="text-xl font-semibold mb-4 -mt-1">{% if menu_page %}Edit{% else %}Add{% endif %} Your Menu</h2>
-                        {% if menu_page %}
+                            <div class="bg-white rounded-lg shadow-md p-4 min-h-[300px]">
+                                <h2 class="text-xl font-semibold mb-4 -mt-1">{% if has_menu %}Edit{% else %}Add{% endif %} Your Menu</h2>
+                                {% if has_menu %}
                             <a href="{% url 'menu' business_details.subdirectory %}" 
                                class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
                                 Edit Menu
@@ -33,8 +33,9 @@
                             </form>
                         {% endif %}
                     </div>
+                    <!-- Layout Box -->
                     <div class="bg-white rounded-lg shadow-md p-4 min-h-[300px]">
-                        <h2 class="text-xl font-semibold mb-4 -mt-1">Edit Your Layout</h2>
+                        <h2 class="text-xl font-semibold mb-4 -mt-1">Edit Your Website Layout</h2>
                         <a href="{% url 'edit_layout' business_subdirectory=business_details.subdirectory %}" 
                            class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
                             Edit Layout

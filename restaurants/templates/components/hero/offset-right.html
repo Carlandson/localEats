@@ -36,10 +36,10 @@
 
         <!-- Image Content (Right Side) -->
         <div class="h-64 lg:h-full">
-            {% if hero_image %}
+            {% if hero_primary %}
                 <img class="w-full h-full object-cover" 
-                     src="{{ hero_image.image.url }}" 
-                     alt="{{ hero_image.alt_text }}">
+                     src="{{ hero_primary.image.url }}" 
+                     alt="{{ hero_primary.alt_text }}">
             {% else %}
                 <div class="w-full h-full bg-gray-100 flex items-center justify-center">
                     <svg class="h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
