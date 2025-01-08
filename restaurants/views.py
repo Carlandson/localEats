@@ -138,7 +138,7 @@ def fetch_business_info(request):
 
 def index(request): 
     business_list = Business.objects.all().order_by('-created')
-    paginator = Paginator(business_list, 5)
+    paginator = Paginator(business_list, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -146,11 +146,12 @@ def index(request):
             'businesses': [
                 {
                     'name': business.business_name,
+                    'business_type': business.business_type,
                     'city': business.city,
                     'state': business.state,
-                    'cuisine': str(business.cuisine),
+                    'cuisine': str(business.menus.first().cuisine.first()) if business.menus.exists() and business.menus.first().cuisine.exists() else None,
                     'created': business.created.strftime('%B %d, %Y'),
-                    'url': reverse('business_subdirectory', args=[business.business_name])
+                    'url': reverse('business_home', args=[business.subdirectory])
                 } for business in page_obj
             ],
             'has_next': page_obj.has_next(),
@@ -223,14 +224,7 @@ def create(request):
                     new_business.address = formatted_address
 
                     new_business.save()
-                    # Only add cuisines if there are any
-                    if cuisine_names:
-                        for cuisine_name in cuisine_names:
-                            cuisine_category, created = CuisineCategory.objects.get_or_create(
-                                cuisine=cuisine_name
-                            )
-                            new_business.cuisine.add(cuisine_category)
-                    slug = f"{new_business.subdirectory}-home"
+                    # Create home page
                     home_page = SubPage.objects.create(
                         business=new_business,
                         page_type='home',
@@ -241,7 +235,36 @@ def create(request):
                         show_hero_heading=True,
                         show_hero_subheading=True
                     )
-                    print(new_business.subdirectory)
+
+                    # Create menu page
+                    menu_page = SubPage.objects.create(
+                        business=new_business,
+                        page_type='menu',
+                        title=f"{new_business.business_name} Menu",
+                        is_published=True,
+                        hero_heading="Our Menu",
+                        hero_subheading="Explore our delicious offerings",
+                        show_hero_heading=True,
+                        show_hero_subheading=True
+                    )
+
+                    # Create menu and link it to the menu page
+                    default_menu = Menu.objects.create(
+                        business=new_business,
+                        name=f"{new_business.business_name} Menu",
+                        description="Our main menu",
+                        subpage=menu_page,  # Link menu to the menu page
+                        display_style='grid'
+                    )
+
+                    # Add cuisines to the menu if specified
+                    if cuisine_names:
+                        for cuisine_name in cuisine_names:
+                            cuisine_category, created = CuisineCategory.objects.get_or_create(
+                                cuisine=cuisine_name
+                            )
+                            default_menu.cuisine.add(cuisine_category)
+
                     messages.success(request, 'business created successfully!')
                     return redirect(reverse('business_home', kwargs={'business_subdirectory': new_business.subdirectory}))
                 else:
@@ -292,7 +315,7 @@ def get_business_context(business, user, page_type='home'):
         business=business, 
         page_type=page_type
     ).first()
-
+    subpages = SubPage.objects.filter(business=business)
     # Get all published subpages for navigation
     published_pages = SubPage.get_published_subpages(business)
 
@@ -428,7 +451,8 @@ def get_business_context(business, user, page_type='home'):
         'business_details': business,
         'business_subdirectory': business.subdirectory,
         # changed to published_pages
-        'subpages': published_pages,
+        'subpages': subpages,
+        'published_pages': published_pages,
         'subpage': subpage,
         'current_page': subpage,
         # Choices/Options for template dropdowns and selectors
@@ -649,6 +673,8 @@ def menu(request, business_subdirectory):
         "owner": request.user == business.owner,
         "is_verified": business.is_verified,
         "menu": menu,
+        "is_edit_page": True,
+        "is_owner": request.user == business.owner
     }
 
     if request.method != "GET":
@@ -661,7 +687,7 @@ def menu(request, business_subdirectory):
         return render(request, "visitor_pages/menu.html", context)
     
     else:
-        return render(request, "owner_subpages/menu.html", context)
+        return render(request, "subpages/menu.html", context)
 
 
 def about(request, business_subdirectory):
@@ -899,22 +925,21 @@ def search(request, position, distance):
     business_list = Business.objects.all()
     businesss_nearby = []
     test_dict = []
-    for eatery in business_list:
-        coordinates = str(eatery.geolocation)
-        eatery_latitude = float(coordinates.split(",")[0])
-        eatery_longitude = float(coordinates.split(",")[1])
-        if distance_plus_lat > eatery_latitude > distance_minus_lat and distance_plus_lon > eatery_longitude > distance_minus_lon:
+    for business in business_list:
+        coordinates = str(business.geolocation)
+        business_latitude = float(coordinates.split(",")[0])
+        business_longitude = float(coordinates.split(",")[1])
+        if distance_plus_lat > business_latitude > distance_minus_lat and distance_plus_lon > business_longitude > distance_minus_lon:
             between_locations = round(geopy.distance.distance(position, coordinates).miles, 2)
-            businesss_nearby.append(eatery)
+            businesss_nearby.append(business)
             e = {
-                "eatery": eatery.cuisine.cuisine,
-                "name": eatery.business_name,
-                "address": eatery.address,
-                "city": eatery.city,
-                "state": eatery.state,
-                "description": eatery.description,
+                "name": business.business_name,
+                "address": business.address,
+                "city": business.city,
+                "state": business.state,
+                "description": business.description,
                 "between": between_locations,
-                "cuisine": eatery.cuisine.cuisine
+                "cuisine": business.menus.first().cuisine.first().cuisine
             }
             test_dict.append(e)
     return JsonResponse([localbusiness for localbusiness in test_dict], safe=False)
@@ -1354,6 +1379,8 @@ def edit_layout(request, business_subdirectory):
             'banner_3': banner_3,
             'preview_mode': True,
             'hero_heading_font': current_subpage.hero_heading_font,
+            'is_owner': True,
+            'is_edit_page': True,
         }
         
         return render(request, "edit_layout.html", context)
@@ -2462,3 +2489,13 @@ def update_brand_colors(request, business_subdirectory):
 
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
+    
+
+@login_required
+def seo(request, business_subdirectory):
+    return render(request, 'subpages/seo.html')
+
+@login_required
+def advertising(request, business_subdirectory):
+    return render(request, 'subpages/advertising.html')
+

@@ -65,5 +65,9 @@ urlpatterns = [
     # Business pages (catch-all patterns last)
     path('<slug:business_subdirectory>/', views.business_page, name="business_home"),
     path('<slug:business_subdirectory>/<str:page_type>/', views.business_page, name="business_page"),
+
+    # SEO
+    path('<slug:business_subdirectory>/SEO/', views.seo, name="SEO"),
+    path('<slug:business_subdirectory>/Advertising/', views.advertising, name="Advertising"),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

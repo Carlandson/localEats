@@ -255,10 +255,10 @@ async function immediateUpdate(context, data) {
             
             responseData = await response.json();
             
-            // Special handling for new page success message
-            if (data.fieldType === 'new_page') {
-                showSuccessAlert(responseData.message);
-            }
+            // // Special handling for new page success message
+            // if (data.fieldType === 'new_page') {
+            //     showSuccessAlert(responseData.message);
+            // }
         }
 
         // Unified preview update logic
@@ -275,17 +275,17 @@ async function immediateUpdate(context, data) {
 }
 
 // Helper functions
-function showSuccessAlert(message) {
-    const alertDiv = document.createElement('div');
-    alertDiv.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded z-50';
-    alertDiv.role = 'alert';
-    alertDiv.innerHTML = `
-        <strong class="font-bold">Success!</strong>
-        <span class="block sm:inline"> ${message}</span>
-    `;
-    document.body.appendChild(alertDiv);
-    setTimeout(() => alertDiv.remove(), 3000);
-}
+// function showSuccessAlert(message) {
+//     const alertDiv = document.createElement('div');
+//     alertDiv.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded z-50';
+//     alertDiv.role = 'alert';
+//     alertDiv.innerHTML = `
+//         <strong class="font-bold">Success!</strong>
+//         <span class="block sm:inline"> ${message}</span>
+//     `;
+//     document.body.appendChild(alertDiv);
+//     setTimeout(() => alertDiv.remove(), 3000);
+// }
 
 function updatePageSelector(pageType) {
     const pageSelector = document.getElementById('page-selector');

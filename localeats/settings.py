@@ -9,18 +9,18 @@ environ.Env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-GOOGLE_MAPS_API_KEY = os.environ['GOOGLE_MAPS_API_KEY']
+GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY', default=None)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = env('SECRET_KEY', default=None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
 
 ACCOUNT_TEMPLATE_DIR = os.path.join(BASE_DIR, 'restaurants', 'templates', 'account')
@@ -64,8 +64,8 @@ SOCIALACCOUNT_PROVIDERS = {
             'prompt': 'consent',
         },
         'APP' : {
-            'client_id': os.environ['CLIENT_ID'],
-            'secret': os.environ['GOOGLE_SECRET'],
+            'client_id': env('CLIENT_ID', default=None),
+            'secret': env('GOOGLE_SECRET', default=None),
             'key': '',
         }
 
@@ -141,7 +141,7 @@ ACCOUNT_RATE_LIMITS = {
 }
 
 # Mailpit
-if DEBUG and not os.environ.get('USE_MAILGUN'):
+if DEBUG and not env.bool('USE_MAILGUN', default=False):
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = '127.0.0.1'
     EMAIL_PORT = 1025
@@ -150,8 +150,8 @@ if DEBUG and not os.environ.get('USE_MAILGUN'):
     EMAIL_USE_TLS = False
 else:
     EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-    MAILGUN_ACCESS_KEY = os.environ.get('MAILGUN_ACCESS_KEY')
-    MAILGUN_SERVER_NAME = os.environ.get('MAILGUN_SERVER_NAME')
+    MAILGUN_ACCESS_KEY = env('MAILGUN_ACCESS_KEY', default=None)
+    MAILGUN_SERVER_NAME = env('MAILGUN_SERVER_NAME', default=None)
 # Login/out URLs
 
 LOGIN_REDIRECT_URL = '/'

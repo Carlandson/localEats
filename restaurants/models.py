@@ -173,7 +173,7 @@ class Business(models.Model):
         ('simple', 'Simple'),
     ]
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner")
-    cuisine = models.ManyToManyField(CuisineCategory, related_name="cuisines", blank=True)
+    cuisine = models.ManyToManyField(CuisineCategory, related_name="business_cuisines", blank=True)
     business_name = models.CharField(max_length=64)
     business_type = models.CharField(max_length=50)
     address = map_fields.AddressField(max_length=200)
@@ -516,6 +516,7 @@ class Menu(models.Model):
         ('cards', 'Card Layout'),
     ]
     business = models.ForeignKey(Business, on_delete=models.CASCADE, related_name="menus")
+    cuisine = models.ManyToManyField(CuisineCategory, related_name="menu_cuisines", blank=True)
     name = models.CharField(max_length=64)
     description = models.TextField(blank=True)
     subpage = models.ForeignKey(SubPage, on_delete=models.SET_NULL, null=True, related_name='menu_content')

@@ -25,9 +25,14 @@
         <header>
             <!-- Top navigation bar -->
             <nav class="py-2 relative">
-                <a class="flex justify-left" href="{% url 'index' %}">
-                    <img src="{% static 'images/patrons-love-high-resolution-logo.png' %}" alt="Brand Image" class="h-12 w-auto max-w-full"/>
-                </a>  
+                <div class="flex items-center space-x-4">
+                    <a class="flex items-center" href="{% url 'index' %}">
+                        <img src="{% static 'images/patrons-love-high-resolution-logo.png' %}" alt="Brand Image" class="h-12 w-auto max-w-full"/>
+                    </a>
+                    {% if is_owner and is_edit_page %}
+                        <a class="text-lg font-semibold" href="{% url 'profile' %}">Return to Profile</a>
+                    {% endif %}
+                </div>
                 <div class="container mx-auto px-4">
                     <!--Login/Register/Index-->
                     <div class="absolute right-2 top-1/2 transform -translate-y-1/2">

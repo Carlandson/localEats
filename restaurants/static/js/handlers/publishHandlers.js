@@ -1,5 +1,6 @@
 import { smartUpdate } from '../utils/previewUpdates.js';
 import { displayError } from '../utils/errors.js';
+import { showToast } from '../components/toast.js';
 
 
 export function initializePublishToggle(context) {
@@ -106,18 +107,4 @@ export function initializeAddPageDropdown(context) {
             }
         });
     }
-}
-
-function showToast(message, duration = 3000) {
-    const toast = document.getElementById('toast');
-    const toastMessage = document.getElementById('toast-message');
-    toastMessage.textContent = message;
-    
-    // Show the toast
-    toast.classList.add('toast-show');
-    
-    // Hide the toast after duration
-    setTimeout(() => {
-        toast.classList.remove('toast-show');
-    }, duration);
 }

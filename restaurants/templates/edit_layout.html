@@ -4,7 +4,7 @@
     {{ page_data|json_script:"editor-config" }}
 {% endblock %}
 {% block body %}
-<div id="toast" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out"></div>
+<div id="toast" class="fixed top-4 left-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-[-100%] opacity-0 transition-all duration-300 ease-in-out">
     <span id="toast-message"></span>
 </div>
 <div class="flex h-screen overflow-hidden">
@@ -33,7 +33,7 @@
                 <div class="flex items-center mt-4">
                     <span class="text-sm font-medium text-gray-700 w-24">Add New Page</span>
                     <select id="available-pages" class="form-select flex-1 rounded-md border-gray-300 px-2">
-                        <option value="">Select a Page Type</option>
+                        <option value="" selected disabled>Select a Page Type</option>
                         {% for page in available_pages %}
                         <option value="{{ page.page_type }}" class="px-2">
                             {{ page.title }} Page
