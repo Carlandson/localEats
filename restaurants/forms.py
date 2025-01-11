@@ -53,9 +53,7 @@ class CustomSignupView(SignupView):
 custom_signup = CustomSignupView.as_view()
 
 class BusinessCreateForm(forms.ModelForm):
-    phone_number = PhoneNumberField(
-        widget=PhoneNumberPrefixWidget(initial='US')
-    )
+    phone_number = PhoneNumberField(region='US')
     cuisine = forms.CharField(max_length=64, required=False) 
     subdirectory = forms.SlugField(
         max_length=64, 

@@ -133,7 +133,6 @@ async function loadPageData(pageType, context) {
             
             handleBannerSliderVisibility(response.hero_layout);
             updateFormValues(response, context);
-
             // Update preview if we got preview HTML
             if (response.preview_html) {
                 const previewContainer = document.getElementById('preview-container');
@@ -190,6 +189,7 @@ async function initializePageData(context) {
 function updateFormValues(data, context) {
     try {
         // accordion states
+
         const accordionStates = {};
         document.querySelectorAll('.accordion-content').forEach(content => {
             accordionStates[content.id] = !content.classList.contains('hidden');
