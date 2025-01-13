@@ -173,7 +173,6 @@ class Business(models.Model):
         ('simple', 'Simple'),
     ]
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner")
-    cuisine = models.ManyToManyField(CuisineCategory, related_name="business_cuisines", blank=True)
     business_name = models.CharField(max_length=64)
     business_type = models.CharField(max_length=50)
     address = map_fields.AddressField(max_length=200)

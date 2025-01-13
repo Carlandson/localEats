@@ -141,7 +141,6 @@ class BusinessEditForm(forms.ModelForm):
         fields = [
             'business_name',
             'business_type',
-            'cuisine',
             'description',
             'address',
             'phone_number',

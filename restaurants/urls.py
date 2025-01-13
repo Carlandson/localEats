@@ -63,6 +63,7 @@ urlpatterns = [
     path('<slug:business_subdirectory>/create/<str:page_type>/', views.create_subpage, name="create_subpage"),
     
     # Business pages (catch-all patterns last)
+    path('<slug:business_subdirectory>/dashboard/', views.business_dashboard, name="business_dashboard"),
     path('<slug:business_subdirectory>/', views.business_page, name="business_home"),
     path('<slug:business_subdirectory>/<str:page_type>/', views.business_page, name="business_page"),
 

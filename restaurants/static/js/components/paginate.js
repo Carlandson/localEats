@@ -46,7 +46,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h2 class="text-xl font-bold mb-2">${business.name}</h2>
                     <p class="text-gray-600 italic">${business.business_type}</p>
                     <p class="text-gray-600">${business.city}, ${business.state}</p>
-                    {% if business.business_type == <p class="text-gray-600">${business.cuisine} cuisine</p>
+                    ${business.cuisines.length > 0 
+                        ? `<p class="text-gray-600">${business.cuisines.join(', ')}</p>`
+                        : ''
+                    }
                     <p class="text-gray-500 italic mt-2">opened ${business.created}</p>
                 </a>
             </div>

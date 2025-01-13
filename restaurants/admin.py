@@ -15,7 +15,7 @@ class MenuInline(admin.TabularInline):
 @admin.register(Business)
 class BusinessAdmin(admin.ModelAdmin):
     list_display = ['business_name', 'owner', 'is_verified', 'subdirectory']
-    list_filter = ['is_verified', 'cuisine']
+    list_filter = ['is_verified']
     search_fields = ['business_name', 'owner__username']
     fields = [
         'business_name',
@@ -28,7 +28,6 @@ class BusinessAdmin(admin.ModelAdmin):
         'phone_number',
         'subdirectory',
         'description',
-        'cuisine',
         'is_verified',
     ]
     

@@ -30,8 +30,8 @@
                         <img src="{% static 'images/patrons-love-high-resolution-logo.png' %}" alt="Brand Image" class="h-12 w-auto max-w-full"/>
                     </a>
                     {% if is_owner and is_edit_page %}
-                        <a class="text-lg font-semibold" href="{% url 'profile' %}">Return to Profile</a>
-                    {% endif %}
+                    <a class="text-lg font-semibold" href="{% url 'business_dashboard' business_subdirectory=business_details.subdirectory %}">Return to Dashboard</a>
+                {% endif %}
                 </div>
                 <div class="container mx-auto px-4">
                     <!--Login/Register/Index-->

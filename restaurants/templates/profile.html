@@ -10,7 +10,7 @@
                 <ul class="p-4 inline-block space-y-4 w-full max-w-md">
                     {% for business in owner_business %}
                         <li class="p-4 border rounded-lg bg-orange-300 hover:bg-orange-400 transition-colors duration-200">
-                            <a href="{% url 'business_home' business.subdirectory %}" class="block text-lg font-semibold">
+                            <a href="{% url 'business_dashboard' business_subdirectory=business.subdirectory %}" class="block text-lg font-semibold">
                                 {{business.business_name}}
                             </a>
                         </li>

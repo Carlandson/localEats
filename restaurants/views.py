@@ -149,7 +149,7 @@ def index(request):
                     'business_type': business.business_type,
                     'city': business.city,
                     'state': business.state,
-                    'cuisine': str(business.menus.first().cuisine.first()) if business.menus.exists() and business.menus.first().cuisine.exists() else None,
+                    'cuisines': list(business.menus.first().cuisine.values_list('cuisine', flat=True)) if business.menus.exists() else [],
                     'created': business.created.strftime('%B %d, %Y'),
                     'url': reverse('business_home', args=[business.subdirectory])
                 } for business in page_obj
@@ -182,6 +182,7 @@ def profile(request):
 def aboutus(request):
     return render(request, "aboutus.html")
 
+# create_business
 @login_required
 def create(request):
     user = request.user
@@ -205,7 +206,7 @@ def create(request):
                 cuisine_names = cuisine_data.split(',')
                 cuisine_names = [name.strip() for name in cuisine_names if name.strip()]
             else:
-                cuisine_names = []
+                cuisine_names = None
             # Combine address components for geocoding
             full_address = f"{new_business.address}, {new_business.city}, {new_business.state} {new_business.zip_code}"
 
@@ -235,30 +236,27 @@ def create(request):
                         show_hero_heading=True,
                         show_hero_subheading=True
                     )
-
-                    # Create menu page
-                    menu_page = SubPage.objects.create(
-                        business=new_business,
-                        page_type='menu',
-                        title=f"{new_business.business_name} Menu",
-                        is_published=True,
-                        hero_heading="Our Menu",
-                        hero_subheading="Explore our delicious offerings",
-                        show_hero_heading=True,
-                        show_hero_subheading=True
-                    )
-
-                    # Create menu and link it to the menu page
-                    default_menu = Menu.objects.create(
-                        business=new_business,
-                        name=f"{new_business.business_name} Menu",
-                        description="Our main menu",
-                        subpage=menu_page,  # Link menu to the menu page
-                        display_style='grid'
-                    )
-
                     # Add cuisines to the menu if specified
                     if cuisine_names:
+                        menu_page = SubPage.objects.create(
+                            business=new_business,
+                            page_type='menu',
+                            title=f"{new_business.business_name} Menu",
+                            is_published=True,
+                            hero_heading="Our Menu",
+                            hero_subheading="Explore our delicious offerings",
+                            show_hero_heading=True,
+                            show_hero_subheading=True
+                        )
+
+                        # Create menu and link it to the menu page
+                        default_menu = Menu.objects.create(
+                            business=new_business,
+                            name=f"{new_business.business_name} Menu",
+                            description="Our main menu",
+                            subpage=menu_page,  # Link menu to the menu page
+                            display_style='grid'
+                        )
                         for cuisine_name in cuisine_names:
                             cuisine_category, created = CuisineCategory.objects.get_or_create(
                                 cuisine=cuisine_name
@@ -310,6 +308,11 @@ def get_business_context(business, user, page_type='home'):
     Get context for any business subpage
     page_type can be: 'home', 'about', 'menu', 'services', 'products', 'gallery', 'contact'
     """
+    is_dashboard = False
+
+    if page_type == 'dashboard':
+        page_type = 'home'
+        is_dashboard = True
     # Get the requested subpage and its images
     subpage = SubPage.objects.filter(
         business=business, 
@@ -460,6 +463,8 @@ def get_business_context(business, user, page_type='home'):
         'banner_2': banner_2,
         'banner_3': banner_3,
         'hero_heading_font': subpage.hero_heading_font,
+        'is_owner': user == business.owner,
+        'is_edit_page': user == business.owner and not is_dashboard,
     }
     # context = {
     #     'business_details': {
@@ -496,8 +501,23 @@ def get_business_context(business, user, page_type='home'):
 
     return context
 
+def business_dashboard(request, business_subdirectory):
+    business = get_object_or_404(Business, subdirectory=business_subdirectory)
+    
+    # Check if user is the business owner
+    if request.user != business.owner:
+        return redirect('business_home', business_subdirectory=business_subdirectory)
+    
+    if request.method != "GET":
+        return JsonResponse({"error": "GET request required."}, status=400)
+
+    # Get context for the dashboard
+    context = get_business_context(business, request.user, 'dashboard')
+    
+    return render(request, "eatery_owner.html", context)
+
 # new business page view
-def business_page(request, business_subdirectory, page_type='home'):
+def business_page(request, business_subdirectory, page_type="home"):
     business = get_object_or_404(Business, subdirectory=business_subdirectory)
     
     if request.method != "GET":
@@ -511,7 +531,7 @@ def business_page(request, business_subdirectory, page_type='home'):
 
     # Determine which template to use
     if request.user == business.owner:
-        template = "eatery_owner.html" 
+        template = f"subpages/{page_type}.html" 
     else:
         template = f"visitor_pages/{page_type}.html"
 
@@ -1273,8 +1293,9 @@ def edit_layout(request, business_subdirectory):
             business=business,
             page_type=current_page
         ).first()
-
+        print(current_subpage)
         # for links
+        subpages = SubPage.objects.filter(business=business)
         published_pages = SubPage.get_published_subpages(business)
         existing_page_types = set([page.get('page_type') for page in published_pages])
         existing_page_types.add(current_page)  # Add current page to existing set
@@ -1361,10 +1382,11 @@ def edit_layout(request, business_subdirectory):
             'business_details': business,
             'business_subdirectory': business_subdirectory,
             # changed to published_pages
-            'subpages': published_pages,
+            'subpages': subpages,
             'subpage': current_subpage,
             'current_page': current_page,
             'available_pages': available_pages,
+            'published_pages': published_pages,
             # Choices/Options for template dropdowns and selectors
             'hero_choices': SubPage.HERO_CHOICES,
             'nav_styles': business.NAV_CHOICES,
@@ -1423,10 +1445,13 @@ def update_layout(request, business_subdirectory):
             )
             # Create the corresponding page content based on type
             if page_type == 'menu':
+                # Create menu and link it to the menu page
                 Menu.objects.create(
                     business=business,
                     name=f"{business.business_name} Menu",
-                    subpage=new_subpage
+                    description="Our main menu",
+                    subpage=new_subpage,  # Link menu to the menu page
+                    display_style='grid'
                 )
             elif page_type == 'about':
                 AboutUsPage.objects.create(
@@ -2499,3 +2524,5 @@ def seo(request, business_subdirectory):
 def advertising(request, business_subdirectory):
     return render(request, 'subpages/advertising.html')
 
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
