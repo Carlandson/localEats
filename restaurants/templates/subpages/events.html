@@ -1,8 +1,86 @@
 {% extends "owner_layout.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block body %}
+{{ business_details.subdirectory|json_script:"business" }}
 
-Events Edit Page
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Events Editor</h1>
 
+    <!-- Add Event Button Section -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+
+    <!-- Events List Section -->
+    <div id="events-container" class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-semibold mb-4">Upcoming Events</h2>
+        <button id="add-event" 
+            class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded transition-colors duration-200">
+            Add New Event
+        </button>
+        </div>
+        <!-- Form container - initially hidden -->
+        <div id="event-form-container" class="hidden mt-4">
+            {% crispy form %}
+            <!-- Form will be inserted here by JavaScript -->
+        </div>
+        <!-- Events list -->
+        <div id="events-list" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {% if events_data %}
+                {% for event in events_data %}
+                    <article id="event{{ event.id }}" class="border rounded-lg p-4 bg-white shadow-sm">
+                        <div class="text-center">
+                            <h3 class="text-xl font-bold mb-2">{{ event.title }}</h3>
+                            {% if event.image_url %}
+                                <img src="{{ event.image_url }}" 
+                                     class="mx-auto object-contain h-40 w-40" 
+                                     alt="{{ event.title }}">
+                            {% else %}
+                                <div class="h-40 w-40 mx-auto flex items-center justify-center bg-gray-100 rounded-lg border-2 border-dashed border-gray-300">
+                                    <span class="text-gray-400">No Image</span>
+                                </div>
+                            {% endif %}
+                            <p class="mt-2 font-semibold">Start Date: {{ event.datetime|date:"F j, Y g:i A" }}</p>
+                            {% if event.end_date %}
+                                <p class="mt-2 font-semibold">End Date: {{ event.end_date|date:"F j, Y g:i A" }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="text-center mt-4">
+                            <h4 class="font-semibold mb-2">Description:</h4>
+                            <p>{{ event.description }}</p>
+                        </div>
+                        {% if is_owner %}
+                            <div class="mt-4 flex justify-end items-center space-x-2">
+                                <button class="editEvent px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200" 
+                                        id="e{{ event.id }}">Edit</button>
+                                <button class="deleteEvent px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded transition-colors duration-200" 
+                                        id="d{{ event.id }}">Delete</button>
+                            </div>
+                        {% endif %}
+                    </article>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- No events message -->
+        <div id="no-events-message" class="text-center py-8 text-gray-500 {% if events_data %}hidden{% endif %}">
+            <p class="text-lg">No upcoming events scheduled.</p>
+            <p class="text-sm mt-2">Click the "Add New Event" button to create your first event.</p>
+        </div>
+    </div>
+    <div id="past-events-container" class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Past Events</h2>
+    </div>
+</div>
 {% endblock %}
+
+{% if debug %}
+    {% block dev_scripts %}
+    <script src="{% static 'js/subpages/events2.js' %}"></script>
+    {% endblock dev_scripts %}
+{% else %}
+    {% block prod_scripts %}
+    <script src="{% static 'dist/events.bundle.js' %}"></script>
+    {% endblock prod_scripts %}
+{% endif %}

@@ -2,6 +2,8 @@ from django.contrib import admin
 import json
 from django_google_maps import widgets as map_widgets
 from django_google_maps import fields as map_fields
+from django.utils.safestring import mark_safe
+from django.contrib.contenttypes.models import ContentType
 from .models import Image, CuisineCategory, Business, Menu, Course, Dish, SubPage, Event, AboutUsPage, EventsPage, SpecialsPage, SideOption
 
 class SubPageInline(admin.StackedInline):
@@ -95,14 +97,47 @@ class CuisineCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['title', 'get_business', 'date']
+    list_display = ['title', 'get_business', 'date', 'get_image']
     list_filter = ['date', 'events_page__subpage__business']
     search_fields = ['title', 'events_page__subpage__business__business_name']
+    readonly_fields = ['get_image_preview']
 
     def get_business(self, obj):
         return obj.events_page.subpage.business
-    get_business.short_description = 'business'
+    get_business.short_description = 'Business'
     get_business.admin_order_field = 'events_page__subpage__business'
+
+    def get_image(self, obj):
+        # Get the associated image through the generic relation
+        image = Image.objects.filter(
+            content_type__model='event',
+            object_id=obj.id
+        ).first()
+        return '✓' if image else '✗'
+    get_image.short_description = 'Has Image'
+
+    def get_image_preview(self, obj):
+        # Get the associated image through the generic relation
+        image = Image.objects.filter(
+            content_type__model='event',
+            object_id=obj.id
+        ).first()
+        if image:
+            return mark_safe(f'<img src="{image.image.url}" style="max-height: 200px;" />')
+        return "No image uploaded"
+    get_image.short_description = 'Image Preview'
+
+    fieldsets = (
+        (None, {
+            'fields': ('events_page', 'title', 'description')
+        }),
+        ('Date and Time', {
+            'fields': ('date', 'end_date')
+        }),
+        ('Image', {
+            'fields': ('get_image_preview',)
+        })
+    )
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):

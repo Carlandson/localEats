@@ -552,7 +552,12 @@ class Dish(models.Model):
     date_added = models.DateField(auto_now=True)
     favorites = models.ManyToManyField(User, blank=True, related_name="user_favorite")
     is_special = models.BooleanField(default=False)
+    special_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     included_sides = models.IntegerField(default=0)
+    # new fields
+    happy_hour = models.BooleanField(default=False)
+    happy_hour_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    
     class Meta:
         unique_together = ['course', 'name']
     def __str__(self):
@@ -572,10 +577,11 @@ class SideOption(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='side_options')
     name = models.CharField(max_length=64)
     description = models.TextField(blank=True, null=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2, default=0)  # Price for premium sides
-    is_premium = models.BooleanField(default=False)  # If True, this side costs extra
+    price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    is_premium = models.BooleanField(default=False)
     available = models.BooleanField(default=True)
 
+# Subpage Subclasses
 class AboutUsPage(models.Model):
     subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='about_us_content')
     content = models.TextField()
@@ -584,18 +590,53 @@ class AboutUsPage(models.Model):
 
 class EventsPage(models.Model):
     subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='events_content')
+    description = models.TextField(blank=True, null=True)
 
 class Event(models.Model):
     events_page = models.ForeignKey(EventsPage, on_delete=models.CASCADE, related_name='events')
     title = models.CharField(max_length=200)
     description = models.TextField()
     date = models.DateTimeField()
-    image = models.ImageField(upload_to='event_images/', blank=True, null=True)
+    end_date = models.DateTimeField(null=True, blank=True)
 
 class SpecialsPage(models.Model):
     subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='specials_content')
+    happy_hour_start = models.TimeField(null=True, blank=True)
+    happy_hour_end = models.TimeField(null=True, blank=True)
+    happy_hour_days = models.CharField(max_length=100, blank=True, help_text="Comma-separated days, e.g., 'Mon,Tue,Wed'")
 
+class DailySpecial(models.Model):
+    DAYS_OF_WEEK = [
+        (0, 'Monday'),
+        (1, 'Tuesday'),
+        (2, 'Wednesday'),
+        (3, 'Thursday'),
+        (4, 'Friday'),
+        (5, 'Saturday'),
+        (6, 'Sunday'),
+    ]
 
+    specials_page = models.ForeignKey(SpecialsPage, on_delete=models.CASCADE, related_name='daily_specials')
+    day_of_week = models.IntegerField(choices=DAYS_OF_WEEK)
+    dishes = models.ManyToManyField('Dish', limit_choices_to={'is_special': True})
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ['specials_page', 'day_of_week']
+        ordering = ['day_of_week']
+
+    def __str__(self):
+        return f"{self.get_day_of_week_display()} Specials"
+
+class ServicesPage(models.Model):
+    subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='services_content')
+    description = models.TextField()
+
+class Service(models.Model):
+    services_page = models.ForeignKey(ServicesPage, on_delete=models.CASCADE, related_name='services')
+    name = models.CharField(max_length=64)
+    description = models.TextField()
+    image = models.ImageField(upload_to='service_images/', blank=True, null=True)
 
 def get_all_images(self):
     """Debug method to get all images for this subpage"""

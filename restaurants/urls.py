@@ -66,9 +66,15 @@ urlpatterns = [
     path('<slug:business_subdirectory>/dashboard/', views.business_dashboard, name="business_dashboard"),
     path('<slug:business_subdirectory>/', views.business_page, name="business_home"),
     path('<slug:business_subdirectory>/<str:page_type>/', views.business_page, name="business_page"),
+    path('<slug:business_subdirectory>/events/delete/<int:event_id>/', views.delete_event, name='delete_event'),
 
     # SEO
     path('<slug:business_subdirectory>/SEO/', views.seo, name="SEO"),
     path('<slug:business_subdirectory>/Advertising/', views.advertising, name="Advertising"),
+
+    # Events
+    path('<slug:business_subdirectory>/events/add/', views.add_event, name="add_event"),
+    path('<str:business_subdirectory>/events/get-form/<int:event_id>/', views.get_event_form, name='get_event_form'),
+    path('<str:business_subdirectory>/events/edit/<int:event_id>/', views.edit_event, name='edit_event'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

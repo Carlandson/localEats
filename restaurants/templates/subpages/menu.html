@@ -7,7 +7,7 @@
 <main class="text-center">
     <section class="mb-5">
         <header class="container">
-            <h1 class="text-4xl">{{ business_details.business_name }}Menu Editor</h1>
+            <h1 class="text-4xl">{{ business_details.business_name }} Menu Editor</h1>
             <address>
                 <p>{{ business_details.address }}</p>
                 <p>{{ business_details.city }} {{ business_details.state }}, {{ business_details.country }}</p>
@@ -234,6 +234,12 @@
 </main>
 {% endblock %}
 
-{% block script %}
-    <script src="{% static 'js/menubuilder.js' %}"></script>
-{% endblock %}
+{% if debug %}
+    {% block dev_scripts %}
+    <script src="{% static 'js/subpages/menuBuilder.js' %}"></script>
+    {% endblock dev_scripts %}
+{% else %}
+    {% block prod_scripts %}
+    <script src="{% static 'dist/events.bundle.js' %}"></script>
+    {% endblock prod_scripts %}
+{% endif %}

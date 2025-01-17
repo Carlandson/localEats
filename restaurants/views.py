@@ -25,13 +25,16 @@ from allauth.socialaccount.models import SocialAccount
 from google.oauth2.credentials import Credentials
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import BusinessCreateForm, DishSubmit, CustomSignupView, ImageUploadForm, BusinessCustomizationForm
+from .forms import BusinessCreateForm, DishSubmit, CustomSignupView, ImageUploadForm, BusinessCustomizationForm, EventForm
+from django.core.exceptions import PermissionDenied
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Max
 from django.core.files.base import ContentFile
 from django.template.loader import render_to_string
+from crispy_forms.layout import Div, Submit, HTML
 from django.utils import timezone
 from .constants import get_font_choices, get_font_sizes
+from datetime import datetime
 import base64, uuid
 import googlemaps
 import traceback
@@ -282,224 +285,359 @@ def create(request):
         }
         return render(request, "create.html", context)
 
-# def get_business_context(business, user, is_preview=False):
-#     """Helper function to create consistent context for both views"""
-#     # Get subpage information
-#     menu_page = SubPage.objects.filter(business=business, page_type='menu').exists()
-#     about_page = SubPage.objects.filter(business=business, page_type='about').exists()
-#     events_page = SubPage.objects.filter(business=business, page_type='events').exists()
-#     specials_page = SubPage.objects.filter(business=business, page_type='specials').exists()
-    
-#     return {
-#         "business_subdirectory": business.subdirectory,
-#         "business_details": business,
-#         "owner": user == business.owner,
-#         "is_verified": business.is_verified,
-#         "menu_page": menu_page,
-#         "about_page": about_page,
-#         "events_page": events_page,
-#         "specials_page": specials_page,
-#         "is_preview": is_preview
-#     }
-
-#feed any page type to this function to get the context for that page
+# new business context
 def get_business_context(business, user, page_type='home'):
-    """
-    Get context for any business subpage
-    page_type can be: 'home', 'about', 'menu', 'services', 'products', 'gallery', 'contact'
-    """
-    is_dashboard = False
-
-    if page_type == 'dashboard':
-        page_type = 'home'
-        is_dashboard = True
-    # Get the requested subpage and its images
+    """Base context for both editor and visitor views"""
+    is_dashboard = page_type == 'dashboard'
+    is_owner = user == business.owner
+    
+    # Get the requested subpage
     subpage = SubPage.objects.filter(
         business=business, 
-        page_type=page_type
+        page_type=page_type if not is_dashboard else 'home'
     ).first()
-    subpages = SubPage.objects.filter(business=business)
-    # Get all published subpages for navigation
-    published_pages = SubPage.get_published_subpages(business)
 
-    # Get images for the current subpage
-    hero_primary = subpage.get_hero_primary() if subpage else None
-    banner_2 = subpage.get_banner_2() if subpage else None
-    banner_3 = subpage.get_banner_3() if subpage else None
-
-    # Get menu items if they exist
-    menu_items = {
-        'exists': Menu.objects.filter(business=business).exists(),
-        'featured': Dish.objects.filter(
-            menu__business=business, 
-            is_special=True
-        ).select_related('menu').prefetch_related('images')[:3]
+    # Base context needed for both views
+    base_context = {
+        'business_details': business,
+        'business_subdirectory': business.subdirectory,
+        'subpage': subpage,
+        'is_owner': is_owner,
+        'is_edit_page': is_owner and not is_dashboard,
     }
 
-    # Get upcoming events if they exist
-    events = {
-        'exists': Event.objects.filter(
-            events_page__subpage__business=business, 
-            date__gte=timezone.now()
-        ).exists(),
-        'upcoming': Event.objects.filter(
-            events_page__subpage__business=business,
-            date__gte=timezone.now()
-        ).order_by('date')[:2]
-    }
+    if is_owner:
+        return get_editor_context(base_context, business, subpage, page_type)
+    else:
+        return get_visitor_context(base_context, business, subpage, page_type)
 
-    # Get page-specific content
-    page_content = {}
-    if page_type == 'about':
-        about_page = getattr(subpage, 'aboutuspage', None)
-        if about_page:
-            page_content = {
-                'team_members': about_page.team_members.all() if hasattr(about_page, 'team_members') else [],
-                'history': about_page.history,
-                'mission': about_page.mission,
-            }
+# gathers editor data
+def get_editor_context(base_context, business, subpage, page_type):
+    """Additional context for editor view"""
+    context = base_context.copy()
+    
+    # Add editor-specific data
+    context.update({
+        'subpages': SubPage.objects.filter(business=business),
+        'published_pages': SubPage.get_published_subpages(business),
+        'has_menu': SubPage.objects.filter(business=business, page_type='menu').exists(),
+    })
+
+    # Add page-specific editor content
+    if page_type == 'events':
+        # Get or create events page using correct related name
+        events_page = getattr(subpage, 'events_content', None)
+        if not events_page:
+            events_page = EventsPage.objects.create(subpage=subpage)
+
+        events_data = []
+        content_type = ContentType.objects.get_for_model(Event)
+        
+        for event in events_page.events.all().order_by('date'):
+            # Get the associated image for this event
+            image = Image.objects.filter(
+                content_type=content_type,
+                object_id=event.id,
+            ).first()
+
+            events_data.append({
+                'id': event.id,
+                'title': event.title,
+                'datetime': event.date,
+                'end_date': event.end_date,
+                'description': event.description,
+                'image_url': image.image.url if image else None,
+                'is_editable': True
+            })
+
+        context['events_data'] = events_data
+        context['form'] = EventForm()
+        
     elif page_type == 'menu':
-        page_content = {
+        context['menu_data'] = {
             'menus': Menu.objects.filter(business=business).prefetch_related(
                 'courses', 
                 'courses__dishes'
             ),
             'specials': Dish.objects.filter(menu__business=business, is_special=True),
         }
-    elif page_type == 'events':
+    
+    return context
+
+# gathers visitor data
+def get_visitor_context(base_context, business, subpage, page_type):
+    """Additional context for visitor view"""
+    context = base_context.copy()
+    
+    if subpage:
+        # Get images for layout
+        hero_primary = subpage.get_hero_primary()
+        banner_2 = subpage.get_banner_2()
+        banner_3 = subpage.get_banner_3()
+
+        # Add layout data needed for display
+        context['page_data'] = {
+            'business_subdirectory': business.subdirectory,
+            'current_page': subpage,
+            # Primary Hero Data
+            'hero_heading': subpage.hero_heading,
+            'hero_subheading': subpage.hero_subheading,
+            'hero_button_text': subpage.hero_button_text,
+            'hero_button_link': subpage.hero_button_link,
+            'hero_layout': subpage.hero_layout,
+            'hero_text_align': subpage.hero_text_align,
+            'hero_heading_color': subpage.hero_heading_color,
+            'hero_subheading_color': subpage.hero_subheading_color,
+            'hero_size': subpage.hero_size,
+            'show_hero_heading': subpage.show_hero_heading,
+            'show_hero_subheading': subpage.show_hero_subheading,
+            'show_hero_button': subpage.show_hero_button,
+            'hero_heading_font': subpage.hero_heading_font,
+            'hero_subheading_font': subpage.hero_subheading_font,
+            'hero_heading_size': subpage.hero_heading_size,
+            'hero_subheading_size': subpage.hero_subheading_size,
+            'hero_primary': {
+                'url': hero_primary.image.url if hero_primary else None,
+                'alt_text': hero_primary.alt_text if hero_primary else None
+            },
+            'hero_button_bg_color': subpage.hero_button_bg_color,
+            'hero_button_text_color': subpage.hero_button_text_color,
+            
+            # Banner 2 Data
+            'banner_2': {
+                'heading': subpage.banner_2_heading,
+                'subheading': subpage.banner_2_subheading,
+                'show_heading': subpage.show_banner_2_heading,
+                'show_subheading': subpage.show_banner_2_subheading,
+                'heading_font': subpage.banner_2_heading_font,
+                'subheading_font': subpage.banner_2_subheading_font,
+                'heading_size': subpage.banner_2_heading_size,
+                'subheading_size': subpage.banner_2_subheading_size,
+                'heading_color': subpage.banner_2_heading_color,
+                'subheading_color': subpage.banner_2_subheading_color,
+                'button_text': subpage.banner_2_button_text,
+                'button_link': subpage.banner_2_button_link,
+                'text_align': subpage.banner_2_text_align,
+                'button_bg_color': subpage.banner_2_button_bg_color,
+                'button_text_color': subpage.banner_2_button_text_color,
+                'url': banner_2.image.url if banner_2 else None,
+                'alt_text': banner_2.alt_text if banner_2 else None
+            },
+            
+            # Banner 3 Data
+            'banner_3': {
+                'heading': subpage.banner_3_heading,
+                'subheading': subpage.banner_3_subheading,
+                'show_heading': subpage.show_banner_3_heading,
+                'show_subheading': subpage.show_banner_3_subheading,
+                'heading_font': subpage.banner_3_heading_font,
+                'subheading_font': subpage.banner_3_subheading_font,
+                'heading_size': subpage.banner_3_heading_size,
+                'subheading_size': subpage.banner_3_subheading_size,
+                'heading_color': subpage.banner_3_heading_color,
+                'subheading_color': subpage.banner_3_subheading_color,
+                'button_text': subpage.banner_3_button_text,
+                'button_link': subpage.banner_3_button_link,
+                'text_align': subpage.banner_3_text_align,
+                'button_bg_color': subpage.banner_3_button_bg_color,
+                'button_text_color': subpage.banner_3_button_text_color,
+                'url': banner_3.image.url if banner_3 else None,
+                'alt_text': banner_3.alt_text if banner_3 else None
+            },
+            'is_published': subpage.is_published,
+        }
+    
+    # Add page-specific visitor content
+    if page_type == 'events':
         events_page = getattr(subpage, 'eventspage', None)
         if events_page:
-            page_content = {
-                'upcoming_events': events_page.events.filter(date__gte=timezone.now()).order_by('date'),
-                'past_events': events_page.events.filter(date__lt=timezone.now()).order_by('-date'),
-            }
-    has_menu = SubPage.objects.filter(business=business, page_type='menu').exists()
-    page_data = {
-        'business_subdirectory': business.subdirectory,
-        'current_page': subpage,
-        # Primary Hero Data
-        'hero_heading': subpage.hero_heading,
-        'hero_subheading': subpage.hero_subheading,
-        'hero_button_text': subpage.hero_button_text,
-        'hero_button_link': subpage.hero_button_link,
-        'hero_layout': subpage.hero_layout,
-        'hero_text_align': subpage.hero_text_align,
-        'hero_heading_color': subpage.hero_heading_color,
-        'hero_subheading_color': subpage.hero_subheading_color,
-        'hero_size': subpage.hero_size,
-        'show_hero_heading': subpage.show_hero_heading,
-        'show_hero_subheading': subpage.show_hero_subheading,
-        'show_hero_button': subpage.show_hero_button,
-        'hero_heading_font': subpage.hero_heading_font,
-        'hero_subheading_font': subpage.hero_subheading_font,
-        'hero_heading_size': subpage.hero_heading_size,
-        'hero_subheading_size': subpage.hero_subheading_size,
-        'hero_primary': {
-            'url': hero_primary.image.url if hero_primary else None,
-            'alt_text': hero_primary.alt_text if hero_primary else None
-        },
-        # Button Styles
-        'hero_button_bg_color': subpage.hero_button_bg_color,
-        'hero_button_text_color': subpage.hero_button_text_color,
-        
-        # Banner 2 Data
-        'banner_2': {
-            'heading': subpage.banner_2_heading,
-            'subheading': subpage.banner_2_subheading,
-            'show_heading': subpage.show_banner_2_heading,
-            'show_subheading': subpage.show_banner_2_subheading,
-            'heading_font': subpage.banner_2_heading_font,
-            'subheading_font': subpage.banner_2_subheading_font,
-            'heading_size': subpage.banner_2_heading_size,
-            'subheading_size': subpage.banner_2_subheading_size,
-            'heading_color': subpage.banner_2_heading_color,
-            'subheading_color': subpage.banner_2_subheading_color,
-            'button_text': subpage.banner_2_button_text,
-            'button_link': subpage.banner_2_button_link,
-            'text_align': subpage.banner_2_text_align,
-            'button_bg_color': subpage.banner_2_button_bg_color,
-            'button_text_color': subpage.banner_2_button_text_color,
-            'url': banner_2.image.url if banner_2 else None,
-            'alt_text': banner_2.alt_text if banner_2 else None
-        },
-        
-        # Banner 3 Data
-        'banner_3': {
-            'heading': subpage.banner_3_heading,
-            'subheading': subpage.banner_3_subheading,
-            'show_heading': subpage.show_banner_3_heading,
-            'show_subheading': subpage.show_banner_3_subheading,
-            'heading_font': subpage.banner_3_heading_font,
-            'subheading_font': subpage.banner_3_subheading_font,
-            'heading_size': subpage.banner_3_heading_size,
-            'subheading_size': subpage.banner_3_subheading_size,
-            'heading_color': subpage.banner_3_heading_color,
-            'subheading_color': subpage.banner_3_subheading_color,
-            'button_text': subpage.banner_3_button_text,
-            'button_link': subpage.banner_3_button_link,
-            'text_align': subpage.banner_3_text_align,
-            'button_bg_color': subpage.banner_3_button_bg_color,
-            'button_text_color': subpage.banner_3_button_text_color,
-            'url': banner_3.image.url if banner_3 else None,
-            'alt_text': banner_3.alt_text if banner_3 else None
-        },
-        'is_published': subpage.is_published,
-    }
-
-    context = {
-        # For JavaScript initialization
-        'has_menu': has_menu,
-        'page_data': page_data,
-        # For template rendering
-        'business_details': business,
-        'business_subdirectory': business.subdirectory,
-        # changed to published_pages
-        'subpages': subpages,
-        'published_pages': published_pages,
-        'subpage': subpage,
-        'current_page': subpage,
-        # Choices/Options for template dropdowns and selectors
-        'hero_primary': hero_primary,
-        'banner_2': banner_2,
-        'banner_3': banner_3,
-        'hero_heading_font': subpage.hero_heading_font,
-        'is_owner': user == business.owner,
-        'is_edit_page': user == business.owner and not is_dashboard,
-    }
-    # context = {
-    #     'business_details': {
-    #         'business_name': business.business_name,
-    #         'subdirectory': business.subdirectory,
-    #         'description': business.description,
-    #         'navigation_style': business.navigation_style or 'default',
-    #         'footer_style': business.footer_style or 'default',
-    #         'primary_color': business.primary_color or '#000000',
-    #         'secondary_color': business.secondary_color or '#666666',
-    #         'text_color': business.text_color or '#000000',
-    #         'hover_color': business.hover_color or '#333333',
-    #         'menu_items': menu_items,
-    #         'events': events,
-    #         'contact_info': {
-    #             'phone': business.phone_number,
-    #             'address': business.address,
-    #             'city': business.city,
-    #             'state': business.state,
-    #             'zip_code': business.zip_code,
-    #         }
-    #     },
-    #     'subpage': subpage,
-    #     'page_type': page_type,
-    #     'published_pages': published_pages,
-    #     'hero_image': hero_primary,
-    #     'banner_2': banner_2,
-    #     'banner_3': banner_3,
-    #     'page_content': page_content,
-    #     'user': user,
-    #     'is_owner': user == business.owner,
-    #     'is_verified': business.is_verified,
-    # }
-
+            context['events_data'] = [{
+                'id': event.id,
+                'name': event.name,
+                'datetime': event.date.isoformat(),
+                'description': event.description,
+                'image_url': event.image.url if event.image else None
+            } for event in events_page.events.filter(
+                date__gte=timezone.now()
+            ).order_by('date')]
+    elif page_type == 'menu':
+        context['menu_data'] = {
+            'menus': Menu.objects.filter(
+                business=business, 
+                is_published=True
+            ).prefetch_related('courses', 'courses__dishes'),
+            'specials': Dish.objects.filter(
+                menu__business=business, 
+                is_special=True, 
+                menu__is_published=True
+            ),
+        }
+    
     return context
+"""
+old get_business_context
+"""
+#feed any page type to this function to get the context for that page
+# def get_business_context(business, user, page_type='home'):
+#     """
+#     Get context for any business subpage
+#     page_type can be: 'home', 'about', 'menu', 'services', 'products', 'gallery', 'contact'
+#     """
+#     is_dashboard = False
+
+#     if page_type == 'dashboard':
+#         page_type = 'home'
+#         is_dashboard = True
+#     # Get the requested subpage and its images
+#     subpage = SubPage.objects.filter(
+#         business=business, 
+#         page_type=page_type
+#     ).first()
+#     subpages = SubPage.objects.filter(business=business)
+#     # Get all published subpages for navigation
+#     published_pages = SubPage.get_published_subpages(business)
+
+#     # Get images for the current subpage
+#     hero_primary = subpage.get_hero_primary() if subpage else None
+#     banner_2 = subpage.get_banner_2() if subpage else None
+#     banner_3 = subpage.get_banner_3() if subpage else None
+
+#     # Get upcoming events if they exist
+#     events = {
+#         'exists': Event.objects.filter(
+#             events_page__subpage__business=business, 
+#             date__gte=timezone.now()
+#         ).exists(),
+#         'upcoming': Event.objects.filter(
+#             events_page__subpage__business=business,
+#             date__gte=timezone.now()
+#         ).order_by('date')[:2]
+#     }
+
+#     # Get page-specific content
+#     page_content = {}
+#     if page_type == 'about':
+#         about_page = getattr(subpage, 'aboutuspage', None)
+#         if about_page:
+#             page_content = {
+#                 'team_members': about_page.team_members.all() if hasattr(about_page, 'team_members') else [],
+#                 'history': about_page.history,
+#                 'mission': about_page.mission,
+#             }
+#     elif page_type == 'menu':
+#         page_content = {
+#             'menus': Menu.objects.filter(business=business).prefetch_related(
+#                 'courses', 
+#                 'courses__dishes'
+#             ),
+#             'specials': Dish.objects.filter(menu__business=business, is_special=True),
+#         }
+#     elif page_type == 'events':
+#         events_page = getattr(subpage, 'eventspage', None)
+#         if events_page:
+#             events_data = [{
+#                 'id': event.id,
+#                 'name': event.name,
+#                 'datetime': event.date.isoformat(),
+#                 'description': event.description,
+#                 'image_url': event.image.url if event.image else None
+#             } for event in events_page.events.filter(date__gte=timezone.now()).order_by('date')]
+#             context['events_data'] = events_data
+
+#     has_menu = SubPage.objects.filter(business=business, page_type='menu').exists()
+#     page_data = {
+#         'business_subdirectory': business.subdirectory,
+#         'current_page': subpage,
+#         # Primary Hero Data
+#         'hero_heading': subpage.hero_heading,
+#         'hero_subheading': subpage.hero_subheading,
+#         'hero_button_text': subpage.hero_button_text,
+#         'hero_button_link': subpage.hero_button_link,
+#         'hero_layout': subpage.hero_layout,
+#         'hero_text_align': subpage.hero_text_align,
+#         'hero_heading_color': subpage.hero_heading_color,
+#         'hero_subheading_color': subpage.hero_subheading_color,
+#         'hero_size': subpage.hero_size,
+#         'show_hero_heading': subpage.show_hero_heading,
+#         'show_hero_subheading': subpage.show_hero_subheading,
+#         'show_hero_button': subpage.show_hero_button,
+#         'hero_heading_font': subpage.hero_heading_font,
+#         'hero_subheading_font': subpage.hero_subheading_font,
+#         'hero_heading_size': subpage.hero_heading_size,
+#         'hero_subheading_size': subpage.hero_subheading_size,
+#         'hero_primary': {
+#             'url': hero_primary.image.url if hero_primary else None,
+#             'alt_text': hero_primary.alt_text if hero_primary else None
+#         },
+#         # Button Styles
+#         'hero_button_bg_color': subpage.hero_button_bg_color,
+#         'hero_button_text_color': subpage.hero_button_text_color,
+        
+#         # Banner 2 Data
+#         'banner_2': {
+#             'heading': subpage.banner_2_heading,
+#             'subheading': subpage.banner_2_subheading,
+#             'show_heading': subpage.show_banner_2_heading,
+#             'show_subheading': subpage.show_banner_2_subheading,
+#             'heading_font': subpage.banner_2_heading_font,
+#             'subheading_font': subpage.banner_2_subheading_font,
+#             'heading_size': subpage.banner_2_heading_size,
+#             'subheading_size': subpage.banner_2_subheading_size,
+#             'heading_color': subpage.banner_2_heading_color,
+#             'subheading_color': subpage.banner_2_subheading_color,
+#             'button_text': subpage.banner_2_button_text,
+#             'button_link': subpage.banner_2_button_link,
+#             'text_align': subpage.banner_2_text_align,
+#             'button_bg_color': subpage.banner_2_button_bg_color,
+#             'button_text_color': subpage.banner_2_button_text_color,
+#             'url': banner_2.image.url if banner_2 else None,
+#             'alt_text': banner_2.alt_text if banner_2 else None
+#         },
+        
+#         # Banner 3 Data
+#         'banner_3': {
+#             'heading': subpage.banner_3_heading,
+#             'subheading': subpage.banner_3_subheading,
+#             'show_heading': subpage.show_banner_3_heading,
+#             'show_subheading': subpage.show_banner_3_subheading,
+#             'heading_font': subpage.banner_3_heading_font,
+#             'subheading_font': subpage.banner_3_subheading_font,
+#             'heading_size': subpage.banner_3_heading_size,
+#             'subheading_size': subpage.banner_3_subheading_size,
+#             'heading_color': subpage.banner_3_heading_color,
+#             'subheading_color': subpage.banner_3_subheading_color,
+#             'button_text': subpage.banner_3_button_text,
+#             'button_link': subpage.banner_3_button_link,
+#             'text_align': subpage.banner_3_text_align,
+#             'button_bg_color': subpage.banner_3_button_bg_color,
+#             'button_text_color': subpage.banner_3_button_text_color,
+#             'url': banner_3.image.url if banner_3 else None,
+#             'alt_text': banner_3.alt_text if banner_3 else None
+#         },
+#         'is_published': subpage.is_published,
+#     }
+
+#     context = {
+#         # For JavaScript initialization
+#         'has_menu': has_menu,
+#         'page_data': page_data,
+#         # For template rendering
+#         'business_details': business,
+#         'business_subdirectory': business.subdirectory,
+#         # changed to published_pages
+#         'subpages': subpages,
+#         'published_pages': published_pages,
+#         'subpage': subpage,
+#         'current_page': subpage,
+#         # Choices/Options for template dropdowns and selectors
+#         'hero_primary': hero_primary,
+#         'banner_2': banner_2,
+#         'banner_3': banner_3,
+#         'hero_heading_font': subpage.hero_heading_font,
+#         'is_owner': user == business.owner,
+#         'is_edit_page': user == business.owner and not is_dashboard,
+#     }
+#     return context
 
 def business_dashboard(request, business_subdirectory):
     business = get_object_or_404(Business, subdirectory=business_subdirectory)
@@ -515,6 +653,11 @@ def business_dashboard(request, business_subdirectory):
     context = get_business_context(business, request.user, 'dashboard')
     
     return render(request, "eatery_owner.html", context)
+
+def business_subpage_editor(request, business_subdirectory, page_type):
+    business = get_object_or_404(Business, subdirectory=business_subdirectory)
+    context = get_business_context(business, request.user, page_type)
+    return render(request, "subpages/events.html", context)
 
 # new business page view
 def business_page(request, business_subdirectory, page_type="home"):
@@ -553,7 +696,6 @@ def business_main(request, business_subdirectory):
             'is_published': True
         }
     )
-
     # Get your existing context
     context = get_business_context(business, request.user)
     
@@ -2249,110 +2391,7 @@ def update_subpage_hero(request, business_subdirectory, subpage_id):
         return JsonResponse({'success': False, 'error': 'Invalid JSON'}, status=400)
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
-    
-# @login_required
-# def update_hero(request, business_subdirectory):
-#     if request.method != 'POST':
-#         return JsonResponse({'success': False, 'error': 'Invalid method'})
-
-#     try:
-#         data = json.loads(request.body)
-#         field = data.get('field')
-#         value = data.get('value', 'default')  # Provide a default value
-#         page_type = data.get('page_type')
-
-#         logger.debug(f"Updating hero field: {field} to value: {value} for page: {page_type}")
-
-#         business = get_object_or_404(Business, subdirectory=business_subdirectory)
-#         if request.user != business.owner:
-#             return JsonResponse({'success': False, 'error': 'Unauthorized'})
-
-#         subpage = get_object_or_404(SubPage, business=business, page_type=page_type)
-        
-#         # Map of frontend field names to model field names
-#         field_mapping = {
-#             # hero fields
-#             'text_align': 'hero_text_align',
-#             'hero_heading': 'hero_heading',
-#             'hero_heading_size': 'hero_heading_size',
-#             'hero_subheading': 'hero_subheading',
-#             'hero_subheading_size': 'hero_subheading_size',
-#             'hero_heading_font': 'hero_heading_font',
-#             'hero_subheading_font': 'hero_subheading_font',
-#             'hero_heading_color': 'hero_heading_color',
-#             'hero_subheading_color': 'hero_subheading_color',
-#             'show_hero_heading': 'show_hero_heading',
-#             'show_hero_subheading': 'show_hero_subheading',
-#             'hero_layout': 'hero_layout',
-#             'hero_size': 'hero_size',
-#             'hero_button_text': 'hero_button_text',
-#             # hero button fields
-#             'hero_button_link': 'hero_button_link',
-#             'show_hero_button': 'show_hero_button',
-#             'hero_button_bg_color': 'hero_button_bg_color',
-#             'hero_button_text_color': 'hero_button_text_color',
-#             'hero_button_size': 'hero_button_size',
-#             # Banner 2 fields
-#             'hero_banner_2_heading': 'banner_2_heading',
-#             'hero_banner_2_subheading': 'banner_2_subheading',
-#             'show_hero_banner_2_heading': 'show_banner_2_heading',
-#             'show_hero_banner_2_subheading': 'show_banner_2_subheading',
-#             'hero_banner_2_heading_font': 'banner_2_heading_font',
-#             'hero_banner_2_heading_size': 'banner_2_heading_size',
-#             'hero_banner_2_heading_color': 'banner_2_heading_color',
-#             'hero_banner_2_subheading_font': 'banner_2_subheading_font',
-#             'hero_banner_2_subheading_size': 'banner_2_subheading_size',
-#             'hero_banner_2_subheading_color': 'banner_2_subheading_color',
-#             'hero_banner_2_text_align': 'banner_2_text_align',
-#             # banner 2 button fields
-#             'hero_banner_2_button_text': 'banner_2_button_text',
-#             'hero_banner_2_button_link': 'banner_2_button_link',
-#             'show_hero_banner_2_button': 'show_banner_2_button',
-#             'hero_banner_2_button_bg_color': 'banner_2_button_bg_color',
-#             'hero_banner_2_button_text_color': 'banner_2_button_text_color',
-#             'hero_banner_2_button_size': 'banner_2_button_size',
-#             # Banner 3 fields
-#             'hero_banner_3_heading': 'banner_3_heading',
-#             'hero_banner_3_subheading': 'banner_3_subheading',
-#             'show_hero_banner_3_heading': 'show_banner_3_heading',
-#             'show_hero_banner_3_subheading': 'show_banner_3_subheading',
-#             'hero_banner_3_heading_font': 'banner_3_heading_font',
-#             'hero_banner_3_heading_size': 'banner_3_heading_size',
-#             'hero_banner_3_heading_color': 'banner_3_heading_color',
-#             'hero_banner_3_subheading_font': 'banner_3_subheading_font',
-#             'hero_banner_3_subheading_size': 'banner_3_subheading_size',
-#             'hero_banner_3_subheading_color': 'banner_3_subheading_color',
-#             'hero_banner_3_text_align': 'banner_3_text_align',
-#             # banner 3 button fields
-#             'hero_banner_3_button_text': 'banner_3_button_text',
-#             'hero_banner_3_button_link': 'banner_3_button_link',
-#             'show_hero_banner_3_button': 'show_banner_3_button',
-#             'hero_banner_3_button_bg_color': 'banner_3_button_bg_color',
-#             'hero_banner_3_button_text_color': 'banner_3_button_text_color',
-#             'hero_banner_3_button_size': 'banner_3_button_size',
-#         }
-#         # Get the correct field name from the mapping
-#         model_field = field_mapping.get(field)
-#         print(f"Field mapping result: {model_field}")
-#         logger.debug(f"Field mapping result: {model_field}")
-#         logger.debug(f"Current value in database: {getattr(subpage, model_field, None)}")
-#         logger.debug(f"New value being set: {value}")
-#         if not model_field:
-#             return JsonResponse({'success': False, 'error': f'Invalid field: {field}'})
-
-#         # Ensure value is not None before setting
-#         if value is not None:
-#             setattr(subpage, model_field, value)
-#             subpage.save()
-#             logger.debug(f"Successfully updated {model_field} to {value}")
-#             return JsonResponse({'success': True})
-#         else:
-#             return JsonResponse({'success': False, 'error': 'Value cannot be null'})
-
-#     except Exception as e:
-#         logger.error(f"Error in update_hero: {str(e)}")
-#         return JsonResponse({'success': False, 'error': str(e)})
-    
+ 
 
 @require_POST
 def update_hero(request, business_subdirectory):
@@ -2515,7 +2554,295 @@ def update_brand_colors(request, business_subdirectory):
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
     
+@login_required
+def add_event(request, business_subdirectory):
+    """Add a new event to the business's events page"""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST request required.'}, status=400)
 
+    # Get the business and verify ownership
+    business = get_object_or_404(Business, subdirectory=business_subdirectory)
+    if request.user != business.owner:
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+    
+    try:
+        # Get or create events page
+        subpage = SubPage.objects.get_or_create(
+            business=business,
+            page_type='events'
+        )[0]
+        events_page = EventsPage.objects.get_or_create(subpage=subpage)[0]
+
+        # Get form data
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        start_date = request.POST.get('start_date')
+        start_time = request.POST.get('start_time')
+
+        if not all([title, start_date, start_time]):
+            missing = []
+            if not title: missing.append('title')
+            if not start_date: missing.append('start date')
+            if not start_time: missing.append('start time')
+            return JsonResponse({
+                'error': f'Missing required fields: {", ".join(missing)}'
+            }, status=400)
+
+        # Combine date and time
+        start_datetime = datetime.combine(
+            datetime.strptime(start_date, '%Y-%m-%d').date(),
+            datetime.strptime(start_time, '%H:%M').time()
+        )
+
+        # Handle end date/time if provided
+        end_datetime = None
+        end_date = request.POST.get('end_date')
+        end_time = request.POST.get('end_time')
+        if end_date and end_time:
+            end_datetime = datetime.combine(
+                datetime.strptime(end_date, '%Y-%m-%d').date(),
+                datetime.strptime(end_time, '%H:%M').time()
+            )
+
+        # Create new event
+        event = Event.objects.create(
+            events_page=events_page,
+            title=title,
+            description=description,
+            date=start_datetime,
+            end_date=end_datetime
+        )
+
+        # Handle image if provided
+        image_url = None
+        print(request.FILES)
+        if 'image' in request.FILES:
+            image_file = request.FILES['image']
+            
+            # Check file size
+            if image_file.size > settings.FILE_UPLOAD_MAX_MEMORY_SIZE:
+                event.delete()  # Clean up the created event
+                return JsonResponse({
+                    'success': False, 
+                    'error': f'File size cannot exceed {settings.FILE_UPLOAD_MAX_MEMORY_SIZE // (1024*1024)}MB'
+                })
+
+            # Check file extension
+            ext = image_file.name.split('.')[-1].lower()
+            if ext not in Image.ALLOWED_EXTENSIONS:
+                event.delete()  # Clean up the created event
+                return JsonResponse({
+                    'success': False,
+                    'error': f'Unsupported file extension. Allowed types: {", ".join(Image.ALLOWED_EXTENSIONS)}'
+                })
+            
+            # Validate image file
+            try:
+                with PILImage.open(image_file) as img:
+                    img.verify()
+                    image_file.seek(0)  # Reset file pointer after verify
+            except Exception as e:
+                event.delete()  # Clean up the created event
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Invalid image file'
+                })
+
+            try:
+                # Create new image
+                image = Image.objects.create(
+                    image=image_file,
+                    uploaded_by=request.user,
+                    content_type=ContentType.objects.get_for_model(event),
+                    object_id=event.id,
+                    alt_text=f"Event image for {event.title}"
+                )
+                image_url = image.image.url
+                
+            except ValidationError as e:
+                event.delete()  # Clean up the created event
+                logger.error(f"Validation error during event image upload: {str(e)}")
+                if hasattr(e, 'message_dict'):
+                    error_message = '; '.join([f"{k}: {', '.join(v)}" for k, v in e.message_dict.items()])
+                else:
+                    error_message = str(e)
+                return JsonResponse({
+                    'success': False,
+                    'error': error_message
+                })
+
+        # Return the created event data
+        return JsonResponse({
+            'success': True,
+            'event_id': event.id,
+            'name': event.title,
+            'description': event.description,
+            'datetime': event.date.isoformat(),
+            'end_datetime': event.end_date.isoformat() if event.end_date else None,
+            'image_url': image_url,
+            'message': 'Event created successfully'
+        })
+
+    except ValueError as e:
+        return JsonResponse({
+            'error': f'Invalid date/time format: {str(e)}'
+        }, status=400)
+    except Exception as e:
+        logger.error(f"Error creating event: {str(e)}", exc_info=True)
+        return JsonResponse({
+            'error': f'An error occurred while creating the event: {str(e)}'
+        }, status=500)
+
+@require_http_methods(["GET"])
+def get_event_form(request, business_subdirectory, event_id):
+    try:
+        business = get_object_or_404(Business, subdirectory=business_subdirectory)
+        if request.user != business.owner:
+            return JsonResponse({'error': 'Unauthorized'}, status=403)
+
+        event = get_object_or_404(Event, id=event_id)
+        
+        # Get the current image
+        content_type = ContentType.objects.get_for_model(Event)
+        current_image = Image.objects.filter(
+            content_type=content_type,
+            object_id=event.id
+        ).first()
+
+        form = EventForm(instance=event, initial={
+            'start_date': event.date.date(),
+            'start_time': event.date.time(),
+            'end_date': event.end_date.date() if event.end_date else None,
+            'end_time': event.end_date.time() if event.end_date else None,
+        })
+        
+        form.helper.form_id = f'editEvent{event_id}'
+        
+        # Add image preview if exists
+        if current_image:
+            form.helper.layout.insert(-1, Div(
+                HTML(f"""
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-600 mb-2">Current Image:</p>
+                        <img src="{current_image.image.url}" 
+                             alt="Current event image" 
+                             class="h-32 w-32 object-cover rounded-lg border border-gray-200">
+                    </div>
+                """),
+                css_class='mt-4'
+            ))
+
+        form.helper.layout[-1] = Div(
+            HTML(f"""
+                <button type="button" class="cancel-edit px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded transition-colors duration-200">
+                    Cancel
+                </button>
+            """),
+            Submit('submit', 'Save Changes', 
+                css_class='px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200 ml-2'),
+            css_class='flex justify-end space-x-2 mt-4'
+        )
+
+        html = render_to_string('forms/crispy_form.html', {'form': form})
+        return JsonResponse({'form_html': html})
+
+    except Exception as e:
+        logger.error(f"Error in get_event_form: {str(e)}")
+        return JsonResponse({'error': str(e)}, status=500)
+    
+@require_http_methods(["POST"])
+def edit_event(request, business_subdirectory, event_id):
+    try:
+        business = get_object_or_404(Business, subdirectory=business_subdirectory)
+        if request.user != business.owner:
+            return JsonResponse({'error': 'Unauthorized'}, status=403)
+
+        event = get_object_or_404(Event, id=event_id)
+        form = EventForm(request.POST, request.FILES, instance=event)
+        
+        if form.is_valid():
+            event = form.save()
+
+            # Handle image upload if present
+            if request.FILES.get('image'):
+                content_type = ContentType.objects.get_for_model(Event)
+                
+                # Delete old image if exists
+                Image.objects.filter(
+                    content_type=content_type,
+                    object_id=event.id
+                ).delete()
+                
+                # Create new image
+                Image.objects.create(
+                    image=request.FILES['image'],
+                    uploaded_by=request.user,
+                    content_type=content_type,
+                    object_id=event.id,
+                    alt_text=f"Event image for {event.title}"
+                )
+
+            return JsonResponse({
+                'success': True,
+                'message': 'Event updated successfully'
+            })
+        else:
+            return JsonResponse({
+                'error': 'Invalid form data',
+                'form_errors': form.errors
+            }, status=400)
+
+    except Exception as e:
+        logger.error(f"Error in edit_event: {str(e)}")
+        return JsonResponse({'error': str(e)}, status=500)
+    
+@login_required
+@require_http_methods(["POST"])
+def delete_event(request, business_subdirectory, event_id):
+    """Delete an event after verifying ownership and permissions"""
+    try:
+        # Get the business and verify ownership
+        business = get_object_or_404(Business, subdirectory=business_subdirectory)
+        if request.user != business.owner:
+            return JsonResponse({
+                'success': False,
+                'error': 'Unauthorized: You do not own this business'
+            }, status=403)
+
+        # Get the event and verify it belongs to the business
+        event = get_object_or_404(Event, 
+            id=event_id,
+            events_page__subpage__business=business
+        )
+
+        # Delete associated image if it exists
+        content_type = ContentType.objects.get_for_model(Event)
+        Image.objects.filter(
+            content_type=content_type,
+            object_id=event.id
+        ).delete()
+
+        # Delete the event
+        event.delete()
+
+        return JsonResponse({
+            'success': True,
+            'message': 'Event deleted successfully'
+        })
+
+    except Event.DoesNotExist:
+        logger.warning(f"Attempted to delete non-existent event {event_id}")
+        return JsonResponse({
+            'success': False,
+            'error': 'Event not found'
+        }, status=404)
+    except Exception as e:
+        logger.error(f"Error deleting event {event_id}: {str(e)}", exc_info=True)
+        return JsonResponse({
+            'success': False,
+            'error': 'An error occurred while deleting the event'
+        }, status=500)
+    
 @login_required
 def seo(request, business_subdirectory):
     return render(request, 'subpages/seo.html')
@@ -2526,3 +2853,4 @@ def advertising(request, business_subdirectory):
 
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
+
