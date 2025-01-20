@@ -14,6 +14,11 @@ from django.utils.text import slugify
 from .models import Image
 from datetime import datetime, timedelta, date
 from django.forms import ValidationError
+from django.utils import timezone
+import pytz
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class CustomSignupForm(SignupForm):
@@ -281,6 +286,7 @@ class EventForm(forms.ModelForm):
         fields = ['title', 'description', 'image']
 
     def __init__(self, *args, **kwargs):
+        self.business = kwargs.pop('business', None)
         instance = kwargs.get('instance', None)
         if instance:
             initial = kwargs.get('initial', {})
@@ -358,32 +364,50 @@ class EventForm(forms.ModelForm):
         end_date = cleaned_data.get('end_date')
         end_time = cleaned_data.get('end_time')
         
-        # Get current datetime
-        now = datetime.now()
-        today = now.date()
-        
-        if start_date:
-            # Check if start date is in the past
-            if start_date < today:
-                raise ValidationError("Event cannot be scheduled in the past")
-            
-            # If start date is today, check if time is in the past
-            if start_date == today and start_time:
-                start_datetime = datetime.combine(start_date, start_time)
-                if start_datetime < now:
-                    raise ValidationError("Event cannot be scheduled in the past")
+        # Get current datetime in business timezone
+        if self.business:
+            tz = pytz.timezone(self.business.timezone)
+            now = timezone.now().astimezone(tz)
+        else:
+            now = timezone.now()
         
         if start_date and start_time:
-            cleaned_data['date'] = datetime.combine(start_date, start_time)
-        
-        if end_date and end_time:
-            cleaned_data['end_date'] = datetime.combine(end_date, end_time)
+            # Create timezone-aware start datetime in business timezone
+            start_datetime = datetime.combine(start_date, start_time)
+            if self.business:
+                start_datetime = tz.localize(start_datetime)
+            else:
+                start_datetime = timezone.make_aware(start_datetime)
+            cleaned_data['date'] = start_datetime
             
-            # Validate that end date is after start date
-            if cleaned_data['end_date'] <= cleaned_data['date']:
-                raise ValidationError("End date must be after start date")
+            if start_datetime < now:
+                raise ValidationError("Event cannot be scheduled in the past")
+            
+            if end_date and end_time:
+                # Create timezone-aware end datetime in business timezone
+                end_datetime = datetime.combine(end_date, end_time)
+                if self.business:
+                    end_datetime = tz.localize(end_datetime)
+                else:
+                    end_datetime = timezone.make_aware(end_datetime)
+                cleaned_data['end_date'] = end_datetime
+                
+                if end_datetime <= start_datetime:
+                    raise ValidationError("End date and time must be after start date and time")
         
         return cleaned_data
+
+    def clean_end_date(self):
+        """Individual field validation for end_date"""
+        end_date = self.cleaned_data.get('end_date')
+        logger.info(f"Cleaning end_date: {end_date}")
+        return end_date
+
+    def clean_end_time(self):
+        """Individual field validation for end_time"""
+        end_time = self.cleaned_data.get('end_time')
+        logger.info(f"Cleaning end_time: {end_time}")
+        return end_time
 
     def save(self, commit=True):
         instance = super().save(commit=False)

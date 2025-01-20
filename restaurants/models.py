@@ -180,6 +180,7 @@ class Business(models.Model):
     city = models.CharField(max_length=64)
     state = models.CharField(max_length=64)
     zip_code = models.CharField(max_length=20)
+    timezone = models.CharField(max_length=50, default='UTC')
     email = models.EmailField(blank=True)
     description = models.TextField(max_length=200, default="", blank=True)
     created = models.DateTimeField(auto_now_add=True)

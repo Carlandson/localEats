@@ -35,6 +35,7 @@ from crispy_forms.layout import Div, Submit, HTML
 from django.utils import timezone
 from .constants import get_font_choices, get_font_sizes
 from datetime import datetime
+import pytz
 import base64, uuid
 import googlemaps
 import traceback
@@ -221,7 +222,13 @@ def create(request):
                     location = geocode_result[0]['geometry']['location']
                     formatted_address = geocode_result[0]['formatted_address']
                     coordinates = f"{location['lat']},{location['lng']}"
-
+                    timezone_result = gmaps.timezone(
+                        location=(location['lat'], location['lng']),
+                        timestamp=datetime.now().timestamp()
+                    )
+                    if timezone_result:
+                        new_business.timezone = timezone_result['timeZoneId']
+                    
                     if Business.verified_business_exists(formatted_address):
                         raise ValidationError("A verified business already exists at this address.")
                     
@@ -2574,48 +2581,20 @@ def add_event(request, business_subdirectory):
         events_page = EventsPage.objects.get_or_create(subpage=subpage)[0]
 
         # Get form data
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-        start_date = request.POST.get('start_date')
-        start_time = request.POST.get('start_time')
-
-        if not all([title, start_date, start_time]):
-            missing = []
-            if not title: missing.append('title')
-            if not start_date: missing.append('start date')
-            if not start_time: missing.append('start time')
+        form = EventForm(request.POST, request.FILES)
+        if not form.is_valid():
             return JsonResponse({
-                'error': f'Missing required fields: {", ".join(missing)}'
+                'success': False,
+                'error': form.errors
             }, status=400)
 
-        # Combine date and time
-        start_datetime = datetime.combine(
-            datetime.strptime(start_date, '%Y-%m-%d').date(),
-            datetime.strptime(start_time, '%H:%M').time()
-        )
-
-        # Handle end date/time if provided
-        end_datetime = None
-        end_date = request.POST.get('end_date')
-        end_time = request.POST.get('end_time')
-        if end_date and end_time:
-            end_datetime = datetime.combine(
-                datetime.strptime(end_date, '%Y-%m-%d').date(),
-                datetime.strptime(end_time, '%H:%M').time()
-            )
-
-        # Create new event
-        event = Event.objects.create(
-            events_page=events_page,
-            title=title,
-            description=description,
-            date=start_datetime,
-            end_date=end_datetime
-        )
+        # Create new event using form's cleaned data
+        event = form.save(commit=False)
+        event.events_page = events_page
+        event.save()
 
         # Handle image if provided
         image_url = None
-        print(request.FILES)
         if 'image' in request.FILES:
             image_file = request.FILES['image']
             
@@ -2683,10 +2662,6 @@ def add_event(request, business_subdirectory):
             'message': 'Event created successfully'
         })
 
-    except ValueError as e:
-        return JsonResponse({
-            'error': f'Invalid date/time format: {str(e)}'
-        }, status=400)
     except Exception as e:
         logger.error(f"Error creating event: {str(e)}", exc_info=True)
         return JsonResponse({
@@ -2709,7 +2684,11 @@ def get_event_form(request, business_subdirectory, event_id):
             object_id=event.id
         ).first()
 
-        form = EventForm(instance=event, initial={
+        tz = pytz.timezone(business.timezone)
+        local_date = event.date.astimezone(tz)
+        local_end_date = event.end_date.astimezone(tz) if event.end_date else None
+
+        form = EventForm(instance=event, business=business, initial={
             'start_date': event.date.date(),
             'start_time': event.date.time(),
             'end_date': event.end_date.date() if event.end_date else None,

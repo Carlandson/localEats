@@ -6137,3 +6137,467 @@ INFO 2025-01-16 18:07:40,060 basehttp 9800 9624 "POST /test2/events/delete/8/ HT
 INFO 2025-01-16 18:07:42,270 basehttp 9800 9624 "POST /test2/events/delete/11/ HTTP/1.1" 200 58
 INFO 2025-01-16 18:07:45,072 basehttp 9800 9624 "POST /test2/events/delete/10/ HTTP/1.1" 200 58
 INFO 2025-01-16 18:07:47,134 basehttp 9800 9624 "POST /test2/events/delete/9/ HTTP/1.1" 200 58
+INFO 2025-01-20 10:17:39,768 autoreload 12380 29068 Watching for file changes with StatReloader
+INFO 2025-01-20 10:17:43,066 basehttp 12380 25728 "GET / HTTP/1.1" 200 16716
+INFO 2025-01-20 10:17:43,293 basehttp 12380 19492 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-20 10:17:43,313 basehttp 12380 8228 "GET /static/js/components/paginate.js HTTP/1.1" 200 3440
+INFO 2025-01-20 10:17:43,325 basehttp 12380 25728 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-20 10:17:43,339 basehttp 12380 19492 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-20 10:17:43,342 basehttp 12380 20576 "GET /static/js/index.js HTTP/1.1" 200 4271
+INFO 2025-01-20 10:17:43,354 basehttp 12380 25728 "GET /static/images/test2.jpg HTTP/1.1" 200 2206722
+INFO 2025-01-20 10:17:43,360 basehttp 12380 8228 "GET /static/images/test1.jpg HTTP/1.1" 200 1800794
+INFO 2025-01-20 10:17:43,365 basehttp 12380 5960 "GET /static/images/test3.jpg HTTP/1.1" 200 3262750
+INFO 2025-01-20 10:17:45,218 basehttp 12380 5960 "GET /profile/ HTTP/1.1" 200 14111
+INFO 2025-01-20 10:17:46,634 basehttp 12380 5960 "GET /test2/dashboard/ HTTP/1.1" 200 18864
+INFO 2025-01-20 10:17:49,294 basehttp 12380 5960 "GET /test2/events/ HTTP/1.1" 200 18800
+INFO 2025-01-20 10:17:49,430 basehttp 12380 5960 "GET /static/js/subpages/events2.js HTTP/1.1" 304 0
+INFO 2025-01-20 10:17:49,492 basehttp 12380 5960 "GET /media/user_uploads/2025/01/16/arena_background_1Od8pIw.webp HTTP/1.1" 200 61188
+DEBUG 2025-01-20 10:18:41,377 models 12380 5960 
+            Saving Image:
+            - Alt Text: Event image for New Event test 1
+            - Content Type: Restaurants | event
+            - Object ID: 12
+            - Content Object: Event object (12)
+            - Image Path: blue-ball-lightning-abstract-electric-lightning-strike-light-flash-thunder-spark-png.webp
+        
+DEBUG 2025-01-20 10:18:41,408 models 12380 5960 Content type check: image/webp
+DEBUG 2025-01-20 10:18:41,727 models 12380 5960 
+            Image Saved:
+            - ID: 137
+            - Alt Text: Event image for New Event test 1
+            - Content Type: Restaurants | event
+            - Object ID: 12
+        
+INFO 2025-01-20 10:18:41,728 basehttp 12380 5960 "POST /test2/events/add/ HTTP/1.1" 200 329
+INFO 2025-01-20 10:18:41,800 basehttp 12380 5960 "GET /test2/events/ HTTP/1.1" 200 20526
+INFO 2025-01-20 10:18:41,851 basehttp 12380 5960 "GET /media/user_uploads/2025/01/20/blue-ball-lightning-abstract-electric-lightning-strike-light-fl_8vUGIRc.webp HTTP/1.1" 200 75492
+INFO 2025-01-20 10:21:56,183 autoreload 12380 29068 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models.py changed, reloading.
+INFO 2025-01-20 10:21:56,749 autoreload 17676 31988 Watching for file changes with StatReloader
+INFO 2025-01-20 10:21:58,255 autoreload 17676 31988 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models.py changed, reloading.
+INFO 2025-01-20 10:21:58,732 autoreload 30372 292 Watching for file changes with StatReloader
+INFO 2025-01-20 10:22:01,305 autoreload 30372 292 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models.py changed, reloading.
+INFO 2025-01-20 10:22:02,094 autoreload 18840 29796 Watching for file changes with StatReloader
+INFO 2025-01-20 10:22:33,159 autoreload 18840 29796 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-20 10:22:34,042 autoreload 720 12776 Watching for file changes with StatReloader
+INFO 2025-01-20 10:22:39,486 autoreload 720 12776 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-20 10:22:40,274 autoreload 17292 1212 Watching for file changes with StatReloader
+INFO 2025-01-20 10:22:42,828 autoreload 17292 1212 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-20 10:22:43,649 autoreload 31924 31156 Watching for file changes with StatReloader
+INFO 2025-01-20 10:23:11,109 autoreload 32984 23668 Watching for file changes with StatReloader
+INFO 2025-01-20 10:27:22,056 autoreload 34132 7336 Watching for file changes with StatReloader
+INFO 2025-01-20 10:27:24,508 basehttp 34132 33832 "GET /test2/events/ HTTP/1.1" 200 20526
+INFO 2025-01-20 10:27:24,572 basehttp 34132 33832 "GET /media/user_uploads/2025/01/20/blue-ball-lightning-abstract-electric-lightning-strike-light-fl_8vUGIRc.webp HTTP/1.1" 304 0
+DEBUG 2025-01-20 10:27:40,409 models 34132 33832 
+            Saving Image:
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 13
+            - Content Object: Event object (13)
+            - Image Path: arena background.webp
+        
+DEBUG 2025-01-20 10:27:40,414 models 34132 33832 Content type check: image/webp
+DEBUG 2025-01-20 10:27:40,606 models 34132 33832 
+            Image Saved:
+            - ID: 138
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 13
+        
+INFO 2025-01-20 10:27:40,607 basehttp 34132 33832 "POST /test2/events/add/ HTTP/1.1" 200 264
+INFO 2025-01-20 10:27:40,810 basehttp 34132 33832 "GET /test2/events/ HTTP/1.1" 200 22164
+INFO 2025-01-20 10:27:40,930 basehttp 34132 33832 "GET /media/user_uploads/2025/01/20/arena_background.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:28:53,282 autoreload 34132 7336 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:28:54,149 autoreload 30808 17580 Watching for file changes with StatReloader
+INFO 2025-01-20 10:28:57,357 autoreload 30808 17580 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:28:58,179 autoreload 11780 24680 Watching for file changes with StatReloader
+INFO 2025-01-20 10:29:08,058 autoreload 11780 24680 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:29:08,856 autoreload 30620 9432 Watching for file changes with StatReloader
+INFO 2025-01-20 10:29:14,102 autoreload 30620 9432 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:29:14,927 autoreload 30996 34912 Watching for file changes with StatReloader
+INFO 2025-01-20 10:29:18,421 basehttp 30996 23820 "GET /test2/events/ HTTP/1.1" 200 22164
+INFO 2025-01-20 10:29:18,612 basehttp 30996 23820 "GET /media/user_uploads/2025/01/20/arena_background.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:29:18,612 basehttp 30996 9600 "GET /media/user_uploads/2025/01/20/blue-ball-lightning-abstract-electric-lightning-strike-light-fl_8vUGIRc.webp HTTP/1.1" 304 0
+DEBUG 2025-01-20 10:29:23,147 models 30996 23820 
+            Saving Image:
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 14
+            - Content Object: Event object (14)
+            - Image Path: arena background.webp
+        
+DEBUG 2025-01-20 10:29:23,152 models 30996 23820 Content type check: image/webp
+DEBUG 2025-01-20 10:29:23,342 models 30996 23820 
+            Image Saved:
+            - ID: 139
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 14
+        
+INFO 2025-01-20 10:29:23,344 basehttp 30996 23820 "POST /test2/events/add/ HTTP/1.1" 200 272
+INFO 2025-01-20 10:29:23,440 basehttp 30996 23820 "GET /test2/events/ HTTP/1.1" 200 23810
+INFO 2025-01-20 10:29:23,567 basehttp 30996 23820 "GET /media/user_uploads/2025/01/20/arena_background_aeFjJeo.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:29:30,714 basehttp 30996 23820 "GET /test2/events/ HTTP/1.1" 200 23810
+INFO 2025-01-20 10:29:30,756 basehttp 30996 9600 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-20 10:29:30,758 basehttp 30996 9600 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-20 10:29:30,758 basehttp 30996 23872 "GET /static/js/subpages/events2.js HTTP/1.1" 200 8797
+INFO 2025-01-20 10:29:30,759 basehttp 30996 23820 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-20 10:29:30,779 basehttp 30996 23820 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-20 10:29:30,780 basehttp 30996 23872 "GET /media/user_uploads/2025/01/20/arena_background.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:29:30,780 basehttp 30996 9600 "GET /media/user_uploads/2025/01/20/arena_background_aeFjJeo.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:29:30,781 basehttp 30996 26948 "GET /media/user_uploads/2025/01/20/blue-ball-lightning-abstract-electric-lightning-strike-light-fl_8vUGIRc.webp HTTP/1.1" 200 75492
+INFO 2025-01-20 10:29:30,781 basehttp 30996 16112 "GET /media/user_uploads/2025/01/16/arena_background_1Od8pIw.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:29:31,010 basehttp 30996 23820 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+DEBUG 2025-01-20 10:29:35,362 models 30996 23820 
+            Saving Image:
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 15
+            - Content Object: Event object (15)
+            - Image Path: arena background.webp
+        
+DEBUG 2025-01-20 10:29:35,364 models 30996 23820 Content type check: image/webp
+DEBUG 2025-01-20 10:29:35,555 models 30996 23820 
+            Image Saved:
+            - ID: 140
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 15
+        
+INFO 2025-01-20 10:29:35,556 basehttp 30996 23820 "POST /test2/events/add/ HTTP/1.1" 200 272
+INFO 2025-01-20 10:29:35,649 basehttp 30996 23820 "GET /test2/events/ HTTP/1.1" 200 25456
+INFO 2025-01-20 10:29:35,707 basehttp 30996 23820 "GET /media/user_uploads/2025/01/20/arena_background_hj5IosV.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:29:35,848 basehttp 30996 23820 "GET /media/user_uploads/2025/01/20/arena_background_aeFjJeo.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:30:08,221 autoreload 30996 34912 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:30:09,101 autoreload 21020 23192 Watching for file changes with StatReloader
+INFO 2025-01-20 10:30:11,137 autoreload 21020 23192 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:30:11,929 autoreload 35624 32564 Watching for file changes with StatReloader
+INFO 2025-01-20 10:30:20,630 autoreload 35624 32564 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:30:21,456 autoreload 29208 12312 Watching for file changes with StatReloader
+INFO 2025-01-20 10:30:23,534 autoreload 29208 12312 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:30:24,459 autoreload 2596 304 Watching for file changes with StatReloader
+INFO 2025-01-20 10:30:26,565 autoreload 2596 304 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:30:27,563 autoreload 31136 24680 Watching for file changes with StatReloader
+INFO 2025-01-20 10:30:30,775 autoreload 31136 24680 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:30:31,646 autoreload 26584 27480 Watching for file changes with StatReloader
+INFO 2025-01-20 10:30:32,765 basehttp 26584 17852 "GET /test2/events/ HTTP/1.1" 200 25456
+INFO 2025-01-20 10:30:33,080 basehttp 26584 17852 "GET /media/user_uploads/2025/01/20/arena_background.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:30:33,081 basehttp 26584 18296 "GET /media/user_uploads/2025/01/20/arena_background_aeFjJeo.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:30:33,082 basehttp 26584 10608 "GET /media/user_uploads/2025/01/20/arena_background_hj5IosV.webp HTTP/1.1" 304 0
+DEBUG 2025-01-20 10:30:35,479 models 26584 17852 
+            Saving Image:
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 16
+            - Content Object: Event object (16)
+            - Image Path: arena background.webp
+        
+DEBUG 2025-01-20 10:30:35,485 models 26584 17852 Content type check: image/webp
+DEBUG 2025-01-20 10:30:35,675 models 26584 17852 
+            Image Saved:
+            - ID: 141
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 16
+        
+INFO 2025-01-20 10:30:35,676 basehttp 26584 17852 "POST /test2/events/add/ HTTP/1.1" 200 272
+INFO 2025-01-20 10:30:35,768 basehttp 26584 17852 "GET /test2/events/ HTTP/1.1" 200 27102
+INFO 2025-01-20 10:30:35,898 basehttp 26584 17852 "GET /media/user_uploads/2025/01/20/arena_background_rJRMvmh.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:30:35,969 basehttp 26584 17852 "GET /media/user_uploads/2025/01/20/blue-ball-lightning-abstract-electric-lightning-strike-light-fl_8vUGIRc.webp HTTP/1.1" 200 75492
+INFO 2025-01-20 10:31:17,809 autoreload 26584 27480 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:31:18,792 autoreload 17676 31212 Watching for file changes with StatReloader
+INFO 2025-01-20 10:31:37,614 autoreload 17676 31212 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:31:38,460 autoreload 10964 22668 Watching for file changes with StatReloader
+INFO 2025-01-20 10:31:42,729 autoreload 10964 22668 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:31:43,560 autoreload 18960 35620 Watching for file changes with StatReloader
+INFO 2025-01-20 10:31:44,103 basehttp 18960 14264 "GET /test2/events/ HTTP/1.1" 200 27102
+INFO 2025-01-20 10:31:44,304 basehttp 18960 304 "GET /media/user_uploads/2025/01/20/arena_background_aeFjJeo.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:31:44,304 basehttp 18960 14264 "GET /media/user_uploads/2025/01/20/arena_background.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:31:44,306 basehttp 18960 21048 "GET /media/user_uploads/2025/01/20/arena_background_hj5IosV.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:31:44,306 basehttp 18960 30924 "GET /media/user_uploads/2025/01/20/arena_background_rJRMvmh.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:31:46,528 basehttp 18960 14264 "POST /test2/events/delete/15/ HTTP/1.1" 200 58
+INFO 2025-01-20 10:31:48,053 basehttp 18960 14264 "POST /test2/events/delete/14/ HTTP/1.1" 200 58
+INFO 2025-01-20 10:31:50,656 basehttp 18960 14264 "POST /test2/events/delete/16/ HTTP/1.1" 200 58
+INFO 2025-01-20 10:31:52,748 basehttp 18960 14264 "POST /test2/events/delete/12/ HTTP/1.1" 200 58
+INFO 2025-01-20 10:31:54,687 basehttp 18960 14264 "POST /test2/events/delete/6/ HTTP/1.1" 200 58
+INFO 2025-01-20 10:31:56,549 basehttp 18960 14264 "POST /test2/events/delete/13/ HTTP/1.1" 200 58
+DEBUG 2025-01-20 10:31:59,523 models 18960 14264 
+            Saving Image:
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 17
+            - Content Object: Event object (17)
+            - Image Path: arena background.webp
+        
+DEBUG 2025-01-20 10:31:59,529 models 18960 14264 Content type check: image/webp
+DEBUG 2025-01-20 10:31:59,724 models 18960 14264 
+            Image Saved:
+            - ID: 142
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 17
+        
+INFO 2025-01-20 10:31:59,726 basehttp 18960 14264 "POST /test2/events/add/ HTTP/1.1" 200 272
+INFO 2025-01-20 10:31:59,830 basehttp 18960 14264 "GET /test2/events/ HTTP/1.1" 200 18759
+INFO 2025-01-20 10:31:59,966 basehttp 18960 14264 "GET /media/user_uploads/2025/01/20/arena_background_UZUX8f0.webp HTTP/1.1" 200 61188
+DEBUG 2025-01-20 10:32:35,365 models 18960 14264 
+            Saving Image:
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 18
+            - Content Object: Event object (18)
+            - Image Path: arena background.webp
+        
+DEBUG 2025-01-20 10:32:35,367 models 18960 14264 Content type check: image/webp
+DEBUG 2025-01-20 10:32:35,561 models 18960 14264 
+            Image Saved:
+            - ID: 143
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 18
+        
+INFO 2025-01-20 10:32:35,562 basehttp 18960 14264 "POST /test2/events/add/ HTTP/1.1" 200 272
+INFO 2025-01-20 10:32:35,672 basehttp 18960 14264 "GET /test2/events/ HTTP/1.1" 200 20405
+INFO 2025-01-20 10:32:35,751 basehttp 18960 14264 "GET /media/user_uploads/2025/01/20/arena_background_zrPhMEB.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:32:35,861 basehttp 18960 14264 "GET /media/user_uploads/2025/01/20/arena_background_UZUX8f0.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:33:50,628 autoreload 18960 35620 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:33:51,553 autoreload 21416 26596 Watching for file changes with StatReloader
+DEBUG 2025-01-20 10:33:55,261 models 21416 30488 
+            Saving Image:
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 19
+            - Content Object: Event object (19)
+            - Image Path: arena background.webp
+        
+DEBUG 2025-01-20 10:33:55,265 models 21416 30488 Content type check: image/webp
+DEBUG 2025-01-20 10:33:55,453 models 21416 30488 
+            Image Saved:
+            - ID: 144
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 19
+        
+INFO 2025-01-20 10:33:55,454 basehttp 21416 30488 "POST /test2/events/add/ HTTP/1.1" 200 272
+INFO 2025-01-20 10:33:55,591 basehttp 21416 30488 "GET /test2/events/ HTTP/1.1" 200 22051
+INFO 2025-01-20 10:33:55,724 basehttp 21416 30488 "GET /media/user_uploads/2025/01/20/arena_background_OPp9cwj.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:33:55,786 basehttp 21416 30488 "GET /media/user_uploads/2025/01/20/arena_background_UZUX8f0.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:33:55,787 basehttp 21416 17448 "GET /media/user_uploads/2025/01/20/arena_background_zrPhMEB.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:34:00,905 basehttp 21416 30488 "GET /test2/events/ HTTP/1.1" 200 22051
+INFO 2025-01-20 10:34:01,084 basehttp 21416 30488 "GET /media/user_uploads/2025/01/20/arena_background_OPp9cwj.webp HTTP/1.1" 304 0
+DEBUG 2025-01-20 10:34:04,209 models 21416 30488 
+            Saving Image:
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 20
+            - Content Object: Event object (20)
+            - Image Path: arena background.webp
+        
+DEBUG 2025-01-20 10:34:04,211 models 21416 30488 Content type check: image/webp
+DEBUG 2025-01-20 10:34:04,402 models 21416 30488 
+            Image Saved:
+            - ID: 145
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 20
+        
+INFO 2025-01-20 10:34:04,403 basehttp 21416 30488 "POST /test2/events/add/ HTTP/1.1" 200 272
+INFO 2025-01-20 10:34:04,502 basehttp 21416 30488 "GET /test2/events/ HTTP/1.1" 200 23697
+INFO 2025-01-20 10:34:04,558 basehttp 21416 30488 "GET /media/user_uploads/2025/01/20/arena_background_TKGGuSL.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:34:04,728 basehttp 21416 30488 "GET /media/user_uploads/2025/01/20/arena_background_zrPhMEB.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:34:04,728 basehttp 21416 17448 "GET /media/user_uploads/2025/01/20/arena_background_OPp9cwj.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:34:10,311 autoreload 5664 5960 Watching for file changes with StatReloader
+INFO 2025-01-20 10:34:12,731 basehttp 5664 23076 "GET /test2/events/ HTTP/1.1" 200 23697
+INFO 2025-01-20 10:34:12,919 basehttp 5664 23076 "GET /media/user_uploads/2025/01/20/arena_background_UZUX8f0.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:34:12,921 basehttp 5664 584 "GET /media/user_uploads/2025/01/20/arena_background_zrPhMEB.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:34:12,921 basehttp 5664 15924 "GET /media/user_uploads/2025/01/20/arena_background_OPp9cwj.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:34:12,921 basehttp 5664 4872 "GET /media/user_uploads/2025/01/20/arena_background_TKGGuSL.webp HTTP/1.1" 304 0
+DEBUG 2025-01-20 10:34:14,777 models 5664 23076 
+            Saving Image:
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 21
+            - Content Object: Event object (21)
+            - Image Path: arena background.webp
+        
+DEBUG 2025-01-20 10:34:14,783 models 5664 23076 Content type check: image/webp
+DEBUG 2025-01-20 10:34:14,978 models 5664 23076 
+            Image Saved:
+            - ID: 146
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 21
+        
+INFO 2025-01-20 10:34:14,979 basehttp 5664 23076 "POST /test2/events/add/ HTTP/1.1" 200 272
+INFO 2025-01-20 10:34:15,106 basehttp 5664 23076 "GET /test2/events/ HTTP/1.1" 200 25343
+INFO 2025-01-20 10:34:15,234 basehttp 5664 23076 "GET /media/user_uploads/2025/01/20/arena_background_53AqpPE.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:34:15,330 basehttp 5664 23076 "GET /media/user_uploads/2025/01/20/arena_background_OPp9cwj.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:34:15,331 basehttp 5664 584 "GET /media/user_uploads/2025/01/20/arena_background_TKGGuSL.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:37:16,006 autoreload 5664 5960 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-20 10:37:16,828 autoreload 31868 24032 Watching for file changes with StatReloader
+INFO 2025-01-20 10:37:26,691 autoreload 31868 24032 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-20 10:37:27,618 autoreload 25676 32564 Watching for file changes with StatReloader
+INFO 2025-01-20 10:37:35,244 autoreload 25676 32564 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-20 10:37:36,100 autoreload 9736 22796 Watching for file changes with StatReloader
+INFO 2025-01-20 10:37:56,092 autoreload 9736 22796 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-20 10:37:56,924 autoreload 12784 33344 Watching for file changes with StatReloader
+INFO 2025-01-20 10:38:04,635 autoreload 12784 33344 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-20 10:38:05,468 autoreload 33172 23956 Watching for file changes with StatReloader
+INFO 2025-01-20 10:38:43,467 basehttp 33172 27464 "GET /test2/events/ HTTP/1.1" 200 25343
+INFO 2025-01-20 10:38:43,714 basehttp 33172 27464 "GET /media/user_uploads/2025/01/20/arena_background_UZUX8f0.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:38:43,716 basehttp 33172 32044 "GET /media/user_uploads/2025/01/20/arena_background_zrPhMEB.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:38:43,717 basehttp 33172 27464 "GET /media/user_uploads/2025/01/20/arena_background_53AqpPE.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:38:43,717 basehttp 33172 29168 "GET /media/user_uploads/2025/01/20/arena_background_OPp9cwj.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:38:43,717 basehttp 33172 23192 "GET /media/user_uploads/2025/01/20/arena_background_TKGGuSL.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:38:46,677 forms 33172 27464 Cleaning end_date: 2025-01-30
+INFO 2025-01-20 10:38:46,677 forms 33172 27464 Cleaning end_time: 11:11:00
+INFO 2025-01-20 10:38:46,677 forms 33172 27464 Starting clean method
+INFO 2025-01-20 10:38:46,677 forms 33172 27464 Raw form data: <QueryDict: {'csrfmiddlewaretoken': ['9XmOrqOUdtNLWtmIPXLx1Msg5ixFcVbcLS0rytEIN6JaOdNfQ5rLHrdUp0w9xcUy'], 'title': ['df'], 'start_date': ['2025-01-31'], 'start_time': ['11:11'], 'end_date': ['2025-01-30'], 'end_time': ['11:11'], 'description': ['11']}>
+INFO 2025-01-20 10:38:46,678 forms 33172 27464 Cleaned data: {'title': 'df', 'description': '11', 'image': <InMemoryUploadedFile: arena background.webp (image/webp)>, 'start_date': datetime.date(2025, 1, 31), 'start_time': datetime.time(11, 11), 'end_date': datetime.date(2025, 1, 30), 'end_time': datetime.time(11, 11)}
+INFO 2025-01-20 10:38:46,678 forms 33172 27464 Current time: 2025-01-20 16:38:46.678334+00:00
+INFO 2025-01-20 10:38:46,678 forms 33172 27464 Start datetime: 2025-01-31 11:11:00+00:00
+INFO 2025-01-20 10:38:46,678 forms 33172 27464 End datetime: 2025-01-30 11:11:00+00:00
+WARNING 2025-01-20 10:38:46,678 forms 33172 27464 Invalid time range: 2025-01-31 11:11:00+00:00 to 2025-01-30 11:11:00+00:00
+ERROR 2025-01-20 10:38:46,679 forms 33172 27464 Error in datetime validation: {'end_date': ['End date and time must be after start date and time'], 'end_time': ['End date and time must be after start date and time']}
+WARNING 2025-01-20 10:38:46,680 views 33172 27464 Form validation errors: <ul class="errorlist"><li>end_date<ul class="errorlist"><li>End date and time must be after start date and time</li></ul></li><li>end_time<ul class="errorlist"><li>End date and time must be after start date and time</li></ul></li></ul>
+WARNING 2025-01-20 10:38:46,680 log 33172 27464 Bad Request: /test2/events/add/
+WARNING 2025-01-20 10:38:46,681 basehttp 33172 27464 "POST /test2/events/add/ HTTP/1.1" 400 167
+INFO 2025-01-20 10:40:20,234 basehttp 33172 27464 "GET /test2/events/ HTTP/1.1" 200 25343
+INFO 2025-01-20 10:40:20,481 basehttp 33172 27464 "GET /media/user_uploads/2025/01/20/arena_background_UZUX8f0.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:40:20,481 basehttp 33172 32044 "GET /media/user_uploads/2025/01/20/arena_background_zrPhMEB.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:40:20,481 basehttp 33172 29168 "GET /media/user_uploads/2025/01/20/arena_background_OPp9cwj.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:40:20,481 basehttp 33172 23192 "GET /media/user_uploads/2025/01/20/arena_background_TKGGuSL.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:40:20,482 basehttp 33172 16948 "GET /media/user_uploads/2025/01/20/arena_background_53AqpPE.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:40:22,734 forms 33172 27464 Cleaning end_date: 2025-01-30
+INFO 2025-01-20 10:40:22,735 forms 33172 27464 Cleaning end_time: 11:11:00
+INFO 2025-01-20 10:40:22,735 forms 33172 27464 Starting clean method
+INFO 2025-01-20 10:40:22,735 forms 33172 27464 Raw form data: <QueryDict: {'csrfmiddlewaretoken': ['RzcJsGTPesuKvQxxfHXUt6oNp26gKJO8tuQmzJJDO5q9nAY4gPD89L9rJK5K50xu'], 'title': ['df'], 'start_date': ['2025-01-31'], 'start_time': ['11:11'], 'end_date': ['2025-01-30'], 'end_time': ['11:11'], 'description': ['11']}>
+INFO 2025-01-20 10:40:22,735 forms 33172 27464 Cleaned data: {'title': 'df', 'description': '11', 'image': <InMemoryUploadedFile: arena background.webp (image/webp)>, 'start_date': datetime.date(2025, 1, 31), 'start_time': datetime.time(11, 11), 'end_date': datetime.date(2025, 1, 30), 'end_time': datetime.time(11, 11)}
+INFO 2025-01-20 10:40:22,735 forms 33172 27464 Current time: 2025-01-20 16:40:22.735717+00:00
+INFO 2025-01-20 10:40:22,736 forms 33172 27464 Start datetime: 2025-01-31 11:11:00+00:00
+INFO 2025-01-20 10:40:22,736 forms 33172 27464 End datetime: 2025-01-30 11:11:00+00:00
+WARNING 2025-01-20 10:40:22,736 forms 33172 27464 Invalid time range: 2025-01-31 11:11:00+00:00 to 2025-01-30 11:11:00+00:00
+ERROR 2025-01-20 10:40:22,736 forms 33172 27464 Error in datetime validation: {'end_date': ['End date and time must be after start date and time'], 'end_time': ['End date and time must be after start date and time']}
+WARNING 2025-01-20 10:40:22,737 views 33172 27464 Form validation errors: <ul class="errorlist"><li>end_date<ul class="errorlist"><li>End date and time must be after start date and time</li></ul></li><li>end_time<ul class="errorlist"><li>End date and time must be after start date and time</li></ul></li></ul>
+WARNING 2025-01-20 10:40:22,737 log 33172 27464 Bad Request: /test2/events/add/
+WARNING 2025-01-20 10:40:22,737 basehttp 33172 27464 "POST /test2/events/add/ HTTP/1.1" 400 167
+INFO 2025-01-20 10:40:32,564 basehttp 33172 27464 "GET /test2/events/ HTTP/1.1" 200 25343
+INFO 2025-01-20 10:40:32,766 basehttp 33172 29168 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-20 10:40:32,805 basehttp 33172 23192 "GET /static/js/subpages/events2.js HTTP/1.1" 200 9709
+INFO 2025-01-20 10:40:32,813 basehttp 33172 27464 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-20 10:40:32,817 basehttp 33172 27464 "GET /media/user_uploads/2025/01/20/arena_background_OPp9cwj.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:40:32,817 basehttp 33172 23192 "GET /media/user_uploads/2025/01/20/arena_background_UZUX8f0.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:40:32,818 basehttp 33172 16948 "GET /media/user_uploads/2025/01/20/arena_background_TKGGuSL.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:40:32,818 basehttp 33172 29168 "GET /media/user_uploads/2025/01/20/arena_background_53AqpPE.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:40:32,819 basehttp 33172 22152 "GET /media/user_uploads/2025/01/20/arena_background_zrPhMEB.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:40:32,819 basehttp 33172 23192 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-20 10:40:32,821 basehttp 33172 32044 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-20 10:40:32,881 basehttp 33172 27464 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-20 10:40:35,225 forms 33172 27464 Cleaning end_date: 2025-01-30
+INFO 2025-01-20 10:40:35,225 forms 33172 27464 Cleaning end_time: 11:11:00
+INFO 2025-01-20 10:40:35,225 forms 33172 27464 Starting clean method
+INFO 2025-01-20 10:40:35,225 forms 33172 27464 Raw form data: <QueryDict: {'csrfmiddlewaretoken': ['aobJfQgTOW7TscdW3DJLsPEou2vCw7gsMjPmmT6Hoz3ikWEt4LpZ8up2OKu6RoZO'], 'title': ['df'], 'start_date': ['2025-01-31'], 'start_time': ['11:11'], 'end_date': ['2025-01-30'], 'end_time': ['11:11'], 'description': ['11']}>
+INFO 2025-01-20 10:40:35,226 forms 33172 27464 Cleaned data: {'title': 'df', 'description': '11', 'image': <InMemoryUploadedFile: arena background.webp (image/webp)>, 'start_date': datetime.date(2025, 1, 31), 'start_time': datetime.time(11, 11), 'end_date': datetime.date(2025, 1, 30), 'end_time': datetime.time(11, 11)}
+INFO 2025-01-20 10:40:35,226 forms 33172 27464 Current time: 2025-01-20 16:40:35.226977+00:00
+INFO 2025-01-20 10:40:35,226 forms 33172 27464 Start datetime: 2025-01-31 11:11:00+00:00
+INFO 2025-01-20 10:40:35,226 forms 33172 27464 End datetime: 2025-01-30 11:11:00+00:00
+WARNING 2025-01-20 10:40:35,226 forms 33172 27464 Invalid time range: 2025-01-31 11:11:00+00:00 to 2025-01-30 11:11:00+00:00
+ERROR 2025-01-20 10:40:35,226 forms 33172 27464 Error in datetime validation: {'end_date': ['End date and time must be after start date and time'], 'end_time': ['End date and time must be after start date and time']}
+WARNING 2025-01-20 10:40:35,227 views 33172 27464 Form validation errors: <ul class="errorlist"><li>end_date<ul class="errorlist"><li>End date and time must be after start date and time</li></ul></li><li>end_time<ul class="errorlist"><li>End date and time must be after start date and time</li></ul></li></ul>
+WARNING 2025-01-20 10:40:35,227 log 33172 27464 Bad Request: /test2/events/add/
+WARNING 2025-01-20 10:40:35,228 basehttp 33172 27464 "POST /test2/events/add/ HTTP/1.1" 400 167
+INFO 2025-01-20 10:43:25,535 autoreload 33172 23956 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:43:26,359 autoreload 35608 22808 Watching for file changes with StatReloader
+INFO 2025-01-20 10:43:27,986 autoreload 35608 22808 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:43:28,852 autoreload 28676 35312 Watching for file changes with StatReloader
+INFO 2025-01-20 10:43:53,220 autoreload 28676 35312 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:43:54,050 autoreload 2004 6104 Watching for file changes with StatReloader
+INFO 2025-01-20 10:43:59,483 autoreload 2004 6104 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:44:00,364 autoreload 21984 27808 Watching for file changes with StatReloader
+INFO 2025-01-20 10:44:01,960 autoreload 21984 27808 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms.py changed, reloading.
+INFO 2025-01-20 10:44:02,784 autoreload 30464 33168 Watching for file changes with StatReloader
+INFO 2025-01-20 10:44:28,219 autoreload 30464 33168 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-20 10:44:29,133 autoreload 29212 25012 Watching for file changes with StatReloader
+INFO 2025-01-20 10:44:43,557 autoreload 29212 25012 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-20 10:44:44,374 autoreload 35156 31924 Watching for file changes with StatReloader
+INFO 2025-01-20 10:44:46,492 basehttp 35156 14304 "GET /test2/events/ HTTP/1.1" 200 25343
+INFO 2025-01-20 10:44:46,916 basehttp 35156 14304 "GET /static/js/subpages/events2.js HTTP/1.1" 200 8828
+INFO 2025-01-20 10:44:46,934 basehttp 35156 14304 "GET /media/user_uploads/2025/01/20/arena_background_UZUX8f0.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:44:46,936 basehttp 35156 26084 "GET /media/user_uploads/2025/01/20/arena_background_zrPhMEB.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:44:46,937 basehttp 35156 23320 "GET /media/user_uploads/2025/01/20/arena_background_OPp9cwj.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:44:46,937 basehttp 35156 14304 "GET /media/user_uploads/2025/01/20/arena_background_53AqpPE.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:44:46,937 basehttp 35156 32564 "GET /media/user_uploads/2025/01/20/arena_background_TKGGuSL.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:44:49,094 forms 35156 14304 Cleaning end_date: 2025-01-30
+INFO 2025-01-20 10:44:49,095 forms 35156 14304 Cleaning end_time: 11:11:00
+WARNING 2025-01-20 10:44:49,095 log 35156 14304 Bad Request: /test2/events/add/
+WARNING 2025-01-20 10:44:49,095 basehttp 35156 14304 "POST /test2/events/add/ HTTP/1.1" 400 97
+INFO 2025-01-20 10:45:40,728 basehttp 35156 14304 "GET /test2/events/ HTTP/1.1" 200 25343
+INFO 2025-01-20 10:45:40,782 basehttp 35156 14304 "GET /static/js/subpages/events2.js HTTP/1.1" 200 9359
+INFO 2025-01-20 10:45:40,939 basehttp 35156 26084 - Broken pipe from ('127.0.0.1', 65488)
+INFO 2025-01-20 10:45:40,939 basehttp 35156 14304 - Broken pipe from ('127.0.0.1', 65483)
+INFO 2025-01-20 10:45:40,939 basehttp 35156 23320 - Broken pipe from ('127.0.0.1', 65489)
+INFO 2025-01-20 10:45:40,939 basehttp 35156 32564 - Broken pipe from ('127.0.0.1', 65490)
+INFO 2025-01-20 10:45:42,791 forms 35156 25652 Cleaning end_date: 2025-01-30
+INFO 2025-01-20 10:45:42,791 forms 35156 25652 Cleaning end_time: 11:11:00
+WARNING 2025-01-20 10:45:42,792 log 35156 25652 Bad Request: /test2/events/add/
+WARNING 2025-01-20 10:45:42,792 basehttp 35156 25652 "POST /test2/events/add/ HTTP/1.1" 400 97
+INFO 2025-01-20 10:46:46,886 basehttp 35156 25652 "GET /test2/events/ HTTP/1.1" 200 25343
+INFO 2025-01-20 10:46:46,966 basehttp 35156 25652 "GET /static/js/subpages/events2.js HTTP/1.1" 200 9180
+INFO 2025-01-20 10:46:47,138 basehttp 35156 25652 "GET /media/user_uploads/2025/01/20/arena_background_UZUX8f0.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:46:47,140 basehttp 35156 16620 "GET /media/user_uploads/2025/01/20/arena_background_zrPhMEB.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:46:47,141 basehttp 35156 25652 "GET /media/user_uploads/2025/01/20/arena_background_53AqpPE.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:46:47,142 basehttp 35156 35392 "GET /media/user_uploads/2025/01/20/arena_background_OPp9cwj.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:46:47,142 basehttp 35156 26148 "GET /media/user_uploads/2025/01/20/arena_background_TKGGuSL.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:46:49,111 forms 35156 25652 Cleaning end_date: 2025-01-30
+INFO 2025-01-20 10:46:49,111 forms 35156 25652 Cleaning end_time: 11:11:00
+WARNING 2025-01-20 10:46:49,112 log 35156 25652 Bad Request: /test2/events/add/
+WARNING 2025-01-20 10:46:49,112 basehttp 35156 25652 "POST /test2/events/add/ HTTP/1.1" 400 97
+INFO 2025-01-20 10:47:14,371 basehttp 35156 25652 "GET /test2/events/ HTTP/1.1" 200 25343
+INFO 2025-01-20 10:47:14,429 basehttp 35156 25652 "GET /static/js/subpages/events2.js HTTP/1.1" 200 9591
+INFO 2025-01-20 10:48:57,464 basehttp 35156 25652 "GET /test2/events/ HTTP/1.1" 200 25428
+INFO 2025-01-20 10:48:57,532 basehttp 35156 25652 "GET /static/js/subpages/events2.js HTTP/1.1" 200 9753
+INFO 2025-01-20 10:48:57,664 basehttp 35156 25652 "GET /media/user_uploads/2025/01/20/arena_background_UZUX8f0.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:48:57,665 basehttp 35156 26084 "GET /media/user_uploads/2025/01/20/arena_background_zrPhMEB.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:48:57,667 basehttp 35156 25652 "GET /media/user_uploads/2025/01/20/arena_background_TKGGuSL.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:48:57,667 basehttp 35156 14304 "GET /media/user_uploads/2025/01/20/arena_background_OPp9cwj.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:48:57,667 basehttp 35156 23320 "GET /media/user_uploads/2025/01/20/arena_background_53AqpPE.webp HTTP/1.1" 304 0
+INFO 2025-01-20 10:49:03,771 basehttp 35156 25652 "GET /test2/events/ HTTP/1.1" 200 25428
+INFO 2025-01-20 10:49:03,829 basehttp 35156 26084 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-20 10:49:03,829 basehttp 35156 14304 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-20 10:49:03,829 basehttp 35156 23320 "GET /static/js/subpages/events2.js HTTP/1.1" 200 9753
+INFO 2025-01-20 10:49:03,831 basehttp 35156 25652 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-20 10:49:03,871 basehttp 35156 25652 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-20 10:49:03,873 basehttp 35156 25652 "GET /media/user_uploads/2025/01/20/arena_background_UZUX8f0.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:49:03,877 basehttp 35156 25652 "GET /media/user_uploads/2025/01/20/arena_background_OPp9cwj.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:49:03,877 basehttp 35156 23320 "GET /media/user_uploads/2025/01/20/arena_background_zrPhMEB.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:49:03,877 basehttp 35156 14304 "GET /media/user_uploads/2025/01/20/arena_background_TKGGuSL.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:49:03,880 basehttp 35156 25652 "GET /media/user_uploads/2025/01/20/arena_background_53AqpPE.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:49:04,025 basehttp 35156 25652 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-20 10:49:36,347 forms 35156 25652 Cleaning end_date: 2025-02-13
+INFO 2025-01-20 10:49:36,348 forms 35156 25652 Cleaning end_time: 11:11:00
+DEBUG 2025-01-20 10:49:36,351 models 35156 25652 
+            Saving Image:
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 22
+            - Content Object: Event object (22)
+            - Image Path: arena background.webp
+        
+DEBUG 2025-01-20 10:49:36,355 models 35156 25652 Content type check: image/webp
+DEBUG 2025-01-20 10:49:36,553 models 35156 25652 
+            Image Saved:
+            - ID: 147
+            - Alt Text: Event image for df
+            - Content Type: Restaurants | event
+            - Object ID: 22
+        
+INFO 2025-01-20 10:49:36,554 basehttp 35156 25652 "POST /test2/events/add/ HTTP/1.1" 200 272
+INFO 2025-01-20 10:49:36,663 basehttp 35156 25652 "GET /test2/events/ HTTP/1.1" 200 27075
+INFO 2025-01-20 10:49:36,710 basehttp 35156 25652 "GET /static/js/subpages/events2.js HTTP/1.1" 304 0
+INFO 2025-01-20 10:49:36,729 basehttp 35156 25652 "GET /media/user_uploads/2025/01/20/arena_background_falnvup.webp HTTP/1.1" 200 61188
+INFO 2025-01-20 10:49:49,406 basehttp 35156 25652 "POST /test2/events/delete/19/ HTTP/1.1" 200 58
+INFO 2025-01-20 10:49:51,674 basehttp 35156 25652 "POST /test2/events/delete/18/ HTTP/1.1" 200 58
+INFO 2025-01-20 10:49:53,347 basehttp 35156 25652 "POST /test2/events/delete/17/ HTTP/1.1" 200 58
+INFO 2025-01-20 10:49:55,977 basehttp 35156 25652 "POST /test2/events/delete/20/ HTTP/1.1" 200 58
+INFO 2025-01-20 10:49:58,304 basehttp 35156 25652 "POST /test2/events/delete/21/ HTTP/1.1" 200 58
+INFO 2025-01-20 10:50:00,418 basehttp 35156 25652 "POST /test2/events/delete/22/ HTTP/1.1" 200 58
+INFO 2025-01-20 10:50:46,590 basehttp 35156 25652 "GET /test2/dashboard/ HTTP/1.1" 200 18864

@@ -1,5 +1,3 @@
-// let business;
-
 document.addEventListener('DOMContentLoaded', function() {
     const business = JSON.parse(document.getElementById('business').textContent);
     const formContainer = document.getElementById('event-form-container');
@@ -22,7 +20,23 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         const form = event.target;
         const formData = new FormData(form);
-
+    
+        // Get form values
+        const startDate = new Date(formData.get('start_date') + 'T' + formData.get('start_time'));
+        const endDate = formData.get('end_date') && formData.get('end_time') ? 
+            new Date(formData.get('end_date') + 'T' + formData.get('end_time')) : null;
+        
+        const errorDisplay = document.getElementById('form-error-message');
+        errorDisplay.textContent = '';
+        errorDisplay.classList.add('hidden');
+    
+        // Validate dates
+        if (endDate && endDate <= startDate) {
+            errorDisplay.textContent = 'End date and time must be after start date and time';
+            errorDisplay.classList.remove('hidden');
+            return;
+        }
+    
         try {
             const response = await fetch(`/${business}/events/add/`, {
                 method: 'POST',
@@ -31,18 +45,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: formData
             });
-
+    
+            const data = await response.json();
+            
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to create event');
+                errorDisplay.textContent = typeof data.error === 'string' ? 
+                    data.error : 'Error creating event';
+                errorDisplay.classList.remove('hidden');
+                return;
             }
-
-            // Refresh the events list
+    
+            // Success - refresh the events list
             location.reload();
-
+    
         } catch (error) {
             console.error('Error:', error);
-            alert(error.message || 'Error creating event. Please try again.');
+            errorDisplay.textContent = 'An unexpected error occurred. Please try again.';
+            errorDisplay.classList.remove('hidden');
         }
     });
 
