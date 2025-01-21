@@ -9,7 +9,7 @@ from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit, Div, HTML
-from .models import Event
+from .models import Event, HomePage, NewsFeed, NewsPost, Comment
 from django.utils.text import slugify
 from .models import Image
 from datetime import datetime, timedelta, date
@@ -416,3 +416,49 @@ class EventForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+    
+
+# Home Page Form
+class HomePageForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        
+        # Add Tailwind classes to form fields
+        self.fields['welcome_title'].widget.attrs.update({
+            'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500'
+        })
+        self.fields['welcome_message'].widget.attrs.update({
+            'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+            'rows': 4
+        })
+        
+        self.helper.layout = Layout(
+            Field('welcome_title', placeholder='Enter welcome title'),
+            Field('welcome_message', placeholder='Enter welcome message'),
+            Submit('submit', 'Save Changes', css_class='mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500')
+        )
+
+    class Meta:
+        model = HomePage
+        fields = [
+            'welcome_title',
+            'welcome_message',
+            'show_welcome',
+            'show_daily_special',
+            'show_affiliates',
+            'show_newsfeed',
+            'show_upcoming_event',
+            'show_featured_service',
+            'show_featured_product'
+        ]
+        labels = {
+            'show_welcome': 'Show Welcome Section',
+            'show_daily_special': 'Show Daily Specials',
+            'show_affiliates': 'Show Affiliates',
+            'show_newsfeed': 'Show News Feed',
+            'show_upcoming_event': 'Show Upcoming Events',
+            'show_featured_service': 'Show Featured Services',
+            'show_featured_product': 'Show Featured Products'
+        }

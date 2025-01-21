@@ -197,7 +197,8 @@ class Business(models.Model):
     show_social_feed = models.BooleanField(default=True)
     show_hours = models.BooleanField(default=True)
     show_map = models.BooleanField(default=True)
-    
+    # Affiliates
+    affiliates = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='affiliated_with')
     # Customization Options
     primary_color = models.CharField(max_length=7, default='#4F46E5')  # Hex color
     secondary_color = models.CharField(max_length=7, default='#1F2937')
@@ -207,7 +208,14 @@ class Business(models.Model):
     
     # Media
     images = GenericRelation(Image)
-
+    def get_affiliates(self):
+        """Get all businesses this business is affiliated with"""
+        return self.affiliates.all()
+    
+    def get_affiliated_with(self):
+        """Get all businesses that have marked this business as an affiliate"""
+        return self.affiliated_with.all()
+    
     def get_logo(self):
         """Get the business's logo image"""
         return self.images.filter(alt_text='logo').first()
@@ -266,7 +274,9 @@ class Business(models.Model):
             "address": self.address,
             "city": self.city,
             "state": self.state,
-            "description": self.description
+            "description": self.description,
+            "affiliates": [affiliate.business_name for affiliate in self.get_affiliates()]
+
         }
     
     class Meta:
@@ -582,6 +592,43 @@ class SideOption(models.Model):
     is_premium = models.BooleanField(default=False)
     available = models.BooleanField(default=True)
 
+class HomePage(models.Model):
+    LAYOUT_CHOICES = [
+        ('grid', 'Grid Layout'),
+        ('list', 'List Layout'),
+        ('cards', 'Card Layout'),
+    ]
+    layout = models.CharField(max_length=20, choices=LAYOUT_CHOICES, default='grid')
+    subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='home_content')
+    welcome_title = models.CharField(max_length=200, blank=True, null=True)
+    welcome_message = models.TextField(blank=True, null=True)
+    show_welcome = models.BooleanField(default=False)
+    show_daily_special = models.BooleanField(default=False)
+    show_affiliates = models.BooleanField(default=False)
+    show_newsfeed = models.BooleanField(default=False)
+    show_upcoming_event = models.BooleanField(default=False)
+    show_daily_special = models.BooleanField(default=False)
+    show_featured_service = models.BooleanField(default=False)
+    show_featured_product = models.BooleanField(default=False)
+    show_hours = models.BooleanField(default=False)
+    show_map = models.BooleanField(default=False)
+    
+class NewsFeed(models.Model):
+    home_page = models.ForeignKey(HomePage, on_delete=models.CASCADE, related_name='news_feed')
+
+class NewsPost(models.Model):
+    news_feed = models.ForeignKey(NewsFeed, on_delete=models.CASCADE, related_name='news_posts')
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    date_posted = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, blank=True, related_name="user_liked")
+
+class Comment(models.Model):
+    news_post = models.ForeignKey(NewsPost, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_comments')
+    content = models.TextField()
+    date_posted = models.DateTimeField(auto_now_add=True)
+
 # Subpage Subclasses
 class AboutUsPage(models.Model):
     subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='about_us_content')
@@ -624,7 +671,7 @@ class DailySpecial(models.Model):
 
     class Meta:
         unique_together = ['specials_page', 'day_of_week']
-        ordering = ['day_of_week']
+        ordering = ['day_of_week'] 
 
     def __str__(self):
         return f"{self.get_day_of_week_display()} Specials"
@@ -636,8 +683,20 @@ class ServicesPage(models.Model):
 class Service(models.Model):
     services_page = models.ForeignKey(ServicesPage, on_delete=models.CASCADE, related_name='services')
     name = models.CharField(max_length=64)
+    featured = models.BooleanField(default=False)
     description = models.TextField()
     image = models.ImageField(upload_to='service_images/', blank=True, null=True)
+
+class ProductsPage(models.Model):
+    subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='products_content')
+    description = models.TextField()
+
+class Product(models.Model):
+    products_page = models.ForeignKey(ProductsPage, on_delete=models.CASCADE, related_name='products')
+    name = models.CharField(max_length=64)
+    featured = models.BooleanField(default=False)
+    description = models.TextField()
+    image = models.ImageField(upload_to='product_images/', blank=True, null=True)
 
 def get_all_images(self):
     """Debug method to get all images for this subpage"""

@@ -11,7 +11,9 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods, require_POST
 from django.core.paginator import Paginator
-from .models import Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Business, CuisineCategory, SideOption
+from django.apps import apps
+from django.core import serializers
+from .models import Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Business, CuisineCategory, SideOption, HomePage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -325,12 +327,38 @@ def get_editor_context(base_context, business, subpage, page_type):
     
     # Add editor-specific data
     context.update({
-        'subpages': SubPage.objects.filter(business=business),
+        'subpages': SubPage.objects.filter(business=business).order_by('page_type'),
         'published_pages': SubPage.get_published_subpages(business),
         'has_menu': SubPage.objects.filter(business=business, page_type='menu').exists(),
     })
 
     # Add page-specific editor content
+    if page_type == 'home':
+        # Get or create home page using correct related name
+        home_page = getattr(subpage, 'home_content', None)
+        if not home_page:
+            home_page = HomePage.objects.create(
+                subpage=subpage,
+                welcome_title=f"Welcome to {business.business_name}",
+                welcome_message="We're excited to serve you!"
+            )
+        
+        # Add form to context
+        from .forms import HomePageForm  # Import at top of file
+        context['form'] = HomePageForm(instance=home_page)
+        
+        # Add any additional home page data needed
+        context['home_data'] = {
+            'welcome_title': home_page.welcome_title,
+            'welcome_message': home_page.welcome_message,
+            'show_welcome': home_page.show_welcome,
+            'show_daily_special': home_page.show_daily_special,
+            'show_affiliates': home_page.show_affiliates,
+            'show_newsfeed': home_page.show_newsfeed,
+            'show_upcoming_event': home_page.show_upcoming_event,
+            'show_featured_service': home_page.show_featured_service,
+            'show_featured_product': home_page.show_featured_product,
+        }
     if page_type == 'events':
         # Get or create events page using correct related name
         events_page = getattr(subpage, 'events_content', None)
@@ -376,6 +404,22 @@ def get_visitor_context(base_context, business, subpage, page_type):
     """Additional context for visitor view"""
     context = base_context.copy()
     
+    model_name = f"{subpage.capitalize()}Page"
+    try:
+        page_model = apps.get_model('restaurants', model_name)
+        # Get or create the specific page instance
+        page_instance, created = page_model.objects.get_or_create(
+            subpage=subpage
+        )
+        
+        # Convert model instance to dictionary, excluding certain fields
+        page_data_dict = {
+            field.name: getattr(page_instance, field.name)
+            for field in page_model._meta.fields
+            if field.name not in ['id', 'subpage']  # Fields to exclude
+        }
+    except LookupError:
+        page_data_dict = {}
     if subpage:
         # Get images for layout
         hero_primary = subpage.get_hero_primary()
@@ -384,6 +428,7 @@ def get_visitor_context(base_context, business, subpage, page_type):
 
         # Add layout data needed for display
         context['page_data'] = {
+            'page_data': page_data_dict,
             'business_subdirectory': business.subdirectory,
             'current_page': subpage,
             # Primary Hero Data
@@ -1442,7 +1487,22 @@ def edit_layout(request, business_subdirectory):
             business=business,
             page_type=current_page
         ).first()
-        print(current_subpage)
+        model_name = f"{current_page.capitalize()}Page"
+        try:
+            page_model = apps.get_model('restaurants', model_name)
+            # Get or create the specific page instance
+            page_instance, created = page_model.objects.get_or_create(
+                subpage=current_subpage
+            )
+            
+            # Convert model instance to dictionary, excluding certain fields
+            page_data_dict = {
+                field.name: getattr(page_instance, field.name)
+                for field in page_model._meta.fields
+                if field.name not in ['id', 'subpage']  # Fields to exclude
+            }
+        except LookupError:
+            page_data_dict = {}
         # for links
         subpages = SubPage.objects.filter(business=business)
         published_pages = SubPage.get_published_subpages(business)
@@ -1453,6 +1513,7 @@ def edit_layout(request, business_subdirectory):
         banner_2 = current_subpage.get_banner_2()
         banner_3 = current_subpage.get_banner_3()
         page_data = {
+            f'{current_page}_page': page_data_dict,
             'business_subdirectory': business_subdirectory,
             'current_page': current_page,
             # Primary Hero Data
@@ -2820,6 +2881,76 @@ def delete_event(request, business_subdirectory, event_id):
         return JsonResponse({
             'success': False,
             'error': 'An error occurred while deleting the event'
+        }, status=500)
+    
+@login_required
+@require_http_methods(["POST"])
+def update_home_page_settings(request, business_subdirectory):
+    print(business_subdirectory)
+    try:
+        data = json.loads(request.body)
+        subpage = SubPage.objects.get(business__subdirectory=business_subdirectory, page_type='home')
+        print(subpage)
+        home_page, created = HomePage.objects.get_or_create(subpage=subpage)
+
+        # Handle welcome section update
+        if data.get('fieldName') == 'show_welcome' and ('welcome_title' in data or 'welcome_message' in data):
+            home_page.welcome_title = data.get('welcome_title', home_page.welcome_title)
+            home_page.welcome_message = data.get('welcome_message', home_page.welcome_message)
+            home_page.save()
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Welcome content updated successfully',
+                'welcome_title': home_page.welcome_title,
+                'welcome_message': home_page.welcome_message
+            })
+
+        # Handle boolean toggle updates
+        field_name = data.get('fieldName')
+        new_value = data.get('value')
+        
+        allowed_fields = [
+            'show_welcome',
+            'show_daily_special',
+            'show_affiliates',
+            'show_newsfeed',
+            'show_upcoming_event',
+            'show_featured_service',
+            'show_featured_product'
+        ]
+        
+        if field_name not in allowed_fields:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Invalid field name'
+            }, status=400)
+        
+        setattr(home_page, field_name, new_value)
+        home_page.save()
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Setting updated successfully',
+            'field': field_name,
+            'value': new_value
+        })
+
+    except SubPage.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Subpage not found'
+        }, status=404)
+        
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Invalid JSON data'
+        }, status=400)
+        
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
         }, status=500)
     
 @login_required

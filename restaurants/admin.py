@@ -4,7 +4,7 @@ from django_google_maps import widgets as map_widgets
 from django_google_maps import fields as map_fields
 from django.utils.safestring import mark_safe
 from django.contrib.contenttypes.models import ContentType
-from .models import Image, CuisineCategory, Business, Menu, Course, Dish, SubPage, Event, AboutUsPage, EventsPage, SpecialsPage, SideOption
+from .models import Image, CuisineCategory, Business, Menu, Course, Dish, SubPage, Event, AboutUsPage, EventsPage, SpecialsPage, SideOption, HomePage
 
 class SubPageInline(admin.StackedInline):
     model = SubPage
@@ -143,6 +143,9 @@ class EventAdmin(admin.ModelAdmin):
 class ImageAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'uploaded_by', 'upload_date']
 
+admin.site.register(HomePage)
+class HomePageAdmin(admin.ModelAdmin):
+    list_display = ['subpage', 'show_welcome', 'show_daily_special', 'show_affiliates', 'show_newsfeed', 'show_upcoming_event', 'show_daily_special', 'show_featured_service', 'show_featured_product']
 admin.site.register(SideOption)
 admin.site.register(AboutUsPage)
 admin.site.register(EventsPage)

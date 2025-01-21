@@ -72,6 +72,9 @@ urlpatterns = [
     path('<slug:business_subdirectory>/SEO/', views.seo, name="SEO"),
     path('<slug:business_subdirectory>/Advertising/', views.advertising, name="Advertising"),
 
+    # Home page settings
+    path('<slug:business_subdirectory>/home/settings/', views.update_home_page_settings, name="update_home_page_settings"),
+
     # Events
     path('<slug:business_subdirectory>/events/add/', views.add_event, name="add_event"),
     path('<str:business_subdirectory>/events/get-form/<int:event_id>/', views.get_event_form, name='get_event_form'),

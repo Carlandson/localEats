@@ -8,78 +8,54 @@
 
     <!-- Main Content -->
     <main>
-        <!-- About Section Preview -->
-        <section class="py-16 bg-white">
-            <div class="container mx-auto px-4">
-                <div class="max-w-3xl mx-auto text-center">
-                    <h2 class="text-3xl font-bold mb-8">{{ business_details.business_name }}</h2>
-                    <p class="text-gray-600 mb-8">
-                        {{ business_details.description }}
-                        Description Area
-                    </p>
-                    <a href="/{{ business_details.subdirectory }}/about" 
-                       class="inline-block px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-                        Learn More About Us
-                    </a>
-                </div>
-            </div>
-        </section>
+        <!-- Welcome Section -->
+         {% if page_data.home_page.show_welcome %}
+            {% include "components/home/welcome.html" %}
+         {% endif %}
 
-        <!-- Featured Menu Items -->
-        {% if business_details.menu_items.exists %}
-        <section class="py-16 bg-gray-50">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-bold text-center mb-12">Featured Menu</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {% for item in business_details.menu_items.featured|slice:":3" %}
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                        {% if item.image %}
-                        <img src="{{ item.image.url }}" 
-                             alt="{{ item.name }}" 
-                             class="w-full h-48 object-cover">
-                        {% endif %}
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold mb-2">{{ item.name }}</h3>
-                            <p class="text-gray-600 mb-4">{{ item.description }}</p>
-                            <p class="text-primary-600 font-bold">${{ item.price }}</p>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="text-center mt-8">
-                    <a href="/{{ business_details.subdirectory }}/menu" 
-                       class="inline-block px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-                        View Full Menu
-                    </a>
-                </div>
-            </div>
-        </section>
+         <!-- daily specials -->
+         {% if page_data.home_page.show_daily_special %}
+            {% include "components/home/daily_special.html"%}
+         {% endif %}
+
+         <!-- affiliates -->
+         {% if page_data.home_page.show_affiliates %}
+            {% include "components/home/affiliates.html"%}
+         {% endif %}
+
+         <!-- newsfeed -->
+         {% if page_data.home_page.show_newsfeed %}
+            {% include "components/home/newsfeed.html"%}
         {% endif %}
 
-        <!-- Special Events/Promotions -->
-        {% if business_details.events.exists %}
-        <section class="py-16 bg-white">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-bold text-center mb-12">Upcoming Events</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    {% for event in business_details.events.upcoming|slice:":2" %}
-                    <div class="bg-gray-50 rounded-lg p-6">
-                        <h3 class="text-xl font-semibold mb-2">{{ event.title }}</h3>
-                        <p class="text-gray-600 mb-4">{{ event.description }}</p>
-                        <p class="text-sm text-gray-500">
-                            {{ event.date|date:"F j, Y" }} at {{ event.time|time:"g:i A" }}
-                        </p>
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="text-center mt-8">
-                    <a href="/{{ business_details.subdirectory }}/events" 
-                       class="inline-block px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-                        View All Events
-                    </a>
-                </div>
-            </div>
-        </section>
-        {% endif %}
+         <!-- upcoming events -->
+         {% if page_data.home_page.show_upcoming_event %}
+            {% include "components/home/upcoming_event.html"%}
+         {% endif %}
+
+         <!-- daily specials -->
+         {% if page_data.home_page.show_daily_special %}
+            {% include "components/home/daily_special.html"%}
+         {% endif %}
+
+         <!-- featured service -->
+         {% if page_data.home_page.show_featured_service %}
+            {% include "components/home/featured_service.html"%}
+         {% endif %}
+
+         <!-- featured product -->
+         {% if page_data.home_page.show_featured_product %}
+            {% include "components/home/featured_product.html"%}
+         {% endif %}
+
+         <!-- hours -->
+         {% if page_data.home_page.show_hours %}
+            {% include "components/home/hours.html"%}
+         {% endif %}
+
+         <!-- map -->
+         {% if page_data.home_page.show_map %}
+            {% include "components/home/map.html"%}
+         {% endif %}
     </main>
 </div>

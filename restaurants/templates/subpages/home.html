@@ -1,10 +1,77 @@
 {% extends "owner_layout.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block body %}
+{{ business_details.subdirectory|json_script:"business" }}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Home Editor</h1>
+    
+    {% csrf_token %}
+    <div class="grid grid-cols-1 gap-6">
+        <div id="toast" class="fixed top-5 left-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-[-100%] opacity-0 transition-all duration-300 ease-in-out z-50">
+            <span id="toast-message"></span>
+        </div>
+        <!-- Welcome Section -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Welcome Section</h2>
+            <div class="space-y-4">
+                <!-- Show Welcome Toggle -->
+                <div class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200">
+                    <div class="relative inline-block w-10 align-middle select-none">
+                        {{ form.show_welcome }}
+                        <label for="{{ form.show_welcome.id_for_label }}" class="sr-only">
+                            Show Welcome Section
+                        </label>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700">Show Welcome Section</span>
+                </div>
+                
+                <!-- Welcome Content Fields -->
+                <div class="space-y-4">
+                    {{ form.welcome_title|as_crispy_field }}
+                    {{ form.welcome_message|as_crispy_field }}
+                    <button type="button" 
+                            data-section="show_welcome"
+                            class="save-button mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
 
-Home Edit Page
-
-What content would you like to include?
+        <!-- Other Toggle Options -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Page Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% for field in form %}
+                    {% if field.field.widget.input_type == "checkbox" and field.name != "show_welcome" %}
+                        <div class="flex items-center gap-3">
+                            <div class="relative inline-block w-10 align-middle select-none">
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}" class="sr-only">
+                                    {{ field.label }}
+                                </label>
+                            </div>
+                            <span class="text-sm font-medium text-gray-700">
+                                {{ field.label|cut:"Show "|title }}
+                            </span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
+
+{% if debug %}
+    {% block dev_scripts %}
+    <script type="module" src="{% static 'js/subpages/home.js' %}"></script>
+    {% endblock dev_scripts %}
+{% else %}
+    {% block prod_scripts %}
+    <script src="{% static 'dist/events.bundle.js' %}"></script>
+    {% endblock prod_scripts %}
+{% endif %}
