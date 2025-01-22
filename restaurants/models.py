@@ -635,6 +635,18 @@ class AboutUsPage(models.Model):
     content = models.TextField()
     history = models.TextField(blank=True, null=True)
     team_members = models.TextField(blank=True, null=True)
+    show_history = models.BooleanField(default=False)
+    show_team = models.BooleanField(default=False)
+    mission_statement = models.TextField(blank=True)
+    core_values = models.TextField(blank=True)
+    show_mission = models.BooleanField(default=False)
+    show_values = models.BooleanField(default=False)
+    def __str__(self):
+        return f"About Us Page"
+
+    class Meta:
+        verbose_name = "About Us Page"
+        verbose_name_plural = "About Us Pages"
 
 class EventsPage(models.Model):
     subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='events_content')

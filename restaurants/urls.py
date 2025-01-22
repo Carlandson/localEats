@@ -3,6 +3,7 @@ from django.conf.urls import include
 from .views import custom_signup, custom_logout
 from django.conf import settings
 from django.conf.urls.static import static
+from .admin import business_admin
 from . import views
 
 # change to remove views.anything
@@ -72,12 +73,16 @@ urlpatterns = [
     path('<slug:business_subdirectory>/SEO/', views.seo, name="SEO"),
     path('<slug:business_subdirectory>/Advertising/', views.advertising, name="Advertising"),
 
-    # Home page settings
+    # Home Content Editor
     path('<slug:business_subdirectory>/home/settings/', views.update_home_page_settings, name="update_home_page_settings"),
+    path('api/<str:business_subdirectory>/news-post/', views.create_news_post, name='create_news_post'),
 
-    # Events
+    # Events Content Editor
     path('<slug:business_subdirectory>/events/add/', views.add_event, name="add_event"),
     path('<str:business_subdirectory>/events/get-form/<int:event_id>/', views.get_event_form, name='get_event_form'),
     path('<str:business_subdirectory>/events/edit/<int:event_id>/', views.edit_event, name='edit_event'),
+
+    # About Content Editor
+    path('<slug:business_subdirectory>/about/settings/', views.update_about_page_settings, name="update_about_page_settings"),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -5,47 +5,19 @@
 {% block body %}
 {{ business_details.subdirectory|json_script:"business" }}
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Home Editor</h1>
+    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Home ContentEditor</h1>
     
     {% csrf_token %}
     <div class="grid grid-cols-1 gap-6">
         <div id="toast" class="fixed top-5 left-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-[-100%] opacity-0 transition-all duration-300 ease-in-out z-50">
             <span id="toast-message"></span>
         </div>
-        <!-- Welcome Section -->
-        <div class="bg-white shadow rounded-lg p-6">
-            <h2 class="text-xl font-semibold mb-4">Welcome Section</h2>
-            <div class="space-y-4">
-                <!-- Show Welcome Toggle -->
-                <div class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200">
-                    <div class="relative inline-block w-10 align-middle select-none">
-                        {{ form.show_welcome }}
-                        <label for="{{ form.show_welcome.id_for_label }}" class="sr-only">
-                            Show Welcome Section
-                        </label>
-                    </div>
-                    <span class="text-sm font-medium text-gray-700">Show Welcome Section</span>
-                </div>
-                
-                <!-- Welcome Content Fields -->
-                <div class="space-y-4">
-                    {{ form.welcome_title|as_crispy_field }}
-                    {{ form.welcome_message|as_crispy_field }}
-                    <button type="button" 
-                            data-section="show_welcome"
-                            class="save-button mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 ease-in-out">
-                        Save Changes
-                    </button>
-                </div>
-            </div>
-        </div>
 
-        <!-- Other Toggle Options -->
         <div class="bg-white shadow rounded-lg p-6">
             <h2 class="text-xl font-semibold mb-4">Page Features</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {% for field in form %}
-                    {% if field.field.widget.input_type == "checkbox" and field.name != "show_welcome" %}
+                    {% if field.field.widget.input_type == "checkbox"%}
                         <div class="flex items-center gap-3">
                             <div class="relative inline-block w-10 align-middle select-none">
                                 {{ field }}
@@ -59,6 +31,223 @@
                         </div>
                     {% endif %}
                 {% endfor %}
+            </div>
+        </div>
+        <!-- Welcome Section -->
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_welcome.value %}hidden{% endif %}" data-section="show_welcome">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" 
+                    data-target="welcome-content"
+                    data-expanded="{% if form.show_welcome.value %}true{% else %}false{% endif %}">
+                <h2 class="text-xl font-semibold">Welcome Section</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200 
+                            {% if form.show_welcome.value %}rotate-180{% endif %}" 
+                     xmlns="http://www.w3.org/2000/svg" 
+                     fill="none" 
+                     viewBox="0 0 24 24" 
+                     stroke="currentColor">
+                    <path stroke-linecap="round" 
+                          stroke-linejoin="round" 
+                          stroke-width="2" 
+                          d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="welcome-content" 
+                class="space-y-4 transition-all duration-300 ease-in-out overflow-hidden
+                        {% if not form.show_welcome.value %}hidden{% endif %}">
+                        {{ form.welcome_title|as_crispy_field }}
+                        {{ form.welcome_message|as_crispy_field }}
+                <button type="button" 
+                        data-section="welcome"
+                        class="save-button mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+        <!-- News Feed Section -->
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_newsfeed.value %}hidden{% endif %}" data-section="show_newsfeed">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" 
+                    data-target="newsfeed-content"
+                    data-expanded="{% if form.show_newsfeed.value %}true{% else %}false{% endif %}">
+                <h2 class="text-xl font-semibold">News Feed</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200 {% if form.show_newsfeed.value %}rotate-180{% endif %}" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor">
+                    <path stroke-linecap="round" 
+                        stroke-linejoin="round" 
+                        stroke-width="2" 
+                        d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="newsfeed-content" 
+                class="space-y-4 transition-all duration-300 ease-in-out overflow-hidden {% if not form.show_newsfeed.value %}hidden{% endif %}">    
+                <!-- News Post Form -->
+                <div class="mt-8 pt-6 border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Add a new post?</h3>
+                    <div class="space-y-4">
+                        {{ news_form.title|as_crispy_field }}
+                        {{ news_form.content|as_crispy_field }}
+                        {{ news_form.image|as_crispy_field }}
+                        <div id="image-preview-container" class="hidden mt-4">
+                            <h4 class="text-sm font-medium text-gray-700 mb-2">Image Preview</h4>
+                            <div class="relative">
+                                <img id="image-preview" class="max-w-full h-auto rounded-lg shadow-sm" src="" alt="Preview">
+                                <button type="button" 
+                                        id="remove-image" 
+                                        class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 focus:outline-none">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" 
+                                id="save-news-post"
+                                class="save-button mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+                            Post News
+                        </button>
+                    </div>
+                </div>
+                <!-- Existing News Feed Display-->
+                <div class="mb-8">
+                    <label for="news-feed-display" class="text-lg font-medium text-gray-900 mb-4">News Feed</label>
+                    {% for news_post in news_feed %}
+                        <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                            {% if news_post.image %}
+                                <img src="{{ news_post.image.url }}" alt="{{ news_post.title }}" class="w-full h-auto mb-2">
+                            {% endif %}
+                            <h4 class="text-base font-medium text-gray-900 mb-2">{{ news_post.title }}</h4>
+                            <p class="text-sm text-gray-700">{{ news_post.content }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_daily_special %}hidden{% endif %}" data-section="show_daily_special">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" data-target="daily-special-content">
+                <h2 class="text-xl font-semibold">Daily Special</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200" 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor">
+                    <path stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            stroke-width="2" 
+                            d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="daily-special-content" class="space-y-4">
+                <div class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200"></div>
+            </div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_featured_service.value %}hidden{% endif %}" data-section="show_featured_service">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" data-target="featured-service-content">
+                <h2 class="text-xl font-semibold">Featured Service</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200" 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor">
+                    <path stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            stroke-width="2" 
+                            d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="featured-service-content" class="space-y-4">
+
+            </div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_featured_product.value %}hidden{% endif %}" data-section="show_featured_product">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" data-target="featured-product-content">
+                <h2 class="text-xl font-semibold">Featured Product</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200" 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor">
+                    <path stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            stroke-width="2" 
+                            d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="featured-product-content" class="space-y-4">
+
+            </div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_upcoming_event.value %}hidden{% endif %}" data-section="show_upcoming_event">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" data-target="upcoming-event-content">
+                <h2 class="text-xl font-semibold">Upcoming Event</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200" 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor">
+                    <path stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            stroke-width="2" 
+                            d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="upcoming-event-content" class="space-y-4">
+
+            </div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_hours.value %}hidden{% endif %}" data-section="show_hours">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" data-target="hours-content">
+                <h2 class="text-xl font-semibold">Hours</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200" 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor">
+                    <path stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            stroke-width="2" 
+                            d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="hours-content" class="space-y-4">
+
+            </div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_map.value %}hidden{% endif %}" data-section="show_map">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" data-target="map-content">
+                <h2 class="text-xl font-semibold">Map</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200" 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor">
+                    <path stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            stroke-width="2" 
+                            d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="map-content" class="space-y-4">
+
+            </div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_affiliates.value %}hidden{% endif %}" data-section="show_affiliates">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" data-target="affiliates-content">
+                <h2 class="text-xl font-semibold">Affiliates</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200" 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor">
+                    <path stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            stroke-width="2" 
+                            d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="affiliates-content" class="space-y-4">
+
             </div>
         </div>
     </div>

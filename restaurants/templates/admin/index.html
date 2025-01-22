@@ -1,0 +1,80 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div class="business-admin">
+    <!-- Users Section -->
+    {% if user.is_superuser %}
+    <div class="admin-section">
+        <h2 class="text-2xl font-bold mb-4">Users</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for user_obj in users %}
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-xl font-semibold mb-2">{{ user_obj.username }}</h3>
+                <p class="text-gray-600">{{ user_obj.email }}</p>
+                <div class="mt-2">
+                    <strong>Businesses:</strong>
+                    {% with user_businesses=user_obj.owner.all %}
+                        {% if user_businesses %}
+                            <ul class="list-disc ml-4">
+                            {% for business in user_businesses %}
+                                <li>{{ business.business_name }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-gray-500">No businesses</p>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Businesses Section -->
+    <div class="admin-section mt-8">
+        <h2 class="text-2xl font-bold mb-4">
+            {% if user.is_superuser %}
+                All Businesses
+            {% else %}
+                Your Businesses
+            {% endif %}
+        </h2>
+        
+        {% if businesses %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for business in businesses %}
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-xl font-semibold mb-4">{{ business.business_name }}</h3>
+                        <ul class="space-y-2">
+                            <li><a href="{% url 'admin:restaurants_subpage_changelist' %}?business__id__exact={{ business.id }}"
+                                class="block px-4 py-2 bg-indigo-50 text-indigo-700 rounded hover:bg-indigo-100 transition-colors">
+                                Pages
+                            </a></li>
+                            <li><a href="{% url 'admin:restaurants_menu_changelist' %}?business__id__exact={{ business.id }}"
+                                class="block px-4 py-2 bg-indigo-50 text-indigo-700 rounded hover:bg-indigo-100 transition-colors">
+                                Menus
+                            </a></li>
+                            <li><a href="{% url 'admin:restaurants_event_changelist' %}?business__id__exact={{ business.id }}"
+                                class="block px-4 py-2 bg-indigo-50 text-indigo-700 rounded hover:bg-indigo-100 transition-colors">
+                                Events
+                            </a></li>
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500">No businesses found.</p>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.admin-section {
+    padding: 20px;
+    background-color: #030608;
+    border-radius: 8px;
+}
+</style>
+{% endblock %}

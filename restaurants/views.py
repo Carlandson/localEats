@@ -13,7 +13,7 @@ from django.views.decorators.http import require_http_methods, require_POST
 from django.core.paginator import Paginator
 from django.apps import apps
 from django.core import serializers
-from .models import Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Business, CuisineCategory, SideOption, HomePage
+from .models import Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Business, CuisineCategory, SideOption, HomePage, NewsPost
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -27,7 +27,7 @@ from allauth.socialaccount.models import SocialAccount
 from google.oauth2.credentials import Credentials
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import BusinessCreateForm, DishSubmit, CustomSignupView, ImageUploadForm, BusinessCustomizationForm, EventForm
+from .forms import BusinessCreateForm, DishSubmit, CustomSignupView, ImageUploadForm, BusinessCustomizationForm, EventForm, NewsPostForm, HomePageForm, AboutUsForm
 from django.core.exceptions import PermissionDenied
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Max
@@ -305,7 +305,7 @@ def get_business_context(business, user, page_type='home'):
         business=business, 
         page_type=page_type if not is_dashboard else 'home'
     ).first()
-
+    print(subpage)
     # Base context needed for both views
     base_context = {
         'business_details': business,
@@ -342,10 +342,9 @@ def get_editor_context(base_context, business, subpage, page_type):
                 welcome_title=f"Welcome to {business.business_name}",
                 welcome_message="We're excited to serve you!"
             )
-        
-        # Add form to context
-        from .forms import HomePageForm  # Import at top of file
+
         context['form'] = HomePageForm(instance=home_page)
+        context['news_form'] = NewsPostForm() 
         
         # Add any additional home page data needed
         context['home_data'] = {
@@ -359,6 +358,11 @@ def get_editor_context(base_context, business, subpage, page_type):
             'show_featured_service': home_page.show_featured_service,
             'show_featured_product': home_page.show_featured_product,
         }
+    if page_type == 'about':
+        about_page = getattr(subpage, 'about_us_content', None)
+        if not about_page:
+            about_page = AboutUsPage.objects.create(subpage=subpage)
+        context['form'] = AboutUsForm(instance=about_page)
     if page_type == 'events':
         # Get or create events page using correct related name
         events_page = getattr(subpage, 'events_content', None)
@@ -402,9 +406,13 @@ def get_editor_context(base_context, business, subpage, page_type):
 # gathers visitor data
 def get_visitor_context(base_context, business, subpage, page_type):
     """Additional context for visitor view"""
+    #    subpage = SubPage.objects.filter(
+    #     business=business, 
+    #     page_type=page_type if not is_dashboard else 'home'
+    # ).first()
+
     context = base_context.copy()
-    
-    model_name = f"{subpage.capitalize()}Page"
+    model_name = f"{page_type.capitalize()}Page"
     try:
         page_model = apps.get_model('restaurants', model_name)
         # Get or create the specific page instance
@@ -428,7 +436,7 @@ def get_visitor_context(base_context, business, subpage, page_type):
 
         # Add layout data needed for display
         context['page_data'] = {
-            'page_data': page_data_dict,
+            f'{page_type}_page': page_data_dict,
             'business_subdirectory': business.subdirectory,
             'current_page': subpage,
             # Primary Hero Data
@@ -524,172 +532,7 @@ def get_visitor_context(base_context, business, subpage, page_type):
                 menu__is_published=True
             ),
         }
-    
     return context
-"""
-old get_business_context
-"""
-#feed any page type to this function to get the context for that page
-# def get_business_context(business, user, page_type='home'):
-#     """
-#     Get context for any business subpage
-#     page_type can be: 'home', 'about', 'menu', 'services', 'products', 'gallery', 'contact'
-#     """
-#     is_dashboard = False
-
-#     if page_type == 'dashboard':
-#         page_type = 'home'
-#         is_dashboard = True
-#     # Get the requested subpage and its images
-#     subpage = SubPage.objects.filter(
-#         business=business, 
-#         page_type=page_type
-#     ).first()
-#     subpages = SubPage.objects.filter(business=business)
-#     # Get all published subpages for navigation
-#     published_pages = SubPage.get_published_subpages(business)
-
-#     # Get images for the current subpage
-#     hero_primary = subpage.get_hero_primary() if subpage else None
-#     banner_2 = subpage.get_banner_2() if subpage else None
-#     banner_3 = subpage.get_banner_3() if subpage else None
-
-#     # Get upcoming events if they exist
-#     events = {
-#         'exists': Event.objects.filter(
-#             events_page__subpage__business=business, 
-#             date__gte=timezone.now()
-#         ).exists(),
-#         'upcoming': Event.objects.filter(
-#             events_page__subpage__business=business,
-#             date__gte=timezone.now()
-#         ).order_by('date')[:2]
-#     }
-
-#     # Get page-specific content
-#     page_content = {}
-#     if page_type == 'about':
-#         about_page = getattr(subpage, 'aboutuspage', None)
-#         if about_page:
-#             page_content = {
-#                 'team_members': about_page.team_members.all() if hasattr(about_page, 'team_members') else [],
-#                 'history': about_page.history,
-#                 'mission': about_page.mission,
-#             }
-#     elif page_type == 'menu':
-#         page_content = {
-#             'menus': Menu.objects.filter(business=business).prefetch_related(
-#                 'courses', 
-#                 'courses__dishes'
-#             ),
-#             'specials': Dish.objects.filter(menu__business=business, is_special=True),
-#         }
-#     elif page_type == 'events':
-#         events_page = getattr(subpage, 'eventspage', None)
-#         if events_page:
-#             events_data = [{
-#                 'id': event.id,
-#                 'name': event.name,
-#                 'datetime': event.date.isoformat(),
-#                 'description': event.description,
-#                 'image_url': event.image.url if event.image else None
-#             } for event in events_page.events.filter(date__gte=timezone.now()).order_by('date')]
-#             context['events_data'] = events_data
-
-#     has_menu = SubPage.objects.filter(business=business, page_type='menu').exists()
-#     page_data = {
-#         'business_subdirectory': business.subdirectory,
-#         'current_page': subpage,
-#         # Primary Hero Data
-#         'hero_heading': subpage.hero_heading,
-#         'hero_subheading': subpage.hero_subheading,
-#         'hero_button_text': subpage.hero_button_text,
-#         'hero_button_link': subpage.hero_button_link,
-#         'hero_layout': subpage.hero_layout,
-#         'hero_text_align': subpage.hero_text_align,
-#         'hero_heading_color': subpage.hero_heading_color,
-#         'hero_subheading_color': subpage.hero_subheading_color,
-#         'hero_size': subpage.hero_size,
-#         'show_hero_heading': subpage.show_hero_heading,
-#         'show_hero_subheading': subpage.show_hero_subheading,
-#         'show_hero_button': subpage.show_hero_button,
-#         'hero_heading_font': subpage.hero_heading_font,
-#         'hero_subheading_font': subpage.hero_subheading_font,
-#         'hero_heading_size': subpage.hero_heading_size,
-#         'hero_subheading_size': subpage.hero_subheading_size,
-#         'hero_primary': {
-#             'url': hero_primary.image.url if hero_primary else None,
-#             'alt_text': hero_primary.alt_text if hero_primary else None
-#         },
-#         # Button Styles
-#         'hero_button_bg_color': subpage.hero_button_bg_color,
-#         'hero_button_text_color': subpage.hero_button_text_color,
-        
-#         # Banner 2 Data
-#         'banner_2': {
-#             'heading': subpage.banner_2_heading,
-#             'subheading': subpage.banner_2_subheading,
-#             'show_heading': subpage.show_banner_2_heading,
-#             'show_subheading': subpage.show_banner_2_subheading,
-#             'heading_font': subpage.banner_2_heading_font,
-#             'subheading_font': subpage.banner_2_subheading_font,
-#             'heading_size': subpage.banner_2_heading_size,
-#             'subheading_size': subpage.banner_2_subheading_size,
-#             'heading_color': subpage.banner_2_heading_color,
-#             'subheading_color': subpage.banner_2_subheading_color,
-#             'button_text': subpage.banner_2_button_text,
-#             'button_link': subpage.banner_2_button_link,
-#             'text_align': subpage.banner_2_text_align,
-#             'button_bg_color': subpage.banner_2_button_bg_color,
-#             'button_text_color': subpage.banner_2_button_text_color,
-#             'url': banner_2.image.url if banner_2 else None,
-#             'alt_text': banner_2.alt_text if banner_2 else None
-#         },
-        
-#         # Banner 3 Data
-#         'banner_3': {
-#             'heading': subpage.banner_3_heading,
-#             'subheading': subpage.banner_3_subheading,
-#             'show_heading': subpage.show_banner_3_heading,
-#             'show_subheading': subpage.show_banner_3_subheading,
-#             'heading_font': subpage.banner_3_heading_font,
-#             'subheading_font': subpage.banner_3_subheading_font,
-#             'heading_size': subpage.banner_3_heading_size,
-#             'subheading_size': subpage.banner_3_subheading_size,
-#             'heading_color': subpage.banner_3_heading_color,
-#             'subheading_color': subpage.banner_3_subheading_color,
-#             'button_text': subpage.banner_3_button_text,
-#             'button_link': subpage.banner_3_button_link,
-#             'text_align': subpage.banner_3_text_align,
-#             'button_bg_color': subpage.banner_3_button_bg_color,
-#             'button_text_color': subpage.banner_3_button_text_color,
-#             'url': banner_3.image.url if banner_3 else None,
-#             'alt_text': banner_3.alt_text if banner_3 else None
-#         },
-#         'is_published': subpage.is_published,
-#     }
-
-#     context = {
-#         # For JavaScript initialization
-#         'has_menu': has_menu,
-#         'page_data': page_data,
-#         # For template rendering
-#         'business_details': business,
-#         'business_subdirectory': business.subdirectory,
-#         # changed to published_pages
-#         'subpages': subpages,
-#         'published_pages': published_pages,
-#         'subpage': subpage,
-#         'current_page': subpage,
-#         # Choices/Options for template dropdowns and selectors
-#         'hero_primary': hero_primary,
-#         'banner_2': banner_2,
-#         'banner_3': banner_3,
-#         'hero_heading_font': subpage.hero_heading_font,
-#         'is_owner': user == business.owner,
-#         'is_edit_page': user == business.owner and not is_dashboard,
-#     }
-#     return context
 
 def business_dashboard(request, business_subdirectory):
     business = get_object_or_404(Business, subdirectory=business_subdirectory)
@@ -2927,6 +2770,113 @@ def update_home_page_settings(request, business_subdirectory):
         
         setattr(home_page, field_name, new_value)
         home_page.save()
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Setting updated successfully',
+            'field': field_name,
+            'value': new_value
+        })
+
+    except SubPage.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Subpage not found'
+        }, status=404)
+        
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Invalid JSON data'
+        }, status=400)
+        
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
+
+@login_required
+@require_http_methods(["POST"])
+def create_news_post(request, business_subdirectory):
+    try:
+        subpage = SubPage.objects.get(business__subdirectory=business_subdirectory, page_type='home')
+        home_page = HomePage.objects.get(subpage=subpage)
+        
+        form = NewsPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            news_post = form.save(commit=False)
+            news_post.news_feed = home_page.news_feed
+            news_post.save()
+
+            # Handle image if present
+            if 'image' in request.FILES:
+                image = Image(
+                    image=request.FILES['image'],
+                    uploaded_by=request.user,
+                    content_object=news_post,
+                    alt_text=f"Image for {news_post.title}"
+                )
+                image.save()
+
+            messages.success(request, 'News post created successfully!')
+            return redirect('home_page', business_subdirectory=business_subdirectory)
+        else:
+            messages.error(request, 'Please correct the errors below.')
+            return render(request, 'subpages/home.html', {
+                'form': form,
+                'news_form': form,  # Add both since your template might use either
+            })
+
+    except (SubPage.DoesNotExist, HomePage.DoesNotExist):
+        messages.error(request, 'Page not found')
+        return redirect('home')
+
+@login_required
+@require_http_methods(["POST"])
+def update_about_page_settings(request, business_subdirectory):
+
+    try:
+        data = json.loads(request.body)
+        subpage = SubPage.objects.get(business__subdirectory=business_subdirectory, page_type='about')
+        about_page, created = AboutUsPage.objects.get_or_create(subpage=subpage)
+        print(data.get('fieldName'))
+        # Handle content section updates
+        if data.get('fieldName') in ['content', 'history', 'team_members', 'mission_statement', 'core_values']:
+            field_name = data.get('fieldName')
+            print(field_name)
+            setattr(about_page, field_name, data.get(field_name, getattr(about_page, field_name)))
+            about_page.save()
+            return JsonResponse({
+                'status': 'success',
+                'message': f'{field_name.replace("_", " ").title()} updated successfully',
+                field_name: getattr(about_page, field_name)
+            })
+
+        # Handle boolean toggle updates
+        field_name = data.get('fieldName')
+        new_value = data.get('value')
+        
+        allowed_fields = [
+            'show_history',
+            'show_team',
+            'show_mission',
+            'show_values',
+            'team_members',
+            'core_values',
+            'mission_statement',
+            'history'
+        ]
+        
+        if field_name not in allowed_fields:
+            print(data.get('fieldName'))
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Invalid field name'
+            }, status=400)
+        
+        setattr(about_page, field_name, new_value)
+        about_page.save()
         
         return JsonResponse({
             'status': 'success',

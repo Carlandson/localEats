@@ -1,10 +1,158 @@
 {% extends "owner_layout.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block body %}
-
-
-About Edit Page
-
+{{ business_details.subdirectory|json_script:"business" }}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} About Us Content Editor</h1>
+    {% csrf_token %}
+    <div class="grid grid-cols-1 gap-6">
+        <div id="toast" class="fixed top-5 left-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-[-100%] opacity-0 transition-all duration-300 ease-in-out z-50">
+            <span id="toast-message"></span>
+        </div>
+        
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Page Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% for field in form %}
+                    {% if field.field.widget.input_type == "checkbox" %}
+                        <div class="flex items-center gap-3">
+                            <div class="relative inline-block w-10 align-middle select-none">
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}" class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></label>
+                            </div>
+                            <span class="text-sm font-medium text-gray-700">
+                                {{ field.label|cut:"Show "|title }}
+                            </span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_history.value %}hidden{% endif %}" data-section="show_history">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" 
+                    data-target="history-content"
+                    data-expanded="{% if form.show_history.value %}true{% else %}false{% endif %}">
+                <h2 class="text-xl font-semibold">History Section</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200 
+                            {% if form.show_history.value %}rotate-180{% endif %}" 
+                     xmlns="http://www.w3.org/2000/svg" 
+                     fill="none" 
+                     viewBox="0 0 24 24" 
+                     stroke="currentColor">
+                    <path stroke-linecap="round" 
+                          stroke-linejoin="round" 
+                          stroke-width="2" 
+                          d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="history-content" 
+                class="space-y-4 transition-all duration-300 ease-in-out overflow-hidden
+                        {% if not form.show_history.value %}hidden{% endif %}">
+                        {{ form.history|as_crispy_field }}
+                <button type="button" 
+                        data-section="history"
+                        class="save-button mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_mission.value %}hidden{% endif %}" data-section="show_mission">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" 
+                    data-target="mission-content"
+                    data-expanded="{% if form.show_mission.value %}true{% else %}false{% endif %}">
+                <h2 class="text-xl font-semibold">Mission Statement Section</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200 
+                            {% if form.show_mission.value %}rotate-180{% endif %}" 
+                     xmlns="http://www.w3.org/2000/svg" 
+                     fill="none" 
+                     viewBox="0 0 24 24" 
+                     stroke="currentColor">
+                    <path stroke-linecap="round" 
+                          stroke-linejoin="round" 
+                          stroke-width="2" 
+                          d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="mission-content" 
+                class="space-y-4 transition-all duration-300 ease-in-out overflow-hidden
+                        {% if not form.show_mission.value %}hidden{% endif %}">
+                        {{ form.mission_statement|as_crispy_field }}
+                <button type="button" 
+                        data-section="mission_statement"
+                        class="save-button mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_team.value %}hidden{% endif %}" data-section="show_team">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" 
+                    data-target="team-content"
+                    data-expanded="{% if form.show_team.value %}true{% else %}false{% endif %}">
+                <h2 class="text-xl font-semibold">Team Members Section</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200 
+                            {% if form.show_team.value %}rotate-180{% endif %}" 
+                     xmlns="http://www.w3.org/2000/svg" 
+                     fill="none" 
+                     viewBox="0 0 24 24" 
+                     stroke="currentColor">
+                    <path stroke-linecap="round" 
+                          stroke-linejoin="round" 
+                          stroke-width="2" 
+                          d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="team-content" 
+                class="space-y-4 transition-all duration-300 ease-in-out overflow-hidden
+                        {% if not form.show_team.value %}hidden{% endif %}">
+                        {{ form.team_members|as_crispy_field }}
+                <button type="button" 
+                        data-section="team_members"
+                        class="save-button mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 {% if not form.show_values.value %}hidden{% endif %}" data-section="show_values">
+            <button class="accordion-header w-full flex justify-between items-center mb-4" 
+                    data-target="values-content"
+                    data-expanded="{% if form.show_values.value %}true{% else %}false{% endif %}">
+                <h2 class="text-xl font-semibold">Core Values Section</h2>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-200 
+                            {% if form.show_values.value %}rotate-180{% endif %}" 
+                     xmlns="http://www.w3.org/2000/svg" 
+                     fill="none" 
+                     viewBox="0 0 24 24" 
+                     stroke="currentColor">
+                    <path stroke-linecap="round" 
+                          stroke-linejoin="round" 
+                          stroke-width="2" 
+                          d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="values-content" 
+                class="space-y-4 transition-all duration-300 ease-in-out overflow-hidden
+                        {% if not form.show_values.value %}hidden{% endif %}">
+                        {{ form.core_values|as_crispy_field }}
+                <button type="button" 
+                        data-section="core_values"
+                        class="save-button mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
+
+{% if debug %}
+    {% block dev_scripts %}
+    <script type="module" src="{% static 'js/subpages/about.js' %}"></script>
+    {% endblock dev_scripts %}
+{% else %}
+    {% block prod_scripts %}
+    <script src="{% static 'dist/events.bundle.js' %}"></script>
+    {% endblock prod_scripts %}
+{% endif %}
