@@ -682,22 +682,6 @@ def menu(request, business_subdirectory):
     
     # First get the menu subpage
     menu_subpage = get_object_or_404(SubPage, business=business, page_type='menu')
-    
-    try:
-        # Then get the menu associated with this subpage
-        menu = Menu.objects.get(subpage=menu_subpage)
-        courses = Course.objects.filter(menu=menu).order_by('order')
-        dishes = Dish.objects.filter(menu=menu)
-    except Menu.DoesNotExist:
-        # If no menu exists yet, create one
-        menu = Menu.objects.create(
-            business=business,
-            name=f"{business.business_name} Menu",
-            subpage=menu_subpage
-        )
-        courses = []
-        dishes = []
-
     course_options = [
         'Appetizers',
         'Lunch',
@@ -720,13 +704,33 @@ def menu(request, business_subdirectory):
         'Halal',
         'Kosher'
     ]
+    try:
+        # Then get the menu associated with this subpage
+        menu = Menu.objects.get(subpage=menu_subpage)
+        courses = Course.objects.filter(menu=menu).order_by('order')
+        dishes = Dish.objects.filter(menu=menu)
+        existing_course_names = list(courses.values_list('name', flat=True))
+        available_course_options = [option for option in course_options 
+                            if option not in existing_course_names]
+    except Menu.DoesNotExist:
+        # If no menu exists yet, create one
+        menu = Menu.objects.create(
+            business=business,
+            name=f"{business.business_name} Menu",
+            subpage=menu_subpage
+        )
+        courses = []
+        dishes = []
+        existing_course_names = []
+        available_course_options = course_options
     
     context = {
         "business_subdirectory": business_subdirectory,
         "business_details": business,
         "courses": courses,
         "dishes": dishes,
-        "course_options": course_options,
+        "course_options": available_course_options,
+        "existing_courses": existing_course_names,
         "owner": request.user == business.owner,
         "is_verified": business.is_verified,
         "menu": menu,
@@ -872,6 +876,12 @@ def add_course(request, business_subdirectory):
         # If that fails, try to get menu directly through business
         menu = get_object_or_404(Menu, business=business)
 
+        # Check for existing course with the same name (case-insensitive)
+    if Course.objects.filter(menu=menu, name__iexact=course_name).exists():
+        return JsonResponse({
+            "error": "A course with this name already exists"
+        }, status=400)
+    
     # Create new course
     highest_order = Course.objects.filter(menu=menu).aggregate(Max('order'))['order__max'] or 0
     course = Course.objects.create(
@@ -2914,3 +2924,5 @@ def advertising(request, business_subdirectory):
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
 
+def edit_business(request, business_subdirectory):
+    return render(request, 'subpages/edit_business.html')

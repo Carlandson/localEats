@@ -184,6 +184,7 @@ class Business(models.Model):
     email = models.EmailField(blank=True)
     description = models.TextField(max_length=200, default="", blank=True)
     created = models.DateTimeField(auto_now_add=True)
+    hours_of_operation = models.TextField(max_length=200, default="", blank=True)
     user_favorite = models.ManyToManyField(User, blank=True, related_name="regular")
     phone_number = PhoneNumberField()
     is_verified = models.BooleanField(default=False)
@@ -553,6 +554,12 @@ class Course(models.Model):
     def __str__(self):
         return f"{self.menu.name} - {self.name}"
 
+    def serialize(self):
+        return {
+            "name": self.name,
+            "menu": self.menu.name
+        }
+
 class Dish(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     name = models.CharField(max_length=64)
@@ -728,3 +735,43 @@ def get_all_images(self):
         } for img in images]}
     """)
     return images
+
+
+"""
+Printful
+1. Create developer account
+2. Create API key
+3. Create POD account
+4. Create POD product
+"""
+class PODAccount(models.Model):
+    business = models.OneToOneField('Business', on_delete=models.CASCADE)
+    provider = models.CharField(max_length=50, choices=[
+        ('PRINTFUL', 'Printful'),
+        ('PRINTIFY', 'Printify'),
+    ])
+    api_key = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['provider']),
+        ]
+
+class PODProduct(models.Model):
+    business = models.ForeignKey('Business', on_delete=models.CASCADE)
+    pod_account = models.ForeignKey(PODAccount, on_delete=models.CASCADE)
+    provider_product_id = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    design_data = models.JSONField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['provider_product_id']),
+            models.Index(fields=['business', 'is_active']),
+        ]

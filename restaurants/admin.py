@@ -8,8 +8,6 @@ from .models import (
     SpecialsPage, Event, CuisineCategory, SubPage, Menu
 )
 
-print("LOADING CUSTOM ADMIN FILE")
-
 class BusinessInline(admin.StackedInline):
     model = Business
     extra = 0

@@ -84,5 +84,8 @@ urlpatterns = [
 
     # About Content Editor
     path('<slug:business_subdirectory>/about/settings/', views.update_about_page_settings, name="update_about_page_settings"),
+
+    # Edit Business Information
+    path('<slug:business_subdirectory>/edit-business/', views.edit_business, name="edit_business"),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

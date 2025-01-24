@@ -2,6 +2,7 @@ let eatery;
 
 document.addEventListener('DOMContentLoaded', function() {
     eatery = JSON.parse(document.getElementById('kitchen').textContent);
+    existingCourses = JSON.parse(document.getElementById('existing_courses').textContent);
     const accordionTriggers = document.querySelectorAll('.accordion-trigger');
     
     accordionTriggers.forEach(trigger => {
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.matches('#add')) {
             e.preventDefault();
             const submission = document.querySelector('#addCourse');
-            addCourse(submission.value);
+            addCourse(submission.value, eatery, existingCourses);
         }
 
         // Submit Dish button
@@ -197,10 +198,12 @@ function handleImageUpload(fileInput) {
     });
 }
 
-function addCourse(dishData){
-    let currentKitchen = JSON.parse(document.getElementById('kitchen').textContent);
-    console.log(currentKitchen)
-    // Fix the URL construction to use the full path
+function addCourse(dishData, currentKitchen, existingCourses){
+    if (existingCourses.map(course => course.toLowerCase()).includes(dishData.toLowerCase())) {
+        alert('A course with this name already exists. Please choose a different name.');
+        return;
+    }
+
     fetch(`/${currentKitchen}/menu/add_course/`, {
         method: "POST",
         headers: {
@@ -551,8 +554,8 @@ function deleteCourse(courseId) {
         return;
     }
 
-    // const eatery = JSON.parse(document.getElementById('kitchen').textContent);
     const courseElement = document.getElementById(`delete${courseId}`).closest('.mb-4');
+    const courseName = courseElement.querySelector('.accordion-trigger h2').textContent.trim();
     
     // Add loading state
     courseElement.style.opacity = '0.5';
@@ -572,10 +575,37 @@ function deleteCourse(courseId) {
         return response.json();
     })
     .then(result => {
+        // Animate the course removal
         courseElement.style.transition = 'all 0.3s ease-out';
         courseElement.style.transform = 'translateX(100%)';
         courseElement.style.opacity = '0';
         
+        // Remove the course from existingCourses array
+        const courseIndex = existingCourses.findIndex(course => 
+            course.toLowerCase() === courseName.toLowerCase()
+        );
+        if (courseIndex > -1) {
+            existingCourses.splice(courseIndex, 1);
+        }
+
+        // Add the course back to the dropdown
+        const dropdown = document.getElementById('addCourse');
+        const option = document.createElement('option');
+        option.value = courseName;
+        option.textContent = courseName;
+        
+        // Insert the option in alphabetical order
+        const options = Array.from(dropdown.options);
+        const insertIndex = options.findIndex(opt => 
+            opt.text.toLowerCase() > courseName.toLowerCase()
+        );
+        
+        if (insertIndex === -1) {
+            dropdown.appendChild(option); // Add to end if it should go last
+        } else {
+            dropdown.insertBefore(option, dropdown.options[insertIndex]); // Insert at correct position
+        }
+
         setTimeout(() => {
             courseElement.remove();
         }, 300);

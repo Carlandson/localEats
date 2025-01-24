@@ -1,0 +1,16 @@
+{% extends "owner_layout.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <h1 class="text-2xl font-bold text-gray-900 mb-8">Edit Business Information</h1>
+    
+    <div class="bg-white shadow rounded-lg p-6">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% crispy form %}
+        </form>
+    </div>
+</div>
+{% endblock %}

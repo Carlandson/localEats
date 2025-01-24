@@ -146,24 +146,92 @@ class DishSubmit(ModelForm):
             'image': forms.FileInput(attrs={'class': 'form-control'}),  # Changed from URLInput to FileInput
         }
 
-class BusinessEditForm(forms.ModelForm):
-    class Meta:
-        model = Business
+class BusinessEditForm(BusinessCreateForm):
+    class Meta(BusinessCreateForm.Meta):
         fields = [
             'business_name',
             'business_type',
-            'description',
             'address',
+            'city', 
+            'state',
+            'zip_code',
             'phone_number',
+            'description',
+            'cuisine',
             'email',
-            'navigation_style',
-            'footer_style',
+            'hours_of_operation',
         ]
-        widgets = {
-            'description': forms.Textarea(attrs={'rows': 4}),
-            'navigation_style': forms.RadioSelect(),
-            'footer_style': forms.RadioSelect(),
-        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'subdirectory' in self.fields:
+            del self.fields['subdirectory']
+        
+        # Initialize Crispy Forms helper
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_class = 'space-y-6'
+        
+        # Create layout with sections
+        self.helper.layout = Layout(
+            # Basic Information Section
+            HTML("<h3 class='text-lg font-medium text-gray-900 mb-4'>Basic Information</h3>"),
+            Div(
+                Field('business_name', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
+                Field('business_type', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
+                Field('description', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
+                Field('cuisine', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
+                css_class='space-y-4'
+            ),
+            
+            # Contact Information Section
+            HTML("<h3 class='text-lg font-medium text-gray-900 mt-6 mb-4'>Contact Information</h3>"),
+            Div(
+                Field('email', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
+                Field('phone_number', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
+                css_class='space-y-4'
+            ),
+            
+            # Location Section
+            HTML("<h3 class='text-lg font-medium text-gray-900 mt-6 mb-4'>Location</h3>"),
+            Div(
+                Field('address', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
+                Div(
+                    Div(
+                        Field('city', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
+                        css_class='col-span-2'
+                    ),
+                    Div(
+                        Field('state', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
+                        css_class='col-span-1'
+                    ),
+                    Div(
+                        Field('zip_code', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
+                        css_class='col-span-1'
+                    ),
+                    css_class='grid grid-cols-4 gap-4'
+                ),
+                css_class='space-y-4'
+            ),
+            
+            # Hours Section
+            HTML("<h3 class='text-lg font-medium text-gray-900 mt-6 mb-4'>Business Hours</h3>"),
+            Field('hours_of_operation', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
+            
+            # Submit Button
+            Div(
+                Submit('submit', 'Save Changes', css_class='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500'),
+                css_class='mt-6'
+            )
+        )
+
+    def save(self, commit=True):
+        instance = super(BusinessCreateForm, self).save(commit=False)
+        if commit:
+            instance.save()
+        return instance
+    
+
 
 class ImageUploadForm(forms.ModelForm):
     class Meta:
