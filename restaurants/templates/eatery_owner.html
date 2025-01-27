@@ -2,9 +2,7 @@
 {% load static %}
 {% block body %}
 {{ business_subdirectory|json_script:"business" }}
-<br>
-
-    <div class="min-h-screen bg-gray-100 py-12">
+<div class="min-h-screen bg-gray-100 py-12">
         <div class="container mx-auto px-4">
             <div class="container">
                 <div class="text-center">
@@ -62,23 +60,15 @@
                     <!-- About Box -->
                     <div class="bg-white rounded-lg shadow-md p-4 min-h-[300px]">
                         <h2 class="text-xl font-semibold mb-4 -mt-1">Edit business Information</h2>
-                        {% if about_page %}
-                            <a href="{% url 'about' business_details.subdirectory %}" 
+                            <a href="{% url 'edit_business' business_details.subdirectory %}" 
                                class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
                                 Edit Information
                             </a>
-                        {% else %}
-                            <form method="post" action="{% url 'create_subpage' business_details.subdirectory 'about' %}" class="inline">
-                                {% csrf_token %}
-                                <button type="submit" 
-                                        class="inline-block bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
-                                    Add Information
-                                </button>
-                            </form>
-                        {% endif %}
                     </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 {% endblock %}
 {% block script %}
     <script src="{% static 'js/menubuilder.js' %}"></script>

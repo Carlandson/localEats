@@ -27,7 +27,7 @@ from allauth.socialaccount.models import SocialAccount
 from google.oauth2.credentials import Credentials
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import BusinessCreateForm, DishSubmit, CustomSignupView, ImageUploadForm, BusinessCustomizationForm, EventForm, NewsPostForm, HomePageForm, AboutUsForm
+from .forms import BusinessCreateForm, DishSubmit, CustomSignupView, ImageUploadForm, BusinessCustomizationForm, EventForm, NewsPostForm, HomePageForm, AboutUsForm, BusinessEditForm, ContactMessageForm
 from django.core.exceptions import PermissionDenied
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Max
@@ -2924,5 +2924,145 @@ def advertising(request, business_subdirectory):
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
 
+@login_required
 def edit_business(request, business_subdirectory):
-    return render(request, 'subpages/edit_business.html')
+    business = get_object_or_404(Business, subdirectory=business_subdirectory, owner=request.user)
+    
+    if request.method == 'POST':
+        print(request.POST)
+        form = BusinessEditForm(request.POST, instance=request.user.business)
+        if form.is_valid():
+            business = form.save()
+            # Return only the updated field value
+            field_name = next(iter(form.changed_data))  # Get the first (and should be only) changed field
+            return JsonResponse({
+                field_name: getattr(business, field_name)
+            })
+        return JsonResponse({'error': 'Invalid form data'}, status=400)
+    else:
+        form = BusinessEditForm(instance=business)
+    
+    return render(request, 'subpages/edit_business.html', {
+        'form': form,
+        'instance': business,
+        'business_details': business,
+        'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY,
+        'is_edit_page': True,
+        'is_owner': True,
+    })
+
+@login_required
+def update_business_field(request, business_subdirectory):
+    if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+    
+    business = get_object_or_404(Business, subdirectory=business_subdirectory)
+    
+    # Get the field being updated from the request
+    field_name = request.POST.get('field_name')
+    if not field_name:
+        return JsonResponse({'error': 'No field specified'}, status=400)
+    
+    # Create a form with only the specific field data
+    form_data = {field_name: request.POST.get(field_name)}
+    form = BusinessEditForm(form_data, instance=business)
+    
+    # Validate only the specific field
+    form.fields = {field_name: form.fields[field_name]}
+    
+    if form.is_valid():
+        try:
+            # If updating address, check for existing verified business
+            if field_name == 'address':
+                new_address = form.cleaned_data[field_name]
+                existing_business = Business.objects.filter(
+                    address=new_address,
+                    is_verified=True
+                ).exclude(id=business.id).first()
+                
+                if existing_business:
+                    return JsonResponse({
+                        'status': 'error',
+                        'errors': ['A verified business already exists at this address. Please contact support if this is your business.']
+                    }, status=400)
+            
+            # Update the field if validation passes
+            setattr(business, field_name, form.cleaned_data[field_name])
+            business.save(update_fields=[field_name])
+            
+            return JsonResponse({
+                'status': 'success',
+                field_name: str(getattr(business, field_name))
+            })
+            
+        except ValidationError as e:
+            return JsonResponse({
+                'status': 'error',
+                'errors': [str(e)]
+            }, status=400)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'errors': ['An unexpected error occurred. Please try again.']
+            }, status=500)
+    
+    return JsonResponse({
+        'status': 'error',
+        'errors': form.errors.get(field_name, ['Invalid data'])
+    }, status=400)
+
+@require_POST
+def submit_contact_form(request, business_subdirectory):
+    if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+
+    business = get_object_or_404(Business, subdirectory=business_subdirectory)
+    form = ContactMessageForm(request.POST)
+
+    if form.is_valid():
+        try:
+            # Save the message
+            message = form.save(commit=False)
+            message.business = business
+            message.save()
+
+            # Prepare email context
+            context = {
+                'business_name': business.business_name,
+                'name': form.cleaned_data['name'],
+                'email': form.cleaned_data['email'],
+                'subject': form.cleaned_data['subject'],
+                'message': form.cleaned_data['message'],
+            }
+
+            # Render email templates
+            html_message = render_to_string('emails/contact_form_notification.html', context)
+            text_message = render_to_string('emails/contact_form_notification.txt', context)
+
+            # Send email using configured backend
+            send_mail(
+                subject=f'New Contact Form Message - {business.business_name}',
+                message=text_message,
+                from_email=f'noreply@{settings.MAILGUN_SERVER_NAME}' if settings.MAILGUN_SERVER_NAME else settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[business.email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Your message has been sent successfully!'
+            })
+
+        except Exception as e:
+            # Log the error (you should have proper logging configured)
+            logger.error(f'Error sending contact form email: {str(e)}')
+            return JsonResponse({
+                'status': 'error',
+                'message': 'There was an error sending your message. Please try again later.'
+            }, status=500)
+
+    return JsonResponse({
+        'status': 'error',
+        'errors': form.errors
+    }, status=400)

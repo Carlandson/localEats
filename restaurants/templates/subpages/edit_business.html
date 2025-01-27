@@ -2,10 +2,10 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block content %}
+{% block body %}
+{{ business_details.subdirectory|json_script:"business" }}
 <div class="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
     <h1 class="text-2xl font-bold text-gray-900 mb-8">Edit Business Information</h1>
-    
     <div class="bg-white shadow rounded-lg p-6">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
@@ -14,3 +14,14 @@
     </div>
 </div>
 {% endblock %}
+
+{% if debug %}
+    {% block dev_scripts %}
+    <script type="module" src="{% static 'js/subpages/editBusiness.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
+    {% endblock dev_scripts %}
+{% else %}
+    {% block prod_scripts %}
+    <script src="{% static 'dist/edit_business.bundle.js' %}"></script>
+    {% endblock prod_scripts %}
+{% endif %}

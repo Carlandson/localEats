@@ -9,7 +9,7 @@ from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit, Div, HTML
-from .models import Event, HomePage, NewsFeed, NewsPost, Comment, AboutUsPage
+from .models import Event, HomePage, NewsFeed, NewsPost, Comment, AboutUsPage, ContactMessage
 from django.utils.text import slugify
 from .models import Image
 from datetime import datetime, timedelta, date
@@ -152,9 +152,6 @@ class BusinessEditForm(BusinessCreateForm):
             'business_name',
             'business_type',
             'address',
-            'city', 
-            'state',
-            'zip_code',
             'phone_number',
             'description',
             'cuisine',
@@ -164,73 +161,128 @@ class BusinessEditForm(BusinessCreateForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if 'subdirectory' in self.fields:
-            del self.fields['subdirectory']
-        
-        # Initialize Crispy Forms helper
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.form_class = 'space-y-6'
+        self.fields['address'].widget.attrs.update({
+            'id': 'address-input',
+            'class': 'address-autocomplete',
+            'data-geo-id': 'id_geolocation'  # Link to hidden geolocation field
+        })
         
-        # Create layout with sections
         self.helper.layout = Layout(
             # Basic Information Section
             HTML("<h3 class='text-lg font-medium text-gray-900 mb-4'>Basic Information</h3>"),
-            Div(
-                Field('business_name', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
-                Field('business_type', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
-                Field('description', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
-                Field('cuisine', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
-                css_class='space-y-4'
-            ),
+            *[self.create_editable_field(field) for field in [
+                'business_name', 'business_type', 'description'
+            ]],
             
             # Contact Information Section
             HTML("<h3 class='text-lg font-medium text-gray-900 mt-6 mb-4'>Contact Information</h3>"),
-            Div(
-                Field('email', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
-                Field('phone_number', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
-                css_class='space-y-4'
-            ),
+            *[self.create_editable_field(field) for field in [
+                'email', 'phone_number'
+            ]],
             
             # Location Section
             HTML("<h3 class='text-lg font-medium text-gray-900 mt-6 mb-4'>Location</h3>"),
-            Div(
-                Field('address', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
-                Div(
-                    Div(
-                        Field('city', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
-                        css_class='col-span-2'
-                    ),
-                    Div(
-                        Field('state', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
-                        css_class='col-span-1'
-                    ),
-                    Div(
-                        Field('zip_code', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
-                        css_class='col-span-1'
-                    ),
-                    css_class='grid grid-cols-4 gap-4'
-                ),
-                css_class='space-y-4'
-            ),
+            self.create_address_field(),  # Special handling for address
             
             # Hours Section
             HTML("<h3 class='text-lg font-medium text-gray-900 mt-6 mb-4'>Business Hours</h3>"),
-            Field('hours_of_operation', css_class='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500'),
-            
-            # Submit Button
+            self.create_editable_field('hours_of_operation'),
+        )
+    def create_address_field(self):
+        """Special handling for address field with Google Maps integration"""
+        return Div(
             Div(
-                Submit('submit', 'Save Changes', css_class='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500'),
-                css_class='mt-6'
+                HTML("""
+                    <div class="field-display-wrapper">
+                        <div data-field="address" class="flex justify-between items-center p-4 bg-white rounded-lg border border-gray-200">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Address</label>
+                                <div class="mt-1 text-gray-900">{{ instance.address }}</div>
+                            </div>
+                            <button type="button" 
+                                    class="edit-button ml-4 inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+                                Change Address
+                            </button>
+                        </div>
+                    </div>
+                """),
+                Div(
+                    HTML("""
+                        <div class="mb-4">
+                            <div id="map" class="h-64 w-full rounded-lg mb-4"></div>
+                        </div>
+                    """),
+                    Field('address', css_class="address-autocomplete mb-4"),
+                    Field('geolocation', type="hidden"),
+                    Div(
+                        HTML("""
+                            <button type="button" class="save-button mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+                                Save
+                            </button>
+                            <button type="button" class="cancel-button inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+                                Cancel
+                            </button>
+                        """),
+                        css_class='mt-3 flex justify-end'
+                    ),
+                    css_class='field-edit-wrapper hidden p-4 bg-gray-50 rounded-lg border border-gray-200 mt-2'
+                ),
+                css_class='mb-4'
             )
         )
-
-    def save(self, commit=True):
-        instance = super(BusinessCreateForm, self).save(commit=False)
-        if commit:
-            instance.save()
-        return instance
+    def create_editable_field(self, field_name):
+        # Special handling for address field to show street address
+        display_value = "{{ instance.street_address }}" if field_name == 'address' else "{{ instance." + field_name + " }}"
+        
+        return Div(
+            Div(
+                HTML(f"""
+                    <div class="field-display-wrapper">
+                        <div data-field="{field_name}" class="flex justify-between items-center p-4 bg-white rounded-lg border border-gray-200">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">{self.fields[field_name].label}</label>
+                                <div class="mt-1 text-gray-900">{display_value}</div>
+                            </div>
+                            <button type="button" 
+                                    class="edit-button ml-4 inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                """),
+                Div(
+                    Field(field_name),
+                    Div(
+                        HTML("""
+                            <button type="button" class="save-button mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+                                Save
+                            </button>
+                            <button type="button" class="cancel-button inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+                                Cancel
+                            </button>
+                        """),
+                        css_class='mt-3 flex justify-end'
+                    ),
+                    css_class='field-edit-wrapper hidden p-4 bg-gray-50 rounded-lg border border-gray-200 mt-2'
+                ),
+                css_class='mb-4'
+            )
+        )
     
+    
+class ContactMessageForm(forms.ModelForm):
+    class Meta:
+        model = ContactMessage
+        fields = ['name', 'email', 'subject', 'message']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-input rounded-md'}),
+            'email': forms.EmailInput(attrs={'class': 'form-input rounded-md'}),
+            'subject': forms.TextInput(attrs={'class': 'form-input rounded-md'}),
+            'message': forms.Textarea(attrs={'class': 'form-textarea rounded-md', 'rows': 4}),
+        }
 
 
 class ImageUploadForm(forms.ModelForm):

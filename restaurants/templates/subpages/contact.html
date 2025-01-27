@@ -4,6 +4,33 @@
 {% block body %}
 
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Contact Page</h1>
+    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Contact Page Editor</h1>
+    {% csrf_token %}
+    <div class="grid grid-cols-1 gap-6">
+        <div id="toast" class="fixed top-5 left-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-[-100%] opacity-0 transition-all duration-300 ease-in-out z-50">
+            <span id="toast-message"></span>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Page Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% for field in form %}
+                    {% if field.field.widget.input_type == "checkbox"%}
+                        <div class="flex items-center gap-3">
+                            <div class="relative inline-block w-10 align-middle select-none">
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}" class="sr-only">
+                                    {{ field.label }}
+                                </label>
+                            </div>
+                            <span class="text-sm font-medium text-gray-700">
+                                {{ field.label|cut:"Show "|title }}
+                            </span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

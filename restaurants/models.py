@@ -262,6 +262,15 @@ class Business(models.Model):
     @classmethod
     def verified_business_exists(cls, address):
         return cls.objects.filter(address=address, is_verified=True).exists()
+    
+    @property
+    def street_address(self):
+        """Returns just the street address portion"""
+        if isinstance(self.address, str):
+            # If it's already a string, return it (it's already the street address)
+            return self.address
+        # If it's an Address object, get the street address component
+        return str(self.address).split(',')[0] if self.address else ""
 
     def clean(self):
         super().clean()
@@ -654,6 +663,30 @@ class AboutUsPage(models.Model):
     class Meta:
         verbose_name = "About Us Page"
         verbose_name_plural = "About Us Pages"
+
+
+class ContactPage(models.Model):
+    subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='contact_content')
+    description = models.TextField(blank=True, null=True)
+    show_description = models.BooleanField(default=False)
+    show_map = models.BooleanField(default=False)
+    show_contact_form = models.BooleanField(default=False)
+
+class ContactMessage(models.Model):
+    business = models.ForeignKey('Business', on_delete=models.CASCADE, related_name='contact_messages')
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=200)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Message from {self.name} to {self.business.business_name}"
+
 
 class EventsPage(models.Model):
     subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='events_content')

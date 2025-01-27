@@ -153,17 +153,17 @@ if DEBUG and not env.bool('USE_MAILGUN', default=False):
     EMAIL_HOST_USER = ''
     EMAIL_HOST_PASSWORD = ''
     EMAIL_USE_TLS = False
+    DEFAULT_FROM_EMAIL = 'development@localhost'
 else:
     EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
     MAILGUN_ACCESS_KEY = env('MAILGUN_ACCESS_KEY', default=None)
     MAILGUN_SERVER_NAME = env('MAILGUN_SERVER_NAME', default=None)
+    DEFAULT_FROM_EMAIL = f'noreply@{MAILGUN_SERVER_NAME}'
 # Login/out URLs
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Email backend (for development)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_TEMPLATE_EXTENSION = 'html'
 # Database
@@ -236,7 +236,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DEFAULT_FROM_EMAIL = 'your-email@example.com'
 ADMIN_EMAIL = 'admin@example.com'
 
 MEDIA_URL = '/media/'
