@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
     toggles.forEach(toggle => {
         toggle.addEventListener('change', async function() {
             const section = this.name;
-            const isEnabled = this.checked;            const contentDiv = document.querySelector(`[data-section="${section}"]`);
+            const isEnabled = this.checked;            
+            const contentDiv = document.querySelector(`[data-section="${section}"]`);
             
             try {
                 // Show loading state

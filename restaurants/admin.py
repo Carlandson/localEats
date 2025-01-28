@@ -5,7 +5,8 @@ from django.urls import reverse
 from django.utils.html import format_html
 from .models import (
     Business, HomePage, AboutUsPage, EventsPage, 
-    SpecialsPage, Event, CuisineCategory, SubPage, Menu
+    SpecialsPage, Event, CuisineCategory, SubPage, 
+    Menu, Product, ProductsPage, ServicesPage, Service
 )
 
 class BusinessInline(admin.StackedInline):
@@ -61,3 +62,7 @@ business_admin.register(EventsPage)
 business_admin.register(SpecialsPage)
 business_admin.register(Event)
 business_admin.register(CuisineCategory)
+business_admin.register(Product)
+business_admin.register(ProductsPage)
+business_admin.register(ServicesPage)
+business_admin.register(Service)

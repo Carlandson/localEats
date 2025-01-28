@@ -89,4 +89,14 @@ urlpatterns = [
     # About Content Editor
     path('<slug:business_subdirectory>/about/settings/', views.update_about_page_settings, name="update_about_page_settings"),
     
+    # Contact Content Editor
+    path('<slug:business_subdirectory>/contact/settings/', views.update_contact_page_settings, name="update_contact_page_settings"),
+    
+    # Products Content Editor
+    path('<slug:business_subdirectory>/products/settings/', views.update_products_page_settings, name="update_products_page_settings"),
+    path('<slug:business_subdirectory>/products/create/', views.create_product, name="create_product"),
+    path('<slug:business_subdirectory>/products/<int:product_id>/', views.product_detail, name='product_detail'),
+    path('<str:business_subdirectory>/products/<int:product_id>/get-form/', views.get_product_form, name='api_product_form'),
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

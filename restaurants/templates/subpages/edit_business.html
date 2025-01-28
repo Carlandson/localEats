@@ -8,7 +8,6 @@
     <h1 class="text-2xl font-bold text-gray-900 mb-8">Edit Business Information</h1>
     <div class="bg-white shadow rounded-lg p-6">
         <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
             {% crispy form %}
         </form>
     </div>

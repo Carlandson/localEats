@@ -13,7 +13,11 @@ from django.views.decorators.http import require_http_methods, require_POST
 from django.core.paginator import Paginator
 from django.apps import apps
 from django.core import serializers
-from .models import Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Business, CuisineCategory, SideOption, HomePage, NewsPost
+from .models import (Image, 
+    SubPage, 
+    Menu, 
+    Course, 
+    Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Business, CuisineCategory, SideOption, HomePage, NewsPost, ContactPage, ContactMessage, ProductsPage, Product)
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -27,7 +31,22 @@ from allauth.socialaccount.models import SocialAccount
 from google.oauth2.credentials import Credentials
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import BusinessCreateForm, DishSubmit, CustomSignupView, ImageUploadForm, BusinessCustomizationForm, EventForm, NewsPostForm, HomePageForm, AboutUsForm, BusinessEditForm, ContactMessageForm
+from .forms import (
+    BusinessCreateForm,
+    BusinessEditForm,
+    BusinessCustomizationForm,
+    ContactMessageForm,
+    ContactPageForm,
+    CustomSignupView,
+    DishSubmit,
+    EventForm,
+    HomePageForm,
+    AboutUsForm,
+    ImageUploadForm,
+    NewsPostForm,
+    ProductForm,
+    ProductPageForm,
+)
 from django.core.exceptions import PermissionDenied
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Max
@@ -391,7 +410,25 @@ def get_editor_context(base_context, business, subpage, page_type):
 
         context['events_data'] = events_data
         context['form'] = EventForm()
-        
+    if page_type == 'contact':
+        contact_page = getattr(subpage, 'contact_content', None)
+        if not contact_page:
+            contact_page = ContactPage.objects.create(subpage=subpage)
+        context['form'] = ContactPageForm(instance=contact_page)
+
+    if page_type == 'products':
+        products_page = getattr(subpage, 'products_content', None)
+        if not products_page:
+            products_page = ProductsPage.objects.create(
+                subpage=subpage,
+                description="",  # Default empty description
+                show_description=False  # Default value
+            )
+        context['product_form'] = ProductForm()
+        context['products'] = Product.objects.filter(business=business)
+        context['description_form'] = ProductPageForm(instance=products_page)
+        context['products_page'] = products_page
+
     elif page_type == 'menu':
         context['menu_data'] = {
             'menus': Menu.objects.filter(business=business).prefetch_related(
@@ -2912,17 +2949,73 @@ def update_about_page_settings(request, business_subdirectory):
             'status': 'error',
             'message': str(e)
         }, status=500)
-    
-@login_required
-def seo(request, business_subdirectory):
-    return render(request, 'subpages/seo.html')
 
 @login_required
-def advertising(request, business_subdirectory):
-    return render(request, 'subpages/advertising.html')
+@require_http_methods(["POST"])
+def update_contact_page_settings(request, business_subdirectory):
+    try:
+        data = json.loads(request.body)
+        subpage = SubPage.objects.get(
+            business__subdirectory=business_subdirectory,
+            business__owner=request.user,  # Ensure owner
+            page_type='contact'
+        )
+        contact_page, created = ContactPage.objects.get_or_create(subpage=subpage)
 
-def custom_404(request, exception):
-    return render(request, '404.html', status=404)
+        # Handle content updates
+        if data.get('fieldName') == 'description':
+            contact_page.description = data.get('description', contact_page.description)
+            contact_page.save()
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Description updated successfully',
+                'description': contact_page.description
+            })
+
+        # Handle boolean toggle updates
+        field_name = data.get('fieldName')
+        new_value = data.get('value')
+        
+        allowed_fields = [
+            'show_description',
+            'show_map',
+            'show_contact_form',
+            'description'
+        ]
+        
+        if field_name not in allowed_fields:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Invalid field name'
+            }, status=400)
+        
+        setattr(contact_page, field_name, new_value)
+        contact_page.save()
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Setting updated successfully',
+            'field': field_name,
+            'value': new_value
+        })
+
+    except SubPage.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Contact page not found'
+        }, status=404)
+        
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Invalid JSON data'
+        }, status=400)
+        
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
 
 @login_required
 def edit_business(request, business_subdirectory):
@@ -2963,8 +3056,19 @@ def update_business_field(request, business_subdirectory):
     if not field_name:
         return JsonResponse({'error': 'No field specified'}, status=400)
     
+    # Get the new value
+    new_value = request.POST.get(field_name)
+    current_value = str(getattr(business, field_name))
+
+    # If the value hasn't changed, return success without doing anything
+    if new_value == current_value:
+        return JsonResponse({
+            'status': 'success',
+            field_name: current_value
+        })
+    
     # Create a form with only the specific field data
-    form_data = {field_name: request.POST.get(field_name)}
+    form_data = {field_name: new_value}
     form = BusinessEditForm(form_data, instance=business)
     
     # Validate only the specific field
@@ -3066,3 +3170,176 @@ def submit_contact_form(request, business_subdirectory):
         'status': 'error',
         'errors': form.errors
     }, status=400)
+
+@require_POST
+@login_required
+def create_product(request, business_subdirectory):
+    try:
+        business = Business.objects.get(subdirectory=business_subdirectory)
+        
+        # Check if user owns this business
+        if business.owner != request.user:
+            return JsonResponse({'error': 'Unauthorized'}, status=403)
+        
+        # Get or create the products page
+        subpage = SubPage.objects.get(business=business, page_type='products')
+        products_page = getattr(subpage, 'products_content', None)
+        if not products_page:
+            products_page = ProductsPage.objects.create(subpage=subpage)
+            
+        form = ProductForm(request.POST, request.FILES, business=business)
+        
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.products_page = products_page  # Set the products_page relationship
+            product.save()
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Product created successfully',
+                'product': {
+                    'id': product.id,
+                    'name': product.name,
+                    'description': product.description,
+                    'price': str(product.price),
+                    'image_url': product.image.url if product.image else None
+                }
+            })
+        else:
+            return JsonResponse({
+                'error': 'Invalid form data',
+                'errors': form.errors
+            }, status=400)
+            
+    except Business.DoesNotExist:
+        return JsonResponse({'error': 'Business not found'}, status=404)
+    except SubPage.DoesNotExist:
+        return JsonResponse({'error': 'Products page not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@login_required
+@require_http_methods(['GET', 'POST', 'DELETE'])  # Changed from PUT to POST
+def product_detail(request, business_subdirectory, product_id):
+    # Get the product and verify ownership
+    product = get_object_or_404(
+        Product, 
+        id=product_id, 
+        products_page__subpage__business__subdirectory=business_subdirectory
+    )
+    
+    # Verify business ownership
+    if product.products_page.subpage.business.owner != request.user:
+        raise PermissionDenied("You don't have permission to access this product")
+
+    if request.method == 'GET':
+        return JsonResponse({'product': product.to_dict()})
+        
+    elif request.method == 'POST':  # Changed from PUT to POST
+        try:
+            form = ProductForm(
+                request.POST, 
+                request.FILES, 
+                instance=product,
+                business=product.products_page.subpage.business
+            )
+            
+            if form.is_valid():
+                product = form.save()
+
+                # Handle image upload if present
+                if request.FILES.get('image'):
+                    if product.image:
+                        product.image.delete()
+                    product.image = request.FILES['image']
+                    product.save()
+
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Product updated successfully',
+                    'product': product.to_dict()
+                })
+            else:
+                return JsonResponse({
+                    'error': 'Invalid form data',
+                    'errors': form.errors
+                }, status=400)
+                
+        except Exception as e:
+            return JsonResponse({
+                'error': str(e)
+            }, status=500)
+            
+    elif request.method == 'DELETE':
+        try:
+            product.delete()
+            return JsonResponse({
+                'success': True,
+                'message': 'Product deleted successfully'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'error': f'Failed to delete product: {str(e)}'
+            }, status=500)
+        
+@login_required
+def get_product_form(request, business_subdirectory, product_id):
+    product = get_object_or_404(
+        Product, 
+        id=product_id, 
+        products_page__subpage__business__subdirectory=business_subdirectory
+    )
+    
+    if product.products_page.subpage.business.owner != request.user:
+        raise PermissionDenied("You don't have permission to access this product")
+        
+    form = ProductForm(instance=product, business=product.products_page.subpage.business)
+    
+    form_html = render_to_string('forms/edit_product.html', {
+        'form': form,
+        'product': product,
+    }, request=request)
+    
+    return JsonResponse({
+        'success': True,
+        'form_html': form_html
+    })
+
+@login_required
+@require_POST
+def update_products_page_settings(request, business_subdirectory):
+    try:
+        business = Business.objects.get(subdirectory=business_subdirectory)
+        subpage = SubPage.objects.get(business=business, page_type='products')
+        products_page = getattr(subpage, 'products_content', None)
+        
+        if not products_page:
+            return JsonResponse({'error': 'Products page not found'}, status=404)
+
+        data = json.loads(request.body)
+        field_name = data.get('fieldName')
+        
+        if field_name == 'description':
+            products_page.description = data.get('description', '')
+            products_page.save()
+        elif field_name == 'show_description':
+            products_page.show_description = data.get('value', False)
+            products_page.save()
+        else:
+            return JsonResponse({'error': 'Invalid field name'}, status=400)
+            
+        return JsonResponse({'status': 'success'})
+        
+    except (Business.DoesNotExist, SubPage.DoesNotExist, json.JSONDecodeError) as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+@login_required
+def seo(request, business_subdirectory):
+    return render(request, 'subpages/seo.html')
+
+@login_required
+def advertising(request, business_subdirectory):
+    return render(request, 'subpages/advertising.html')
+
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)

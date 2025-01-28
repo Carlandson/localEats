@@ -4,7 +4,101 @@
 
 {% block body %}
 {{ business_details.subdirectory|json_script:"business" }}
-<div class="container mx-auto px-4 py-8"></div>
-    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Products Page</h1>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Products Page Editor</h1>
+    
+    <!-- Description Section -->
+    <div class="bg-white shadow rounded-lg p-6 mb-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">Page Description</h2>
+            <button type="button" 
+                    id="toggle-description-edit"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
+                Edit Description
+            </button>
+        </div>
+   
+    <!-- Display Description -->
+        <div id="description-display" class="prose max-w-none">
+            {% if products_page.description %}
+                {{ products_page.description|linebreaks }}
+            {% else %}
+                <p class="text-gray-500 italic">No description added yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Edit Description Form -->
+        <div id="description-form" class="hidden space-y-4">
+            {{ description_form|crispy }}
+            <div class="flex justify-end">
+                <button type="button" 
+                        data-section="save-description"
+                        class="save-button px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add New Product Section -->
+    <div id="products-container" class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div id="form-error-message" class="hidden text-red-600 text-sm mt-2"></div>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-semibold mb-4">Products</h2>
+            <button id="add-product" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded transition-colors duration-200">Add New Product</button>
+        </div>
+        
+        <!-- Form container - initially hidden -->
+        <div id="product-form-container" class="hidden mt-4">
+            {% crispy product_form %}
+        </div>
+        
+        <!-- Products list -->
+        <div id="products-list" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {% if products %}
+                {% for product in products %}
+                    <article id="product{{ product.id }}" class="border rounded-lg p-4 bg-white shadow-sm">
+                        <div class="text-center">
+                            <h3 class="text-xl font-bold mb-2">{{ product.name }}</h3>
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" 
+                                     class="mx-auto object-contain h-40 w-40" 
+                                     alt="{{ product.name }}">
+                            {% else %}
+                                <div class="h-40 w-40 mx-auto flex items-center justify-center bg-gray-100 rounded-lg border-2 border-dashed border-gray-300">
+                                    <span class="text-gray-400">No Image</span>
+                                </div>
+                            {% endif %}
+                            <p class="mt-2 font-semibold text-emerald-600">${{ product.price }}</p>
+                        </div>
+                        <div class="text-center mt-4">
+                            <h4 class="font-semibold mb-2">Description:</h4>
+                            <p>{{ product.description }}</p>
+                        </div>
+                        {% if is_owner %}
+                            <div class="mt-4 flex justify-end items-center space-x-2">
+                                <button class="editProduct px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200" 
+                                        id="e{{ product.id }}">Edit</button>
+                                <button class="deleteProduct px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded transition-colors duration-200" 
+                                        id="d{{ product.id }}">Delete</button>
+                            </div>
+                        {% endif %}
+                    </article>
+                {% empty %}
+                    <p class="col-span-3 text-center text-gray-500 py-8">No products added yet.</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}
+
+{% if debug %}
+    {% block dev_scripts %}
+    <script type="module" src="{% static 'js/subpages/products.js' %}"></script>
+    {% endblock dev_scripts %}
+{% else %}
+    {% block prod_scripts %}
+    <script src="{% static 'dist/products.bundle.js' %}"></script>
+    {% endblock prod_scripts %}
+{% endif %}

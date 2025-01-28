@@ -45,3 +45,53 @@ export function createUploadPlaceholderHTML(prefix) {
         </div>
     `;
 }
+
+export function createProductFormHTML(product, productId) {
+    return `
+        <div id="edit-form-${productId}" class="border rounded-lg p-4 bg-white shadow-sm">
+            <form id="editProduct${productId}" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" name="name" value="${product.name}"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea name="description" rows="3"
+                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                    >${product.description}</textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Price</label>
+                    <input type="number" name="price" value="${product.price}" step="0.01"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
+                    <div id="product-image-container">
+                        ${product.image_url ? 
+                            createHeroImageHTML(product.image_url, 'product-image') :
+                            createUploadPlaceholderHTML('product-image')}
+                    </div>
+                    <input type="file" 
+                           name="image" 
+                           id="product-image-upload"
+                           accept="image/*"
+                           class="hidden">
+                </div>
+                
+                <div class="flex justify-end space-x-2">
+                    <button type="button" class="cancel-edit px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded transition-colors duration-200">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+}
