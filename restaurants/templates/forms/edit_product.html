@@ -1,11 +1,27 @@
 {% load crispy_forms_tags %}
 
-<form id="editProduct{{ product.id }}" class="space-y-4">
+<form id="editProduct{{ product.id }}" class="space-y-4" enctype="multipart/form-data">
     {% csrf_token %}
     
     {% for field in form %}
         {% if field.name == 'image' %}
-            {% include 'forms/image_field.html' with field=field %}
+            <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+                
+                {% if product.image %}
+                    <div class="mb-2">
+                        <img src="{{ product.image.image.url }}" 
+                             alt="{{ product.name }}" 
+                             class="w-32 h-32 object-cover rounded-lg">
+                    </div>
+                {% endif %}
+                
+                {{ field }}
+                
+                {% if field.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
         {% else %}
             <div>
                 <label class="block text-sm font-medium text-gray-700">{{ field.label }}</label>

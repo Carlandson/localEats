@@ -61,7 +61,7 @@
                         <div class="text-center">
                             <h3 class="text-xl font-bold mb-2">{{ product.name }}</h3>
                             {% if product.image %}
-                                <img src="{{ product.image.url }}" 
+                                <img src="{{ product.image.image.url }}" 
                                      class="mx-auto object-contain h-40 w-40" 
                                      alt="{{ product.name }}">
                             {% else %}

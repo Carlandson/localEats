@@ -98,5 +98,11 @@ urlpatterns = [
     path('<slug:business_subdirectory>/products/<int:product_id>/', views.product_detail, name='product_detail'),
     path('<str:business_subdirectory>/products/<int:product_id>/get-form/', views.get_product_form, name='api_product_form'),
 
+    # Services Content Editor
+    path('<slug:business_subdirectory>/services/settings/', views.update_services_page_settings, name="update_services_page_settings"),
+    path('<slug:business_subdirectory>/services/create/', views.create_service, name="create_service"),
+    path('<slug:business_subdirectory>/services/<int:service_id>/', views.service_detail, name='service_detail'),
+    path('<str:business_subdirectory>/services/<int:service_id>/get-form/', views.get_service_form, name='api_service_form'),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

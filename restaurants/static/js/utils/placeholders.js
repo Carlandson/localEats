@@ -95,3 +95,47 @@ export function createProductFormHTML(product, productId) {
         </div>
     `;
 }
+
+export function createServiceFormHTML(service, serviceId) {
+    return `
+        <div id="edit-form-${serviceId}" class="border rounded-lg p-4 bg-white shadow-sm">
+            <form id="editService${serviceId}" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" name="name" value="${service.name}"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea name="description" rows="3"
+                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                    >${service.description}</textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Service Image</label>
+                    <div id="service-image-container">
+                        ${service.image_url ? 
+                            createHeroImageHTML(service.image_url, 'service-image') :
+                            createUploadPlaceholderHTML('service-image')}
+                    </div>
+                    <input type="file" 
+                           name="image" 
+                           id="service-image-upload"
+                           accept="image/*"
+                           class="hidden">
+                </div>
+                
+                <div class="flex justify-end space-x-2">
+                    <button type="button" class="cancel-edit px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded transition-colors duration-200">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+}

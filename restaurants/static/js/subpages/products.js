@@ -1,6 +1,6 @@
 import { showToast } from '../components/toast.js';
 import { api } from '../utils/subpagesAPI.js';
-import { createProductFormHTML, createUploadPlaceholderHTML } from '../utils/placeholders.js';
+import { createProductFormHTML } from '../utils/placeholders.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     const business = JSON.parse(document.getElementById('business').textContent);
@@ -89,6 +89,64 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Error:', error);
             showToast('Failed to update setting. Please try again.', 'error');
+        }
+    });
+    function handleImagePreview(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        // Find or create preview container
+        let previewContainer = input.parentElement.querySelector('.image-preview');
+        if (!previewContainer) {
+            previewContainer = document.createElement('div');
+            previewContainer.className = 'image-preview mb-2 mt-2 relative';
+            input.parentElement.insertBefore(previewContainer, input);
+        } else {
+            previewContainer.innerHTML = ''; // Clear existing preview
+        }
+
+        // Create and setup image element
+        const img = document.createElement('img');
+        img.className = 'w-32 h-32 object-cover rounded-lg';
+
+        // Create remove button
+        const removeButton = document.createElement('button');
+        removeButton.className = 'absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors duration-200';
+        removeButton.innerHTML = '×';
+        removeButton.type = 'button';
+        
+        // Remove button click handler
+        removeButton.onclick = function() {
+            previewContainer.remove();
+            input.value = ''; // Clear the file input
+        };
+
+        // Create and show loading message
+        const loading = document.createElement('div');
+        loading.className = 'text-sm text-gray-500';
+        loading.textContent = 'Loading preview...';
+        previewContainer.appendChild(loading);
+
+        // Setup file reader
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            loading.remove();
+            img.src = e.target.result;
+            previewContainer.appendChild(img);
+            previewContainer.appendChild(removeButton);
+        };
+
+        reader.onerror = function() {
+            previewContainer.innerHTML = '<div class="text-red-500 text-sm">Error loading preview</div>';
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    // Add event listener to file input
+    document.addEventListener('change', function(e) {
+        if (e.target.type === 'file' && e.target.accept.includes('image')) {
+            handleImagePreview(e.target);
         }
     });
 

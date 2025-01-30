@@ -104,5 +104,29 @@ export const api = {
         getEditForm: async (business, productId) => {
             return makeRequest(`/${business}/products/${productId}/get-form/`, 'GET');
         },
+    },
+    services: {
+        updateSettings: async (business, data) => {
+            return makeRequest(`/${business}/services/settings/`, 'POST', data);
+        },
+
+        createService: async (business, formData) => {
+            return makeRequest(`/${business}/services/create/`, 'POST', formData);
+        },
+
+        getService: async (business, serviceId) => {
+            return makeRequest(`/${business}/services/${serviceId}/`, 'GET');
+        },
+
+        updateService: async (business, serviceId, formData) => {
+            return makeRequest(`/${business}/services/${serviceId}/`, 'POST', formData);
+        },
+
+        deleteService: async (business, serviceId) => {
+            return makeRequest(`/${business}/services/${serviceId}/`, 'DELETE');
+        },
+        getEditForm: async (business, serviceId) => {
+            return makeRequest(`/${business}/services/${serviceId}/get-form/`, 'GET');
+        },
     }
 };

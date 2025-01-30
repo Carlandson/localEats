@@ -1,0 +1,44 @@
+{% load crispy_forms_tags %}
+
+<form id="editService{{ service.id }}" class="space-y-4" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    {% for field in form %}
+        {% if field.name == 'image' %}
+            <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+                
+                {% if service.image %}
+                    <div class="mb-2">
+                        <img src="{{ service.image.image.url }}" 
+                             alt="{{ service.name }}" 
+                             class="w-32 h-32 object-cover rounded-lg">
+                    </div>
+                {% endif %}
+                
+                {{ field }}
+                
+                {% if field.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
+        {% else %}
+            <div>
+                <label class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+    
+    <div class="flex justify-end space-x-2">
+        <button type="button" class="cancel-edit px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded transition-colors duration-200">
+            Cancel
+        </button>
+        <button type="submit" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200">
+            Save Changes
+        </button>
+    </div>
+</form>

@@ -4421,3 +4421,1734 @@ INFO 2025-01-28 16:36:45,794 basehttp 29224 15092 "GET /static/js/subpages/produ
 INFO 2025-01-28 16:36:45,823 basehttp 29224 15092 "GET /media/product_images/test3_VyJ6wyu.jpg HTTP/1.1" 200 3262750
 WARNING 2025-01-28 16:36:45,960 log 29224 31752 Not Found: /test_non_menu/products/installHook.js.map
 WARNING 2025-01-28 16:36:45,960 basehttp 29224 31752 "GET /test_non_menu/products/installHook.js.map HTTP/1.1" 404 14243
+INFO 2025-01-29 11:22:13,185 autoreload 13444 26084 Watching for file changes with StatReloader
+INFO 2025-01-29 11:22:20,139 basehttp 13444 5904 "GET / HTTP/1.1" 200 16716
+INFO 2025-01-29 11:22:20,334 basehttp 13444 5904 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-29 11:22:20,352 basehttp 13444 25836 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-29 11:22:20,378 basehttp 13444 19756 "GET /static/js/components/paginate.js HTTP/1.1" 200 3440
+INFO 2025-01-29 11:22:20,390 basehttp 13444 15644 "GET /static/js/index.js HTTP/1.1" 200 4271
+INFO 2025-01-29 11:22:20,391 basehttp 13444 25836 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-29 11:22:20,404 basehttp 13444 5904 "GET /static/images/test1.jpg HTTP/1.1" 200 1800794
+INFO 2025-01-29 11:22:20,409 basehttp 13444 19756 "GET /static/images/test2.jpg HTTP/1.1" 200 2206722
+INFO 2025-01-29 11:22:20,413 basehttp 13444 21000 "GET /static/images/test3.jpg HTTP/1.1" 200 3262750
+INFO 2025-01-29 11:22:22,440 basehttp 13444 21000 "GET /profile/ HTTP/1.1" 200 14103
+INFO 2025-01-29 11:22:23,812 basehttp 13444 21000 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 17810
+INFO 2025-01-29 11:22:25,302 basehttp 13444 21000 "GET /test_non_menu/events/ HTTP/1.1" 200 18815
+INFO 2025-01-29 11:22:25,332 basehttp 13444 21000 "GET /static/js/subpages/events.js HTTP/1.1" 200 9753
+INFO 2025-01-29 11:22:25,462 basehttp 13444 21000 "GET /media/user_uploads/2025/01/28/25_PC_logo_Kessling.webp HTTP/1.1" 200 22514
+WARNING 2025-01-29 11:22:27,403 log 13444 21000 Not Found: /favicon.ico
+WARNING 2025-01-29 11:22:27,404 basehttp 13444 21000 "GET /favicon.ico HTTP/1.1" 404 14153
+INFO 2025-01-29 11:22:52,581 basehttp 13444 21000 "GET /test_non_menu/products/ HTTP/1.1" 200 17432
+INFO 2025-01-29 11:22:52,619 basehttp 13444 21000 "GET /static/js/subpages/products.js HTTP/1.1" 304 0
+INFO 2025-01-29 11:22:52,727 basehttp 13444 19756 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-29 11:22:52,728 basehttp 13444 5904 "GET /static/js/utils/placeholders.js HTTP/1.1" 304 0
+INFO 2025-01-29 11:22:52,753 basehttp 13444 21000 "GET /media/product_images/test3_VyJ6wyu.jpg HTTP/1.1" 200 3262750
+INFO 2025-01-29 11:23:03,225 basehttp 13444 21000 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 17810
+INFO 2025-01-29 11:23:06,053 basehttp 13444 21000 "GET /test_non_menu/services/ HTTP/1.1" 200 10568
+ERROR 2025-01-29 11:40:19,700 log 13444 32824 Internal Server Error: /test_non_menu/services/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 875, in _resolve_lookup
+    current = current[bit]
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 881, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+AttributeError: type object 'RequestContext' has no attribute 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 891, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 613, in business_page
+    return render(request, template, context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\crispy_forms\templatetags\crispy_forms_tags.py", line 199, in render
+    c = self.get_render(context).flatten()
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\crispy_forms\templatetags\crispy_forms_tags.py", line 89, in get_render
+    actual_form = form.resolve(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 842, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 898, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [service_form] in [{'True': True, 'False': False, 'None': None}, {}, {}, {'business_details': <Business: test none menu>, 'business_subdirectory': 'test_non_menu', 'subpage': <SubPage: test none menu - services>, 'is_owner': True, 'is_edit_page': True, 'subpages': <QuerySet [<SubPage: test none menu - contact>, <SubPage: test none menu - events>, <SubPage: test none menu - gallery>, <SubPage: test none menu - home>, <SubPage: test none menu - menu>, <SubPage: test none menu - products>, <SubPage: test none menu - services>, <SubPage: test none menu - specials>, <SubPage: test none menu - testimonials>]>, 'published_pages': [{'page_type': 'home', 'title': 'test none menu Home', 'slug': 'test_non_menu', 'is_published': True}], 'has_menu': True}]
+ERROR 2025-01-29 11:40:19,719 basehttp 13444 32824 "GET /test_non_menu/services/ HTTP/1.1" 500 236538
+WARNING 2025-01-29 11:40:19,924 log 13444 32824 Not Found: /favicon.ico
+INFO 2025-01-29 11:40:19,924 basehttp 13444 32824 - Broken pipe from ('127.0.0.1', 50189)
+INFO 2025-01-29 11:45:36,901 basehttp 13444 9656 "GET /test_non_menu/home/ HTTP/1.1" 200 30439
+INFO 2025-01-29 11:45:37,038 basehttp 13444 9656 "GET /static/js/subpages/home.js HTTP/1.1" 200 9355
+INFO 2025-01-29 11:46:21,685 basehttp 13444 9656 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 17810
+INFO 2025-01-29 11:46:25,248 basehttp 13444 9656 "GET /test_non_menu/specials/ HTTP/1.1" 200 10568
+INFO 2025-01-29 11:46:27,460 basehttp 13444 9656 "GET /test_non_menu/testimonials/ HTTP/1.1" 200 10572
+INFO 2025-01-29 11:46:33,640 basehttp 13444 9656 "GET /test_non_menu/products/ HTTP/1.1" 200 17432
+INFO 2025-01-29 11:46:33,763 basehttp 13444 9656 - Broken pipe from ('127.0.0.1', 51035)
+INFO 2025-01-29 11:46:37,978 basehttp 13444 17344 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 17810
+DEBUG 2025-01-29 11:46:49,040 content 13444 17344 
+            Searching for hero_primary:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 11:46:49,043 content 13444 17344 All images found: []
+DEBUG 2025-01-29 11:46:49,044 content 13444 17344 Hero primary found: None
+DEBUG 2025-01-29 11:46:49,044 content 13444 17344 
+            Searching for banner_2:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 11:46:49,046 content 13444 17344 Banner 2 found: None
+DEBUG 2025-01-29 11:46:49,046 content 13444 17344 
+            Searching for banner_3:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 11:46:49,047 content 13444 17344 Banner 3 found: None
+DEBUG 2025-01-29 11:46:49,054 content 13444 17344 
+            Searching for hero_primary:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 11:46:49,055 content 13444 17344 All images found: []
+DEBUG 2025-01-29 11:46:49,057 content 13444 17344 Hero primary found: None
+DEBUG 2025-01-29 11:46:49,060 content 13444 17344 
+            Searching for banner_2:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 11:46:49,061 content 13444 17344 Banner 2 found: None
+DEBUG 2025-01-29 11:46:49,063 content 13444 17344 
+            Searching for banner_3:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 11:46:49,065 content 13444 17344 Banner 3 found: None
+INFO 2025-01-29 11:46:49,074 basehttp 13444 17344 "GET /test_non_menu/edit-layout/ HTTP/1.1" 200 79741
+INFO 2025-01-29 11:46:49,215 basehttp 13444 17344 "GET /static/js/layoutEditor.js HTTP/1.1" 200 20239
+INFO 2025-01-29 11:46:49,254 basehttp 13444 17344 "GET /static/js/utils/errors.js HTTP/1.1" 200 183
+INFO 2025-01-29 11:46:49,256 basehttp 13444 5504 "GET /static/js/handlers/imageHandlers.js HTTP/1.1" 200 6739
+INFO 2025-01-29 11:46:49,257 basehttp 13444 27804 "GET /static/js/handlers/textHandlers.js HTTP/1.1" 200 6363
+INFO 2025-01-29 11:46:49,257 basehttp 13444 8680 "GET /static/js/handlers/sizeHandlers.js HTTP/1.1" 200 1329
+INFO 2025-01-29 11:46:49,258 basehttp 13444 18968 "GET /static/js/handlers/colorHandlers.js HTTP/1.1" 200 2741
+INFO 2025-01-29 11:46:49,258 basehttp 13444 17344 "GET /static/js/handlers/layoutHandlers.js HTTP/1.1" 200 3520
+INFO 2025-01-29 11:46:49,260 basehttp 13444 5504 "GET /static/js/handlers/alignmentHandlers.js HTTP/1.1" 200 2244
+INFO 2025-01-29 11:46:49,260 basehttp 13444 23756 "GET /static/js/handlers/fontHandlers.js HTTP/1.1" 200 4679
+INFO 2025-01-29 11:46:49,260 basehttp 13444 27804 "GET /static/js/handlers/buttonHandlers.js HTTP/1.1" 200 5313
+INFO 2025-01-29 11:46:49,260 basehttp 13444 8680 "GET /static/js/handlers/publishHandlers.js HTTP/1.1" 200 4576
+INFO 2025-01-29 11:46:49,261 basehttp 13444 18968 "GET /static/js/utils/previewUpdates.js HTTP/1.1" 200 21087
+INFO 2025-01-29 11:46:49,261 basehttp 13444 17344 "GET /static/js/components/heroComponents.js HTTP/1.1" 200 4377
+INFO 2025-01-29 11:46:49,283 basehttp 13444 17344 "GET /static/js/utils/cookies.js HTTP/1.1" 200 513
+INFO 2025-01-29 11:46:49,308 basehttp 13444 17344 "GET /static/js/components/slider.js HTTP/1.1" 200 5137
+INFO 2025-01-29 11:46:49,308 basehttp 13444 18968 "GET /static/js/utils/cache.js HTTP/1.1" 200 879
+INFO 2025-01-29 11:46:49,308 basehttp 13444 5504 "GET /static/js/utils/debounce.js HTTP/1.1" 200 660
+DEBUG 2025-01-29 11:46:51,138 content 13444 17344 Saving SubPage: test none menu - about
+DEBUG 2025-01-29 11:46:51,138 content 13444 17344 Generated slug: test_non_menu-about-20250129-174651
+DEBUG 2025-01-29 11:46:51,147 content 13444 17344 
+            Searching for hero_primary:
+            - SubPage ID: 102
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 11:46:51,149 content 13444 17344 All images found: []
+DEBUG 2025-01-29 11:46:51,150 content 13444 17344 Hero primary found: None
+DEBUG 2025-01-29 11:46:51,150 content 13444 17344 
+            Searching for banner_2:
+            - SubPage ID: 102
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 11:46:51,151 content 13444 17344 Banner 2 found: None
+DEBUG 2025-01-29 11:46:51,151 content 13444 17344 
+            Searching for banner_3:
+            - SubPage ID: 102
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 11:46:51,152 content 13444 17344 Banner 3 found: None
+DEBUG 2025-01-29 11:46:51,154 content 13444 17344 
+            Searching for hero_primary:
+            - SubPage ID: 102
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 11:46:51,155 content 13444 17344 All images found: []
+DEBUG 2025-01-29 11:46:51,156 content 13444 17344 Hero primary found: None
+DEBUG 2025-01-29 11:46:51,156 content 13444 17344 
+            Searching for banner_2:
+            - SubPage ID: 102
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 11:46:51,157 content 13444 17344 Banner 2 found: None
+DEBUG 2025-01-29 11:46:51,157 content 13444 17344 
+            Searching for banner_3:
+            - SubPage ID: 102
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 11:46:51,158 content 13444 17344 Banner 3 found: None
+INFO 2025-01-29 11:46:51,159 basehttp 13444 17344 "POST /api/test_non_menu/layout/update/ HTTP/1.1" 200 4708
+INFO 2025-01-29 11:46:52,487 basehttp 13444 17344 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-29 11:46:54,505 basehttp 13444 17344 "GET /test_non_menu/about/ HTTP/1.1" 200 24614
+INFO 2025-01-29 11:46:54,539 basehttp 13444 17344 "GET /static/js/subpages/about.js HTTP/1.1" 200 7273
+INFO 2025-01-29 11:46:57,312 basehttp 13444 17344 "POST /test_non_menu/about/settings/ HTTP/1.1" 200 104
+INFO 2025-01-29 11:47:08,502 basehttp 13444 17344 "GET /test_non_menu/about/ HTTP/1.1" 200 24619
+INFO 2025-01-29 11:47:22,981 basehttp 13444 17344 "POST /test_non_menu/about/settings/ HTTP/1.1" 200 103
+INFO 2025-01-29 11:47:27,822 basehttp 13444 17344 "POST /test_non_menu/about/settings/ HTTP/1.1" 200 104
+INFO 2025-01-29 11:47:29,588 basehttp 13444 17344 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-29 11:47:32,127 basehttp 13444 17344 "GET /test_non_menu/home/ HTTP/1.1" 200 30439
+INFO 2025-01-29 11:47:35,608 basehttp 13444 17344 "POST /test_non_menu/home/settings/ HTTP/1.1" 200 114
+INFO 2025-01-29 11:47:39,629 basehttp 13444 17344 "POST /test_non_menu/home/settings/ HTTP/1.1" 200 106
+INFO 2025-01-29 11:48:22,950 basehttp 13444 17344 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-29 11:48:25,075 basehttp 13444 17344 "GET /test_non_menu/products/ HTTP/1.1" 200 17432
+INFO 2025-01-29 11:48:49,656 autoreload 13444 26084 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\urls.py changed, reloading.
+INFO 2025-01-29 11:48:50,550 autoreload 20964 24912 Watching for file changes with StatReloader
+INFO 2025-01-29 11:49:10,372 autoreload 20964 24912 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:49:11,263 autoreload 24968 14132 Watching for file changes with StatReloader
+INFO 2025-01-29 11:49:15,095 autoreload 24968 14132 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:49:15,868 autoreload 33204 12484 Watching for file changes with StatReloader
+INFO 2025-01-29 11:49:17,541 autoreload 33204 12484 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:49:18,405 autoreload 24820 29424 Watching for file changes with StatReloader
+INFO 2025-01-29 11:49:20,040 autoreload 24820 29424 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:49:20,857 autoreload 2260 13356 Watching for file changes with StatReloader
+INFO 2025-01-29 11:49:24,704 autoreload 2260 13356 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:49:25,545 autoreload 23032 4476 Watching for file changes with StatReloader
+INFO 2025-01-29 11:49:29,406 autoreload 23032 4476 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:49:30,252 autoreload 28880 27776 Watching for file changes with StatReloader
+INFO 2025-01-29 11:49:31,754 autoreload 28880 27776 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:49:32,525 autoreload 15932 7888 Watching for file changes with StatReloader
+INFO 2025-01-29 11:49:39,095 autoreload 15932 7888 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:49:39,919 autoreload 27524 24340 Watching for file changes with StatReloader
+INFO 2025-01-29 11:49:42,017 autoreload 27524 24340 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:49:42,809 autoreload 2052 18500 Watching for file changes with StatReloader
+INFO 2025-01-29 11:50:08,387 autoreload 2052 18500 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:50:09,195 autoreload 736 24440 Watching for file changes with StatReloader
+INFO 2025-01-29 11:50:12,395 autoreload 736 24440 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:50:13,225 autoreload 30236 31416 Watching for file changes with StatReloader
+INFO 2025-01-29 11:50:15,306 autoreload 30236 31416 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:50:16,177 autoreload 24696 20928 Watching for file changes with StatReloader
+INFO 2025-01-29 11:50:20,579 autoreload 24696 20928 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:50:21,433 autoreload 564 33044 Watching for file changes with StatReloader
+INFO 2025-01-29 11:50:23,500 autoreload 564 33044 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 11:50:24,316 autoreload 14648 8728 Watching for file changes with StatReloader
+INFO 2025-01-29 11:50:37,589 autoreload 14648 8728 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 11:50:38,441 autoreload 11104 5244 Watching for file changes with StatReloader
+INFO 2025-01-29 12:06:10,206 autoreload 27204 17600 Watching for file changes with StatReloader
+INFO 2025-01-29 12:06:10,827 basehttp 27204 33168 "GET /test_non_menu/products/ HTTP/1.1" 200 17432
+INFO 2025-01-29 12:06:11,078 basehttp 27204 33168 - Broken pipe from ('127.0.0.1', 53114)
+INFO 2025-01-29 12:06:14,214 basehttp 27204 27372 "DELETE /test_non_menu/products/5/ HTTP/1.1" 200 60
+WARNING 2025-01-29 12:06:15,507 log 27204 27372 Not Found: /favicon.ico
+INFO 2025-01-29 12:06:15,507 basehttp 27204 27372 - Broken pipe from ('127.0.0.1', 53123)
+INFO 2025-01-29 13:21:37,362 autoreload 22784 29748 Watching for file changes with StatReloader
+INFO 2025-01-29 13:37:03,974 basehttp 22784 26484 "GET /test_non_menu/gallery/ HTTP/1.1" 200 10499
+INFO 2025-01-29 13:37:06,027 basehttp 22784 26484 "GET /test_non_menu/events/ HTTP/1.1" 200 18815
+INFO 2025-01-29 13:37:06,134 basehttp 22784 26484 - Broken pipe from ('127.0.0.1', 61096)
+INFO 2025-01-29 13:37:06,179 basehttp 22784 29016 "GET /media/user_uploads/2025/01/28/25_PC_logo_Kessling.webp HTTP/1.1" 200 22514
+INFO 2025-01-29 13:37:12,424 basehttp 22784 29016 "GET /test_non_menu/events/ HTTP/1.1" 200 18815
+INFO 2025-01-29 13:37:15,581 basehttp 22784 29016 "POST /test_non_menu/events/delete/23/ HTTP/1.1" 200 58
+WARNING 2025-01-29 13:37:17,295 log 22784 29016 Not Found: /favicon.ico
+INFO 2025-01-29 13:37:17,295 basehttp 22784 29016 - Broken pipe from ('127.0.0.1', 61103)
+INFO 2025-01-29 13:37:18,223 basehttp 22784 30100 "GET /test_non_menu/products/ HTTP/1.1" 200 15929
+INFO 2025-01-29 13:37:18,368 basehttp 22784 30100 "GET /static/js/subpages/products.js HTTP/1.1" 200 11736
+INFO 2025-01-29 13:37:18,385 basehttp 22784 30100 - Broken pipe from ('127.0.0.1', 61129)
+INFO 2025-01-29 13:37:18,390 basehttp 22784 13572 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-29 13:37:18,390 basehttp 22784 11236 "GET /static/js/utils/placeholders.js HTTP/1.1" 200 7237
+ERROR 2025-01-29 13:37:21,601 log 22784 11236 Internal Server Error: /test_non_menu/services/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 875, in _resolve_lookup
+    current = current[bit]
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 881, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+AttributeError: type object 'RequestContext' has no attribute 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 891, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 613, in business_page
+    return render(request, template, context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\crispy_forms\templatetags\crispy_forms_tags.py", line 199, in render
+    c = self.get_render(context).flatten()
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\crispy_forms\templatetags\crispy_forms_tags.py", line 89, in get_render
+    actual_form = form.resolve(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 842, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 898, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [service_form] in [{'True': True, 'False': False, 'None': None}, {}, {}, {'business_details': <Business: test none menu>, 'business_subdirectory': 'test_non_menu', 'subpage': <SubPage: test none menu - services>, 'is_owner': True, 'is_edit_page': True, 'subpages': <QuerySet [<SubPage: test none menu - about>, <SubPage: test none menu - contact>, <SubPage: test none menu - events>, <SubPage: test none menu - gallery>, <SubPage: test none menu - home>, <SubPage: test none menu - menu>, <SubPage: test none menu - products>, <SubPage: test none menu - services>, <SubPage: test none menu - specials>, <SubPage: test none menu - testimonials>]>, 'published_pages': [{'page_type': 'home', 'title': 'test none menu Home', 'slug': 'test_non_menu', 'is_published': True}], 'has_menu': True}]
+ERROR 2025-01-29 13:37:21,617 basehttp 22784 11236 "GET /test_non_menu/services/ HTTP/1.1" 500 237932
+INFO 2025-01-29 13:46:05,856 autoreload 22784 29748 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 13:46:06,739 autoreload 28744 14560 Watching for file changes with StatReloader
+INFO 2025-01-29 13:46:15,530 autoreload 28744 14560 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 13:46:16,349 autoreload 22540 20328 Watching for file changes with StatReloader
+INFO 2025-01-29 13:46:18,456 autoreload 22540 20328 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 13:46:19,270 autoreload 5248 30128 Watching for file changes with StatReloader
+INFO 2025-01-29 13:46:21,343 autoreload 5248 30128 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 13:46:22,245 autoreload 10344 18864 Watching for file changes with StatReloader
+INFO 2025-01-29 13:46:25,478 autoreload 10344 18864 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 13:46:26,327 autoreload 13540 30864 Watching for file changes with StatReloader
+INFO 2025-01-29 13:46:28,432 autoreload 13540 30864 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 13:46:29,315 autoreload 17876 12060 Watching for file changes with StatReloader
+INFO 2025-01-29 13:46:32,505 autoreload 17876 12060 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 13:46:33,354 autoreload 28676 26644 Watching for file changes with StatReloader
+INFO 2025-01-29 13:46:37,679 autoreload 28676 26644 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 13:46:38,532 autoreload 25192 8124 Watching for file changes with StatReloader
+INFO 2025-01-29 13:46:56,056 autoreload 25192 8124 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 13:46:56,943 autoreload 18624 19548 Watching for file changes with StatReloader
+INFO 2025-01-29 13:47:48,565 autoreload 18624 19548 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\content_forms.py changed, reloading.
+INFO 2025-01-29 13:47:49,347 autoreload 19140 14916 Watching for file changes with StatReloader
+INFO 2025-01-29 13:47:52,094 autoreload 19140 14916 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\content_forms.py changed, reloading.
+INFO 2025-01-29 13:47:52,918 autoreload 10548 9672 Watching for file changes with StatReloader
+INFO 2025-01-29 13:48:00,405 autoreload 10548 9672 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\content_forms.py changed, reloading.
+INFO 2025-01-29 13:48:01,279 autoreload 19408 24552 Watching for file changes with StatReloader
+INFO 2025-01-29 13:48:15,162 autoreload 19408 24552 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\product_forms.py changed, reloading.
+INFO 2025-01-29 13:48:16,042 autoreload 12140 25720 Watching for file changes with StatReloader
+INFO 2025-01-29 13:58:30,015 autoreload 30864 22484 Watching for file changes with StatReloader
+INFO 2025-01-29 13:59:58,080 autoreload 30864 22484 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\__init__.py changed, reloading.
+INFO 2025-01-29 13:59:58,865 autoreload 2756 32436 Watching for file changes with StatReloader
+INFO 2025-01-29 14:00:00,444 autoreload 2756 32436 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\__init__.py changed, reloading.
+INFO 2025-01-29 14:00:01,232 autoreload 31996 11148 Watching for file changes with StatReloader
+INFO 2025-01-29 14:00:02,777 autoreload 31996 11148 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\__init__.py changed, reloading.
+INFO 2025-01-29 14:00:03,580 autoreload 2476 11284 Watching for file changes with StatReloader
+INFO 2025-01-29 14:00:08,556 autoreload 2476 11284 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\__init__.py changed, reloading.
+INFO 2025-01-29 14:00:09,378 autoreload 20340 27228 Watching for file changes with StatReloader
+INFO 2025-01-29 14:00:12,402 autoreload 20340 27228 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\__init__.py changed, reloading.
+INFO 2025-01-29 14:00:13,243 autoreload 11524 488 Watching for file changes with StatReloader
+INFO 2025-01-29 14:00:19,645 autoreload 11524 488 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\__init__.py changed, reloading.
+INFO 2025-01-29 14:00:20,454 autoreload 18860 24928 Watching for file changes with StatReloader
+INFO 2025-01-29 14:00:25,696 autoreload 18860 24928 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\__init__.py changed, reloading.
+INFO 2025-01-29 14:00:26,507 autoreload 27152 32156 Watching for file changes with StatReloader
+INFO 2025-01-29 14:00:29,178 autoreload 27152 32156 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\__init__.py changed, reloading.
+INFO 2025-01-29 14:00:29,974 autoreload 27696 23692 Watching for file changes with StatReloader
+INFO 2025-01-29 14:00:31,531 autoreload 27696 23692 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\__init__.py changed, reloading.
+INFO 2025-01-29 14:00:32,363 autoreload 20520 26944 Watching for file changes with StatReloader
+INFO 2025-01-29 14:00:36,143 autoreload 20520 26944 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\__init__.py changed, reloading.
+INFO 2025-01-29 14:00:36,922 autoreload 28448 14132 Watching for file changes with StatReloader
+INFO 2025-01-29 14:00:39,632 autoreload 28448 14132 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\__init__.py changed, reloading.
+INFO 2025-01-29 14:00:40,421 autoreload 17192 20704 Watching for file changes with StatReloader
+INFO 2025-01-29 14:00:44,197 autoreload 17192 20704 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\__init__.py changed, reloading.
+INFO 2025-01-29 14:00:45,005 autoreload 29592 16120 Watching for file changes with StatReloader
+INFO 2025-01-29 14:14:38,623 autoreload 29592 16120 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:14:39,510 autoreload 25068 1988 Watching for file changes with StatReloader
+INFO 2025-01-29 14:14:42,726 autoreload 25068 1988 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:14:43,677 autoreload 10548 16944 Watching for file changes with StatReloader
+INFO 2025-01-29 14:14:48,015 autoreload 10548 16944 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:14:48,829 autoreload 19080 6028 Watching for file changes with StatReloader
+INFO 2025-01-29 14:14:50,887 autoreload 19080 6028 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:14:51,740 autoreload 16636 30532 Watching for file changes with StatReloader
+INFO 2025-01-29 14:14:53,823 autoreload 16636 30532 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:14:54,685 autoreload 28260 9324 Watching for file changes with StatReloader
+INFO 2025-01-29 14:14:57,946 autoreload 28260 9324 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:14:58,807 autoreload 23652 30368 Watching for file changes with StatReloader
+INFO 2025-01-29 14:15:00,899 autoreload 23652 30368 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:15:01,694 autoreload 22484 16392 Watching for file changes with StatReloader
+INFO 2025-01-29 14:15:04,905 autoreload 22484 16392 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:15:05,828 autoreload 20080 18252 Watching for file changes with StatReloader
+INFO 2025-01-29 14:15:07,897 autoreload 20080 18252 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:15:08,710 autoreload 13988 15684 Watching for file changes with StatReloader
+INFO 2025-01-29 14:15:10,799 autoreload 13988 15684 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:15:11,606 autoreload 11936 8560 Watching for file changes with StatReloader
+INFO 2025-01-29 14:15:13,697 autoreload 11936 8560 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:15:14,545 autoreload 2908 24984 Watching for file changes with StatReloader
+INFO 2025-01-29 14:15:21,065 autoreload 2908 24984 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:15:21,893 autoreload 15524 6176 Watching for file changes with StatReloader
+INFO 2025-01-29 14:15:23,335 autoreload 15524 6176 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:15:24,094 autoreload 584 31652 Watching for file changes with StatReloader
+INFO 2025-01-29 14:15:28,448 autoreload 584 31652 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:15:29,228 autoreload 27208 32748 Watching for file changes with StatReloader
+INFO 2025-01-29 14:15:31,290 autoreload 27208 32748 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:15:32,078 autoreload 19536 26492 Watching for file changes with StatReloader
+INFO 2025-01-29 14:15:38,662 autoreload 19536 26492 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:15:39,555 autoreload 15416 33512 Watching for file changes with StatReloader
+ERROR 2025-01-29 14:18:04,800 log 15416 12964 Internal Server Error: /test_non_menu/services/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 875, in _resolve_lookup
+    current = current[bit]
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 881, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+AttributeError: type object 'RequestContext' has no attribute 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 891, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 611, in business_page
+    return render(request, template, context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\crispy_forms\templatetags\crispy_forms_tags.py", line 199, in render
+    c = self.get_render(context).flatten()
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\crispy_forms\templatetags\crispy_forms_tags.py", line 89, in get_render
+    actual_form = form.resolve(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 842, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 898, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [service_form] in [{'True': True, 'False': False, 'None': None}, {}, {}, {'business_details': <Business: test none menu>, 'business_subdirectory': 'test_non_menu', 'subpage': <SubPage: test none menu - services>, 'is_owner': True, 'is_edit_page': True, 'subpages': <QuerySet [<SubPage: test none menu - about>, <SubPage: test none menu - contact>, <SubPage: test none menu - events>, <SubPage: test none menu - gallery>, <SubPage: test none menu - home>, <SubPage: test none menu - menu>, <SubPage: test none menu - products>, <SubPage: test none menu - services>, <SubPage: test none menu - specials>, <SubPage: test none menu - testimonials>]>, 'published_pages': [{'page_type': 'home', 'title': 'test none menu Home', 'slug': 'test_non_menu', 'is_published': True}], 'has_menu': True}]
+ERROR 2025-01-29 14:18:04,814 basehttp 15416 12964 "GET /test_non_menu/services/ HTTP/1.1" 500 237932
+WARNING 2025-01-29 14:18:04,993 log 15416 12964 Not Found: /favicon.ico
+INFO 2025-01-29 14:18:04,994 basehttp 15416 12964 - Broken pipe from ('127.0.0.1', 65331)
+ERROR 2025-01-29 14:18:56,844 log 15416 24116 Internal Server Error: /test_non_menu/services/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 875, in _resolve_lookup
+    current = current[bit]
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 881, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+AttributeError: type object 'RequestContext' has no attribute 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 891, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 611, in business_page
+    return render(request, template, context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\crispy_forms\templatetags\crispy_forms_tags.py", line 199, in render
+    c = self.get_render(context).flatten()
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\crispy_forms\templatetags\crispy_forms_tags.py", line 89, in get_render
+    actual_form = form.resolve(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 842, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 898, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [service_form] in [{'True': True, 'False': False, 'None': None}, {}, {}, {'business_details': <Business: test none menu>, 'business_subdirectory': 'test_non_menu', 'subpage': <SubPage: test none menu - services>, 'is_owner': True, 'is_edit_page': True, 'subpages': <QuerySet [<SubPage: test none menu - about>, <SubPage: test none menu - contact>, <SubPage: test none menu - events>, <SubPage: test none menu - gallery>, <SubPage: test none menu - home>, <SubPage: test none menu - menu>, <SubPage: test none menu - products>, <SubPage: test none menu - services>, <SubPage: test none menu - specials>, <SubPage: test none menu - testimonials>]>, 'published_pages': [{'page_type': 'home', 'title': 'test none menu Home', 'slug': 'test_non_menu', 'is_published': True}], 'has_menu': True}]
+ERROR 2025-01-29 14:18:56,857 basehttp 15416 24116 "GET /test_non_menu/services/ HTTP/1.1" 500 237932
+INFO 2025-01-29 14:20:27,905 autoreload 15416 33512 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:20:28,870 autoreload 648 18680 Watching for file changes with StatReloader
+INFO 2025-01-29 14:20:34,302 autoreload 648 18680 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:20:35,140 autoreload 30992 3388 Watching for file changes with StatReloader
+INFO 2025-01-29 14:20:37,237 autoreload 30992 3388 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:20:38,070 autoreload 2872 25456 Watching for file changes with StatReloader
+INFO 2025-01-29 14:20:53,615 autoreload 2872 25456 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:20:54,406 autoreload 28520 16572 Watching for file changes with StatReloader
+INFO 2025-01-29 14:20:58,117 autoreload 28520 16572 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:20:58,950 autoreload 32068 6388 Watching for file changes with StatReloader
+INFO 2025-01-29 14:21:02,159 autoreload 32068 6388 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:21:02,963 autoreload 26268 32792 Watching for file changes with StatReloader
+INFO 2025-01-29 14:21:05,064 autoreload 26268 32792 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:21:05,938 autoreload 20176 33256 Watching for file changes with StatReloader
+INFO 2025-01-29 14:21:23,824 autoreload 20176 33256 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:21:24,699 autoreload 12940 19496 Watching for file changes with StatReloader
+INFO 2025-01-29 14:21:26,175 autoreload 12940 19496 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:21:27,012 autoreload 16944 28740 Watching for file changes with StatReloader
+INFO 2025-01-29 14:21:30,256 autoreload 16944 28740 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:21:31,061 autoreload 32952 32684 Watching for file changes with StatReloader
+INFO 2025-01-29 14:21:33,232 autoreload 32952 32684 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:21:34,041 autoreload 7212 15076 Watching for file changes with StatReloader
+INFO 2025-01-29 14:21:36,105 autoreload 7212 15076 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:21:36,919 autoreload 15640 13572 Watching for file changes with StatReloader
+INFO 2025-01-29 14:21:38,998 autoreload 15640 13572 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:21:39,906 autoreload 3516 3520 Watching for file changes with StatReloader
+INFO 2025-01-29 14:21:43,078 autoreload 3516 3520 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:21:43,935 autoreload 8792 24180 Watching for file changes with StatReloader
+INFO 2025-01-29 14:21:45,971 autoreload 8792 24180 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:21:46,831 autoreload 2712 3340 Watching for file changes with StatReloader
+ERROR 2025-01-29 14:21:49,955 log 2712 26176 Internal Server Error: /test_non_menu/services/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 875, in _resolve_lookup
+    current = current[bit]
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 881, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+AttributeError: type object 'RequestContext' has no attribute 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 891, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'service_form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 611, in business_page
+    return render(request, template, context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\crispy_forms\templatetags\crispy_forms_tags.py", line 199, in render
+    c = self.get_render(context).flatten()
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\crispy_forms\templatetags\crispy_forms_tags.py", line 89, in get_render
+    actual_form = form.resolve(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 842, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 898, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [service_form] in [{'True': True, 'False': False, 'None': None}, {}, {}, {'business_details': <Business: test none menu>, 'business_subdirectory': 'test_non_menu', 'subpage': <SubPage: test none menu - services>, 'is_owner': True, 'is_edit_page': True, 'subpages': <QuerySet [<SubPage: test none menu - about>, <SubPage: test none menu - contact>, <SubPage: test none menu - events>, <SubPage: test none menu - gallery>, <SubPage: test none menu - home>, <SubPage: test none menu - menu>, <SubPage: test none menu - products>, <SubPage: test none menu - services>, <SubPage: test none menu - specials>, <SubPage: test none menu - testimonials>]>, 'published_pages': [{'page_type': 'home', 'title': 'test none menu Home', 'slug': 'test_non_menu', 'is_published': True}], 'has_menu': True}]
+ERROR 2025-01-29 14:21:49,969 basehttp 2712 26176 "GET /test_non_menu/services/ HTTP/1.1" 500 237932
+INFO 2025-01-29 14:22:20,790 autoreload 2712 3340 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:22:21,597 autoreload 26544 28880 Watching for file changes with StatReloader
+INFO 2025-01-29 14:22:23,803 autoreload 26544 28880 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:22:24,614 autoreload 17396 17944 Watching for file changes with StatReloader
+INFO 2025-01-29 14:22:44,606 autoreload 17396 17944 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:22:45,410 autoreload 3024 17348 Watching for file changes with StatReloader
+INFO 2025-01-29 14:22:48,626 autoreload 3024 17348 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:22:49,654 autoreload 3664 27492 Watching for file changes with StatReloader
+INFO 2025-01-29 14:22:51,725 autoreload 3664 27492 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 14:22:52,571 autoreload 3428 32308 Watching for file changes with StatReloader
+ERROR 2025-01-29 14:23:01,874 log 3428 22788 Internal Server Error: /test_non_menu/services/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 612, in business_page
+    context = get_business_context(business, request.user, page_type)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 336, in get_business_context
+    return get_editor_context(base_context, business, subpage, page_type)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 438, in get_editor_context
+    context['services'] = Service.objects.filter(business=business)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\db\models\query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\db\models\query.py", line 1494, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\db\models\query.py", line 1501, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\db\models\sql\query.py", line 1600, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\db\models\sql\query.py", line 1632, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\db\models\sql\query.py", line 1482, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\db\models\sql\query.py", line 1294, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\db\models\sql\query.py", line 1759, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'business' into field. Choices are: description, featured, id, images, name, services_page, services_page_id
+ERROR 2025-01-29 14:23:01,879 basehttp 3428 22788 "GET /test_non_menu/services/ HTTP/1.1" 500 141413
+INFO 2025-01-29 14:23:37,483 autoreload 3428 32308 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 14:23:38,246 autoreload 24936 13816 Watching for file changes with StatReloader
+INFO 2025-01-29 14:27:40,427 autoreload 2904 5940 Watching for file changes with StatReloader
+INFO 2025-01-29 14:27:59,314 basehttp 2904 15532 "GET /test_non_menu/services/ HTTP/1.1" 200 15907
+INFO 2025-01-29 14:27:59,420 basehttp 2904 15532 "GET /static/js/subpages/services.js HTTP/1.1" 200 11736
+INFO 2025-01-29 14:27:59,457 basehttp 2904 15532 - Broken pipe from ('127.0.0.1', 50711)
+INFO 2025-01-29 14:27:59,463 basehttp 2904 26184 "GET /static/js/utils/placeholders.js HTTP/1.1" 304 0
+INFO 2025-01-29 16:39:52,062 basehttp 2904 21924 "GET /test_non_menu/services/ HTTP/1.1" 200 15907
+INFO 2025-01-29 16:39:52,116 basehttp 2904 21924 "GET /static/js/subpages/services.js HTTP/1.1" 200 11736
+INFO 2025-01-29 16:39:52,260 basehttp 2904 21924 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 4585
+INFO 2025-01-29 16:39:52,262 basehttp 2904 21924 "GET /static/js/utils/placeholders.js HTTP/1.1" 304 0
+INFO 2025-01-29 16:39:52,275 basehttp 2904 21924 - Broken pipe from ('127.0.0.1', 61778)
+INFO 2025-01-29 16:39:54,962 basehttp 2904 12008 "POST /test_non_menu/services/settings/ HTTP/1.1" 200 21
+INFO 2025-01-29 16:40:00,551 basehttp 2904 1548 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-29 16:40:00,552 basehttp 2904 12008 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-29 16:40:22,472 basehttp 2904 12008 "GET /test_non_menu/services/ HTTP/1.1" 200 15909
+INFO 2025-01-29 16:40:22,639 basehttp 2904 12008 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+ERROR 2025-01-29 16:40:37,595 log 2904 12008 Internal Server Error: /test_non_menu/services/create/
+ERROR 2025-01-29 16:40:37,596 basehttp 2904 12008 "POST /test_non_menu/services/create/ HTTP/1.1" 500 54
+INFO 2025-01-29 16:41:41,317 autoreload 2904 5940 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 16:41:42,212 autoreload 30492 17344 Watching for file changes with StatReloader
+INFO 2025-01-29 16:41:43,804 autoreload 30492 17344 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 16:41:44,566 autoreload 24360 32816 Watching for file changes with StatReloader
+INFO 2025-01-29 16:41:48,858 autoreload 24360 32816 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 16:41:49,706 autoreload 24456 21424 Watching for file changes with StatReloader
+INFO 2025-01-29 16:41:55,113 autoreload 24456 21424 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 16:41:55,989 autoreload 29120 1448 Watching for file changes with StatReloader
+INFO 2025-01-29 16:41:56,683 basehttp 29120 9060 "GET /test_non_menu/services/ HTTP/1.1" 200 17488
+INFO 2025-01-29 16:41:56,865 basehttp 29120 9060 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+DEBUG 2025-01-29 16:42:04,455 media 29120 9060 
+            Saving Image:
+            - Alt Text: Toilet Cleaning 2
+            - Content Type: Restaurants | service
+            - Object ID: 2
+            - Content Object: Service object (2)
+            - Image Path: IMG_5282.jpg
+        
+DEBUG 2025-01-29 16:42:04,486 media 29120 9060 Content type check: image/jpeg
+DEBUG 2025-01-29 16:42:04,630 media 29120 9060 
+            Image Saved:
+            - ID: 149
+            - Alt Text: Toilet Cleaning 2
+            - Content Type: Restaurants | service
+            - Object ID: 2
+        
+ERROR 2025-01-29 16:42:04,631 log 29120 9060 Internal Server Error: /test_non_menu/services/create/
+ERROR 2025-01-29 16:42:04,632 basehttp 29120 9060 "POST /test_non_menu/services/create/ HTTP/1.1" 500 54
+INFO 2025-01-29 16:42:55,879 basehttp 29120 9060 "GET /test_non_menu/services/ HTTP/1.1" 200 18947
+INFO 2025-01-29 16:42:56,232 basehttp 29120 9060 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-29 17:02:40,058 autoreload 29120 1448 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 17:02:40,935 autoreload 12052 1696 Watching for file changes with StatReloader
+INFO 2025-01-29 17:11:44,559 basehttp 12052 1456 "GET /test_non_menu/services/ HTTP/1.1" 200 18947
+INFO 2025-01-29 17:11:44,770 basehttp 12052 1456 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-29 17:11:44,799 basehttp 12052 33292 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-29 17:11:44,818 basehttp 12052 6072 "GET /static/js/subpages/services.js HTTP/1.1" 200 11736
+INFO 2025-01-29 17:11:44,823 basehttp 12052 13756 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-29 17:11:44,824 basehttp 12052 1456 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-29 17:11:44,844 basehttp 12052 1456 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-29 17:11:44,846 basehttp 12052 1456 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 4585
+INFO 2025-01-29 17:11:44,847 basehttp 12052 6072 "GET /static/js/utils/placeholders.js HTTP/1.1" 200 7237
+INFO 2025-01-29 17:11:44,880 basehttp 12052 1456 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-29 17:11:47,070 basehttp 12052 1456 "DELETE /test_non_menu/services/1/ HTTP/1.1" 200 60
+DEBUG 2025-01-29 17:11:51,809 media 12052 1456 
+            Saving Image:
+            - Alt Text: Toilet Cleaning 2
+            - Content Type: Restaurants | service
+            - Object ID: 3
+            - Content Object: Service object (3)
+            - Image Path: IMG_5282.jpg
+        
+DEBUG 2025-01-29 17:11:51,814 media 12052 1456 Content type check: image/jpeg
+DEBUG 2025-01-29 17:11:51,963 media 12052 1456 
+            Image Saved:
+            - ID: 150
+            - Alt Text: Toilet Cleaning 2
+            - Content Type: Restaurants | service
+            - Object ID: 3
+        
+ERROR 2025-01-29 17:11:51,964 log 12052 1456 Internal Server Error: /test_non_menu/services/create/
+ERROR 2025-01-29 17:11:51,964 basehttp 12052 1456 "POST /test_non_menu/services/create/ HTTP/1.1" 500 54
+INFO 2025-01-29 17:38:59,994 autoreload 12052 1696 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 17:39:05,383 autoreload 28108 24928 Watching for file changes with StatReloader
+INFO 2025-01-29 17:39:06,923 basehttp 28108 26344 "GET /test_non_menu/services/ HTTP/1.1" 200 18857
+INFO 2025-01-29 17:39:07,034 basehttp 28108 26344 - Broken pipe from ('127.0.0.1', 50830)
+INFO 2025-01-29 17:39:07,092 basehttp 28108 16268 - Broken pipe from ('127.0.0.1', 50831)
+INFO 2025-01-29 17:39:07,094 basehttp 28108 2052 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-29 17:39:09,011 basehttp 28108 2052 "GET /test_non_menu/services/2/get-form/ HTTP/1.1" 200 2024
+ERROR 2025-01-29 17:39:10,704 log 28108 2052 Internal Server Error: /test_non_menu/services/2/
+ERROR 2025-01-29 17:39:10,704 basehttp 28108 2052 "POST /test_non_menu/services/2/ HTTP/1.1" 500 56
+INFO 2025-01-29 17:39:50,540 autoreload 28108 24928 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:39:51,293 autoreload 12452 23384 Watching for file changes with StatReloader
+INFO 2025-01-29 17:39:53,741 autoreload 12452 23384 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:39:54,356 autoreload 20872 1548 Watching for file changes with StatReloader
+INFO 2025-01-29 17:40:06,230 autoreload 20872 1548 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:40:06,830 autoreload 9932 9288 Watching for file changes with StatReloader
+INFO 2025-01-29 17:40:14,537 autoreload 9932 9288 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:40:15,273 autoreload 30252 9756 Watching for file changes with StatReloader
+INFO 2025-01-29 17:40:21,947 basehttp 30252 16348 "GET /test_non_menu/services/ HTTP/1.1" 200 18857
+INFO 2025-01-29 17:40:22,357 basehttp 30252 16348 - Broken pipe from ('127.0.0.1', 51072)
+INFO 2025-01-29 17:40:29,163 basehttp 30252 18096 "GET /admin/ HTTP/1.1" 200 28717
+INFO 2025-01-29 17:40:29,205 basehttp 30252 28320 "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2682
+INFO 2025-01-29 17:40:29,206 basehttp 30252 18096 "GET /static/admin/css/base.css HTTP/1.1" 200 21544
+INFO 2025-01-29 17:40:29,206 basehttp 30252 11188 "GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+INFO 2025-01-29 17:40:29,206 basehttp 30252 10572 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-01-29 17:40:29,207 basehttp 30252 15840 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2025-01-29 17:40:29,207 basehttp 30252 33424 "GET /static/admin/css/responsive.css HTTP/1.1" 200 17905
+INFO 2025-01-29 17:40:29,412 basehttp 30252 18096 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+WARNING 2025-01-29 17:40:29,434 log 30252 18096 Not Found: /favicon.ico
+WARNING 2025-01-29 17:40:29,435 basehttp 30252 18096 "GET /favicon.ico HTTP/1.1" 404 15096
+INFO 2025-01-29 17:40:34,548 basehttp 30252 18096 "GET /admin/restaurants/service/ HTTP/1.1" 200 12557
+INFO 2025-01-29 17:40:34,581 basehttp 30252 18096 "GET /static/admin/css/changelists.css HTTP/1.1" 200 6811
+INFO 2025-01-29 17:40:34,582 basehttp 30252 10572 "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-01-29 17:40:34,582 basehttp 30252 28320 "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2025-01-29 17:40:34,582 basehttp 30252 11188 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9042
+INFO 2025-01-29 17:40:34,585 basehttp 30252 18096 "GET /static/admin/js/actions.js HTTP/1.1" 200 8067
+INFO 2025-01-29 17:40:34,585 basehttp 30252 10572 "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-01-29 17:40:34,585 basehttp 30252 28320 "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-01-29 17:40:34,587 basehttp 30252 18096 "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2025-01-29 17:40:34,588 basehttp 30252 15840 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2025-01-29 17:40:34,589 basehttp 30252 11188 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2025-01-29 17:40:34,615 basehttp 30252 33424 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-29 17:40:34,704 basehttp 30252 11188 "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2025-01-29 17:40:35,872 basehttp 30252 11188 "GET /admin/restaurants/service/2/change/ HTTP/1.1" 200 17287
+INFO 2025-01-29 17:40:36,482 basehttp 30252 11188 "GET /static/admin/css/forms.css HTTP/1.1" 200 9048
+INFO 2025-01-29 17:40:36,488 basehttp 30252 11188 "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-01-29 17:40:36,488 basehttp 30252 18096 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2025-01-29 17:40:36,519 basehttp 30252 15840 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-29 17:40:36,528 basehttp 30252 18096 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-01-29 17:40:36,528 basehttp 30252 11188 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-01-29 17:40:36,595 basehttp 30252 11188 "GET /static/admin/css/widgets.css HTTP/1.1" 200 11800
+WARNING 2025-01-29 17:40:36,643 log 30252 11188 Not Found: /favicon.ico
+INFO 2025-01-29 17:40:36,643 basehttp 30252 11188 - Broken pipe from ('127.0.0.1', 51088)
+INFO 2025-01-29 17:41:13,858 basehttp 30252 15840 "GET /admin/restaurants/product/ HTTP/1.1" 200 10973
+INFO 2025-01-29 17:41:13,930 basehttp 30252 15840 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-01-29 17:41:14,016 log 30252 15840 Not Found: /favicon.ico
+INFO 2025-01-29 17:41:14,017 basehttp 30252 15840 - Broken pipe from ('127.0.0.1', 51090)
+INFO 2025-01-29 17:41:16,154 basehttp 30252 18096 "GET /admin/restaurants/service/ HTTP/1.1" 200 12557
+INFO 2025-01-29 17:41:16,229 basehttp 30252 18096 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-01-29 17:41:16,328 log 30252 18096 Not Found: /favicon.ico
+INFO 2025-01-29 17:41:16,329 basehttp 30252 18096 - Broken pipe from ('127.0.0.1', 51085)
+INFO 2025-01-29 17:42:15,680 autoreload 30252 9756 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:42:16,492 autoreload 16936 20344 Watching for file changes with StatReloader
+INFO 2025-01-29 17:42:17,865 autoreload 16936 20344 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:42:18,650 autoreload 25720 15548 Watching for file changes with StatReloader
+INFO 2025-01-29 17:42:22,882 autoreload 25720 15548 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:42:23,748 autoreload 30080 18308 Watching for file changes with StatReloader
+INFO 2025-01-29 17:42:25,792 autoreload 30080 18308 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:42:26,584 autoreload 28624 19560 Watching for file changes with StatReloader
+INFO 2025-01-29 17:42:27,091 basehttp 28624 30508 "GET /admin/restaurants/service/ HTTP/1.1" 200 12553
+INFO 2025-01-29 17:42:27,181 basehttp 28624 30508 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-01-29 17:42:27,283 log 28624 30508 Not Found: /favicon.ico
+INFO 2025-01-29 17:42:27,284 basehttp 28624 30508 - Broken pipe from ('127.0.0.1', 51398)
+INFO 2025-01-29 17:42:43,431 autoreload 28624 19560 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:42:44,254 autoreload 4232 33744 Watching for file changes with StatReloader
+INFO 2025-01-29 17:42:46,378 autoreload 4232 33744 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:42:47,259 autoreload 30548 28492 Watching for file changes with StatReloader
+INFO 2025-01-29 17:42:47,763 basehttp 30548 28756 "GET /admin/restaurants/service/ HTTP/1.1" 200 12621
+INFO 2025-01-29 17:42:47,843 basehttp 30548 28756 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-01-29 17:42:47,958 log 30548 28756 Not Found: /favicon.ico
+INFO 2025-01-29 17:42:47,959 basehttp 30548 28756 - Broken pipe from ('127.0.0.1', 51504)
+INFO 2025-01-29 17:43:29,739 autoreload 30548 28492 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\admin.py changed, reloading.
+INFO 2025-01-29 17:43:30,559 autoreload 10344 25596 Watching for file changes with StatReloader
+INFO 2025-01-29 17:43:46,079 autoreload 10344 25596 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\admin.py changed, reloading.
+INFO 2025-01-29 17:43:46,808 autoreload 26796 9756 Watching for file changes with StatReloader
+INFO 2025-01-29 17:44:28,434 autoreload 11224 32128 Watching for file changes with StatReloader
+INFO 2025-01-29 17:44:30,086 basehttp 11224 3520 "GET /admin/restaurants/service/ HTTP/1.1" 200 15695
+INFO 2025-01-29 17:44:30,150 basehttp 11224 3520 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-29 17:44:30,304 basehttp 11224 14144 "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-01-29 17:44:30,332 basehttp 11224 3612 "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2025-01-29 17:44:30,345 basehttp 11224 3520 "GET /media/user_uploads/2025/01/29/IMG_5282.webp HTTP/1.1" 200 32452
+INFO 2025-01-29 17:44:30,350 basehttp 11224 9880 "GET /media/user_uploads/2025/01/29/IMG_5282_0KzIc4z.webp HTTP/1.1" 200 32452
+WARNING 2025-01-29 17:44:30,367 log 11224 3520 Not Found: /favicon.ico
+INFO 2025-01-29 17:44:30,367 basehttp 11224 3520 - Broken pipe from ('127.0.0.1', 51756)
+INFO 2025-01-29 17:44:32,285 basehttp 11224 9880 "GET /admin/restaurants/service/3/change/ HTTP/1.1" 200 18205
+INFO 2025-01-29 17:44:32,393 basehttp 11224 9880 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-29 17:46:40,123 basehttp 11224 2604 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-29 17:46:41,450 basehttp 11224 2604 "GET /test_non_menu/products/ HTTP/1.1" 200 15929
+INFO 2025-01-29 17:46:41,500 basehttp 11224 2604 "GET /static/js/subpages/products.js HTTP/1.1" 200 11736
+INFO 2025-01-29 17:46:42,201 basehttp 11224 2604 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-29 17:46:42,204 basehttp 11224 2604 "GET /static/js/utils/placeholders.js HTTP/1.1" 304 0
+DEBUG 2025-01-29 17:46:50,812 media 11224 2604 
+            Saving Image:
+            - Alt Text: new
+            - Content Type: Restaurants | product
+            - Object ID: 6
+            - Content Object: new - test none menu
+            - Image Path: Han_Solo_where.webp
+        
+DEBUG 2025-01-29 17:46:50,821 media 11224 2604 Content type check: image/webp
+DEBUG 2025-01-29 17:46:50,870 media 11224 2604 
+            Image Saved:
+            - ID: 151
+            - Alt Text: new
+            - Content Type: Restaurants | product
+            - Object ID: 6
+        
+INFO 2025-01-29 17:46:50,871 basehttp 11224 2604 "POST /test_non_menu/products/create/ HTTP/1.1" 200 199
+INFO 2025-01-29 17:46:50,986 basehttp 11224 2604 "GET /test_non_menu/products/ HTTP/1.1" 200 17375
+INFO 2025-01-29 17:46:56,364 basehttp 11224 2604 "GET /admin/restaurants/product/ HTTP/1.1" 200 12269
+INFO 2025-01-29 17:46:56,438 basehttp 11224 2604 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-01-29 17:46:56,516 log 11224 2604 Not Found: /favicon.ico
+INFO 2025-01-29 17:46:56,516 basehttp 11224 2604 - Broken pipe from ('127.0.0.1', 52072)
+INFO 2025-01-29 17:46:59,002 basehttp 11224 17132 "GET /admin/restaurants/product/6/change/ HTTP/1.1" 200 17867
+INFO 2025-01-29 17:46:59,075 basehttp 11224 17132 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-29 17:47:02,114 basehttp 11224 17132 "GET /admin/restaurants/product/ HTTP/1.1" 200 12269
+INFO 2025-01-29 17:47:04,953 basehttp 11224 17132 "GET /admin/restaurants/service/ HTTP/1.1" 200 15695
+INFO 2025-01-29 17:47:05,028 basehttp 11224 17132 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-29 17:47:52,115 autoreload 11224 32128 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\service_forms.py changed, reloading.
+INFO 2025-01-29 17:47:53,003 autoreload 16880 3096 Watching for file changes with StatReloader
+INFO 2025-01-29 17:48:05,035 autoreload 16880 3096 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\service_forms.py changed, reloading.
+INFO 2025-01-29 17:48:05,897 autoreload 14764 23652 Watching for file changes with StatReloader
+INFO 2025-01-29 17:48:15,695 autoreload 14764 23652 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\service_forms.py changed, reloading.
+INFO 2025-01-29 17:48:16,505 autoreload 13364 27192 Watching for file changes with StatReloader
+INFO 2025-01-29 17:48:21,942 autoreload 13364 27192 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\service_forms.py changed, reloading.
+INFO 2025-01-29 17:48:22,758 autoreload 4584 4256 Watching for file changes with StatReloader
+INFO 2025-01-29 17:48:25,990 autoreload 4584 4256 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\service_forms.py changed, reloading.
+INFO 2025-01-29 17:48:26,771 autoreload 24884 20240 Watching for file changes with StatReloader
+INFO 2025-01-29 17:48:32,674 basehttp 24884 4068 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-29 17:48:33,986 basehttp 24884 4068 "GET /test_non_menu/services/ HTTP/1.1" 200 18857
+INFO 2025-01-29 17:48:34,034 basehttp 24884 4068 "GET /static/js/subpages/services.js HTTP/1.1" 304 0
+INFO 2025-01-29 17:48:36,558 basehttp 24884 4068 "GET /test_non_menu/services/2/get-form/ HTTP/1.1" 200 2024
+INFO 2025-01-29 17:49:06,666 basehttp 24884 4068 "GET /test_non_menu/services/ HTTP/1.1" 200 18857
+INFO 2025-01-29 17:49:08,854 basehttp 24884 4068 "GET /test_non_menu/services/2/get-form/ HTTP/1.1" 200 2538
+ERROR 2025-01-29 17:49:12,925 log 24884 4068 Internal Server Error: /test_non_menu/services/2/
+ERROR 2025-01-29 17:49:12,926 basehttp 24884 4068 "POST /test_non_menu/services/2/ HTTP/1.1" 500 50
+INFO 2025-01-29 17:49:46,823 autoreload 24884 20240 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 17:49:47,681 autoreload 30820 31372 Watching for file changes with StatReloader
+INFO 2025-01-29 17:49:48,243 basehttp 30820 3028 "GET /test_non_menu/services/ HTTP/1.1" 200 18857
+INFO 2025-01-29 17:50:28,135 basehttp 30820 3028 "GET /test_non_menu/services/ HTTP/1.1" 200 18953
+INFO 2025-01-29 17:50:28,192 basehttp 30820 3028 "GET /media/user_uploads/2025/01/29/IMG_5282_0KzIc4z.webp HTTP/1.1" 304 0
+INFO 2025-01-29 17:50:38,023 basehttp 30820 3028 "GET /test_non_menu/services/2/get-form/ HTTP/1.1" 200 2607
+INFO 2025-01-29 17:50:55,674 basehttp 30820 3028 "GET /test_non_menu/services/ HTTP/1.1" 200 18791
+INFO 2025-01-29 17:50:55,884 basehttp 30820 3028 "GET /media/user_uploads/2025/01/29/IMG_5282.webp HTTP/1.1" 304 0
+INFO 2025-01-29 17:50:56,941 basehttp 30820 3028 "GET /test_non_menu/services/2/get-form/ HTTP/1.1" 200 2607
+ERROR 2025-01-29 17:51:23,697 log 30820 3028 Internal Server Error: /test_non_menu/services/2/
+ERROR 2025-01-29 17:51:23,697 basehttp 30820 3028 "POST /test_non_menu/services/2/ HTTP/1.1" 500 50
+INFO 2025-01-29 17:53:54,523 autoreload 30820 31372 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:53:55,360 autoreload 12128 1820 Watching for file changes with StatReloader
+INFO 2025-01-29 17:54:00,771 autoreload 12128 1820 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:54:01,427 autoreload 16340 13476 Watching for file changes with StatReloader
+INFO 2025-01-29 17:54:04,922 autoreload 16340 13476 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:54:05,526 autoreload 24516 28976 Watching for file changes with StatReloader
+INFO 2025-01-29 17:54:13,194 autoreload 24516 28976 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:54:13,950 autoreload 28536 8760 Watching for file changes with StatReloader
+INFO 2025-01-29 17:54:15,989 basehttp 28536 11856 "GET /test_non_menu/services/ HTTP/1.1" 200 18791
+INFO 2025-01-29 17:54:16,298 basehttp 28536 11856 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-29 17:54:17,492 basehttp 28536 11856 "GET /test_non_menu/services/2/get-form/ HTTP/1.1" 200 2607
+ERROR 2025-01-29 17:54:18,367 log 28536 11856 Internal Server Error: /test_non_menu/services/2/
+ERROR 2025-01-29 17:54:18,367 basehttp 28536 11856 "POST /test_non_menu/services/2/ HTTP/1.1" 500 64
+INFO 2025-01-29 17:55:54,919 autoreload 28536 8760 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:55:55,752 autoreload 16744 4016 Watching for file changes with StatReloader
+INFO 2025-01-29 17:55:57,886 autoreload 16744 4016 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:55:58,684 autoreload 16984 19676 Watching for file changes with StatReloader
+INFO 2025-01-29 17:56:01,885 autoreload 16984 19676 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:56:02,662 autoreload 19920 24604 Watching for file changes with StatReloader
+INFO 2025-01-29 17:56:25,955 autoreload 19920 24604 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:56:26,755 autoreload 24260 2776 Watching for file changes with StatReloader
+INFO 2025-01-29 17:56:29,172 basehttp 24260 27744 "GET /test_non_menu/services/ HTTP/1.1" 200 18791
+INFO 2025-01-29 17:56:29,363 basehttp 24260 27744 "GET /media/user_uploads/2025/01/29/IMG_5282_0KzIc4z.webp HTTP/1.1" 304 0
+INFO 2025-01-29 17:56:30,248 basehttp 24260 27744 "GET /test_non_menu/services/2/get-form/ HTTP/1.1" 200 2607
+ERROR 2025-01-29 17:56:31,447 log 24260 27744 Internal Server Error: /test_non_menu/services/2/
+ERROR 2025-01-29 17:56:31,448 basehttp 24260 27744 "POST /test_non_menu/services/2/ HTTP/1.1" 500 67
+INFO 2025-01-29 17:57:02,784 autoreload 24260 2776 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:57:03,790 autoreload 4448 16932 Watching for file changes with StatReloader
+INFO 2025-01-29 17:57:23,716 autoreload 4448 16932 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:57:24,530 autoreload 11244 7948 Watching for file changes with StatReloader
+INFO 2025-01-29 17:57:27,697 autoreload 11244 7948 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\services.py changed, reloading.
+INFO 2025-01-29 17:57:28,488 autoreload 10964 5976 Watching for file changes with StatReloader
+INFO 2025-01-29 17:57:34,763 basehttp 10964 29524 "GET /test_non_menu/services/ HTTP/1.1" 200 18791
+INFO 2025-01-29 17:57:35,944 basehttp 10964 29524 "GET /test_non_menu/services/2/get-form/ HTTP/1.1" 200 2607
+INFO 2025-01-29 17:57:36,999 basehttp 10964 29524 "POST /test_non_menu/services/2/ HTTP/1.1" 200 321
+INFO 2025-01-29 17:57:37,092 basehttp 10964 29524 "GET /test_non_menu/services/ HTTP/1.1" 200 18791
+INFO 2025-01-29 17:57:40,145 basehttp 10964 29524 "GET /test_non_menu/services/2/get-form/ HTTP/1.1" 200 2607
+ERROR 2025-01-29 17:57:45,410 log 10964 29524 Internal Server Error: /test_non_menu/services/2/
+ERROR 2025-01-29 17:57:45,410 basehttp 10964 29524 "POST /test_non_menu/services/2/ HTTP/1.1" 500 40
+INFO 2025-01-29 17:58:57,716 autoreload 10964 5976 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 17:58:58,662 autoreload 4184 32080 Watching for file changes with StatReloader
+INFO 2025-01-29 17:59:04,066 autoreload 4184 32080 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 17:59:04,888 autoreload 30108 32456 Watching for file changes with StatReloader
+INFO 2025-01-29 17:59:08,767 basehttp 30108 28764 "GET /test_non_menu/services/ HTTP/1.1" 200 18839
+INFO 2025-01-29 17:59:10,885 basehttp 30108 28764 "GET /test_non_menu/services/2/get-form/ HTTP/1.1" 200 2261
+DEBUG 2025-01-29 17:59:16,198 media 30108 28764 
+            Saving Image:
+            - Alt Text: Toilet Cleaning 2
+            - Content Type: Restaurants | service
+            - Object ID: 2
+            - Content Object: test none menu - Toilet Cleaning 2
+            - Image Path: back_red.png
+        
+DEBUG 2025-01-29 17:59:16,204 media 30108 28764 Content type check: image/png
+DEBUG 2025-01-29 17:59:16,337 media 30108 28764 
+            Image Saved:
+            - ID: 152
+            - Alt Text: Toilet Cleaning 2
+            - Content Type: Restaurants | service
+            - Object ID: 2
+        
+INFO 2025-01-29 17:59:16,339 basehttp 30108 28764 "POST /test_non_menu/services/2/ HTTP/1.1" 200 321
+INFO 2025-01-29 17:59:16,605 basehttp 30108 28764 "GET /test_non_menu/services/ HTTP/1.1" 200 18791
+INFO 2025-01-29 17:59:16,734 basehttp 30108 28764 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 200 141286
+DEBUG 2025-01-29 17:59:27,910 media 30108 28764 
+            Saving Image:
+            - Alt Text: dfasd
+            - Content Type: Restaurants | service
+            - Object ID: 4
+            - Content Object: test none menu - dfasd
+            - Image Path: card back black.png
+        
+DEBUG 2025-01-29 17:59:27,912 media 30108 28764 Content type check: image/png
+DEBUG 2025-01-29 17:59:28,034 media 30108 28764 
+            Image Saved:
+            - ID: 153
+            - Alt Text: dfasd
+            - Content Type: Restaurants | service
+            - Object ID: 4
+        
+INFO 2025-01-29 17:59:28,035 basehttp 30108 28764 "POST /test_non_menu/services/create/ HTTP/1.1" 200 193
+INFO 2025-01-29 17:59:28,133 basehttp 30108 28764 "GET /test_non_menu/services/ HTTP/1.1" 200 20182
+INFO 2025-01-29 17:59:28,182 basehttp 30108 28764 "GET /media/user_uploads/2025/01/29/card_back_black.webp HTTP/1.1" 200 100886
+INFO 2025-01-29 17:59:28,315 basehttp 30108 28764 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 304 0
+INFO 2025-01-29 17:59:32,588 basehttp 30108 28764 "DELETE /test_non_menu/services/4/ HTTP/1.1" 200 60
+INFO 2025-01-29 18:00:15,290 basehttp 30108 28764 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-29 18:00:16,549 basehttp 30108 28764 "GET /test_non_menu/products/ HTTP/1.1" 200 17375
+INFO 2025-01-29 18:00:16,611 basehttp 30108 28764 - Broken pipe from ('127.0.0.1', 53792)
+INFO 2025-01-29 18:00:51,602 basehttp 30108 25988 "GET /test_non_menu/products/ HTTP/1.1" 200 17425
+INFO 2025-01-29 18:00:51,669 basehttp 30108 25988 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-29 18:00:54,360 basehttp 30108 25988 "GET /test_non_menu/products/6/get-form/ HTTP/1.1" 200 2104
+INFO 2025-01-29 18:02:09,454 autoreload 30108 32456 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:02:10,383 autoreload 2728 26472 Watching for file changes with StatReloader
+INFO 2025-01-29 18:02:12,784 basehttp 2728 20712 "GET /test_non_menu/products/ HTTP/1.1" 200 17425
+INFO 2025-01-29 18:02:12,956 basehttp 2728 20712 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-29 18:02:13,857 basehttp 2728 20712 "GET /test_non_menu/products/6/get-form/ HTTP/1.1" 200 2179
+INFO 2025-01-29 18:03:31,171 basehttp 2728 20712 "GET /test_non_menu/products/ HTTP/1.1" 200 17425
+INFO 2025-01-29 18:03:31,429 basehttp 2728 20712 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-29 18:03:32,127 basehttp 2728 20712 "GET /test_non_menu/products/6/get-form/ HTTP/1.1" 200 2685
+ERROR 2025-01-29 18:03:34,034 log 2728 20712 Internal Server Error: /test_non_menu/products/6/
+ERROR 2025-01-29 18:03:34,034 basehttp 2728 20712 "POST /test_non_menu/products/6/ HTTP/1.1" 500 50
+INFO 2025-01-29 18:04:03,758 autoreload 2728 26472 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\products.py changed, reloading.
+INFO 2025-01-29 18:04:04,647 autoreload 18740 16164 Watching for file changes with StatReloader
+INFO 2025-01-29 18:04:07,347 basehttp 18740 6304 "GET /test_non_menu/products/ HTTP/1.1" 200 17425
+INFO 2025-01-29 18:04:08,456 basehttp 18740 6304 "GET /test_non_menu/products/6/get-form/ HTTP/1.1" 200 2685
+INFO 2025-01-29 18:04:09,811 basehttp 18740 6304 "POST /test_non_menu/products/6/ HTTP/1.1" 200 299
+INFO 2025-01-29 18:04:09,910 basehttp 18740 6304 "GET /test_non_menu/products/ HTTP/1.1" 200 17425
+DEBUG 2025-01-29 18:04:20,692 media 18740 6304 
+            Saving Image:
+            - Alt Text: asdf
+            - Content Type: Restaurants | product
+            - Object ID: 7
+            - Content Object: asdf - test none menu
+            - Image Path: local-eats-high-resolution-logo.png
+        
+DEBUG 2025-01-29 18:04:20,696 media 18740 6304 Content type check: image/png
+DEBUG 2025-01-29 18:04:20,886 media 18740 6304 
+            Image Saved:
+            - ID: 154
+            - Alt Text: asdf
+            - Content Type: Restaurants | product
+            - Object ID: 7
+        
+INFO 2025-01-29 18:04:20,887 basehttp 18740 6304 "POST /test_non_menu/products/create/ HTTP/1.1" 200 223
+INFO 2025-01-29 18:04:21,093 basehttp 18740 6304 "GET /test_non_menu/products/ HTTP/1.1" 200 18916
+INFO 2025-01-29 18:04:21,221 basehttp 18740 6304 "GET /media/user_uploads/2025/01/29/local-eats-high-resolution-logo.webp HTTP/1.1" 200 14274
+INFO 2025-01-29 18:06:56,875 basehttp 18740 6248 "GET /test_non_menu/products/ HTTP/1.1" 200 18916
+INFO 2025-01-29 18:06:57,072 basehttp 18740 6248 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-29 18:06:57,073 basehttp 18740 18100 "GET /media/user_uploads/2025/01/29/local-eats-high-resolution-logo.webp HTTP/1.1" 304 0
+INFO 2025-01-29 18:08:10,075 basehttp 18740 6248 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+DEBUG 2025-01-29 18:08:13,341 content 18740 6248 
+            Searching for hero_primary:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:13,343 content 18740 6248 All images found: []
+DEBUG 2025-01-29 18:08:13,344 content 18740 6248 Hero primary found: None
+DEBUG 2025-01-29 18:08:13,344 content 18740 6248 
+            Searching for banner_2:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:13,345 content 18740 6248 Banner 2 found: None
+DEBUG 2025-01-29 18:08:13,346 content 18740 6248 
+            Searching for banner_3:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:13,347 content 18740 6248 Banner 3 found: None
+DEBUG 2025-01-29 18:08:13,354 content 18740 6248 
+            Searching for hero_primary:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:13,355 content 18740 6248 All images found: []
+DEBUG 2025-01-29 18:08:13,356 content 18740 6248 Hero primary found: None
+DEBUG 2025-01-29 18:08:13,359 content 18740 6248 
+            Searching for banner_2:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:13,360 content 18740 6248 Banner 2 found: None
+DEBUG 2025-01-29 18:08:13,361 content 18740 6248 
+            Searching for banner_3:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:13,363 content 18740 6248 Banner 3 found: None
+INFO 2025-01-29 18:08:13,370 basehttp 18740 6248 "GET /test_non_menu/edit-layout/ HTTP/1.1" 200 79167
+INFO 2025-01-29 18:08:13,435 basehttp 18740 6248 "GET /static/js/layoutEditor.js HTTP/1.1" 200 20239
+INFO 2025-01-29 18:08:13,569 basehttp 18740 6248 "GET /static/js/utils/errors.js HTTP/1.1" 200 183
+INFO 2025-01-29 18:08:13,575 basehttp 18740 6248 "GET /static/js/handlers/imageHandlers.js HTTP/1.1" 200 6739
+INFO 2025-01-29 18:08:13,577 basehttp 18740 18100 "GET /static/js/handlers/textHandlers.js HTTP/1.1" 200 6363
+INFO 2025-01-29 18:08:13,579 basehttp 18740 25092 "GET /static/js/handlers/sizeHandlers.js HTTP/1.1" 200 1329
+INFO 2025-01-29 18:08:13,580 basehttp 18740 11996 "GET /static/js/handlers/colorHandlers.js HTTP/1.1" 200 2741
+INFO 2025-01-29 18:08:13,581 basehttp 18740 14628 "GET /static/js/handlers/layoutHandlers.js HTTP/1.1" 200 3520
+INFO 2025-01-29 18:08:13,581 basehttp 18740 6248 "GET /static/js/handlers/fontHandlers.js HTTP/1.1" 200 4679
+INFO 2025-01-29 18:08:13,582 basehttp 18740 12972 "GET /static/js/handlers/alignmentHandlers.js HTTP/1.1" 200 2244
+INFO 2025-01-29 18:08:13,582 basehttp 18740 18100 "GET /static/js/handlers/buttonHandlers.js HTTP/1.1" 200 5313
+INFO 2025-01-29 18:08:13,582 basehttp 18740 25092 "GET /static/js/handlers/publishHandlers.js HTTP/1.1" 200 4576
+INFO 2025-01-29 18:08:13,583 basehttp 18740 14628 "GET /static/js/components/heroComponents.js HTTP/1.1" 200 4377
+INFO 2025-01-29 18:08:13,583 basehttp 18740 11996 "GET /static/js/utils/previewUpdates.js HTTP/1.1" 200 21087
+INFO 2025-01-29 18:08:13,619 basehttp 18740 6248 "GET /static/js/utils/cookies.js HTTP/1.1" 200 513
+INFO 2025-01-29 18:08:13,621 basehttp 18740 11996 "GET /static/js/utils/cache.js HTTP/1.1" 200 879
+INFO 2025-01-29 18:08:13,621 basehttp 18740 6248 "GET /static/js/components/slider.js HTTP/1.1" 200 5137
+INFO 2025-01-29 18:08:13,622 basehttp 18740 18100 "GET /static/js/utils/debounce.js HTTP/1.1" 200 660
+DEBUG 2025-01-29 18:08:19,214 views 18740 6248 Processing hero_primary image upload for test_non_menu, page type: home
+DEBUG 2025-01-29 18:08:19,214 views 18740 6248 Image file: Han_Solo_where.webp, size: 8198
+DEBUG 2025-01-29 18:08:19,221 media 18740 6248 
+            Saving Image:
+            - Alt Text: hero_primary
+            - Content Type: Restaurants | sub page
+            - Object ID: 93
+            - Content Object: test none menu - home
+            - Image Path: Han_Solo_where.webp
+        
+DEBUG 2025-01-29 18:08:19,224 media 18740 6248 Content type check: image/webp
+DEBUG 2025-01-29 18:08:19,270 media 18740 6248 
+            Image Saved:
+            - ID: 155
+            - Alt Text: hero_primary
+            - Content Type: Restaurants | sub page
+            - Object ID: 93
+        
+DEBUG 2025-01-29 18:08:19,271 views 18740 6248 New hero_primary image created with URL: /media/user_uploads/2025/01/29/Han_Solo_where_VQT1trG.webp
+DEBUG 2025-01-29 18:08:19,271 content 18740 6248 
+            Searching for hero_primary:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:19,273 content 18740 6248 All images found: ['ID:155, Alt:hero_primary']
+DEBUG 2025-01-29 18:08:19,274 content 18740 6248 Hero primary found: 155
+DEBUG 2025-01-29 18:08:19,274 content 18740 6248 
+            Searching for banner_2:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:19,275 content 18740 6248 Banner 2 found: None
+DEBUG 2025-01-29 18:08:19,275 content 18740 6248 
+            Searching for banner_3:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:19,277 content 18740 6248 Banner 3 found: None
+DEBUG 2025-01-29 18:08:19,277 content 18740 6248 
+            Searching for hero_primary:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:19,278 content 18740 6248 All images found: ['ID:155, Alt:hero_primary']
+DEBUG 2025-01-29 18:08:19,279 content 18740 6248 Hero primary found: 155
+INFO 2025-01-29 18:08:19,282 basehttp 18740 6248 "POST /test_non_menu/upload-hero-image/ HTTP/1.1" 200 6901
+INFO 2025-01-29 18:08:19,305 basehttp 18740 6248 "GET /media/user_uploads/2025/01/29/Han_Solo_where_VQT1trG.webp HTTP/1.1" 200 7658
+DEBUG 2025-01-29 18:08:24,833 content 18740 6248 
+            Searching for banner_2:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:24,835 content 18740 6248 Banner 2 found: None
+DEBUG 2025-01-29 18:08:24,835 content 18740 6248 
+            Searching for banner_3:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:24,836 content 18740 6248 Banner 3 found: None
+DEBUG 2025-01-29 18:08:24,836 content 18740 6248 
+            Searching for hero_primary:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:08:24,837 content 18740 6248 All images found: []
+DEBUG 2025-01-29 18:08:24,838 content 18740 6248 Hero primary found: None
+INFO 2025-01-29 18:08:24,839 basehttp 18740 6248 "POST /test_non_menu/remove-hero-image/ HTTP/1.1" 200 6827
+DEBUG 2025-01-29 18:18:15,657 views 18740 15516 Processing hero_primary image upload for test_non_menu, page type: home
+DEBUG 2025-01-29 18:18:15,658 views 18740 15516 Image file: loginimage.jpg, size: 3706927
+DEBUG 2025-01-29 18:18:15,665 media 18740 15516 
+            Saving Image:
+            - Alt Text: hero_primary
+            - Content Type: Restaurants | sub page
+            - Object ID: 93
+            - Content Object: test none menu - home
+            - Image Path: loginimage.jpg
+        
+DEBUG 2025-01-29 18:18:15,667 media 18740 15516 Content type check: image/jpeg
+DEBUG 2025-01-29 18:18:16,332 media 18740 15516 
+            Image Saved:
+            - ID: 156
+            - Alt Text: hero_primary
+            - Content Type: Restaurants | sub page
+            - Object ID: 93
+        
+DEBUG 2025-01-29 18:18:16,333 views 18740 15516 New hero_primary image created with URL: /media/user_uploads/2025/01/29/loginimage.webp
+DEBUG 2025-01-29 18:18:16,333 content 18740 15516 
+            Searching for hero_primary:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:18:16,334 content 18740 15516 All images found: ['ID:156, Alt:hero_primary']
+DEBUG 2025-01-29 18:18:16,335 content 18740 15516 Hero primary found: 156
+DEBUG 2025-01-29 18:18:16,335 content 18740 15516 
+            Searching for banner_2:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:18:16,336 content 18740 15516 Banner 2 found: None
+DEBUG 2025-01-29 18:18:16,336 content 18740 15516 
+            Searching for banner_3:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:18:16,337 content 18740 15516 Banner 3 found: None
+DEBUG 2025-01-29 18:18:16,338 content 18740 15516 
+            Searching for hero_primary:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:18:16,338 content 18740 15516 All images found: ['ID:156, Alt:hero_primary']
+DEBUG 2025-01-29 18:18:16,339 content 18740 15516 Hero primary found: 156
+INFO 2025-01-29 18:18:16,341 basehttp 18740 15516 "POST /test_non_menu/upload-hero-image/ HTTP/1.1" 200 6877
+INFO 2025-01-29 18:18:16,358 basehttp 18740 15516 "GET /media/user_uploads/2025/01/29/loginimage.webp HTTP/1.1" 200 182584
+DEBUG 2025-01-29 18:24:49,137 content 18740 25788 
+            Searching for banner_2:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:24:49,139 content 18740 25788 Banner 2 found: None
+DEBUG 2025-01-29 18:24:49,139 content 18740 25788 
+            Searching for banner_3:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:24:49,141 content 18740 25788 Banner 3 found: None
+DEBUG 2025-01-29 18:24:49,141 content 18740 25788 
+            Searching for hero_primary:
+            - SubPage ID: 93
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 18:24:49,142 content 18740 25788 All images found: []
+DEBUG 2025-01-29 18:24:49,143 content 18740 25788 Hero primary found: None
+INFO 2025-01-29 18:24:49,144 basehttp 18740 25788 "POST /test_non_menu/remove-hero-image/ HTTP/1.1" 200 6827
+INFO 2025-01-29 18:25:47,255 basehttp 18740 25788 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-29 18:25:50,308 basehttp 18740 25788 "GET /test_non_menu/services/ HTTP/1.1" 200 18791
+INFO 2025-01-29 18:25:50,363 basehttp 18740 25788 "GET /static/js/subpages/services.js HTTP/1.1" 304 0
+INFO 2025-01-29 18:25:50,385 basehttp 18740 25788 "GET /media/user_uploads/2025/01/29/IMG_5282_0KzIc4z.webp HTTP/1.1" 200 32452
+INFO 2025-01-29 18:25:50,386 basehttp 18740 20872 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 200 141286
+INFO 2025-01-29 18:25:50,496 basehttp 18740 20872 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-29 18:25:50,497 basehttp 18740 25788 "GET /static/js/utils/placeholders.js HTTP/1.1" 304 0
+INFO 2025-01-29 18:27:05,972 basehttp 18740 20872 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-29 18:27:44,336 autoreload 18740 16164 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:27:50,001 autoreload 28536 11244 Watching for file changes with StatReloader
+INFO 2025-01-29 18:28:08,463 autoreload 28536 11244 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:28:09,302 autoreload 22944 33172 Watching for file changes with StatReloader
+INFO 2025-01-29 18:28:19,206 autoreload 22944 33172 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:28:20,030 autoreload 9860 28792 Watching for file changes with StatReloader
+INFO 2025-01-29 18:28:35,704 basehttp 9860 33332 "GET /test_non_menu/gallery/ HTTP/1.1" 200 10578
+INFO 2025-01-29 18:29:10,021 autoreload 9860 28792 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:29:10,960 autoreload 25480 27508 Watching for file changes with StatReloader
+INFO 2025-01-29 18:29:13,218 autoreload 25480 27508 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:29:14,032 autoreload 2544 9872 Watching for file changes with StatReloader
+INFO 2025-01-29 18:29:22,142 autoreload 2544 9872 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:29:23,150 autoreload 6824 3320 Watching for file changes with StatReloader
+INFO 2025-01-29 18:29:24,668 autoreload 6824 3320 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:29:25,556 autoreload 24744 31688 Watching for file changes with StatReloader
+INFO 2025-01-29 18:29:28,888 autoreload 24744 31688 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:29:29,710 autoreload 14676 26052 Watching for file changes with StatReloader
+ERROR 2025-01-29 18:29:36,480 log 14676 31900 Internal Server Error: /test_non_menu/gallery/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 613, in business_page
+    # Get context with specified page type
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 336, in get_business_context
+    return get_editor_context(base_context, business, subpage, page_type)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 442, in get_editor_context
+    images = get_business_images(business)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 3561, in get_business_images
+    content_type=event_ct,
+AttributeError: 'Business' object has no attribute 'events'
+ERROR 2025-01-29 18:29:36,482 basehttp 14676 31900 "GET /test_non_menu/gallery/ HTTP/1.1" 500 102726
+WARNING 2025-01-29 18:29:36,698 log 14676 31900 Not Found: /favicon.ico
+INFO 2025-01-29 18:29:36,699 basehttp 14676 31900 - Broken pipe from ('127.0.0.1', 57255)
+INFO 2025-01-29 18:35:55,592 autoreload 14676 26052 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\business.py changed, reloading.
+INFO 2025-01-29 18:35:56,117 autoreload 30392 10452 Watching for file changes with StatReloader
+INFO 2025-01-29 18:35:58,613 autoreload 30392 10452 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\business.py changed, reloading.
+INFO 2025-01-29 18:35:59,372 autoreload 31856 7452 Watching for file changes with StatReloader
+INFO 2025-01-29 18:36:04,797 autoreload 31856 7452 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\models\business.py changed, reloading.
+INFO 2025-01-29 18:36:05,473 autoreload 21328 5660 Watching for file changes with StatReloader
+INFO 2025-01-29 18:36:49,384 autoreload 30012 33380 Watching for file changes with StatReloader
+INFO 2025-01-29 18:37:09,105 autoreload 25080 8940 Watching for file changes with StatReloader
+INFO 2025-01-29 18:38:38,221 autoreload 25080 8940 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:38:39,054 autoreload 8132 26740 Watching for file changes with StatReloader
+INFO 2025-01-29 18:38:47,883 autoreload 8132 26740 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:38:48,769 autoreload 10244 20624 Watching for file changes with StatReloader
+ERROR 2025-01-29 18:39:03,583 utils 10244 21152 Error fetching images for business 14: Invalid field name(s) given in select_related: 'images'. Choices are: business, products_page
+INFO 2025-01-29 18:39:03,604 basehttp 10244 21152 "GET /test_non_menu/gallery/ HTTP/1.1" 200 10578
+INFO 2025-01-29 18:39:04,020 basehttp 10244 21152 - Broken pipe from ('127.0.0.1', 58352)
+INFO 2025-01-29 18:39:04,058 basehttp 10244 27592 - Broken pipe from ('127.0.0.1', 58356)
+INFO 2025-01-29 18:39:18,071 autoreload 10244 20624 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:39:18,966 autoreload 32288 1336 Watching for file changes with StatReloader
+INFO 2025-01-29 18:40:15,724 autoreload 32288 1336 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\utils.py changed, reloading.
+INFO 2025-01-29 18:40:16,561 autoreload 27404 17896 Watching for file changes with StatReloader
+ERROR 2025-01-29 18:40:16,983 utils 27404 596 Error fetching images for business 14: Invalid field name(s) given in select_related: 'images'. Choices are: business, products_page
+INFO 2025-01-29 18:40:17,004 basehttp 27404 596 "GET /test_non_menu/gallery/ HTTP/1.1" 200 10578
+ERROR 2025-01-29 18:40:18,071 utils 27404 596 Error fetching images for business 14: Invalid field name(s) given in select_related: 'images'. Choices are: business, products_page
+INFO 2025-01-29 18:40:18,073 basehttp 27404 596 "GET /test_non_menu/gallery/ HTTP/1.1" 200 10578
+INFO 2025-01-29 18:40:39,968 autoreload 27404 17896 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:40:40,799 autoreload 33204 18940 Watching for file changes with StatReloader
+INFO 2025-01-29 18:41:11,151 basehttp 33204 2028 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-29 18:41:13,249 basehttp 33204 2028 "GET /test_non_menu/events/ HTTP/1.1" 200 17124
+INFO 2025-01-29 18:41:13,377 basehttp 33204 2028 "GET /static/js/subpages/events.js HTTP/1.1" 200 9753
+INFO 2025-01-29 18:41:17,893 basehttp 33204 2028 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-29 18:41:18,252 basehttp 33204 2028 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-29 18:41:19,106 basehttp 33204 2028 "GET /test_non_menu/products/ HTTP/1.1" 200 18916
+INFO 2025-01-29 18:41:19,190 basehttp 33204 2028 "GET /static/js/subpages/products.js HTTP/1.1" 200 14054
+INFO 2025-01-29 18:41:19,204 basehttp 33204 2028 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-29 18:41:19,204 basehttp 33204 668 "GET /media/user_uploads/2025/01/29/local-eats-high-resolution-logo.webp HTTP/1.1" 200 14274
+INFO 2025-01-29 18:41:19,903 basehttp 33204 668 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-29 18:41:19,903 basehttp 33204 2028 - Broken pipe from ('127.0.0.1', 58633)
+INFO 2025-01-29 18:41:19,907 basehttp 33204 668 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-29 18:41:22,736 basehttp 33204 668 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+ERROR 2025-01-29 18:41:41,500 utils 33204 668 Error fetching images for business 14: Invalid field name(s) given in select_related: 'images'. Choices are: business, products_page
+INFO 2025-01-29 18:41:41,504 basehttp 33204 668 "GET /test_non_menu/gallery/ HTTP/1.1" 200 10585
+INFO 2025-01-29 18:41:41,719 basehttp 33204 668 - Broken pipe from ('127.0.0.1', 58659)
+INFO 2025-01-29 18:42:25,747 autoreload 33204 18940 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:42:26,794 autoreload 3144 12760 Watching for file changes with StatReloader
+ERROR 2025-01-29 18:42:28,621 utils 3144 17372 Error fetching images for business 14: Invalid field name(s) given in select_related: 'images'. Choices are: business, products_page
+ERROR 2025-01-29 18:42:28,666 log 3144 17372 Internal Server Error: /test_non_menu/gallery/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 615, in business_page
+    context = get_business_context(business, request.user, page_type)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 337, in get_business_context
+    return get_editor_context(base_context, business, subpage, page_type)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 444, in get_editor_context
+    print(images)
+NameError: name 'console' is not defined
+ERROR 2025-01-29 18:42:28,668 basehttp 3144 17372 "GET /test_non_menu/gallery/ HTTP/1.1" 500 97682
+WARNING 2025-01-29 18:42:28,919 log 3144 17372 Not Found: /favicon.ico
+INFO 2025-01-29 18:42:28,919 basehttp 3144 17372 - Broken pipe from ('127.0.0.1', 58840)
+ERROR 2025-01-29 18:42:36,566 utils 3144 11512 Error fetching images for business 14: Invalid field name(s) given in select_related: 'images'. Choices are: business, products_page
+ERROR 2025-01-29 18:42:36,598 log 3144 11512 Internal Server Error: /test_non_menu/gallery/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 615, in business_page
+    context = get_business_context(business, request.user, page_type)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 337, in get_business_context
+    return get_editor_context(base_context, business, subpage, page_type)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 444, in get_editor_context
+    print(images)
+NameError: name 'console' is not defined
+ERROR 2025-01-29 18:42:36,600 basehttp 3144 11512 "GET /test_non_menu/gallery/ HTTP/1.1" 500 97682
+WARNING 2025-01-29 18:42:36,783 log 3144 11512 Not Found: /favicon.ico
+INFO 2025-01-29 18:42:36,784 basehttp 3144 11512 - Broken pipe from ('127.0.0.1', 58859)
+INFO 2025-01-29 18:42:42,057 autoreload 18720 18032 Watching for file changes with StatReloader
+ERROR 2025-01-29 18:42:43,257 utils 18720 8356 Error fetching images for business 14: Invalid field name(s) given in select_related: 'images'. Choices are: business, products_page
+INFO 2025-01-29 18:42:43,276 basehttp 18720 8356 "GET /test_non_menu/gallery/ HTTP/1.1" 200 10585
+INFO 2025-01-29 18:42:43,546 basehttp 18720 8356 - Broken pipe from ('127.0.0.1', 58889)
+INFO 2025-01-29 18:44:35,901 autoreload 18720 18032 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\utils.py changed, reloading.
+INFO 2025-01-29 18:44:36,857 autoreload 24832 30264 Watching for file changes with StatReloader
+INFO 2025-01-29 18:44:37,436 basehttp 24832 30512 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16676
+INFO 2025-01-29 18:44:37,637 basehttp 24832 14852 "GET /media/thumbnails/2025/01/29/Han_Solo_where_thumb.webp HTTP/1.1" 200 1172
+INFO 2025-01-29 18:44:37,667 basehttp 24832 19652 "GET /media/thumbnails/2025/01/29/back_red_thumb.webp HTTP/1.1" 200 2532
+INFO 2025-01-29 18:44:37,680 basehttp 24832 5700 "GET /media/thumbnails/2025/01/29/IMG_5282_thumb_A4p170i.webp HTTP/1.1" 200 1152
+INFO 2025-01-29 18:44:37,687 basehttp 24832 30512 "GET /media/thumbnails/2025/01/29/local-eats-high-resolution-logo_thumb.webp HTTP/1.1" 200 668
+INFO 2025-01-29 18:45:32,067 basehttp 24832 30512 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14293
+INFO 2025-01-29 18:45:32,337 basehttp 24832 30512 - Broken pipe from ('127.0.0.1', 59123)
+INFO 2025-01-29 18:45:39,174 basehttp 24832 19652 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14293
+INFO 2025-01-29 18:45:58,618 autoreload 24832 30264 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-29 18:45:59,500 autoreload 20600 16444 Watching for file changes with StatReloader
+INFO 2025-01-29 18:46:58,673 basehttp 20600 12052 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14277
+INFO 2025-01-29 18:46:58,727 basehttp 20600 12052 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 304 0
+INFO 2025-01-29 18:46:58,727 basehttp 20600 4532 "GET /media/user_uploads/2025/01/29/IMG_5282_0KzIc4z.webp HTTP/1.1" 304 0
+INFO 2025-01-29 18:46:59,003 basehttp 20600 4532 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-29 18:46:59,016 basehttp 20600 12052 "GET /media/user_uploads/2025/01/29/local-eats-high-resolution-logo.webp HTTP/1.1" 200 14274
+INFO 2025-01-29 18:46:59,088 basehttp 20600 12052 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-29 18:47:13,816 basehttp 20600 12052 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14257
+INFO 2025-01-29 18:47:14,052 basehttp 20600 12052 - Broken pipe from ('127.0.0.1', 59461)
+INFO 2025-01-29 18:49:43,997 basehttp 20600 12556 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14661
+INFO 2025-01-29 18:49:44,453 basehttp 20600 12556 - Broken pipe from ('127.0.0.1', 59733)
+INFO 2025-01-29 18:50:40,647 autoreload 26344 30376 Watching for file changes with StatReloader
+INFO 2025-01-29 18:50:41,755 basehttp 26344 31900 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16229
+INFO 2025-01-29 18:50:42,025 basehttp 26344 31900 - Broken pipe from ('127.0.0.1', 59880)
+INFO 2025-01-29 18:50:56,209 basehttp 26344 33640 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16201
+INFO 2025-01-29 18:50:56,593 basehttp 26344 33640 - Broken pipe from ('127.0.0.1', 59926)
+INFO 2025-01-29 18:51:37,672 basehttp 26344 17604 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16201
+INFO 2025-01-29 18:51:37,872 basehttp 26344 17604 "GET /media/user_uploads/2025/01/29/local-eats-high-resolution-logo.webp HTTP/1.1" 304 0
+INFO 2025-01-29 18:51:38,975 basehttp 26344 17604 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16389
+INFO 2025-01-29 18:51:44,479 basehttp 26344 17604 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16201
+INFO 2025-01-29 18:51:44,736 basehttp 26344 17604 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 200 141286
+INFO 2025-01-29 18:51:44,919 basehttp 26344 17604 - Broken pipe from ('127.0.0.1', 60014)
+INFO 2025-01-29 18:53:32,007 basehttp 26344 12404 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16636
+INFO 2025-01-29 18:53:32,261 basehttp 26344 12404 - Broken pipe from ('127.0.0.1', 60280)
+INFO 2025-01-29 18:53:32,261 basehttp 26344 21420 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-29 18:53:32,267 basehttp 26344 21420 - Broken pipe from ('127.0.0.1', 60285)
+INFO 2025-01-29 18:53:32,432 basehttp 26344 16520 - Broken pipe from ('127.0.0.1', 60286)
+INFO 2025-01-29 18:53:51,737 basehttp 26344 18868 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16692
+INFO 2025-01-29 18:53:51,964 basehttp 26344 18868 - Broken pipe from ('127.0.0.1', 60312)
+INFO 2025-01-29 18:54:14,031 basehttp 26344 33168 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16692
+INFO 2025-01-29 18:54:14,407 basehttp 26344 33168 - Broken pipe from ('127.0.0.1', 60359)
+INFO 2025-01-29 18:54:20,350 basehttp 26344 18832 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16692
+INFO 2025-01-29 18:54:20,682 basehttp 26344 18832 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-29 18:54:41,558 basehttp 26344 18832 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16692
+INFO 2025-01-29 18:55:24,304 basehttp 26344 18832 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16132
+INFO 2025-01-29 18:55:24,764 basehttp 26344 18832 - Broken pipe from ('127.0.0.1', 60386)
+INFO 2025-01-29 18:56:03,179 basehttp 26344 13888 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16517
+INFO 2025-01-29 19:00:22,070 basehttp 26344 5324 "GET /test_non_menu/gallery/ HTTP/1.1" 200 13882
+INFO 2025-01-29 19:00:22,117 basehttp 26344 5324 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 587
+INFO 2025-01-29 19:00:22,398 basehttp 26344 1336 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 304 0
+INFO 2025-01-29 19:00:22,399 basehttp 26344 24096 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-29 19:00:22,399 basehttp 26344 31860 "GET /media/user_uploads/2025/01/29/local-eats-high-resolution-logo.webp HTTP/1.1" 200 14274
+INFO 2025-01-29 19:00:22,400 basehttp 26344 22492 "GET /media/user_uploads/2025/01/29/IMG_5282_0KzIc4z.webp HTTP/1.1" 304 0
+WARNING 2025-01-29 19:00:22,404 basehttp 26344 5324 "GET /static/js/subpages/components/masonry.js HTTP/1.1" 404 1858
+INFO 2025-01-29 19:00:22,434 basehttp 26344 31860 - Broken pipe from ('127.0.0.1', 61293)
+INFO 2025-01-29 19:00:30,992 basehttp 26344 1336 - Broken pipe from ('127.0.0.1', 61294)
+DEBUG 2025-01-29 19:00:31,493 content 26344 11888 
+            Searching for hero_primary:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 19:00:31,495 content 26344 11888 All images found: []
+DEBUG 2025-01-29 19:00:31,496 content 26344 11888 Hero primary found: None
+DEBUG 2025-01-29 19:00:31,497 content 26344 11888 
+            Searching for banner_2:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 19:00:31,498 content 26344 11888 Banner 2 found: None
+DEBUG 2025-01-29 19:00:31,498 content 26344 11888 
+            Searching for banner_3:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 19:00:31,499 content 26344 11888 Banner 3 found: None
+INFO 2025-01-29 19:00:31,506 basehttp 26344 11888 "GET /test_non_menu/gallery/ HTTP/1.1" 200 5642
+INFO 2025-01-29 19:01:06,222 basehttp 26344 24096 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14056
+INFO 2025-01-29 19:01:06,281 basehttp 26344 24096 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+WARNING 2025-01-29 19:01:06,436 basehttp 26344 24096 "GET /static/js/subpages/components/masonry.js HTTP/1.1" 404 1858
+INFO 2025-01-29 19:02:05,603 basehttp 26344 22492 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14056
+INFO 2025-01-29 19:02:05,652 basehttp 26344 22492 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 588
+INFO 2025-01-29 19:02:05,777 basehttp 26344 22492 "GET /static/js/components/masonry.js HTTP/1.1" 200 2178
+INFO 2025-01-29 19:02:06,038 basehttp 26344 22492 - Broken pipe from ('127.0.0.1', 61296)
+INFO 2025-01-29 19:03:47,394 basehttp 26344 20716 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14056
+INFO 2025-01-29 19:03:47,443 basehttp 26344 20716 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:03:47,572 basehttp 26344 20716 "GET /static/js/components/masonry.js HTTP/1.1" 200 2185
+INFO 2025-01-29 19:03:47,809 basehttp 26344 20716 - Broken pipe from ('127.0.0.1', 61723)
+INFO 2025-01-29 19:10:25,384 basehttp 26344 32868 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14019
+INFO 2025-01-29 19:10:25,442 basehttp 26344 32868 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 200 24103
+INFO 2025-01-29 19:10:25,442 basehttp 26344 33424 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 200 5485
+INFO 2025-01-29 19:10:25,443 basehttp 26344 23212 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 112
+WARNING 2025-01-29 19:10:25,552 basehttp 26344 32868 "GET /static/js/subpages/components/masonry.js HTTP/1.1" 404 1858
+INFO 2025-01-29 19:10:25,586 basehttp 26344 32940 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-29 19:10:25,586 basehttp 26344 33424 "GET /media/user_uploads/2025/01/29/local-eats-high-resolution-logo.webp HTTP/1.1" 200 14274
+INFO 2025-01-29 19:10:25,587 basehttp 26344 23212 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 200 141286
+INFO 2025-01-29 19:10:25,600 basehttp 26344 23212 - Broken pipe from ('127.0.0.1', 62708)
+INFO 2025-01-29 19:10:25,819 basehttp 26344 33424 - Broken pipe from ('127.0.0.1', 62707)
+INFO 2025-01-29 19:10:35,250 basehttp 26344 32940 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14019
+INFO 2025-01-29 19:10:35,298 basehttp 26344 32940 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 113
+INFO 2025-01-29 19:10:35,299 basehttp 26344 32940 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:10:35,406 basehttp 26344 32940 "GET /static/js/components/masonry.js HTTP/1.1" 200 2061
+INFO 2025-01-29 19:10:35,682 basehttp 26344 32940 - Broken pipe from ('127.0.0.1', 62709)
+INFO 2025-01-29 19:11:23,770 basehttp 26344 26044 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14019
+INFO 2025-01-29 19:11:23,812 basehttp 26344 26044 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 357
+INFO 2025-01-29 19:11:23,818 basehttp 26344 26044 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 200 24103
+INFO 2025-01-29 19:11:23,820 basehttp 26344 26044 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:11:24,082 basehttp 26344 26044 "GET /static/js/components/masonry.js HTTP/1.1" 200 2061
+INFO 2025-01-29 19:11:24,082 basehttp 26344 6292 - Broken pipe from ('127.0.0.1', 62832)
+INFO 2025-01-29 19:11:24,083 basehttp 26344 32296 "GET /media/user_uploads/2025/01/29/IMG_5282_0KzIc4z.webp HTTP/1.1" 200 32452
+INFO 2025-01-29 19:11:24,115 basehttp 26344 32296 - Broken pipe from ('127.0.0.1', 62834)
+INFO 2025-01-29 19:11:29,301 basehttp 26344 26044 - Broken pipe from ('127.0.0.1', 62829)
+INFO 2025-01-29 19:12:39,020 basehttp 26344 2452 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16440
+INFO 2025-01-29 19:12:39,057 basehttp 26344 33468 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:12:39,058 basehttp 26344 7456 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 200 5485
+INFO 2025-01-29 19:12:39,058 basehttp 26344 2452 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 200 24103
+INFO 2025-01-29 19:12:39,157 basehttp 26344 2452 "GET /static/js/components/masonry.js HTTP/1.1" 200 2061
+INFO 2025-01-29 19:12:39,171 basehttp 26344 2452 - Broken pipe from ('127.0.0.1', 62990)
+INFO 2025-01-29 19:12:39,178 basehttp 26344 7456 - Broken pipe from ('127.0.0.1', 62992)
+INFO 2025-01-29 19:12:40,988 basehttp 26344 33468 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16440
+INFO 2025-01-29 19:12:41,128 basehttp 26344 33468 - Broken pipe from ('127.0.0.1', 62993)
+INFO 2025-01-29 19:12:41,138 basehttp 26344 468 - Broken pipe from ('127.0.0.1', 63006)
+INFO 2025-01-29 19:12:46,643 basehttp 26344 30004 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14019
+INFO 2025-01-29 19:12:46,677 basehttp 26344 30004 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:13:06,767 basehttp 26344 30004 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16436
+INFO 2025-01-29 19:13:06,792 basehttp 26344 30004 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:13:06,792 basehttp 26344 22804 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:13:06,898 basehttp 26344 30004 "GET /static/js/components/masonry.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:13:06,909 basehttp 26344 30004 - Broken pipe from ('127.0.0.1', 63013)
+INFO 2025-01-29 19:13:06,922 basehttp 26344 22804 - Broken pipe from ('127.0.0.1', 63063)
+INFO 2025-01-29 19:13:22,891 basehttp 26344 32296 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16412
+INFO 2025-01-29 19:13:22,918 basehttp 26344 32296 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:13:22,919 basehttp 26344 22944 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:13:23,022 basehttp 26344 32296 "GET /static/js/components/masonry.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:13:23,031 basehttp 26344 32296 - Broken pipe from ('127.0.0.1', 63111)
+INFO 2025-01-29 19:13:23,043 basehttp 26344 22944 - Broken pipe from ('127.0.0.1', 63114)
+INFO 2025-01-29 19:13:34,417 basehttp 26344 26932 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16440
+INFO 2025-01-29 19:13:34,453 basehttp 26344 26932 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:13:34,454 basehttp 26344 20232 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:13:41,518 basehttp 26344 26932 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16412
+INFO 2025-01-29 19:13:41,679 basehttp 26344 26932 - Broken pipe from ('127.0.0.1', 63143)
+INFO 2025-01-29 19:13:41,688 basehttp 26344 20232 - Broken pipe from ('127.0.0.1', 63146)
+INFO 2025-01-29 19:14:11,990 basehttp 26344 24444 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16404
+INFO 2025-01-29 19:14:12,021 basehttp 26344 24444 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:14:12,021 basehttp 26344 16636 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:14:12,021 basehttp 26344 8952 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:14:12,130 basehttp 26344 16636 - Broken pipe from ('127.0.0.1', 63230)
+INFO 2025-01-29 19:14:12,130 basehttp 26344 24444 "GET /static/js/components/masonry.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:14:12,154 basehttp 26344 24444 - Broken pipe from ('127.0.0.1', 63227)
+INFO 2025-01-29 19:14:52,337 basehttp 26344 8952 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16408
+INFO 2025-01-29 19:14:52,381 basehttp 26344 8952 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:14:52,382 basehttp 26344 26384 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:14:52,382 basehttp 26344 16868 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:14:52,471 basehttp 26344 8952 "GET /static/js/components/masonry.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:14:57,540 basehttp 26344 8952 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16412
+INFO 2025-01-29 19:14:57,686 basehttp 26344 8952 - Broken pipe from ('127.0.0.1', 63231)
+INFO 2025-01-29 19:14:57,686 basehttp 26344 26384 - Broken pipe from ('127.0.0.1', 63311)
+INFO 2025-01-29 19:16:24,870 autoreload 24364 29480 Watching for file changes with StatReloader
+INFO 2025-01-29 19:16:26,895 basehttp 24364 17728 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16376
+INFO 2025-01-29 19:16:26,934 basehttp 24364 17728 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:16:26,935 basehttp 24364 4168 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:16:27,264 basehttp 24364 4168 - Broken pipe from ('127.0.0.1', 63565)
+INFO 2025-01-29 19:16:27,280 basehttp 24364 17728 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 357
+INFO 2025-01-29 19:16:27,295 basehttp 24364 17728 "GET /static/js/components/masonry.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:16:27,301 basehttp 24364 17728 - Broken pipe from ('127.0.0.1', 63561)
+INFO 2025-01-29 19:16:39,626 basehttp 24364 24124 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16424
+INFO 2025-01-29 19:16:39,845 basehttp 24364 24124 - Broken pipe from ('127.0.0.1', 63593)
+INFO 2025-01-29 19:16:50,065 basehttp 24364 17740 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16604
+INFO 2025-01-29 19:18:52,115 basehttp 24364 27852 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14615
+INFO 2025-01-29 19:18:52,153 basehttp 24364 27852 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:18:52,154 basehttp 24364 1944 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:18:52,154 basehttp 24364 28744 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 367
+WARNING 2025-01-29 19:18:52,254 basehttp 24364 27852 "GET /static/js/subpages/components/masonry.js HTTP/1.1" 404 1858
+INFO 2025-01-29 19:18:52,272 basehttp 24364 1944 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 304 0
+INFO 2025-01-29 19:18:52,272 basehttp 24364 14456 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-29 19:18:52,272 basehttp 24364 28744 "GET /media/user_uploads/2025/01/29/local-eats-high-resolution-logo.webp HTTP/1.1" 200 14274
+INFO 2025-01-29 19:18:52,280 basehttp 24364 28744 - Broken pipe from ('127.0.0.1', 63913)
+INFO 2025-01-29 19:19:18,383 basehttp 24364 1944 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16416
+INFO 2025-01-29 19:19:18,419 basehttp 24364 1944 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+WARNING 2025-01-29 19:19:18,518 basehttp 24364 1944 "GET /static/js/subpages/components/masonry.js HTTP/1.1" 404 1858
+INFO 2025-01-29 19:19:31,561 basehttp 24364 14456 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16542
+INFO 2025-01-29 19:19:31,591 basehttp 24364 14456 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+WARNING 2025-01-29 19:19:31,699 basehttp 24364 14456 "GET /static/js/subpages/components/masonry.js HTTP/1.1" 404 1858
+INFO 2025-01-29 19:19:31,708 basehttp 24364 13944 - Broken pipe from ('127.0.0.1', 64005)
+INFO 2025-01-29 19:19:57,268 basehttp 24364 6096 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16416
+INFO 2025-01-29 19:19:57,300 basehttp 24364 17924 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-29 19:19:57,302 basehttp 24364 11904 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-29 19:19:57,303 basehttp 24364 25316 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 367
+INFO 2025-01-29 19:19:57,306 basehttp 24364 6096 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-29 19:19:57,307 basehttp 24364 31416 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 200 5485
+INFO 2025-01-29 19:19:57,307 basehttp 24364 20612 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 200 24103
+WARNING 2025-01-29 19:19:57,452 basehttp 24364 20612 "GET /static/js/subpages/components/masonry.js HTTP/1.1" 404 1858
+INFO 2025-01-29 19:19:57,520 basehttp 24364 25316 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-29 19:19:57,520 basehttp 24364 11904 "GET /media/user_uploads/2025/01/29/local-eats-high-resolution-logo.webp HTTP/1.1" 200 14274
+INFO 2025-01-29 19:19:57,520 basehttp 24364 31416 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-29 19:19:57,521 basehttp 24364 32844 "GET /media/user_uploads/2025/01/29/IMG_5282_0KzIc4z.webp HTTP/1.1" 200 32452
+INFO 2025-01-29 19:19:57,521 basehttp 24364 17924 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 200 141286
+INFO 2025-01-29 19:19:57,527 basehttp 24364 6096 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-29 19:22:32,484 basehttp 24364 9632 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16768
+INFO 2025-01-29 19:22:32,534 basehttp 24364 25588 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:22:32,535 basehttp 24364 9632 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 200 24103
+INFO 2025-01-29 19:22:32,535 basehttp 24364 29700 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 200 5485
+WARNING 2025-01-29 19:22:32,834 basehttp 24364 9632 "GET /static/js/subpages/components/masonry.js HTTP/1.1" 404 1858
+INFO 2025-01-29 19:22:32,864 basehttp 24364 29700 - Broken pipe from ('127.0.0.1', 64366)
+INFO 2025-01-29 19:22:47,403 basehttp 24364 25588 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16416
+WARNING 2025-01-29 19:22:47,532 basehttp 24364 25588 "GET /static/js/subpages/components/masonry.js HTTP/1.1" 404 1858
+DEBUG 2025-01-29 19:22:55,296 content 24364 2296 
+            Searching for hero_primary:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 19:22:55,298 content 24364 2296 All images found: []
+DEBUG 2025-01-29 19:22:55,299 content 24364 2296 Hero primary found: None
+DEBUG 2025-01-29 19:22:55,299 content 24364 2296 
+            Searching for banner_2:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 19:22:55,300 content 24364 2296 Banner 2 found: None
+DEBUG 2025-01-29 19:22:55,300 content 24364 2296 
+            Searching for banner_3:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 19:22:55,302 content 24364 2296 Banner 3 found: None
+INFO 2025-01-29 19:22:55,308 basehttp 24364 2296 "GET /test_non_menu/gallery/ HTTP/1.1" 200 5642
+INFO 2025-01-29 19:22:59,676 basehttp 24364 15116 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16416
+INFO 2025-01-29 19:22:59,725 basehttp 24364 15116 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+WARNING 2025-01-29 19:22:59,832 basehttp 24364 15116 "GET /static/js/subpages/components/masonry.js HTTP/1.1" 404 1858
+INFO 2025-01-29 19:23:06,131 basehttp 24364 3084 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16416
+WARNING 2025-01-29 19:23:06,297 basehttp 24364 3084 "GET /static/js/subpages/components/masonry.js HTTP/1.1" 404 1858
+INFO 2025-01-29 19:23:29,829 basehttp 24364 28692 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16416
+INFO 2025-01-29 19:23:29,875 basehttp 24364 28692 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-29 19:23:29,879 basehttp 24364 28692 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-29 19:23:29,879 basehttp 24364 15372 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-29 19:23:29,879 basehttp 24364 23892 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 200 5485
+INFO 2025-01-29 19:23:29,880 basehttp 24364 26300 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 200 24103
+INFO 2025-01-29 19:23:29,880 basehttp 24364 23844 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 368
+INFO 2025-01-29 19:23:29,906 basehttp 24364 28692 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-29 19:23:30,028 basehttp 24364 28692 "GET /static/js/components/masonry.js HTTP/1.1" 200 2201
+INFO 2025-01-29 19:23:30,040 basehttp 24364 28692 "GET /media/user_uploads/2025/01/29/local-eats-high-resolution-logo.webp HTTP/1.1" 200 14274
+INFO 2025-01-29 19:23:30,041 basehttp 24364 26300 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 200 141286
+INFO 2025-01-29 19:23:30,044 basehttp 24364 28692 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-29 19:23:30,044 basehttp 24364 26300 "GET /media/user_uploads/2025/01/29/IMG_5282_0KzIc4z.webp HTTP/1.1" 200 32452
+INFO 2025-01-29 19:23:30,092 basehttp 24364 28692 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-29 19:24:32,400 basehttp 24364 28692 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16416
+INFO 2025-01-29 19:24:32,454 basehttp 24364 28692 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-29 19:24:32,459 basehttp 24364 28692 - Broken pipe from ('127.0.0.1', 64521)
+INFO 2025-01-29 19:24:32,460 basehttp 24364 26300 - Broken pipe from ('127.0.0.1', 64525)
+INFO 2025-01-29 19:24:32,460 basehttp 24364 23892 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:24:32,619 basehttp 24364 23892 "GET /static/js/components/masonry.js HTTP/1.1" 200 2205
+INFO 2025-01-29 19:24:32,652 basehttp 24364 23892 - Broken pipe from ('127.0.0.1', 64526)
+INFO 2025-01-29 19:24:32,826 basehttp 24364 15372 - Broken pipe from ('127.0.0.1', 64524)
+INFO 2025-01-29 19:25:33,980 basehttp 24364 6928 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16416
+INFO 2025-01-29 19:25:34,034 basehttp 24364 6928 - Broken pipe from ('127.0.0.1', 64766)
+INFO 2025-01-29 19:25:34,038 basehttp 24364 31600 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:25:34,038 basehttp 24364 25596 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 200 24103
+INFO 2025-01-29 19:25:34,038 basehttp 24364 20724 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:25:34,143 basehttp 24364 25596 "GET /static/js/components/masonry.js HTTP/1.1" 200 2564
+INFO 2025-01-29 19:25:34,168 basehttp 24364 25596 - Broken pipe from ('127.0.0.1', 64768)
+INFO 2025-01-29 19:25:34,322 basehttp 24364 31600 - Broken pipe from ('127.0.0.1', 64769)
+INFO 2025-01-29 19:25:36,201 basehttp 24364 20724 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16416
+INFO 2025-01-29 19:25:36,427 basehttp 24364 20724 "GET /static/js/components/masonry.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:25:44,656 basehttp 24364 20724 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16416
+INFO 2025-01-29 19:25:44,858 basehttp 24364 20724 "GET /static/js/components/masonry.js HTTP/1.1" 200 2602
+INFO 2025-01-29 19:25:55,443 basehttp 24364 20724 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16416
+INFO 2025-01-29 19:25:55,490 basehttp 24364 20724 - Broken pipe from ('127.0.0.1', 64770)
+INFO 2025-01-29 19:25:55,492 basehttp 24364 32064 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 19:25:55,621 basehttp 24364 32064 "GET /static/js/components/masonry.js HTTP/1.1" 200 2592
+INFO 2025-01-29 19:25:55,642 basehttp 24364 32064 - Broken pipe from ('127.0.0.1', 64839)
+INFO 2025-01-29 20:03:57,500 basehttp 24364 26020 "GET /test_non_menu/gallery/ HTTP/1.1" 200 17063
+INFO 2025-01-29 20:03:57,533 basehttp 24364 26020 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 200 24103
+INFO 2025-01-29 20:03:57,534 basehttp 24364 33436 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 304 0
+INFO 2025-01-29 20:03:57,534 basehttp 24364 24832 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-29 20:03:57,639 basehttp 24364 26020 "GET /static/js/components/masonry.js HTTP/1.1" 200 2201
+INFO 2025-01-29 20:03:57,658 basehttp 24364 24832 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-29 20:03:57,658 basehttp 24364 26020 "GET /media/user_uploads/2025/01/29/local-eats-high-resolution-logo.webp HTTP/1.1" 200 14274
+INFO 2025-01-29 20:03:57,659 basehttp 24364 24368 "GET /media/user_uploads/2025/01/29/IMG_5282_0KzIc4z.webp HTTP/1.1" 200 32452
+INFO 2025-01-29 20:03:57,659 basehttp 24364 33436 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 200 141286
+INFO 2025-01-29 20:03:57,668 basehttp 24364 33436 - Broken pipe from ('127.0.0.1', 51809)
+INFO 2025-01-29 20:04:56,194 basehttp 24364 24368 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16807
+INFO 2025-01-29 20:04:56,339 basehttp 24364 24368 "GET /static/js/components/masonry.js HTTP/1.1" 304 0
+INFO 2025-01-29 20:05:05,459 basehttp 24364 24368 "GET /test_non_menu/gallery/ HTTP/1.1" 200 17035
+INFO 2025-01-29 20:05:16,894 basehttp 24364 24368 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16931
+INFO 2025-01-29 20:05:17,029 basehttp 24364 24368 "GET /static/js/components/masonry.js HTTP/1.1" 304 0
+INFO 2025-01-29 20:05:37,555 basehttp 24364 24368 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16875
+INFO 2025-01-29 20:05:37,676 basehttp 24364 24368 "GET /static/js/components/masonry.js HTTP/1.1" 304 0
+INFO 2025-01-29 20:05:38,788 basehttp 24364 24368 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16875
+INFO 2025-01-29 20:05:44,304 basehttp 24364 24368 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16875
+INFO 2025-01-29 20:05:44,335 basehttp 24364 26020 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-29 20:05:44,335 basehttp 24364 24832 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-29 20:05:44,336 basehttp 24364 21420 "GET /static/js/vendor/imagesloaded.pkgd.min.js HTTP/1.1" 200 5485
+INFO 2025-01-29 20:05:44,336 basehttp 24364 13116 "GET /static/js/vendor/masonry.pkgd.min.js HTTP/1.1" 200 24103
+INFO 2025-01-29 20:05:44,337 basehttp 24364 20328 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 368
+INFO 2025-01-29 20:05:44,339 basehttp 24364 24368 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-29 20:05:44,349 basehttp 24364 24368 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-29 20:05:44,435 basehttp 24364 24368 "GET /static/js/components/masonry.js HTTP/1.1" 200 2201
+INFO 2025-01-29 20:05:44,459 basehttp 24364 24368 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-29 20:05:44,521 basehttp 24364 13116 "GET /media/user_uploads/2025/01/29/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-29 20:05:44,521 basehttp 24364 24368 "GET /media/user_uploads/2025/01/29/local-eats-high-resolution-logo.webp HTTP/1.1" 200 14274
+INFO 2025-01-29 20:05:44,521 basehttp 24364 24832 "GET /media/user_uploads/2025/01/29/IMG_5282_0KzIc4z.webp HTTP/1.1" 200 32452
+INFO 2025-01-29 20:05:44,522 basehttp 24364 26020 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 200 141286
+DEBUG 2025-01-29 20:05:48,250 content 24364 15736 
+            Searching for hero_primary:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 20:05:48,252 content 24364 15736 All images found: []
+DEBUG 2025-01-29 20:05:48,253 content 24364 15736 Hero primary found: None
+DEBUG 2025-01-29 20:05:48,254 content 24364 15736 
+            Searching for banner_2:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 20:05:48,255 content 24364 15736 Banner 2 found: None
+DEBUG 2025-01-29 20:05:48,255 content 24364 15736 
+            Searching for banner_3:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-29 20:05:48,256 content 24364 15736 Banner 3 found: None
+INFO 2025-01-29 20:05:48,263 basehttp 24364 15736 "GET /test_non_menu/gallery/ HTTP/1.1" 200 5642

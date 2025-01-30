@@ -46,6 +46,44 @@ class BusinessAdminSite(admin.AdminSite):
         extra_context['users'] = users
         return super().index(request, extra_context)
 
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ('name', 'business', 'featured', 'display_image')
+    list_filter = ('business', 'featured')
+    search_fields = ('name', 'description')
+
+    def display_image(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" width="50" height="50" style="object-fit: cover; border-radius: 4px;"/>',
+                obj.image.image.url
+            )
+        return "No image"
+    display_image.short_description = 'Image'  # Column header in admin
+
+    # Optional: If you want to show a larger image in the detail view
+    readonly_fields = ('preview_image',)
+
+    def preview_image(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" width="200" height="200" style="object-fit: cover; border-radius: 8px;"/>',
+                obj.image.image.url
+            )
+        return "No image"
+    preview_image.short_description = 'Image Preview'
+
+    # Optional: Customize the detail view layout
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'business', 'services_page', 'featured')
+        }),
+        ('Content', {
+            'fields': ('description',)
+        }),
+        ('Image', {
+            'fields': ('preview_image',),
+        }),
+    )
 # Create instance of custom admin site
 business_admin = BusinessAdminSite(name='business_admin')
 
@@ -65,4 +103,4 @@ business_admin.register(CuisineCategory)
 business_admin.register(Product)
 business_admin.register(ProductsPage)
 business_admin.register(ServicesPage)
-business_admin.register(Service)
+business_admin.register(Service, ServiceAdmin)

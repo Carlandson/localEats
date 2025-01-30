@@ -5,6 +5,99 @@
 {% block body %}
 {{ business_details.subdirectory|json_script:"business" }}
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Services Page</h1>
+    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Services Page Editor</h1>
+    
+    <!-- Description Section -->
+    <div class="bg-white shadow rounded-lg p-6 mb-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">Page Description</h2>
+            <button type="button" 
+                    id="toggle-description-edit"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
+                Edit Description
+            </button>
+        </div>
+   
+    <!-- Display Description -->
+        <div id="description-display" class="prose max-w-none">
+            {% if services_page.description %}
+                {{ services_page.description|linebreaks }}
+            {% else %}
+                <p class="text-gray-500 italic">No description added yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Edit Description Form -->
+        <div id="description-form" class="hidden space-y-4">
+            {{ description_form|crispy }}
+            <div class="flex justify-end">
+                <button type="button" 
+                        data-section="save-description"
+                        class="save-button px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add New Service Section -->
+    <div id="services-container" class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div id="form-error-message" class="hidden text-red-600 text-sm mt-2"></div>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-semibold mb-4">Services</h2>
+            <button id="add-service" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded transition-colors duration-200">Add New Service</button>
+        </div>
+        
+        <!-- Form container - initially hidden -->
+        <div id="service-form-container" class="hidden mt-4">
+            {% crispy service_form %}
+        </div>
+        
+        <!-- Services list -->
+        <div id="services-list" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {% if services %}
+                {% for service in services %}
+                    <article id="service{{ service.id }}" class="border rounded-lg p-4 bg-white shadow-sm">
+                        <div class="text-center">
+                            <h3 class="text-xl font-bold mb-2">{{ service.name }}</h3>
+                            {% if service.image %}
+                                <img src="{{ service.image.image.url }}" 
+                                     class="mx-auto object-contain h-40 w-40" 
+                                     alt="{{ service.name }}">
+                            {% else %}
+                                <div class="h-40 w-40 mx-auto flex items-center justify-center bg-gray-100 rounded-lg border-2 border-dashed border-gray-300">
+                                    <span class="text-gray-400">No Image</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="text-center mt-4">
+                            <h4 class="font-semibold mb-2">Description:</h4>
+                            <p>{{ service.description }}</p>
+                        </div>
+                        {% if is_owner %}
+                            <div class="mt-4 flex justify-end items-center space-x-2">
+                                <button class="editService px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200" 
+                                        id="e{{ service.id }}">Edit</button>
+                                <button class="deleteService px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded transition-colors duration-200" 
+                                        id="d{{ service.id }}">Delete</button>
+                            </div>
+                        {% endif %}
+                    </article>
+                {% empty %}
+                    <p class="col-span-3 text-center text-gray-500 py-8">No services added yet.</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
 </div>
-{% endblock %}  
+{% endblock %}
+
+{% if debug %}
+    {% block dev_scripts %}
+    <script type="module" src="{% static 'js/subpages/services.js' %}"></script>
+    {% endblock dev_scripts %}
+{% else %}
+    {% block prod_scripts %}
+    <script src="{% static 'dist/services.bundle.js' %}"></script>
+    {% endblock prod_scripts %}
+{% endif %}

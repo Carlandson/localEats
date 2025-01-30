@@ -36,4 +36,6 @@ __all__ = [
     'NewsPost',
     'Comment',
     'ContactMessage',
+    'ProductsPage',
+    'ServicesPage',
 ]

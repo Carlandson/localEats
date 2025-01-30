@@ -43,7 +43,6 @@ class Course(models.Model):
     name = models.CharField(max_length=64)
     order = models.PositiveIntegerField(default=0)
     description = models.TextField(blank=True)
-    # gluten free options, vegan options, etc.
     note = models.TextField(blank=True, null=True)  
 
     class Meta:

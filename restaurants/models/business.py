@@ -92,6 +92,7 @@ class Business(models.Model):
     def get_gallery_images(self):
         """Get all gallery images"""
         return self.images.exclude(alt_text__in=['logo', 'hero'])
+    
 
     def clean(self):
         if Business.objects.filter(subdirectory=self.subdirectory).exclude(pk=self.pk).exists():

@@ -1,5 +1,5 @@
 from django import forms
-from ..models import NewsPost, AboutUsPage, ContactMessage, ContactPage, HomePage
+from ..models import NewsPost, AboutUsPage, ContactMessage, ContactPage, HomePage, ProductsPage, ServicesPage
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit, Div, HTML
 import logging
@@ -247,3 +247,13 @@ class AboutUsForm(forms.ModelForm):
                 field.widget.attrs.update({
                     'class': 'w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
                 })
+
+class ProductPageForm(forms.ModelForm):
+    class Meta:
+        model = ProductsPage
+        fields = ['description']
+
+class ServicePageForm(forms.ModelForm):
+    class Meta:
+        model = ServicesPage
+        fields = ['description']

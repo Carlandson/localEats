@@ -5,7 +5,10 @@ from PIL import Image as PILImage
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound, HttpResponse
+from django.http import (JsonResponse, HttpResponseRedirect, 
+                         HttpResponseBadRequest, HttpResponseForbidden, 
+                         HttpResponseNotFound, HttpResponse
+)
 from django.urls import reverse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
@@ -14,10 +17,13 @@ from django.core.paginator import Paginator
 from django.apps import apps
 from django.core import serializers
 from .models import (Image, 
-    SubPage, 
-    Menu, 
-    Course, 
-    Dish, AboutUsPage, EventsPage, Event, SpecialsPage, Business, CuisineCategory, SideOption, HomePage, NewsPost, ContactPage, ContactMessage, ProductsPage, Product)
+    SubPage, Menu, Course, 
+    Dish, AboutUsPage, EventsPage, 
+    Event, SpecialsPage, Business, 
+    CuisineCategory, SideOption, HomePage, 
+    NewsPost, ContactPage, ContactMessage, 
+    ProductsPage, Product, ServicesPage, 
+    Service)
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -32,20 +38,12 @@ from google.oauth2.credentials import Credentials
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import (
-    BusinessCreateForm,
-    BusinessEditForm,
-    BusinessCustomizationForm,
-    ContactMessageForm,
-    ContactPageForm,
-    CustomSignupView,
-    DishSubmit,
-    EventForm,
-    HomePageForm,
-    AboutUsForm,
-    ImageUploadForm,
-    NewsPostForm,
-    ProductForm,
-    ProductPageForm,
+    BusinessCreateForm, BusinessEditForm, BusinessCustomizationForm,
+    ContactMessageForm, ContactPageForm, CustomSignupView,
+    DishSubmit, EventForm, HomePageForm,
+    AboutUsForm, ImageUploadForm, NewsPostForm,
+    ProductForm, ProductPageForm, ServiceForm,
+    ServicePageForm,
 )
 from django.core.exceptions import PermissionDenied
 from django.contrib.contenttypes.models import ContentType
@@ -56,6 +54,7 @@ from crispy_forms.layout import Div, Submit, HTML
 from django.utils import timezone
 from .constants import get_font_choices, get_font_sizes
 from datetime import datetime
+from .utils import get_business_images
 import pytz
 import base64, uuid
 import googlemaps
@@ -428,7 +427,21 @@ def get_editor_context(base_context, business, subpage, page_type):
         context['products'] = Product.objects.filter(business=business)
         context['description_form'] = ProductPageForm(instance=products_page)
         context['products_page'] = products_page
-
+    if page_type == 'services':
+        services_page = getattr(subpage, 'services_content', None)
+        if not services_page:
+            services_page = ServicesPage.objects.create(
+                subpage=subpage,
+                description="",
+                show_description=False
+            )
+        context['service_form'] = ServiceForm()
+        context['services'] = Service.objects.filter(business=business)
+        context['description_form'] = ServicePageForm(instance=services_page)
+        context['services_page'] = services_page
+    if page_type == 'gallery':
+        images = get_business_images(business)
+        context['images'] = images
     elif page_type == 'menu':
         context['menu_data'] = {
             'menus': Menu.objects.filter(business=business).prefetch_related(
@@ -437,7 +450,6 @@ def get_editor_context(base_context, business, subpage, page_type):
             ),
             'specials': Dish.objects.filter(menu__business=business, is_special=True),
         }
-    
     return context
 
 # gathers visitor data
@@ -3193,6 +3205,19 @@ def create_product(request, business_subdirectory):
             product = form.save(commit=False)
             product.products_page = products_page  # Set the products_page relationship
             product.save()
+
+            if 'image' in request.FILES:
+                image = Image(
+                    image=request.FILES['image'],
+                    uploaded_by=request.user,
+                    content_type=ContentType.objects.get_for_model(product),
+                    object_id=product.id,
+                    alt_text=product.name
+                )
+                image.save()
+                image_url = image.image.url
+            else:
+                image_url = None
             
             return JsonResponse({
                 'success': True,
@@ -3202,7 +3227,7 @@ def create_product(request, business_subdirectory):
                     'name': product.name,
                     'description': product.description,
                     'price': str(product.price),
-                    'image_url': product.image.url if product.image else None
+                    'image_url': image_url
                 }
             })
         else:
@@ -3302,7 +3327,8 @@ def get_product_form(request, business_subdirectory, product_id):
     
     return JsonResponse({
         'success': True,
-        'form_html': form_html
+        'form_html': form_html,
+        'current_image_url': product.image.image.url if product.image else None
     })
 
 @login_required
@@ -3332,6 +3358,183 @@ def update_products_page_settings(request, business_subdirectory):
         
     except (Business.DoesNotExist, SubPage.DoesNotExist, json.JSONDecodeError) as e:
         return JsonResponse({'error': str(e)}, status=400)
+
+@login_required
+def create_service(request, business_subdirectory):
+    try:
+        business = Business.objects.get(subdirectory=business_subdirectory)
+        
+        # Check if user owns this business
+        if business.owner != request.user:
+            return JsonResponse({'error': 'Unauthorized'}, status=403)
+        
+        # Get or create the services page
+        subpage = SubPage.objects.get(business=business, page_type='services')
+        services_page = getattr(subpage, 'services_content', None)
+        if not services_page:
+            services_page = ServicesPage.objects.create(subpage=subpage)
+            
+        form = ServiceForm(request.POST, request.FILES, business=business)
+        
+        if form.is_valid():
+            service = form.save(commit=False)
+            service.services_page = services_page  # Set the services_page relationship
+            service.save()
+            if 'image' in request.FILES:
+                image = Image(
+                    image=request.FILES['image'],
+                    uploaded_by=request.user,
+                    content_type=ContentType.objects.get_for_model(service),
+                    object_id=service.id,
+                    alt_text=service.name
+                )
+                image.save()
+                image_url = image.image.url
+            else:
+                image_url = None
+            return JsonResponse({
+                'success': True,
+                'message': 'Service created successfully',
+                'service': {
+                    'id': service.id,
+                    'name': service.name,
+                    'description': service.description,
+                    'image_url': image_url
+                }
+            })
+        else:
+            return JsonResponse({
+                'error': 'Invalid form data',
+                'errors': form.errors
+            }, status=400)
+            
+    except Business.DoesNotExist:
+        return JsonResponse({'error': 'Business not found'}, status=404)
+    except SubPage.DoesNotExist:
+        return JsonResponse({'error': 'Services page not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@login_required
+def service_detail(request, business_subdirectory, service_id):
+    service = get_object_or_404(
+        Service, 
+        id=service_id, 
+        services_page__subpage__business__subdirectory=business_subdirectory
+    )
+    # Verify business ownership
+    if service.services_page.subpage.business.owner != request.user:
+        raise PermissionDenied("You don't have permission to access this service")
+
+    if request.method == 'GET':
+        return JsonResponse({'service': service.to_dict()})
+        
+    elif request.method == 'POST':  # Changed from PUT to POST
+        try:
+            form = ServiceForm(
+                request.POST, 
+                request.FILES, 
+                instance=service,
+                business=service.services_page.subpage.business
+            )
+            
+            if form.is_valid():
+                service = form.save()
+
+                # Handle image upload if present
+                if request.FILES.get('image'):
+                    if service.image:
+                        service.image.delete()
+
+                # Create new image
+                new_image = Image(
+                    image=request.FILES['image'],
+                    uploaded_by=request.user,
+                    content_type=ContentType.objects.get_for_model(service),
+                    object_id=service.id,
+                    alt_text=service.name
+                )
+                new_image.save()
+
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Service updated successfully',
+                    'service': service.to_dict()
+                })
+            else:
+                return JsonResponse({
+                    'error': 'Invalid form data',
+                    'errors': form.errors
+                }, status=400)
+                
+        except Exception as e:
+            return JsonResponse({
+                'error': str(e)
+            }, status=500)
+            
+    elif request.method == 'DELETE':
+        try:
+            service.delete()
+            return JsonResponse({
+                'success': True,
+                'message': 'Service deleted successfully'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'error': f'Failed to delete service: {str(e)}'
+            }, status=500)
+
+@login_required
+def get_service_form(request, business_subdirectory, service_id):
+    service = get_object_or_404(
+        Service.objects.select_related('services_page__subpage__business'), 
+        id=service_id, 
+        services_page__subpage__business__subdirectory=business_subdirectory
+    )
+    
+    if service.services_page.subpage.business.owner != request.user:
+        raise PermissionDenied("You don't have permission to access this service")
+        
+    form = ServiceForm(instance=service, business=service.services_page.subpage.business)
+    
+    form_html = render_to_string('forms/edit_service.html', {
+        'form': form,
+        'service': service,
+    }, request=request)
+    
+    return JsonResponse({
+        'success': True,
+        'form_html': form_html,
+        'current_image_url': service.image.image.url if service.image else None
+    })
+
+@login_required
+def update_services_page_settings(request, business_subdirectory):
+    try:
+        business = Business.objects.get(subdirectory=business_subdirectory)
+        subpage = SubPage.objects.get(business=business, page_type='services')
+        services_page = getattr(subpage, 'services_content', None)
+        
+        if not services_page:
+            return JsonResponse({'error': 'Services page not found'}, status=404)
+
+        data = json.loads(request.body)
+        field_name = data.get('fieldName')
+        
+        if field_name == 'description':
+            services_page.description = data.get('description', '')
+            services_page.save()
+        elif field_name == 'show_description':
+            services_page.show_description = data.get('value', False)
+            services_page.save()
+        else:
+            return JsonResponse({'error': 'Invalid field name'}, status=400)
+            
+        return JsonResponse({'status': 'success'})
+        
+    except (Business.DoesNotExist, SubPage.DoesNotExist, json.JSONDecodeError) as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
 
 @login_required
 def seo(request, business_subdirectory):

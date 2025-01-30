@@ -90,8 +90,3 @@ class ProductForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
-
-class ProductPageForm(forms.ModelForm):
-    class Meta:
-        model = ProductsPage
-        fields = ['description']

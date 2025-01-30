@@ -306,3 +306,8 @@ class ProductsPage(models.Model):
     subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='products_content')
     description = models.TextField()
     show_description = models.BooleanField(default=False)
+
+class ServicesPage(models.Model):
+    subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='services_content')
+    description = models.TextField()
+    show_description = models.BooleanField(default=False)
