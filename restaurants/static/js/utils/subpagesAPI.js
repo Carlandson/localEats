@@ -128,5 +128,18 @@ export const api = {
         getEditForm: async (business, serviceId) => {
             return makeRequest(`/${business}/services/${serviceId}/get-form/`, 'GET');
         },
+    },
+    gallery: {
+        upload: async (business, formData) => {
+            return makeRequest(`/${business}/gallery/upload/`, 'POST', formData);
+        },
+        updateDescription: async (business, data) => {
+            return makeRequest(`/${business}/gallery/settings/`, 'POST', data);
+        },
+
+        delete: async (business, imageId) => {
+            return makeRequest(`/${business}/gallery/delete/${imageId}`, 'DELETE');
+        }
+
     }
 };

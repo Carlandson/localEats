@@ -2,7 +2,7 @@ from .account_forms import CustomSignupForm, CustomSignupView
 from .business_forms import BusinessCreateForm, BusinessEditForm, BusinessCustomizationForm
 from .content_forms import (HomePageForm, AboutUsForm, ContactPageForm, 
                             ContactMessageForm, NewsPostForm, ServicePageForm,
-                            ProductPageForm)
+                            ProductPageForm, GalleryPageForm)
 from .media_forms import ImageUploadForm, BusinessImageForm
 from .product_forms import ProductForm
 from .service_forms import ServiceForm
@@ -30,4 +30,5 @@ __all__ = [
     'ServiceForm',
     'ServicePageForm',
     'ProductPageForm',
+    'GalleryPageForm'
 ]

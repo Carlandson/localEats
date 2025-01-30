@@ -104,5 +104,10 @@ urlpatterns = [
     path('<slug:business_subdirectory>/services/<int:service_id>/', views.service_detail, name='service_detail'),
     path('<str:business_subdirectory>/services/<int:service_id>/get-form/', views.get_service_form, name='api_service_form'),
 
+    # Gallery Content Editor
+    path('<str:business_subdirectory>/gallery/upload/', views.upload_gallery_image, name='upload_gallery_image'),
+    path('<str:business_subdirectory>/gallery/settings/', views.update_gallery_page_settings, name="update_gallery_page_settings"),
+    path('<str:business_subdirectory>/gallery/delete/<int:image_id>/', views.delete_gallery_image, name='delete_gallery_image'),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

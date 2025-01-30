@@ -3,10 +3,14 @@ from django.contrib.auth.admin import UserAdmin  # Import the default UserAdmin
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.html import format_html
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.admin import GenericTabularInline  # Add this import
+
 from .models import (
     Business, HomePage, AboutUsPage, EventsPage, 
     SpecialsPage, Event, CuisineCategory, SubPage, 
-    Menu, Product, ProductsPage, ServicesPage, Service
+    Menu, Product, ProductsPage, ServicesPage, Service,
+    Image, GalleryPage
 )
 
 class BusinessInline(admin.StackedInline):
@@ -84,6 +88,75 @@ class ServiceAdmin(admin.ModelAdmin):
             'fields': ('preview_image',),
         }),
     )
+
+class GalleryImageInline(GenericTabularInline):
+    model = Image
+    fields = ('display_image', 'alt_text', 'caption', 'upload_date', 'uploaded_by')
+    readonly_fields = ('display_image', 'upload_date', 'uploaded_by')
+    extra = 0
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(content_type=ContentType.objects.get_for_model(GalleryPage))
+    
+    def display_image(self, obj):
+        if obj and obj.thumbnail:
+            return format_html("""
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="{}" width="100" height="100" style="object-fit: cover; border-radius: 4px;"/>
+                    <a href="{}" target="_blank" class="button" style="text-decoration: none;">
+                        View Full Image
+                    </a>
+                </div>
+            """, obj.thumbnail.url, obj.image.url)
+        elif obj and obj.image:
+            return format_html("""
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="{}" width="100" height="100" style="object-fit: cover; border-radius: 4px;"/>
+                </div>
+            """, obj.image.url)
+        return "No image"
+    display_image.short_description = 'Preview'
+
+class GalleryPageAdmin(admin.ModelAdmin):
+    list_display = ('business_name', 'image_count', 'show_description', 'preview_description')
+    list_filter = ('show_description', 'subpage__business')
+    search_fields = ('description', 'subpage__business__business_name')
+    inlines = [GalleryImageInline]
+
+    def business_name(self, obj):
+        return obj.subpage.business.business_name if obj.subpage else '-'
+    business_name.short_description = 'Business'
+    
+    def image_count(self, obj):
+        return Image.objects.filter(
+            content_type=ContentType.objects.get_for_model(GalleryPage),
+            object_id=obj.id
+        ).count()
+    image_count.short_description = 'Number of Images'
+
+    def preview_description(self, obj):
+        if obj.description:
+            return obj.description[:100] + '...' if len(obj.description) > 100 else obj.description
+        return '-'
+    preview_description.short_description = 'Description Preview'
+
+    fieldsets = (
+        ('Gallery Settings', {
+            'fields': ('subpage', 'show_description')
+        }),
+        ('Content', {
+            'fields': ('description',),
+            'classes': ('wide',)
+        }),
+    )
+
+    class Media:
+        css = {
+            'all': ('admin/css/gallery.css',)
+        }
+
+        js = ('admin/js/gallery.js',) 
 # Create instance of custom admin site
 business_admin = BusinessAdminSite(name='business_admin')
 
@@ -104,3 +177,4 @@ business_admin.register(Product)
 business_admin.register(ProductsPage)
 business_admin.register(ServicesPage)
 business_admin.register(Service, ServiceAdmin)
+business_admin.register(GalleryPage, GalleryPageAdmin)

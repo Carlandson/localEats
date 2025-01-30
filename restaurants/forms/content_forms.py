@@ -1,5 +1,5 @@
 from django import forms
-from ..models import NewsPost, AboutUsPage, ContactMessage, ContactPage, HomePage, ProductsPage, ServicesPage
+from ..models import NewsPost, AboutUsPage, ContactMessage, ContactPage, HomePage, ProductsPage, ServicesPage, GalleryPage
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit, Div, HTML
 import logging
@@ -257,3 +257,23 @@ class ServicePageForm(forms.ModelForm):
     class Meta:
         model = ServicesPage
         fields = ['description']
+    
+class GalleryPageForm(forms.ModelForm):
+    class Meta:
+        model = GalleryPage
+        fields = ['description', 'show_description']
+        widgets = {
+            'description': forms.Textarea(attrs={
+                'class': 'w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500',
+                'rows': 4
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False  # Don't generate form tag
+        self.helper.layout = Layout(
+            Field('description', css_class='mb-4'),
+            Field('show_description', css_class='mb-4'),
+        )

@@ -1,5 +1,5 @@
 from .business import Business
-from .content import HomePage, AboutUsPage, ContactPage, SubPage, EventsPage, NewsFeed
+from .content import HomePage, AboutUsPage, ContactPage, SubPage, EventsPage, NewsFeed, GalleryPage
 from .communication import ContactMessage, NewsPost, Comment
 from .events import Event
 from .media import Image
@@ -38,4 +38,5 @@ __all__ = [
     'ContactMessage',
     'ProductsPage',
     'ServicesPage',
+    'GalleryPage',
 ]

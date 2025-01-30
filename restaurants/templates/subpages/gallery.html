@@ -1,76 +1,121 @@
 {% extends "owner_layout.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block body %}
+{{ business_details.subdirectory|json_script:"business" }}
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Gallery Editor</h1>
+    <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Gallery Page Editor</h1>
     
-    <div class="masonry-grid">
-        {% for image in images %}
-        <div class="masonry-grid-item sm:w-1/2 lg:w-1/3 xl:w-1/4 p-2">
-            <div class="relative group">
-                <div class="w-full overflow-hidden rounded-lg">
-                    <img 
-                        src="{{ image.url }}" 
-                        alt="{{ image.alt_text }}"
-                        class=""
-                        loading="lazy"
-                    >
+    <!-- Description Section -->
+    <div class="bg-white shadow rounded-lg p-6 mb-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">Page Description</h2>
+            <button type="button" 
+                    id="toggle-description-edit"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
+                Edit Description
+            </button>
+        </div>
+   
+    <!-- Display Description -->
+        <div id="description-display" class="prose max-w-none">
+            {% if gallery_page.description %}
+                {{ gallery_page.description|linebreaks }}
+            {% else %}
+                <p class="text-gray-500 italic">No description added yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Edit Description Form -->
+        <div id="description-form" class="hidden space-y-4">
+            <form id="description-edit-form">
+                {% csrf_token %}
+                {{ description_form|crispy }}
+                <div class="flex justify-end">
+                    <button type="button" 
+                            data-section="save-description"
+                            class="save-button px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
+                        Save Changes
+                    </button>
                 </div>
-                
-                <!-- Hover overlay -->
-                <div class="absolute inset-0 bg-black transition-all duration-300 opacity-0 group-hover:opacity-50 rounded-lg"></div>
-                <div class="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-                    <p class="text-lg font-semibold text-white">{{ image.content_type }}: {{ image.content_name }}</p>
-                    {% if image.caption %}
-                        <p class="text-sm text-white">{{ image.caption }}</p>
-                    {% endif %}
-                    <p class="text-xs mt-2 text-white">Uploaded by {{ image.uploaded_by }}</p>
-                    <p class="text-xs text-white">{{ image.upload_date|date:"M d, Y" }}</p>
-                    <a href="{{ image.content_url }}" 
-                       class="mt-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-sm text-white transition-colors duration-200">
-                        View {{ image.content_type }}
-                    </a>
+            </form>
+        </div>
+    </div>
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Upload Form Section - Left Side -->
+        {% if can_upload %}
+        <div class="w-1/3">
+            <div class="bg-white shadow rounded-lg p-6 sticky top-8">
+                <h2 class="text-xl font-semibold mb-4">Upload New Image</h2>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                        Select Image
+                    </label>
+                    <div id="gallery-container"> <!-- Added container ID -->
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg" id="drop-zone">
+                            <div class="space-y-1 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div class="flex flex-col items-center space-y-2">
+                                    <label for="gallery-image" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                        <span>Upload a file</span>
+                                        <input id="gallery-image" 
+                                               name="image" 
+                                               type="file" 
+                                               class="sr-only" 
+                                               accept="image/*"
+                                               data-max-size="{{ max_file_size }}"> <!-- Added data attribute -->
+                                    </label>
+                                    <p class="text-sm text-gray-600">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">
+                                    PNG, JPG, GIF up to {{ max_file_size|filesizeformat }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        {% endfor %}
+        {% endif %}
+        <!-- Gallery Section - Right Side -->
+        <div class="w-2/3">
+            <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"> <!-- Added ID -->
+                {% for image in images %}
+                    <div class="gallery-item relative group">
+                        <img src="{{ image.image.url }}" 
+                             alt="{{ image.alt_text }}"
+                             class="h-full w-64 object-cover rounded-lg shadow-md"
+                             loading="lazy">
+                        
+                        <button type="button"
+                                data-image-id="{{ image.id }}"
+                                class="delete-image-btn absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                        
+                        {% if image.caption %}
+                            <p class="mt-2 text-sm text-gray-600">{{ image.caption }}</p>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p class="text-gray-500">No images in the gallery yet.</p>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
+    
+
 
 {% if debug %}
     {% block dev_scripts %}
-    <script src="{% static 'js/vendor/masonry.pkgd.min.js' %}"></script>
-    <script src="{% static 'js/vendor/imagesloaded.pkgd.min.js' %}"></script>
     <script type="module" src="{% static 'js/subpages/gallery.js' %}"></script>
-    <style>
-        /* Essential Masonry styles */
-        .masonry-grid {
-            display: block;
-            width: 100%;
-        }
-    
-        .masonry-grid-item {
-            display: block;
-            float: left;
-            box-sizing: border-box;
-        }
-    
-        /* Clear Tailwind flex properties */
-        .masonry-grid,
-        .masonry-grid-item {
-            flex: none !important;
-        }
-    
-        /* Optional: ensure images don't break layout */
-        .masonry-grid-item img {
-            display: block;
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-        }
-    </style>
     {% endblock dev_scripts %}
 {% else %}
     {% block prod_scripts %}

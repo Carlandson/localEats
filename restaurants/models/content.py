@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 import logging
 from .business import Business
 from .media import Image
+from django.contrib.contenttypes.fields import GenericRelation
 
 logger = logging.getLogger(__name__)
 # Image, SubPage, Menu, Course, Dish, AboutUsPage, EventsPage, Event, SpecialsPage, business, CuisineCategory
@@ -311,3 +312,25 @@ class ServicesPage(models.Model):
     subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='services_content')
     description = models.TextField()
     show_description = models.BooleanField(default=False)
+
+class GalleryPage(models.Model):
+    subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='gallery_content')
+    description = models.TextField(blank=True)
+    show_description = models.BooleanField(default=False)
+    images = GenericRelation(Image)
+
+    def get_images(self):
+        """Get all images associated with this gallery, ordered by upload date"""
+        return self.images.all().order_by('-upload_date')
+
+    def add_image(self, image_file, uploaded_by, alt_text='', caption=''):
+        """Helper method to add a new image to the gallery"""
+        return Image.objects.create(
+            image=image_file,
+            uploaded_by=uploaded_by,
+            content_type=ContentType.objects.get_for_model(self),
+            object_id=self.id,
+            alt_text=alt_text,
+            caption=caption
+        )
+

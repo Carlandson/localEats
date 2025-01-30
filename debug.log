@@ -6152,3 +6152,1290 @@ DEBUG 2025-01-29 20:05:48,255 content 24364 15736
         
 DEBUG 2025-01-29 20:05:48,256 content 24364 15736 Banner 3 found: None
 INFO 2025-01-29 20:05:48,263 basehttp 24364 15736 "GET /test_non_menu/gallery/ HTTP/1.1" 200 5642
+INFO 2025-01-30 12:06:00,470 autoreload 17836 3008 Watching for file changes with StatReloader
+ERROR 2025-01-30 12:06:02,926 log 17836 8156 Internal Server Error: /test_non_menu/gallery/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 639, in business_page
+    return render(request, template, context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    return parser.parse()
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 510, in parse
+    raise self.error(token, e)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 508, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 510, in parse
+    raise self.error(token, e)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 508, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 481, in parse
+    raise self.error(token, e)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 479, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 597, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 693, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 603, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'crispy'
+ERROR 2025-01-30 12:06:02,931 basehttp 17836 8156 "GET /test_non_menu/gallery/ HTTP/1.1" 500 243786
+WARNING 2025-01-30 12:06:03,417 log 17836 8156 Not Found: /favicon.ico
+WARNING 2025-01-30 12:06:03,418 basehttp 17836 8156 "GET /favicon.ico HTTP/1.1" 404 15829
+INFO 2025-01-30 12:08:46,536 autoreload 17836 3008 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\content_forms.py changed, reloading.
+INFO 2025-01-30 12:08:47,351 autoreload 3144 15944 Watching for file changes with StatReloader
+ERROR 2025-01-30 12:08:48,234 log 3144 1944 Internal Server Error: /test_non_menu/gallery/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 639, in business_page
+    return render(request, template, context)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    return parser.parse()
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 510, in parse
+    raise self.error(token, e)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 508, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 510, in parse
+    raise self.error(token, e)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 508, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 481, in parse
+    raise self.error(token, e)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 479, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 597, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 693, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\template\base.py", line 603, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'crispy'
+ERROR 2025-01-30 12:08:48,239 basehttp 3144 1944 "GET /test_non_menu/gallery/ HTTP/1.1" 500 243837
+INFO 2025-01-30 12:09:13,782 basehttp 3144 1944 "GET /test_non_menu/gallery/ HTTP/1.1" 200 13087
+INFO 2025-01-30 12:09:13,938 basehttp 3144 26792 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 4042
+INFO 2025-01-30 12:09:13,955 basehttp 3144 1944 - Broken pipe from ('127.0.0.1', 64935)
+INFO 2025-01-30 12:09:13,956 basehttp 3144 26792 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 12:09:13,958 basehttp 3144 26792 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 4585
+INFO 2025-01-30 12:09:13,973 basehttp 3144 26792 - Broken pipe from ('127.0.0.1', 65041)
+INFO 2025-01-30 12:09:13,994 basehttp 3144 19832 - Broken pipe from ('127.0.0.1', 65043)
+INFO 2025-01-30 12:09:14,121 basehttp 3144 2784 - Broken pipe from ('127.0.0.1', 65044)
+INFO 2025-01-30 12:10:51,808 basehttp 3144 16648 "GET /test_non_menu/gallery/ HTTP/1.1" 200 13064
+INFO 2025-01-30 12:10:51,875 basehttp 3144 16648 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 12:36:45,425 autoreload 3144 15944 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-30 12:36:46,343 autoreload 33916 19676 Watching for file changes with StatReloader
+INFO 2025-01-30 12:36:53,558 autoreload 33916 19676 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-30 12:36:54,478 autoreload 31108 13112 Watching for file changes with StatReloader
+INFO 2025-01-30 12:37:01,250 basehttp 31108 27336 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15921
+INFO 2025-01-30 12:37:01,405 basehttp 31108 25708 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8963
+INFO 2025-01-30 12:37:01,417 basehttp 31108 27336 - Broken pipe from ('127.0.0.1', 51121)
+INFO 2025-01-30 12:37:01,443 basehttp 31108 25708 - Broken pipe from ('127.0.0.1', 51124)
+INFO 2025-01-30 12:38:43,647 basehttp 31108 568 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15918
+INFO 2025-01-30 12:38:43,724 basehttp 31108 568 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8962
+INFO 2025-01-30 12:39:31,139 basehttp 31108 568 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15917
+INFO 2025-01-30 12:39:31,213 basehttp 31108 568 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 12:40:37,805 basehttp 31108 568 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15917
+INFO 2025-01-30 12:40:37,890 basehttp 31108 568 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8682
+INFO 2025-01-30 12:41:32,494 basehttp 31108 568 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15434
+INFO 2025-01-30 12:41:32,529 basehttp 31108 10244 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 12:41:32,530 basehttp 31108 29544 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 12:41:32,530 basehttp 31108 19808 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8682
+INFO 2025-01-30 12:41:32,532 basehttp 31108 568 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 12:41:32,540 basehttp 31108 568 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 12:41:32,663 basehttp 31108 568 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 12:41:32,663 basehttp 31108 19808 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 4585
+INFO 2025-01-30 12:41:32,680 basehttp 31108 568 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 12:41:48,267 basehttp 31108 568 - Broken pipe from ('127.0.0.1', 51420)
+DEBUG 2025-01-30 12:41:48,469 content 31108 28652 
+            Searching for hero_primary:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-30 12:41:48,472 content 31108 28652 All images found: []
+DEBUG 2025-01-30 12:41:48,473 content 31108 28652 Hero primary found: None
+DEBUG 2025-01-30 12:41:48,473 content 31108 28652 
+            Searching for banner_2:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-30 12:41:48,474 content 31108 28652 Banner 2 found: None
+DEBUG 2025-01-30 12:41:48,475 content 31108 28652 
+            Searching for banner_3:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-30 12:41:48,476 content 31108 28652 Banner 3 found: None
+INFO 2025-01-30 12:41:48,481 basehttp 31108 28652 "GET /test_non_menu/gallery/ HTTP/1.1" 200 5642
+INFO 2025-01-30 12:42:05,850 basehttp 31108 19808 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15434
+INFO 2025-01-30 12:42:05,930 basehttp 31108 19808 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8677
+INFO 2025-01-30 12:42:06,053 basehttp 31108 19808 - Broken pipe from ('127.0.0.1', 51819)
+INFO 2025-01-30 12:44:52,376 basehttp 31108 4584 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16223
+INFO 2025-01-30 12:44:52,425 basehttp 31108 4584 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 12:45:41,620 basehttp 31108 4584 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15953
+INFO 2025-01-30 12:45:41,667 basehttp 31108 4584 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 12:45:43,021 basehttp 31108 4584 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15953
+INFO 2025-01-30 12:45:48,837 basehttp 31108 4584 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15953
+INFO 2025-01-30 12:45:48,878 basehttp 31108 4584 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 12:45:48,880 basehttp 31108 4584 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 12:45:48,883 basehttp 31108 4584 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 12:45:48,886 basehttp 31108 4584 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8677
+INFO 2025-01-30 12:45:48,901 basehttp 31108 4584 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 12:45:49,021 basehttp 31108 4584 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 12:45:49,022 basehttp 31108 568 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 4585
+INFO 2025-01-30 12:45:49,040 basehttp 31108 4584 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 12:46:13,810 basehttp 31108 4584 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15947
+INFO 2025-01-30 12:46:13,858 basehttp 31108 4584 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 12:49:59,912 basehttp 31108 29560 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15947
+INFO 2025-01-30 12:49:59,963 basehttp 31108 29560 - Broken pipe from ('127.0.0.1', 52792)
+INFO 2025-01-30 12:49:59,965 basehttp 31108 32560 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8926
+INFO 2025-01-30 12:50:00,095 basehttp 31108 32560 - Broken pipe from ('127.0.0.1', 52795)
+INFO 2025-01-30 12:50:32,945 basehttp 31108 34420 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15947
+INFO 2025-01-30 12:50:32,991 basehttp 31108 34420 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 12:52:33,557 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15947
+INFO 2025-01-30 12:52:33,605 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 11166
+INFO 2025-01-30 12:52:53,621 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15947
+INFO 2025-01-30 12:52:53,680 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10174
+INFO 2025-01-30 12:53:03,014 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15947
+INFO 2025-01-30 12:53:03,067 basehttp 31108 30660 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 12:53:03,068 basehttp 31108 26948 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 12:53:03,068 basehttp 31108 34316 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10174
+INFO 2025-01-30 12:53:03,069 basehttp 31108 32240 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 12:53:03,092 basehttp 31108 32240 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 12:53:03,208 basehttp 31108 32240 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 12:53:03,208 basehttp 31108 34316 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 4585
+INFO 2025-01-30 12:53:03,224 basehttp 31108 32240 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 12:53:13,553 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15947
+INFO 2025-01-30 12:53:13,609 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8980
+INFO 2025-01-30 12:53:41,729 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15948
+INFO 2025-01-30 12:53:41,780 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 12:53:52,669 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15951
+INFO 2025-01-30 12:53:52,706 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 12:54:07,454 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15951
+INFO 2025-01-30 12:54:07,505 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 12:54:30,253 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15997
+INFO 2025-01-30 12:54:30,301 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 12:55:17,140 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15974
+INFO 2025-01-30 12:55:17,187 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 12:56:08,676 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15989
+INFO 2025-01-30 12:56:08,735 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8980
+INFO 2025-01-30 12:56:18,553 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15989
+INFO 2025-01-30 12:56:18,596 basehttp 31108 6780 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 12:56:18,596 basehttp 31108 8908 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 12:56:18,597 basehttp 31108 30860 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8980
+INFO 2025-01-30 12:56:18,598 basehttp 31108 32240 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 12:56:18,611 basehttp 31108 32240 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 12:56:18,802 basehttp 31108 32240 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 12:56:18,802 basehttp 31108 30860 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 4585
+INFO 2025-01-30 12:56:18,835 basehttp 31108 32240 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 12:57:39,391 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15989
+INFO 2025-01-30 12:57:39,440 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8916
+INFO 2025-01-30 12:58:13,560 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15989
+INFO 2025-01-30 12:58:13,629 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8926
+INFO 2025-01-30 12:59:26,508 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15989
+INFO 2025-01-30 12:59:26,559 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9605
+INFO 2025-01-30 12:59:45,455 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15989
+INFO 2025-01-30 12:59:45,504 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8926
+INFO 2025-01-30 13:00:22,155 basehttp 31108 32240 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15989
+INFO 2025-01-30 13:00:22,208 basehttp 31108 32240 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 13:53:29,887 basehttp 31108 17016 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16007
+INFO 2025-01-30 13:53:29,963 basehttp 31108 17016 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9887
+INFO 2025-01-30 13:53:30,076 basehttp 31108 17016 - Broken pipe from ('127.0.0.1', 58867)
+INFO 2025-01-30 13:53:34,415 basehttp 31108 33472 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=lHIe81tsDXOQ0h80QgEMKenmon2khrDxTntxxwlec2JnLnMP55292fVOwSuE87vx HTTP/1.1" 200 16007
+INFO 2025-01-30 13:53:34,482 basehttp 31108 33472 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 13:53:38,198 basehttp 31108 33472 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=lHIe81tsDXOQ0h80QgEMKenmon2khrDxTntxxwlec2JnLnMP55292fVOwSuE87vx HTTP/1.1" 200 16007
+INFO 2025-01-30 13:53:38,245 basehttp 31108 33472 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 13:54:11,868 basehttp 31108 33472 "GET /admin/restaurants/service/ HTTP/1.1" 200 15695
+INFO 2025-01-30 13:54:11,936 basehttp 31108 33472 "GET /static/admin/css/base.css HTTP/1.1" 200 21544
+INFO 2025-01-30 13:54:11,937 basehttp 31108 17316 "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2682
+INFO 2025-01-30 13:54:11,938 basehttp 31108 28548 "GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+INFO 2025-01-30 13:54:11,939 basehttp 31108 19364 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-01-30 13:54:11,940 basehttp 31108 9604 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2025-01-30 13:54:11,941 basehttp 31108 30236 "GET /static/admin/css/changelists.css HTTP/1.1" 200 6811
+INFO 2025-01-30 13:54:11,943 basehttp 31108 19364 "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2025-01-30 13:54:11,943 basehttp 31108 28548 "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-01-30 13:54:11,944 basehttp 31108 9604 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9042
+INFO 2025-01-30 13:54:11,945 basehttp 31108 30236 "GET /static/admin/js/actions.js HTTP/1.1" 200 8067
+INFO 2025-01-30 13:54:11,947 basehttp 31108 19364 "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-01-30 13:54:11,947 basehttp 31108 28548 "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-01-30 13:54:11,950 basehttp 31108 30236 "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2025-01-30 13:54:11,951 basehttp 31108 19364 "GET /static/admin/css/responsive.css HTTP/1.1" 200 17905
+INFO 2025-01-30 13:54:11,951 basehttp 31108 17316 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2025-01-30 13:54:11,952 basehttp 31108 9604 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2025-01-30 13:54:11,981 basehttp 31108 33472 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-30 13:54:11,989 basehttp 31108 33472 "GET /media/user_uploads/2025/01/29/IMG_5282_0KzIc4z.webp HTTP/1.1" 200 32452
+INFO 2025-01-30 13:54:11,990 basehttp 31108 19364 "GET /media/user_uploads/2025/01/29/back_red.webp HTTP/1.1" 200 141286
+INFO 2025-01-30 13:54:11,996 basehttp 31108 9604 "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-01-30 13:54:11,996 basehttp 31108 17316 "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2025-01-30 13:54:12,083 basehttp 31108 9604 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-01-30 13:54:12,083 basehttp 31108 19364 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-01-30 13:54:12,083 basehttp 31108 17316 "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+WARNING 2025-01-30 13:54:12,105 log 31108 9604 Not Found: /favicon.ico
+WARNING 2025-01-30 13:54:12,106 basehttp 31108 9604 "GET /favicon.ico HTTP/1.1" 404 15829
+INFO 2025-01-30 13:55:31,052 autoreload 31108 13112 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\admin.py changed, reloading.
+INFO 2025-01-30 13:55:31,808 autoreload 24424 33412 Watching for file changes with StatReloader
+INFO 2025-01-30 13:55:41,651 autoreload 24424 33412 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\admin.py changed, reloading.
+INFO 2025-01-30 13:55:42,418 autoreload 9224 11812 Watching for file changes with StatReloader
+INFO 2025-01-30 13:55:46,672 autoreload 9224 11812 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\admin.py changed, reloading.
+INFO 2025-01-30 13:55:47,502 autoreload 28804 33856 Watching for file changes with StatReloader
+INFO 2025-01-30 13:55:53,004 basehttp 28804 32248 "GET /admin/restaurants/service/ HTTP/1.1" 200 15695
+INFO 2025-01-30 13:55:53,085 basehttp 28804 34468 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-30 13:55:53,150 basehttp 28804 32248 - Broken pipe from ('127.0.0.1', 59221)
+INFO 2025-01-30 13:55:53,159 basehttp 28804 22900 - Broken pipe from ('127.0.0.1', 59226)
+WARNING 2025-01-30 13:55:53,191 log 28804 34468 Not Found: /favicon.ico
+INFO 2025-01-30 13:55:53,192 basehttp 28804 34468 - Broken pipe from ('127.0.0.1', 59225)
+INFO 2025-01-30 13:55:58,945 autoreload 28804 33856 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\admin.py changed, reloading.
+INFO 2025-01-30 13:55:59,815 autoreload 23420 18860 Watching for file changes with StatReloader
+INFO 2025-01-30 13:56:35,172 autoreload 23420 18860 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\admin.py changed, reloading.
+INFO 2025-01-30 13:56:36,040 autoreload 27196 25952 Watching for file changes with StatReloader
+INFO 2025-01-30 13:57:04,826 autoreload 27196 25952 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\admin.py changed, reloading.
+INFO 2025-01-30 13:57:05,557 autoreload 10660 33088 Watching for file changes with StatReloader
+INFO 2025-01-30 13:57:09,083 autoreload 10660 33088 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\admin.py changed, reloading.
+INFO 2025-01-30 13:57:09,725 autoreload 26184 33012 Watching for file changes with StatReloader
+INFO 2025-01-30 13:57:17,292 autoreload 4272 740 Watching for file changes with StatReloader
+INFO 2025-01-30 13:57:19,788 basehttp 4272 26068 "GET /admin/restaurants/service/ HTTP/1.1" 200 16016
+INFO 2025-01-30 13:57:19,893 basehttp 4272 26068 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-30 13:57:20,041 basehttp 4272 26068 - Broken pipe from ('127.0.0.1', 59500)
+INFO 2025-01-30 13:57:22,582 basehttp 4272 33576 "GET /admin/restaurants/gallerypage/ HTTP/1.1" 200 15560
+WARNING 2025-01-30 13:57:22,638 basehttp 4272 7740 "GET /static/admin/css/gallery.css HTTP/1.1" 404 1822
+INFO 2025-01-30 13:57:22,665 basehttp 4272 33576 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-30 13:57:22,674 basehttp 4272 33576 "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+WARNING 2025-01-30 13:57:22,744 basehttp 4272 33576 "GET /static/admin/css/gallery.css HTTP/1.1" 404 1822
+WARNING 2025-01-30 13:57:22,773 log 4272 33204 Not Found: /favicon.ico
+INFO 2025-01-30 13:57:22,774 basehttp 4272 33204 - Broken pipe from ('127.0.0.1', 59517)
+INFO 2025-01-30 13:57:24,629 basehttp 4272 21448 "GET /admin/restaurants/gallerypage/1/change/ HTTP/1.1" 200 16678
+INFO 2025-01-30 13:57:24,674 basehttp 4272 21448 "GET /static/admin/css/forms.css HTTP/1.1" 200 9048
+INFO 2025-01-30 13:57:24,675 basehttp 4272 22944 "GET /static/admin/js/inlines.js HTTP/1.1" 200 15526
+INFO 2025-01-30 13:57:24,678 basehttp 4272 21448 "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-01-30 13:57:24,678 basehttp 4272 22944 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+WARNING 2025-01-30 13:57:24,679 basehttp 4272 21064 "GET /static/admin/css/gallery.css HTTP/1.1" 404 1822
+INFO 2025-01-30 13:57:24,712 basehttp 4272 32352 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-30 13:57:24,775 basehttp 4272 21448 "GET /static/admin/css/widgets.css HTTP/1.1" 200 11800
+WARNING 2025-01-30 13:57:24,786 basehttp 4272 21448 "GET /static/admin/css/gallery.css HTTP/1.1" 404 1822
+INFO 2025-01-30 13:59:02,750 autoreload 4272 740 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\admin.py changed, reloading.
+INFO 2025-01-30 13:59:03,490 autoreload 13292 19496 Watching for file changes with StatReloader
+INFO 2025-01-30 13:59:14,475 autoreload 13292 19496 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\admin.py changed, reloading.
+INFO 2025-01-30 13:59:15,250 autoreload 24256 8384 Watching for file changes with StatReloader
+INFO 2025-01-30 13:59:16,414 basehttp 24256 26908 "GET /admin/restaurants/gallerypage/1/change/ HTTP/1.1" 200 23599
+WARNING 2025-01-30 13:59:16,472 basehttp 24256 26908 "GET /static/admin/js/gallery.js HTTP/1.1" 404 1816
+WARNING 2025-01-30 13:59:16,477 basehttp 24256 23052 "GET /static/admin/css/gallery.css HTTP/1.1" 404 1822
+INFO 2025-01-30 13:59:16,510 basehttp 24256 10512 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-01-30 13:59:16,611 basehttp 24256 10512 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+WARNING 2025-01-30 13:59:16,627 basehttp 24256 10512 "GET /static/admin/css/gallery.css HTTP/1.1" 404 1822
+WARNING 2025-01-30 13:59:16,638 basehttp 24256 11248 "GET /static/admin/js/gallery.js HTTP/1.1" 404 1816
+INFO 2025-01-30 13:59:31,621 basehttp 24256 6020 "GET /admin/restaurants/gallerypage/1/change/ HTTP/1.1" 200 23599
+WARNING 2025-01-30 13:59:31,661 basehttp 24256 9732 "GET /static/admin/js/gallery.js HTTP/1.1" 404 1816
+WARNING 2025-01-30 13:59:31,662 basehttp 24256 28188 "GET /static/admin/css/gallery.css HTTP/1.1" 404 1822
+INFO 2025-01-30 13:59:31,689 basehttp 24256 6020 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-01-30 13:59:31,758 basehttp 24256 6020 "GET /static/admin/css/gallery.css HTTP/1.1" 404 1822
+WARNING 2025-01-30 13:59:31,774 basehttp 24256 31472 "GET /static/admin/js/gallery.js HTTP/1.1" 404 1816
+INFO 2025-01-30 13:59:38,741 basehttp 24256 29208 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=ptHHcV1ZeA25ck6ku53rphP7inPgq0stX9s0BqTLNFXCXqK9JUrOHinzqShAhGkt HTTP/1.1" 200 16007
+INFO 2025-01-30 13:59:38,800 basehttp 24256 29208 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9887
+INFO 2025-01-30 13:59:38,924 basehttp 24256 29208 - Broken pipe from ('127.0.0.1', 59841)
+INFO 2025-01-30 14:03:51,746 basehttp 24256 13020 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=ptHHcV1ZeA25ck6ku53rphP7inPgq0stX9s0BqTLNFXCXqK9JUrOHinzqShAhGkt HTTP/1.1" 200 16007
+INFO 2025-01-30 14:03:51,812 basehttp 24256 13020 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 11417
+INFO 2025-01-30 14:03:51,952 basehttp 24256 13020 - Broken pipe from ('127.0.0.1', 60389)
+INFO 2025-01-30 14:03:55,902 basehttp 24256 25636 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=31odJzr421P4uAUFvRKzZFzrS6d6SDrEBH9w84jQB6KBfGyuKG8WhG7T0BFqJjjE HTTP/1.1" 200 16007
+INFO 2025-01-30 14:04:07,352 basehttp 24256 25636 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=31odJzr421P4uAUFvRKzZFzrS6d6SDrEBH9w84jQB6KBfGyuKG8WhG7T0BFqJjjE HTTP/1.1" 200 16007
+INFO 2025-01-30 14:04:07,397 basehttp 24256 18596 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 14:04:07,399 basehttp 24256 25636 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 14:04:07,400 basehttp 24256 25636 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 14:04:07,401 basehttp 24256 18596 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 11417
+INFO 2025-01-30 14:04:07,418 basehttp 24256 25636 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 14:04:07,545 basehttp 24256 25636 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 14:04:07,546 basehttp 24256 18596 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:04:07,561 basehttp 24256 25636 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 14:04:11,311 basehttp 24256 25636 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=sXGofL4yUs1kQfDzUluEIoUMnS6Ocv1E0DrHEgWktxWRBlho9aS10psevny83bTE HTTP/1.1" 200 16007
+INFO 2025-01-30 14:04:25,424 basehttp 24256 25636 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=K1xc4FTiFcVfq6XqTBMGrYP07K1YbvQziHivtaL4ehQMbcBf8qa3JZnsffti2bIz HTTP/1.1" 200 16007
+INFO 2025-01-30 14:04:25,491 basehttp 24256 25636 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:04:25,622 basehttp 24256 25636 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:04:32,848 basehttp 24256 25636 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=FKppIQXTd1LHPPpr17BV9IaTMEAaZp3UdqaI7lPFM6GeAV3ggWZirJIlU92uQ5VU HTTP/1.1" 200 16007
+INFO 2025-01-30 14:05:31,895 autoreload 24256 8384 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-30 14:05:32,762 autoreload 10108 11188 Watching for file changes with StatReloader
+INFO 2025-01-30 14:05:37,609 autoreload 10108 11188 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-30 14:05:38,424 autoreload 20340 21420 Watching for file changes with StatReloader
+INFO 2025-01-30 14:05:50,447 autoreload 17016 31100 Watching for file changes with StatReloader
+INFO 2025-01-30 14:05:51,277 basehttp 17016 19140 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=FKppIQXTd1LHPPpr17BV9IaTMEAaZp3UdqaI7lPFM6GeAV3ggWZirJIlU92uQ5VU HTTP/1.1" 200 16007
+INFO 2025-01-30 14:05:51,339 basehttp 17016 19140 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:05:51,479 basehttp 17016 19140 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:05:54,929 basehttp 17016 19140 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=PxmboJIFlZbPdGLI5EpWjIr7AUNSVQTnnd7uNeArU46mYMpxktNjBJZzIpfcMwLn HTTP/1.1" 200 16007
+INFO 2025-01-30 14:06:19,257 basehttp 17016 19140 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=PxmboJIFlZbPdGLI5EpWjIr7AUNSVQTnnd7uNeArU46mYMpxktNjBJZzIpfcMwLn HTTP/1.1" 200 16007
+INFO 2025-01-30 14:06:19,398 basehttp 17016 19140 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10457
+INFO 2025-01-30 14:06:19,460 basehttp 17016 19140 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:06:22,756 basehttp 17016 19140 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=6lny2YoqkfC0uViLOqv5h9yEiKM7SmwAE18RrtgcTkxxf1WA3fTsza66qferJ2oA HTTP/1.1" 200 16007
+INFO 2025-01-30 14:06:22,826 basehttp 17016 19140 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:06:30,916 basehttp 17016 19140 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=6lny2YoqkfC0uViLOqv5h9yEiKM7SmwAE18RrtgcTkxxf1WA3fTsza66qferJ2oA HTTP/1.1" 200 16007
+INFO 2025-01-30 14:06:31,000 basehttp 17016 23880 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 14:06:31,000 basehttp 17016 19140 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 14:06:31,002 basehttp 17016 18648 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 14:06:31,002 basehttp 17016 23880 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10457
+INFO 2025-01-30 14:06:31,060 basehttp 17016 19140 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 14:06:31,147 basehttp 17016 19140 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 14:06:31,162 basehttp 17016 19140 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:06:31,177 basehttp 17016 19140 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 14:06:34,639 basehttp 17016 19140 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Bo76F65ij2RFpXE4QajL7dbvQAxAm2Qy94Sp4BX4S7Mca3iT5ZH8peJXY5ZUdIIy HTTP/1.1" 200 16007
+INFO 2025-01-30 14:06:34,703 basehttp 17016 19140 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:08:12,246 basehttp 17016 19140 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Bo76F65ij2RFpXE4QajL7dbvQAxAm2Qy94Sp4BX4S7Mca3iT5ZH8peJXY5ZUdIIy HTTP/1.1" 200 16007
+INFO 2025-01-30 14:08:12,394 basehttp 17016 19140 - Broken pipe from ('127.0.0.1', 60699)
+INFO 2025-01-30 14:08:12,395 basehttp 17016 23880 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10441
+INFO 2025-01-30 14:08:12,495 basehttp 17016 23880 - Broken pipe from ('127.0.0.1', 60808)
+INFO 2025-01-30 14:08:12,504 basehttp 17016 18648 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:08:12,533 basehttp 17016 18648 - Broken pipe from ('127.0.0.1', 60809)
+INFO 2025-01-30 14:08:32,289 basehttp 17016 25380 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Bo76F65ij2RFpXE4QajL7dbvQAxAm2Qy94Sp4BX4S7Mca3iT5ZH8peJXY5ZUdIIy HTTP/1.1" 200 16007
+INFO 2025-01-30 14:08:32,421 basehttp 17016 25380 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10449
+INFO 2025-01-30 14:08:35,800 basehttp 17016 25380 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=ppUEZbxKCetKjApqQwuNstdUw0iuasG0X5FXoGpwbjoh4G3f5lSaKuLmEvKO18y0 HTTP/1.1" 200 16007
+INFO 2025-01-30 14:08:35,869 basehttp 17016 25380 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:09:46,422 basehttp 17016 25380 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=ppUEZbxKCetKjApqQwuNstdUw0iuasG0X5FXoGpwbjoh4G3f5lSaKuLmEvKO18y0 HTTP/1.1" 200 15847
+INFO 2025-01-30 14:09:46,517 basehttp 17016 25380 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10449
+INFO 2025-01-30 14:09:46,609 basehttp 17016 25380 - Broken pipe from ('127.0.0.1', 61053)
+INFO 2025-01-30 14:09:46,611 basehttp 17016 25464 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:09:46,624 basehttp 17016 25464 - Broken pipe from ('127.0.0.1', 61233)
+INFO 2025-01-30 14:09:49,610 basehttp 17016 3808 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 15847
+INFO 2025-01-30 14:10:19,438 basehttp 17016 3808 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 15847
+INFO 2025-01-30 14:10:19,560 basehttp 17016 3808 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10441
+INFO 2025-01-30 14:10:19,684 basehttp 17016 3808 - Broken pipe from ('127.0.0.1', 61246)
+INFO 2025-01-30 14:11:00,571 basehttp 17016 32556 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 15847
+INFO 2025-01-30 14:11:00,661 basehttp 17016 32556 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 14:11:00,663 basehttp 17016 32556 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 14:11:00,664 basehttp 17016 32556 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 14:11:00,665 basehttp 17016 32556 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10373
+INFO 2025-01-30 14:11:00,758 basehttp 17016 32556 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 14:11:00,782 basehttp 17016 32556 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 14:11:00,788 basehttp 17016 32556 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:11:00,829 basehttp 17016 32556 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 14:13:06,538 basehttp 17016 20340 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 15847
+INFO 2025-01-30 14:13:06,598 basehttp 17016 5780 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 14:13:06,599 basehttp 17016 1448 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 14:13:06,599 basehttp 17016 32304 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10373
+INFO 2025-01-30 14:13:06,600 basehttp 17016 20340 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 14:13:06,624 basehttp 17016 20340 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 14:13:06,703 basehttp 17016 20340 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 14:13:06,706 basehttp 17016 20340 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:13:06,722 basehttp 17016 20340 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 14:13:34,971 basehttp 17016 20340 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 15761
+INFO 2025-01-30 14:13:35,034 basehttp 17016 20340 - Broken pipe from ('127.0.0.1', 61732)
+INFO 2025-01-30 14:13:35,035 basehttp 17016 32304 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10373
+INFO 2025-01-30 14:13:35,176 basehttp 17016 32304 - Broken pipe from ('127.0.0.1', 61736)
+INFO 2025-01-30 14:13:35,176 basehttp 17016 1448 - Broken pipe from ('127.0.0.1', 61735)
+INFO 2025-01-30 14:13:35,191 basehttp 17016 5780 - Broken pipe from ('127.0.0.1', 61734)
+INFO 2025-01-30 14:13:51,933 basehttp 17016 19480 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 15847
+INFO 2025-01-30 14:13:52,286 basehttp 17016 19480 - Broken pipe from ('127.0.0.1', 61832)
+INFO 2025-01-30 14:15:20,549 basehttp 17016 30520 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 15847
+INFO 2025-01-30 14:15:20,602 basehttp 17016 30520 - Broken pipe from ('127.0.0.1', 62065)
+INFO 2025-01-30 14:15:20,603 basehttp 17016 17752 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10591
+INFO 2025-01-30 14:15:20,768 basehttp 17016 17752 - Broken pipe from ('127.0.0.1', 62067)
+INFO 2025-01-30 14:15:20,770 basehttp 17016 28808 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:15:20,814 basehttp 17016 28808 - Broken pipe from ('127.0.0.1', 62070)
+INFO 2025-01-30 14:17:00,421 basehttp 17016 30236 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 15467
+INFO 2025-01-30 14:17:00,469 basehttp 17016 30236 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 13510
+INFO 2025-01-30 14:17:00,605 basehttp 17016 30236 - Broken pipe from ('127.0.0.1', 62333)
+INFO 2025-01-30 14:17:00,606 basehttp 17016 34584 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:17:00,625 basehttp 17016 34584 - Broken pipe from ('127.0.0.1', 62336)
+INFO 2025-01-30 14:17:29,891 basehttp 17016 31580 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 15467
+INFO 2025-01-30 14:17:29,945 basehttp 17016 20492 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 14:17:29,948 basehttp 17016 20492 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 14:17:29,948 basehttp 17016 11764 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 13510
+INFO 2025-01-30 14:17:29,950 basehttp 17016 31580 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 14:17:29,974 basehttp 17016 31580 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 14:17:30,067 basehttp 17016 31580 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 14:17:30,067 basehttp 17016 11764 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:17:30,087 basehttp 17016 31580 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 14:17:43,838 basehttp 17016 31580 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 15467
+INFO 2025-01-30 14:17:43,876 basehttp 17016 31580 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:17:43,997 basehttp 17016 31580 - Broken pipe from ('127.0.0.1', 62377)
+INFO 2025-01-30 14:18:52,298 basehttp 17016 11764 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 14984
+INFO 2025-01-30 14:18:52,343 basehttp 17016 11764 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 13230
+INFO 2025-01-30 14:18:52,451 basehttp 17016 11764 - Broken pipe from ('127.0.0.1', 62380)
+INFO 2025-01-30 14:19:00,213 basehttp 17016 20492 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 14984
+INFO 2025-01-30 14:19:00,255 basehttp 17016 34424 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 14:19:00,256 basehttp 17016 28612 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 14:19:00,256 basehttp 17016 28676 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 13230
+INFO 2025-01-30 14:19:00,257 basehttp 17016 20492 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 14:19:00,276 basehttp 17016 20492 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 14:19:00,370 basehttp 17016 20492 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 14:19:00,370 basehttp 17016 28676 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:19:00,386 basehttp 17016 20492 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+DEBUG 2025-01-30 14:19:08,276 content 17016 34780 
+            Searching for hero_primary:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-30 14:19:08,278 content 17016 34780 All images found: []
+DEBUG 2025-01-30 14:19:08,280 content 17016 34780 Hero primary found: None
+DEBUG 2025-01-30 14:19:08,280 content 17016 34780 
+            Searching for banner_2:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-30 14:19:08,281 content 17016 34780 Banner 2 found: None
+DEBUG 2025-01-30 14:19:08,282 content 17016 34780 
+            Searching for banner_3:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-30 14:19:08,283 content 17016 34780 Banner 3 found: None
+INFO 2025-01-30 14:19:08,289 basehttp 17016 34780 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 5642
+INFO 2025-01-30 14:21:21,690 basehttp 17016 26128 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 14984
+INFO 2025-01-30 14:21:21,736 basehttp 17016 26128 - Broken pipe from ('127.0.0.1', 62879)
+INFO 2025-01-30 14:21:21,737 basehttp 17016 34080 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8077
+INFO 2025-01-30 14:21:21,858 basehttp 17016 34080 - Broken pipe from ('127.0.0.1', 62881)
+INFO 2025-01-30 14:21:21,860 basehttp 17016 18596 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:21:21,887 basehttp 17016 18596 - Broken pipe from ('127.0.0.1', 62883)
+INFO 2025-01-30 14:21:22,043 basehttp 17016 26932 - Broken pipe from ('127.0.0.1', 62886)
+INFO 2025-01-30 14:21:31,719 basehttp 17016 8792 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 14984
+INFO 2025-01-30 14:21:31,803 basehttp 17016 8792 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 13230
+INFO 2025-01-30 14:21:32,110 basehttp 17016 8792 - Broken pipe from ('127.0.0.1', 62921)
+INFO 2025-01-30 14:21:41,966 basehttp 17016 7896 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 14984
+INFO 2025-01-30 14:21:42,018 basehttp 17016 7896 - Broken pipe from ('127.0.0.1', 62950)
+INFO 2025-01-30 14:21:42,020 basehttp 17016 31912 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 13164
+INFO 2025-01-30 14:21:42,190 basehttp 17016 31912 - Broken pipe from ('127.0.0.1', 62953)
+INFO 2025-01-30 14:22:13,697 basehttp 17016 18500 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 14984
+INFO 2025-01-30 14:22:13,778 basehttp 17016 18500 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10419
+INFO 2025-01-30 14:22:14,111 basehttp 17016 18500 - Broken pipe from ('127.0.0.1', 63014)
+INFO 2025-01-30 14:23:24,079 basehttp 17016 17360 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 14984
+INFO 2025-01-30 14:23:24,183 basehttp 17016 17360 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 10476
+INFO 2025-01-30 14:23:24,296 basehttp 17016 17360 - Broken pipe from ('127.0.0.1', 63121)
+INFO 2025-01-30 14:23:24,305 basehttp 17016 11604 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:23:24,318 basehttp 17016 11604 - Broken pipe from ('127.0.0.1', 63127)
+INFO 2025-01-30 14:23:24,541 basehttp 17016 29524 - Broken pipe from ('127.0.0.1', 63128)
+INFO 2025-01-30 14:23:35,775 basehttp 17016 19964 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 14984
+INFO 2025-01-30 14:23:35,836 basehttp 17016 19964 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:23:44,350 basehttp 17016 19964 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 14984
+INFO 2025-01-30 14:23:44,402 basehttp 17016 19964 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:23:44,742 basehttp 17016 19964 - Broken pipe from ('127.0.0.1', 63160)
+INFO 2025-01-30 14:27:59,029 basehttp 17016 17700 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 14984
+INFO 2025-01-30 14:27:59,077 basehttp 17016 17700 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 6455
+INFO 2025-01-30 14:27:59,216 basehttp 17016 17700 - Broken pipe from ('127.0.0.1', 63760)
+INFO 2025-01-30 14:27:59,217 basehttp 17016 33776 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:27:59,233 basehttp 17016 33776 - Broken pipe from ('127.0.0.1', 63762)
+INFO 2025-01-30 14:27:59,393 basehttp 17016 8060 - Broken pipe from ('127.0.0.1', 63764)
+INFO 2025-01-30 14:28:09,173 basehttp 17016 29740 "GET /test_non_menu/gallery/?csrfmiddlewaretoken=Iw00UxxCpxTzqJwNwREjHe4I9Av3w945gcLjj2poYCO6bPaCLG2GZfCah5XnnPW5 HTTP/1.1" 200 14984
+INFO 2025-01-30 14:28:09,224 basehttp 17016 29740 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 14:28:09,226 basehttp 17016 29740 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 14:28:09,226 basehttp 17016 33892 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 14:28:09,230 basehttp 17016 29740 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 6455
+INFO 2025-01-30 14:28:09,251 basehttp 17016 29740 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 14:28:09,353 basehttp 17016 29740 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 14:28:09,354 basehttp 17016 33892 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:28:09,384 basehttp 17016 29740 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 14:28:37,623 basehttp 17016 29740 "GET / HTTP/1.1" 200 16716
+INFO 2025-01-30 14:28:37,670 basehttp 17016 33892 "GET /static/js/components/paginate.js HTTP/1.1" 200 3440
+INFO 2025-01-30 14:28:37,670 basehttp 17016 34136 - Broken pipe from ('127.0.0.1', 63833)
+INFO 2025-01-30 14:28:37,670 basehttp 17016 29740 "GET /static/js/index.js HTTP/1.1" 200 4271
+INFO 2025-01-30 14:28:37,724 basehttp 17016 33892 "GET /static/images/test2.jpg HTTP/1.1" 200 2206722
+INFO 2025-01-30 14:28:37,726 basehttp 17016 29740 "GET /static/images/test1.jpg HTTP/1.1" 200 1800794
+INFO 2025-01-30 14:28:37,731 basehttp 17016 18040 "GET /static/images/test3.jpg HTTP/1.1" 200 3262750
+INFO 2025-01-30 14:28:39,715 basehttp 17016 18040 "GET /profile/ HTTP/1.1" 200 14103
+INFO 2025-01-30 14:28:40,955 basehttp 17016 18040 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-30 14:28:43,597 basehttp 17016 18040 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14984
+INFO 2025-01-30 14:28:43,878 basehttp 17016 18040 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+DEBUG 2025-01-30 14:28:49,462 content 17016 34668 
+            Searching for hero_primary:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-30 14:28:49,464 content 17016 34668 All images found: []
+DEBUG 2025-01-30 14:28:49,465 content 17016 34668 Hero primary found: None
+DEBUG 2025-01-30 14:28:49,466 content 17016 34668 
+            Searching for banner_2:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-30 14:28:49,467 content 17016 34668 Banner 2 found: None
+DEBUG 2025-01-30 14:28:49,467 content 17016 34668 
+            Searching for banner_3:
+            - SubPage ID: 97
+            - Content Type: restaurants.subpage
+        
+DEBUG 2025-01-30 14:28:49,469 content 17016 34668 Banner 3 found: None
+INFO 2025-01-30 14:28:49,470 basehttp 17016 34668 "GET /test_non_menu/gallery/ HTTP/1.1" 200 5642
+INFO 2025-01-30 14:29:15,322 basehttp 17016 18040 "GET /test_non_menu/gallery/ HTTP/1.1" 200 14984
+INFO 2025-01-30 14:29:15,367 basehttp 17016 18040 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 6455
+INFO 2025-01-30 14:29:15,487 basehttp 17016 18040 - Broken pipe from ('127.0.0.1', 63834)
+INFO 2025-01-30 14:29:15,489 basehttp 17016 33892 - Broken pipe from ('127.0.0.1', 63785)
+INFO 2025-01-30 14:29:15,515 basehttp 17016 29740 - Broken pipe from ('127.0.0.1', 63783)
+INFO 2025-01-30 14:30:11,961 basehttp 17016 33344 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15499
+INFO 2025-01-30 14:30:12,006 basehttp 17016 33344 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 6455
+INFO 2025-01-30 14:30:12,139 basehttp 17016 33344 - Broken pipe from ('127.0.0.1', 64062)
+INFO 2025-01-30 14:30:18,821 basehttp 17016 10972 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15499
+INFO 2025-01-30 14:30:25,580 basehttp 17016 10972 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15523
+INFO 2025-01-30 14:30:25,638 basehttp 17016 10972 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:30:32,554 basehttp 17016 10972 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15498
+INFO 2025-01-30 14:33:09,052 basehttp 17016 13552 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15498
+INFO 2025-01-30 14:33:09,139 basehttp 17016 13552 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 6493
+INFO 2025-01-30 14:33:09,255 basehttp 17016 13552 - Broken pipe from ('127.0.0.1', 64353)
+INFO 2025-01-30 14:33:09,255 basehttp 17016 30884 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:33:26,646 basehttp 17016 30884 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15498
+INFO 2025-01-30 14:33:26,689 basehttp 17016 30884 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:33:32,904 basehttp 17016 30884 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-30 14:33:34,025 basehttp 17016 30884 "GET /test_non_menu/about/ HTTP/1.1" 200 24619
+INFO 2025-01-30 14:33:34,168 basehttp 17016 30884 "GET /static/js/subpages/about.js HTTP/1.1" 200 7273
+INFO 2025-01-30 14:33:35,632 basehttp 17016 30884 "POST /test_non_menu/about/settings/ HTTP/1.1" 200 104
+INFO 2025-01-30 14:33:35,954 basehttp 17016 30884 "POST /test_non_menu/about/settings/ HTTP/1.1" 200 105
+INFO 2025-01-30 14:33:36,697 basehttp 17016 30884 "POST /test_non_menu/about/settings/ HTTP/1.1" 200 99
+INFO 2025-01-30 14:33:37,094 basehttp 17016 30884 "POST /test_non_menu/about/settings/ HTTP/1.1" 200 99
+INFO 2025-01-30 14:33:38,481 basehttp 17016 30884 "POST /test_non_menu/about/settings/ HTTP/1.1" 200 101
+INFO 2025-01-30 14:33:38,784 basehttp 17016 30884 "POST /test_non_menu/about/settings/ HTTP/1.1" 200 102
+INFO 2025-01-30 14:33:39,502 basehttp 17016 30884 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-30 14:33:41,485 basehttp 17016 30884 "GET /test_non_menu/events/ HTTP/1.1" 200 17124
+INFO 2025-01-30 14:33:41,537 basehttp 17016 30884 "GET /static/js/subpages/events.js HTTP/1.1" 200 9753
+INFO 2025-01-30 14:33:44,036 basehttp 17016 30884 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249
+INFO 2025-01-30 14:33:44,969 basehttp 17016 30884 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15498
+INFO 2025-01-30 14:33:45,103 basehttp 17016 30884 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 6493
+INFO 2025-01-30 14:34:50,208 basehttp 17016 30884 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15498
+INFO 2025-01-30 14:34:50,252 basehttp 17016 30884 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 6532
+INFO 2025-01-30 14:34:50,389 basehttp 17016 30884 - Broken pipe from ('127.0.0.1', 64358)
+INFO 2025-01-30 14:36:16,058 autoreload 17016 31100 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\forms\content_forms.py changed, reloading.
+INFO 2025-01-30 14:36:16,937 autoreload 30080 12052 Watching for file changes with StatReloader
+INFO 2025-01-30 14:36:19,229 basehttp 30080 21880 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15498
+INFO 2025-01-30 14:36:19,373 basehttp 30080 21880 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 6532
+INFO 2025-01-30 14:36:19,427 basehttp 30080 21880 - Broken pipe from ('127.0.0.1', 64852)
+INFO 2025-01-30 14:36:19,427 basehttp 30080 31404 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:36:19,448 basehttp 30080 31404 - Broken pipe from ('127.0.0.1', 64856)
+INFO 2025-01-30 14:36:38,307 basehttp 30080 15808 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15723
+INFO 2025-01-30 14:36:38,348 basehttp 30080 15808 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:36:45,262 basehttp 30080 15808 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15734
+INFO 2025-01-30 14:37:54,545 basehttp 30080 15808 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15734
+INFO 2025-01-30 14:37:54,644 basehttp 30080 15808 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8385
+INFO 2025-01-30 14:37:54,822 basehttp 30080 15808 - Broken pipe from ('127.0.0.1', 64913)
+INFO 2025-01-30 14:38:47,660 basehttp 30080 2064 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15734
+INFO 2025-01-30 14:38:47,713 basehttp 30080 2064 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8462
+INFO 2025-01-30 14:38:47,816 basehttp 30080 2064 - Broken pipe from ('127.0.0.1', 65270)
+INFO 2025-01-30 14:40:13,004 basehttp 30080 34540 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:40:13,066 basehttp 30080 34540 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8601
+INFO 2025-01-30 14:40:13,182 basehttp 30080 34540 - Broken pipe from ('127.0.0.1', 65529)
+INFO 2025-01-30 14:40:13,183 basehttp 30080 7860 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:40:13,199 basehttp 30080 7860 - Broken pipe from ('127.0.0.1', 65531)
+WARNING 2025-01-30 14:40:15,311 log 30080 1440 Not Found: /test_non_menu/gallery/description/
+WARNING 2025-01-30 14:40:15,312 basehttp 30080 1440 "POST /test_non_menu/gallery/description/ HTTP/1.1" 404 15899
+INFO 2025-01-30 14:41:07,263 basehttp 30080 1440 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:41:07,380 basehttp 30080 1440 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:41:07,776 basehttp 30080 1440 - Broken pipe from ('127.0.0.1', 49152)
+INFO 2025-01-30 14:41:16,897 basehttp 30080 28256 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:41:16,963 basehttp 30080 28256 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 14:41:16,965 basehttp 30080 28256 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 14:41:16,966 basehttp 30080 28256 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 14:41:16,968 basehttp 30080 28256 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8601
+INFO 2025-01-30 14:41:16,998 basehttp 30080 28256 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 14:41:17,102 basehttp 30080 28256 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 14:41:17,103 basehttp 30080 28256 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:41:17,116 basehttp 30080 28256 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 14:44:17,567 basehttp 30080 22452 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:44:17,621 basehttp 30080 22452 - Broken pipe from ('127.0.0.1', 49731)
+INFO 2025-01-30 14:44:17,623 basehttp 30080 28008 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 8602
+INFO 2025-01-30 14:44:17,757 basehttp 30080 28008 - Broken pipe from ('127.0.0.1', 49733)
+INFO 2025-01-30 14:45:34,025 basehttp 30080 22300 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:45:34,109 basehttp 30080 22300 - Broken pipe from ('127.0.0.1', 49962)
+INFO 2025-01-30 14:45:34,109 basehttp 30080 33224 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9130
+INFO 2025-01-30 14:45:34,202 basehttp 30080 33224 - Broken pipe from ('127.0.0.1', 49964)
+INFO 2025-01-30 14:45:34,205 basehttp 30080 30520 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:45:34,226 basehttp 30080 30520 - Broken pipe from ('127.0.0.1', 49965)
+INFO 2025-01-30 14:45:34,380 basehttp 30080 29808 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 14:46:38,149 basehttp 30080 29808 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:46:38,242 basehttp 30080 29808 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9047
+INFO 2025-01-30 14:46:38,367 basehttp 30080 29808 - Broken pipe from ('127.0.0.1', 49966)
+INFO 2025-01-30 14:46:38,557 basehttp 30080 34684 - Broken pipe from ('127.0.0.1', 50161)
+INFO 2025-01-30 14:50:29,399 basehttp 30080 27216 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:50:29,457 basehttp 30080 27216 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9035
+INFO 2025-01-30 14:50:29,643 basehttp 30080 27216 - Broken pipe from ('127.0.0.1', 50662)
+INFO 2025-01-30 14:50:29,645 basehttp 30080 9152 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5065
+INFO 2025-01-30 14:50:29,757 basehttp 30080 9152 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 14:50:29,930 basehttp 30080 9152 "GET /static/css/animations.css HTTP/1.1" 200 1421
+WARNING 2025-01-30 14:50:32,909 log 30080 9152 Not Found: /test_non_menu/gallery/upload/
+WARNING 2025-01-30 14:50:32,910 basehttp 30080 9152 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 404 15884
+WARNING 2025-01-30 14:50:33,169 log 30080 9152 Not Found: /test_non_menu/gallery/upload/
+WARNING 2025-01-30 14:50:33,170 basehttp 30080 9152 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 404 15884
+INFO 2025-01-30 14:51:23,012 autoreload 30080 12052 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\urls.py changed, reloading.
+INFO 2025-01-30 14:51:23,841 autoreload 27372 13188 Watching for file changes with StatReloader
+INFO 2025-01-30 14:51:27,050 autoreload 27372 13188 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\urls.py changed, reloading.
+INFO 2025-01-30 14:51:27,922 autoreload 25828 10584 Watching for file changes with StatReloader
+INFO 2025-01-30 14:51:28,441 basehttp 25828 25400 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:51:28,599 basehttp 25828 25400 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9035
+INFO 2025-01-30 14:51:28,642 basehttp 25828 25400 - Broken pipe from ('127.0.0.1', 50792)
+INFO 2025-01-30 14:51:28,644 basehttp 25828 32852 - Broken pipe from ('127.0.0.1', 50788)
+WARNING 2025-01-30 14:51:32,425 log 25828 30952 Bad Request: /test_non_menu/gallery/upload/
+WARNING 2025-01-30 14:51:32,426 basehttp 25828 30952 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 400 31
+INFO 2025-01-30 14:52:04,717 basehttp 25828 30952 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:52:04,848 basehttp 25828 30952 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9085
+INFO 2025-01-30 14:52:05,159 basehttp 25828 30952 - Broken pipe from ('127.0.0.1', 50812)
+WARNING 2025-01-30 14:52:08,309 log 25828 34684 Bad Request: /test_non_menu/gallery/upload/
+WARNING 2025-01-30 14:52:08,310 basehttp 25828 34684 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 400 31
+INFO 2025-01-30 14:52:35,101 autoreload 25828 10584 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-30 14:52:35,988 autoreload 9656 13356 Watching for file changes with StatReloader
+INFO 2025-01-30 14:52:44,832 autoreload 9656 13356 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-30 14:52:45,804 autoreload 10892 11284 Watching for file changes with StatReloader
+INFO 2025-01-30 14:52:48,764 basehttp 10892 28468 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:52:48,883 basehttp 10892 28468 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9085
+INFO 2025-01-30 14:52:48,960 basehttp 10892 28468 - Broken pipe from ('127.0.0.1', 51036)
+INFO 2025-01-30 14:53:06,022 basehttp 10892 17456 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:53:06,074 basehttp 10892 17456 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+WARNING 2025-01-30 14:53:11,525 log 10892 17456 Bad Request: /test_non_menu/gallery/upload/
+WARNING 2025-01-30 14:53:11,525 basehttp 10892 17456 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 400 31
+INFO 2025-01-30 14:53:17,487 autoreload 10892 11284 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-30 14:53:18,510 autoreload 29756 18032 Watching for file changes with StatReloader
+INFO 2025-01-30 14:53:19,127 basehttp 29756 29176 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:53:19,183 basehttp 29756 29176 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+WARNING 2025-01-30 14:53:23,054 log 29756 29176 Bad Request: /test_non_menu/gallery/upload/
+WARNING 2025-01-30 14:53:23,054 basehttp 29756 29176 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 400 31
+INFO 2025-01-30 14:54:18,912 autoreload 29756 18032 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-30 14:54:19,858 autoreload 6292 5732 Watching for file changes with StatReloader
+INFO 2025-01-30 14:54:20,349 basehttp 6292 1828 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:54:20,458 basehttp 6292 1828 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9085
+INFO 2025-01-30 14:54:20,532 basehttp 6292 1828 - Broken pipe from ('127.0.0.1', 51314)
+INFO 2025-01-30 14:55:04,520 autoreload 6292 5732 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-30 14:55:05,484 autoreload 9044 33312 Watching for file changes with StatReloader
+INFO 2025-01-30 14:55:06,026 basehttp 9044 18824 "GET /test_non_menu/gallery/ HTTP/1.1" 200 15805
+INFO 2025-01-30 14:55:06,159 basehttp 9044 18824 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9085
+INFO 2025-01-30 14:55:06,228 basehttp 9044 18824 - Broken pipe from ('127.0.0.1', 51427)
+DEBUG 2025-01-30 14:55:09,571 media 9044 29104 Content type check: image/webp
+DEBUG 2025-01-30 14:55:09,896 media 9044 29104 
+            Saving Image:
+            - Alt Text: Han_Solo_where.webp
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: Han_Solo_where.webp
+        
+DEBUG 2025-01-30 14:55:09,900 media 9044 29104 Content type check: image/webp
+DEBUG 2025-01-30 14:55:09,945 media 9044 29104 
+            Image Saved:
+            - ID: 157
+            - Alt Text: Han_Solo_where.webp
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 14:55:09,946 basehttp 9044 29104 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 217
+INFO 2025-01-30 14:55:10,023 basehttp 9044 29104 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 200 7658
+WARNING 2025-01-30 14:55:14,190 log 9044 29104 Not Found: /test_non_menu/gallery/description/
+WARNING 2025-01-30 14:55:14,190 basehttp 9044 29104 "POST /test_non_menu/gallery/description/ HTTP/1.1" 404 15872
+INFO 2025-01-30 14:55:32,028 basehttp 9044 29104 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16769
+INFO 2025-01-30 14:55:32,123 basehttp 9044 29104 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9085
+INFO 2025-01-30 14:55:32,457 basehttp 9044 29104 - Broken pipe from ('127.0.0.1', 51431)
+INFO 2025-01-30 14:55:32,465 basehttp 9044 29980 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5062
+INFO 2025-01-30 14:55:32,465 basehttp 9044 8052 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-30 14:55:32,501 basehttp 9044 8052 - Broken pipe from ('127.0.0.1', 51563)
+INFO 2025-01-30 14:55:32,920 basehttp 9044 29980 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 14:55:59,190 basehttp 9044 29980 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16769
+INFO 2025-01-30 14:55:59,236 basehttp 9044 29980 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9085
+INFO 2025-01-30 14:55:59,367 basehttp 9044 29980 - Broken pipe from ('127.0.0.1', 51562)
+INFO 2025-01-30 14:55:59,378 basehttp 9044 23480 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5062
+INFO 2025-01-30 14:55:59,398 basehttp 9044 23480 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-30 14:55:59,407 basehttp 9044 23480 - Broken pipe from ('127.0.0.1', 51641)
+INFO 2025-01-30 14:55:59,578 basehttp 9044 24164 - Broken pipe from ('127.0.0.1', 51642)
+ERROR 2025-01-30 14:56:04,817 log 9044 6896 Internal Server Error: /test_non_menu/gallery/settings/
+Traceback (most recent call last):
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py", line 3562, in update_gallery_page_settings
+    data = json.loads(request.body)
+  File "C:\Users\Jx1\Documents\GitHub\localEats\venv\lib\site-packages\django\http\request.py", line 326, in body
+    raise RawPostDataException(
+django.http.request.RawPostDataException: You cannot access body after reading from request's data stream
+ERROR 2025-01-30 14:56:04,819 basehttp 9044 6896 "POST /test_non_menu/gallery/settings/ HTTP/1.1" 500 96919
+INFO 2025-01-30 14:57:54,009 basehttp 9044 6896 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16769
+INFO 2025-01-30 14:57:54,073 basehttp 9044 6896 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9315
+INFO 2025-01-30 14:57:54,228 basehttp 9044 6896 - Broken pipe from ('127.0.0.1', 51649)
+INFO 2025-01-30 14:57:54,229 basehttp 9044 14000 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5062
+INFO 2025-01-30 14:57:54,237 basehttp 9044 14000 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-30 14:57:54,260 basehttp 9044 14000 - Broken pipe from ('127.0.0.1', 51933)
+INFO 2025-01-30 14:57:54,435 basehttp 9044 19724 - Broken pipe from ('127.0.0.1', 51934)
+INFO 2025-01-30 14:57:56,946 basehttp 9044 20080 "POST /test_non_menu/gallery/settings/ HTTP/1.1" 200 21
+INFO 2025-01-30 14:58:01,107 basehttp 9044 20080 "POST /test_non_menu/gallery/settings/ HTTP/1.1" 200 21
+INFO 2025-01-30 14:58:38,343 basehttp 9044 20080 "GET /test_non_menu/gallery/ HTTP/1.1" 200 16727
+INFO 2025-01-30 14:58:38,393 basehttp 9044 20080 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:58:38,515 basehttp 9044 20080 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:58:38,529 basehttp 9044 20080 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-30 14:58:38,677 basehttp 9044 20080 - Broken pipe from ('127.0.0.1', 51938)
+DEBUG 2025-01-30 14:58:44,586 media 9044 6196 Content type check: image/webp
+DEBUG 2025-01-30 14:58:44,591 media 9044 6196 
+            Saving Image:
+            - Alt Text: WG.webp
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: WG.webp
+        
+DEBUG 2025-01-30 14:58:44,593 media 9044 6196 Content type check: image/webp
+DEBUG 2025-01-30 14:58:44,640 media 9044 6196 
+            Image Saved:
+            - ID: 158
+            - Alt Text: WG.webp
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 14:58:44,641 basehttp 9044 6196 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 193
+INFO 2025-01-30 14:58:44,701 basehttp 9044 6196 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 200 16720
+INFO 2025-01-30 14:59:06,820 basehttp 9044 6196 "GET /test_non_menu/gallery/ HTTP/1.1" 200 17763
+INFO 2025-01-30 14:59:06,871 basehttp 9044 6196 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9315
+INFO 2025-01-30 14:59:07,012 basehttp 9044 6196 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 14:59:07,026 basehttp 9044 6196 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 200 16720
+INFO 2025-01-30 14:59:07,026 basehttp 9044 1480 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-30 14:59:07,041 basehttp 9044 6196 - Broken pipe from ('127.0.0.1', 52048)
+INFO 2025-01-30 14:59:07,353 basehttp 9044 1480 - Broken pipe from ('127.0.0.1', 52133)
+DEBUG 2025-01-30 14:59:11,993 media 9044 30752 Content type check: image/jpeg
+DEBUG 2025-01-30 14:59:12,222 media 9044 30752 
+            Saving Image:
+            - Alt Text: registerimage.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: registerimage.jpg
+        
+DEBUG 2025-01-30 14:59:12,224 media 9044 30752 Content type check: image/jpeg
+DEBUG 2025-01-30 14:59:13,053 media 9044 30752 
+            Image Saved:
+            - ID: 159
+            - Alt Text: registerimage.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 14:59:13,054 basehttp 9044 30752 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 215
+INFO 2025-01-30 14:59:13,067 basehttp 9044 30752 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 14:59:23,350 basehttp 9044 30752 "GET /test_non_menu/gallery/ HTTP/1.1" 200 18820
+INFO 2025-01-30 14:59:23,389 basehttp 9044 23512 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 14:59:23,390 basehttp 9044 25708 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 14:59:23,391 basehttp 9044 28556 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9315
+INFO 2025-01-30 14:59:23,392 basehttp 9044 30752 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 14:59:23,404 basehttp 9044 30752 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 14:59:23,510 basehttp 9044 30752 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 14:59:23,511 basehttp 9044 28556 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5062
+INFO 2025-01-30 14:59:23,536 basehttp 9044 25708 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-30 14:59:23,536 basehttp 9044 28556 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 200 16720
+INFO 2025-01-30 14:59:23,536 basehttp 9044 30752 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 14:59:23,546 basehttp 9044 30752 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+DEBUG 2025-01-30 14:59:34,828 media 9044 30752 Content type check: image/jpeg
+DEBUG 2025-01-30 14:59:34,839 media 9044 30752 
+            Saving Image:
+            - Alt Text: Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.jpg
+        
+DEBUG 2025-01-30 14:59:34,841 media 9044 30752 Content type check: image/jpeg
+DEBUG 2025-01-30 14:59:34,950 media 9044 30752 
+            Image Saved:
+            - ID: 160
+            - Alt Text: Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 14:59:34,951 basehttp 9044 30752 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 321
+INFO 2025-01-30 14:59:35,031 basehttp 9044 30752 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 200 17310
+INFO 2025-01-30 14:59:50,196 basehttp 9044 30752 "GET /test_non_menu/gallery/ HTTP/1.1" 200 19983
+INFO 2025-01-30 14:59:50,261 basehttp 9044 30752 - Broken pipe from ('127.0.0.1', 52145)
+INFO 2025-01-30 14:59:50,261 basehttp 9044 28556 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9315
+INFO 2025-01-30 14:59:50,415 basehttp 9044 28556 - Broken pipe from ('127.0.0.1', 52163)
+INFO 2025-01-30 14:59:50,419 basehttp 9044 25708 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5062
+INFO 2025-01-30 14:59:50,437 basehttp 9044 25708 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 200 17310
+INFO 2025-01-30 14:59:50,437 basehttp 9044 33872 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-30 14:59:50,438 basehttp 9044 29964 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 200 16720
+INFO 2025-01-30 14:59:50,438 basehttp 9044 23512 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 14:59:50,455 basehttp 9044 23512 - Broken pipe from ('127.0.0.1', 52161)
+INFO 2025-01-30 14:59:50,627 basehttp 9044 25708 - Broken pipe from ('127.0.0.1', 52162)
+DEBUG 2025-01-30 14:59:59,055 media 9044 29964 Content type check: image/jpeg
+DEBUG 2025-01-30 14:59:59,060 media 9044 29964 
+            Saving Image:
+            - Alt Text: IMG_5282.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: IMG_5282.jpg
+        
+DEBUG 2025-01-30 14:59:59,062 media 9044 29964 Content type check: image/jpeg
+DEBUG 2025-01-30 14:59:59,196 media 9044 29964 
+            Image Saved:
+            - ID: 161
+            - Alt Text: IMG_5282.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 14:59:59,198 basehttp 9044 29964 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 205
+INFO 2025-01-30 14:59:59,210 basehttp 9044 29964 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 200 32452
+INFO 2025-01-30 15:00:12,930 basehttp 9044 29964 "GET /test_non_menu/gallery/ HTTP/1.1" 200 21030
+INFO 2025-01-30 15:00:12,969 basehttp 9044 29964 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:00:13,118 basehttp 9044 29964 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:00:13,118 basehttp 9044 33872 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:00:13,120 basehttp 9044 30636 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:00:13,122 basehttp 9044 29964 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:00:13,323 basehttp 9044 29964 - Broken pipe from ('127.0.0.1', 52233)
+DEBUG 2025-01-30 15:00:19,870 media 9044 33872 Content type check: image/jpeg
+DEBUG 2025-01-30 15:00:20,008 media 9044 33872 
+            Saving Image:
+            - Alt Text: createimage.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: createimage.jpg
+        
+DEBUG 2025-01-30 15:00:20,010 media 9044 33872 Content type check: image/jpeg
+DEBUG 2025-01-30 15:00:20,508 media 9044 33872 
+            Image Saved:
+            - ID: 162
+            - Alt Text: createimage.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 15:00:20,509 basehttp 9044 33872 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 211
+INFO 2025-01-30 15:00:20,599 basehttp 9044 33872 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 200 166166
+INFO 2025-01-30 15:01:12,665 basehttp 9044 33872 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22083
+INFO 2025-01-30 15:01:12,745 basehttp 9044 33872 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9334
+INFO 2025-01-30 15:01:12,869 basehttp 9044 33872 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:01:12,892 basehttp 9044 29740 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 200 17310
+INFO 2025-01-30 15:01:12,892 basehttp 9044 30636 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 200 32452
+INFO 2025-01-30 15:01:12,892 basehttp 9044 26676 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:01:12,892 basehttp 9044 21248 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:01:12,893 basehttp 9044 13240 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:01:12,893 basehttp 9044 33872 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 200 166166
+INFO 2025-01-30 15:01:12,947 basehttp 9044 33872 - Broken pipe from ('127.0.0.1', 52234)
+INFO 2025-01-30 15:01:13,093 basehttp 9044 13240 - Broken pipe from ('127.0.0.1', 52432)
+DEBUG 2025-01-30 15:01:19,237 media 9044 30636 Content type check: image/jpeg
+DEBUG 2025-01-30 15:01:19,468 media 9044 30636 
+            Saving Image:
+            - Alt Text: registerimage.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: registerimage.jpg
+        
+DEBUG 2025-01-30 15:01:19,470 media 9044 30636 Content type check: image/jpeg
+DEBUG 2025-01-30 15:01:20,293 media 9044 30636 
+            Image Saved:
+            - ID: 163
+            - Alt Text: registerimage.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 15:01:20,294 basehttp 9044 30636 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 231
+INFO 2025-01-30 15:01:20,386 basehttp 9044 30636 "GET /media/user_uploads/2025/01/30/registerimage_ppe8NW0.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:02:50,231 basehttp 9044 30636 "GET /test_non_menu/gallery/ HTTP/1.1" 200 23148
+INFO 2025-01-30 15:02:50,284 basehttp 9044 30636 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9339
+INFO 2025-01-30 15:02:50,400 basehttp 9044 30636 - Broken pipe from ('127.0.0.1', 52274)
+INFO 2025-01-30 15:02:50,406 basehttp 9044 29740 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5062
+INFO 2025-01-30 15:02:50,460 basehttp 9044 33620 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:02:50,460 basehttp 9044 13752 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:02:50,460 basehttp 9044 21248 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 200 32452
+INFO 2025-01-30 15:02:50,461 basehttp 9044 14700 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 200 17310
+INFO 2025-01-30 15:02:50,462 basehttp 9044 33620 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:02:50,462 basehttp 9044 29740 "GET /media/user_uploads/2025/01/30/registerimage_ppe8NW0.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:02:50,462 basehttp 9044 26676 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 200 166166
+INFO 2025-01-30 15:02:50,503 basehttp 9044 26676 - Broken pipe from ('127.0.0.1', 52434)
+INFO 2025-01-30 15:02:50,652 basehttp 9044 29740 - Broken pipe from ('127.0.0.1', 52431)
+INFO 2025-01-30 15:03:05,157 basehttp 9044 21248 "GET /test_non_menu/gallery/ HTTP/1.1" 200 23148
+INFO 2025-01-30 15:03:05,204 basehttp 9044 14700 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 15:03:05,204 basehttp 9044 13752 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 15:03:05,207 basehttp 9044 14700 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9339
+INFO 2025-01-30 15:03:05,208 basehttp 9044 21248 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 15:03:05,227 basehttp 9044 21248 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 15:03:05,365 basehttp 9044 21248 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 15:03:05,366 basehttp 9044 14700 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5062
+INFO 2025-01-30 15:03:05,394 basehttp 9044 33620 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 200 17310
+INFO 2025-01-30 15:03:05,394 basehttp 9044 20140 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 200 16720
+INFO 2025-01-30 15:03:05,394 basehttp 9044 13752 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 200 32452
+INFO 2025-01-30 15:03:05,396 basehttp 9044 21248 "GET /media/user_uploads/2025/01/30/registerimage_ppe8NW0.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:03:05,396 basehttp 9044 33620 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-30 15:03:05,397 basehttp 9044 25952 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:03:05,397 basehttp 9044 14700 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 200 166166
+INFO 2025-01-30 15:03:05,429 basehttp 9044 21248 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+INFO 2025-01-30 15:03:49,444 basehttp 9044 21248 "GET /test_non_menu/gallery/ HTTP/1.1" 200 23148
+INFO 2025-01-30 15:03:49,497 basehttp 9044 21248 - Broken pipe from ('127.0.0.1', 52433)
+INFO 2025-01-30 15:03:49,499 basehttp 9044 14700 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9315
+INFO 2025-01-30 15:03:49,621 basehttp 9044 14700 - Broken pipe from ('127.0.0.1', 52631)
+INFO 2025-01-30 15:03:49,622 basehttp 9044 25952 - Broken pipe from ('127.0.0.1', 52652)
+INFO 2025-01-30 15:03:49,652 basehttp 9044 20140 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:03:49,653 basehttp 9044 27964 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:03:49,654 basehttp 9044 8908 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:03:49,655 basehttp 9044 31492 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:03:49,655 basehttp 9044 13752 "GET /media/user_uploads/2025/01/30/registerimage_ppe8NW0.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:03:49,656 basehttp 9044 33620 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 200 166166
+INFO 2025-01-30 15:03:49,709 basehttp 9044 33620 - Broken pipe from ('127.0.0.1', 52632)
+INFO 2025-01-30 15:03:50,001 basehttp 9044 13752 - Broken pipe from ('127.0.0.1', 52633)
+INFO 2025-01-30 15:04:05,038 basehttp 9044 20140 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22980
+INFO 2025-01-30 15:04:05,081 basehttp 9044 20140 - Broken pipe from ('127.0.0.1', 52653)
+INFO 2025-01-30 15:04:05,082 basehttp 9044 27964 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9315
+INFO 2025-01-30 15:04:05,210 basehttp 9044 27964 - Broken pipe from ('127.0.0.1', 52708)
+INFO 2025-01-30 15:04:05,210 basehttp 9044 8908 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5062
+INFO 2025-01-30 15:04:05,244 basehttp 9044 31492 - Broken pipe from ('127.0.0.1', 52710)
+INFO 2025-01-30 15:04:05,246 basehttp 9044 5736 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:04:05,246 basehttp 9044 8908 "GET /media/user_uploads/2025/01/30/registerimage_ppe8NW0.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:04:05,306 basehttp 9044 8908 - Broken pipe from ('127.0.0.1', 52709)
+INFO 2025-01-30 15:04:05,609 basehttp 9044 5736 - Broken pipe from ('127.0.0.1', 52759)
+INFO 2025-01-30 15:04:15,937 basehttp 9044 30392 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22686
+INFO 2025-01-30 15:04:15,988 basehttp 9044 30392 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:04:16,126 basehttp 9044 30392 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:04:16,127 basehttp 9044 31912 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:04:16,128 basehttp 9044 33448 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:04:16,130 basehttp 9044 30392 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 200 166166
+INFO 2025-01-30 15:04:16,443 basehttp 9044 30392 - Broken pipe from ('127.0.0.1', 52785)
+INFO 2025-01-30 15:04:53,231 basehttp 9044 31912 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22686
+INFO 2025-01-30 15:04:53,315 basehttp 9044 31912 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9363
+INFO 2025-01-30 15:04:53,411 basehttp 9044 31912 - Broken pipe from ('127.0.0.1', 52787)
+INFO 2025-01-30 15:04:53,411 basehttp 9044 33448 - Broken pipe from ('127.0.0.1', 52788)
+INFO 2025-01-30 15:04:53,425 basehttp 9044 29844 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:04:53,426 basehttp 9044 22868 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:04:53,428 basehttp 9044 19984 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:04:53,429 basehttp 9044 16752 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:04:53,430 basehttp 9044 23828 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:04:53,430 basehttp 9044 26084 "GET /media/user_uploads/2025/01/30/registerimage_ppe8NW0.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:04:53,476 basehttp 9044 26084 - Broken pipe from ('127.0.0.1', 52909)
+INFO 2025-01-30 15:04:53,828 basehttp 9044 29844 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 15:05:31,355 basehttp 9044 29844 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22686
+INFO 2025-01-30 15:05:31,398 basehttp 9044 29844 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9403
+INFO 2025-01-30 15:05:31,516 basehttp 9044 29844 - Broken pipe from ('127.0.0.1', 52910)
+INFO 2025-01-30 15:05:31,518 basehttp 9044 22868 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5062
+INFO 2025-01-30 15:05:31,562 basehttp 9044 23828 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:05:31,562 basehttp 9044 15592 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:05:31,563 basehttp 9044 32828 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:05:31,564 basehttp 9044 16752 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 200 32452
+INFO 2025-01-30 15:05:31,564 basehttp 9044 23828 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:05:31,564 basehttp 9044 22868 "GET /media/user_uploads/2025/01/30/registerimage_ppe8NW0.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:05:31,564 basehttp 9044 19984 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 200 166166
+INFO 2025-01-30 15:05:31,600 basehttp 9044 19984 - Broken pipe from ('127.0.0.1', 52912)
+INFO 2025-01-30 15:05:31,817 basehttp 9044 22868 - Broken pipe from ('127.0.0.1', 52911)
+INFO 2025-01-30 15:05:43,075 basehttp 9044 16752 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22686
+INFO 2025-01-30 15:05:43,128 basehttp 9044 16752 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9363
+INFO 2025-01-30 15:05:43,465 basehttp 9044 16752 - Broken pipe from ('127.0.0.1', 52913)
+INFO 2025-01-30 15:06:22,506 basehttp 9044 15592 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22686
+INFO 2025-01-30 15:06:22,651 basehttp 9044 15592 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9351
+INFO 2025-01-30 15:06:22,767 basehttp 9044 15592 - Broken pipe from ('127.0.0.1', 53028)
+INFO 2025-01-30 15:06:22,768 basehttp 9044 32828 - Broken pipe from ('127.0.0.1', 53029)
+INFO 2025-01-30 15:06:22,794 basehttp 9044 27336 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:06:22,795 basehttp 9044 32156 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:06:22,796 basehttp 9044 11216 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:06:22,797 basehttp 9044 10212 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:06:22,797 basehttp 9044 23828 "GET /media/user_uploads/2025/01/30/registerimage_ppe8NW0.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:06:22,798 basehttp 9044 31180 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 200 166166
+INFO 2025-01-30 15:06:22,840 basehttp 9044 31180 - Broken pipe from ('127.0.0.1', 53146)
+INFO 2025-01-30 15:06:23,144 basehttp 9044 23828 - Broken pipe from ('127.0.0.1', 52914)
+INFO 2025-01-30 15:06:46,499 basehttp 9044 27336 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22686
+INFO 2025-01-30 15:06:46,546 basehttp 9044 27336 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9438
+INFO 2025-01-30 15:06:46,654 basehttp 9044 27336 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:06:46,686 basehttp 9044 27336 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:06:47,075 basehttp 9044 27336 - Broken pipe from ('127.0.0.1', 53147)
+INFO 2025-01-30 15:07:04,165 basehttp 9044 32156 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22686
+INFO 2025-01-30 15:07:04,236 basehttp 9044 32156 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9483
+INFO 2025-01-30 15:07:04,338 basehttp 9044 11216 - Broken pipe from ('127.0.0.1', 53149)
+INFO 2025-01-30 15:07:04,338 basehttp 9044 32156 - Broken pipe from ('127.0.0.1', 53148)
+INFO 2025-01-30 15:07:04,355 basehttp 9044 10212 "GET /media/user_uploads/2025/01/30/registerimage_ppe8NW0.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:07:04,360 basehttp 9044 27588 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:07:04,361 basehttp 9044 28808 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:07:04,362 basehttp 9044 27536 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:07:04,362 basehttp 9044 10212 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 200 166166
+INFO 2025-01-30 15:07:04,402 basehttp 9044 10212 - Broken pipe from ('127.0.0.1', 53150)
+INFO 2025-01-30 15:07:04,645 basehttp 9044 27588 - Broken pipe from ('127.0.0.1', 53269)
+INFO 2025-01-30 15:07:46,820 basehttp 9044 28808 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22686
+INFO 2025-01-30 15:07:46,921 basehttp 9044 28808 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9483
+INFO 2025-01-30 15:07:47,040 basehttp 9044 28808 - Broken pipe from ('127.0.0.1', 53270)
+INFO 2025-01-30 15:07:47,064 basehttp 9044 12556 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:07:47,065 basehttp 9044 10896 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:07:47,065 basehttp 9044 34536 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:07:47,065 basehttp 9044 27536 "GET /media/user_uploads/2025/01/30/registerimage_ppe8NW0.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:07:47,281 basehttp 9044 27536 - Broken pipe from ('127.0.0.1', 53271)
+INFO 2025-01-30 15:08:18,393 basehttp 9044 12556 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22686
+INFO 2025-01-30 15:08:18,450 basehttp 9044 12556 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:08:18,623 basehttp 9044 12556 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5050
+INFO 2025-01-30 15:08:18,684 basehttp 9044 12556 - Broken pipe from ('127.0.0.1', 53359)
+INFO 2025-01-30 15:08:18,684 basehttp 9044 10896 - Broken pipe from ('127.0.0.1', 53360)
+INFO 2025-01-30 15:08:18,685 basehttp 9044 7716 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:08:18,685 basehttp 9044 34536 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 200 17310
+INFO 2025-01-30 15:08:18,686 basehttp 9044 34536 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:08:18,717 basehttp 9044 34536 - Broken pipe from ('127.0.0.1', 53361)
+INFO 2025-01-30 15:08:20,491 basehttp 9044 7716 "DELETE /test_non_menu/gallery/delete/163 HTTP/1.1" 301 0
+WARNING 2025-01-30 15:08:20,532 log 9044 20528 Method Not Allowed (DELETE): /test_non_menu/gallery/delete/163/
+WARNING 2025-01-30 15:08:20,533 basehttp 9044 20528 "DELETE /test_non_menu/gallery/delete/163/ HTTP/1.1" 405 0
+INFO 2025-01-30 15:08:34,457 basehttp 9044 20528 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22686
+INFO 2025-01-30 15:08:34,533 basehttp 9044 20528 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:08:34,628 basehttp 9044 20528 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:08:34,646 basehttp 9044 20528 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:08:34,647 basehttp 9044 16748 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:08:34,649 basehttp 9044 20528 "GET /media/user_uploads/2025/01/30/registerimage_ppe8NW0.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:08:36,563 basehttp 9044 20528 "DELETE /test_non_menu/gallery/delete/163 HTTP/1.1" 301 0
+WARNING 2025-01-30 15:08:36,607 log 9044 16748 Method Not Allowed (DELETE): /test_non_menu/gallery/delete/163/
+WARNING 2025-01-30 15:08:36,607 basehttp 9044 16748 "DELETE /test_non_menu/gallery/delete/163/ HTTP/1.1" 405 0
+INFO 2025-01-30 15:09:33,385 autoreload 9044 33312 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-30 15:09:34,496 autoreload 25964 28488 Watching for file changes with StatReloader
+INFO 2025-01-30 15:09:58,790 autoreload 25964 28488 C:\Users\Jx1\Documents\GitHub\localEats\restaurants\views.py changed, reloading.
+INFO 2025-01-30 15:09:59,607 autoreload 24604 30912 Watching for file changes with StatReloader
+INFO 2025-01-30 15:10:00,105 basehttp 24604 28716 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22686
+INFO 2025-01-30 15:10:00,227 basehttp 24604 24056 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:10:00,304 basehttp 24604 28716 - Broken pipe from ('127.0.0.1', 53786)
+INFO 2025-01-30 15:10:00,359 basehttp 24604 24056 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5050
+INFO 2025-01-30 15:10:00,376 basehttp 24604 3144 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:10:00,379 basehttp 24604 32588 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:10:00,379 basehttp 24604 32420 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:10:00,381 basehttp 24604 3144 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:10:00,381 basehttp 24604 9224 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:10:00,381 basehttp 24604 24056 "GET /media/user_uploads/2025/01/30/registerimage_ppe8NW0.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:10:00,382 basehttp 24604 20324 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 200 166166
+INFO 2025-01-30 15:10:00,435 basehttp 24604 20324 - Broken pipe from ('127.0.0.1', 53792)
+INFO 2025-01-30 15:10:02,322 basehttp 24604 24056 "DELETE /test_non_menu/gallery/delete/163 HTTP/1.1" 301 0
+INFO 2025-01-30 15:10:02,369 basehttp 24604 32588 "DELETE /test_non_menu/gallery/delete/163/ HTTP/1.1" 200 17
+INFO 2025-01-30 15:10:06,048 basehttp 24604 32588 "DELETE /test_non_menu/gallery/delete/162 HTTP/1.1" 301 0
+INFO 2025-01-30 15:10:06,096 basehttp 24604 32420 "DELETE /test_non_menu/gallery/delete/162/ HTTP/1.1" 200 17
+INFO 2025-01-30 15:10:08,726 basehttp 24604 32420 "DELETE /test_non_menu/gallery/delete/159 HTTP/1.1" 301 0
+INFO 2025-01-30 15:10:08,773 basehttp 24604 3144 "DELETE /test_non_menu/gallery/delete/159/ HTTP/1.1" 200 17
+DEBUG 2025-01-30 15:10:13,438 media 24604 3144 Content type check: image/png
+DEBUG 2025-01-30 15:10:13,449 media 24604 3144 
+            Saving Image:
+            - Alt Text: Untitled drawing (2).png
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: Untitled drawing (2).png
+        
+DEBUG 2025-01-30 15:10:13,451 media 24604 3144 Content type check: image/png
+DEBUG 2025-01-30 15:10:13,497 media 24604 3144 
+            Image Saved:
+            - ID: 164
+            - Alt Text: Untitled drawing (2).png
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 15:10:13,498 basehttp 24604 3144 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 225
+INFO 2025-01-30 15:10:13,512 basehttp 24604 3144 "GET /media/user_uploads/2025/01/30/Untitled_drawing_2.webp HTTP/1.1" 200 5264
+INFO 2025-01-30 15:10:29,405 basehttp 24604 3144 "GET /test_non_menu/gallery/ HTTP/1.1" 200 20712
+INFO 2025-01-30 15:10:29,462 basehttp 24604 3144 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9483
+INFO 2025-01-30 15:10:29,598 basehttp 24604 3144 - Broken pipe from ('127.0.0.1', 53793)
+INFO 2025-01-30 15:10:29,599 basehttp 24604 9224 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5050
+INFO 2025-01-30 15:10:29,611 basehttp 24604 9224 "GET /media/user_uploads/2025/01/30/Untitled_drawing_2.webp HTTP/1.1" 200 5264
+INFO 2025-01-30 15:10:29,613 basehttp 24604 9224 - Broken pipe from ('127.0.0.1', 53796)
+INFO 2025-01-30 15:11:20,244 basehttp 24604 27100 "GET /test_non_menu/gallery/ HTTP/1.1" 200 20712
+INFO 2025-01-30 15:11:20,375 basehttp 24604 27100 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:11:20,516 basehttp 24604 27100 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:11:20,539 basehttp 24604 27100 "GET /media/user_uploads/2025/01/30/Untitled_drawing_2.webp HTTP/1.1" 200 5264
+INFO 2025-01-30 15:11:20,539 basehttp 24604 27216 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:11:20,539 basehttp 24604 21460 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 200 32452
+INFO 2025-01-30 15:11:20,540 basehttp 24604 25516 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 200 17310
+INFO 2025-01-30 15:11:20,707 basehttp 24604 21460 - Broken pipe from ('127.0.0.1', 54020)
+INFO 2025-01-30 15:11:42,010 basehttp 24604 27100 "GET /test_non_menu/gallery/ HTTP/1.1" 200 20712
+INFO 2025-01-30 15:11:42,199 basehttp 24604 27100 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:11:42,214 basehttp 24604 27100 "GET /media/user_uploads/2025/01/30/Untitled_drawing_2.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:11:42,214 basehttp 24604 25516 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 304 0
+DEBUG 2025-01-30 15:11:46,172 media 24604 27100 Content type check: image/jpeg
+DEBUG 2025-01-30 15:11:46,176 media 24604 27100 
+            Saving Image:
+            - Alt Text: IMG_5282.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: IMG_5282.jpg
+        
+DEBUG 2025-01-30 15:11:46,178 media 24604 27100 Content type check: image/jpeg
+DEBUG 2025-01-30 15:11:46,321 media 24604 27100 
+            Image Saved:
+            - ID: 165
+            - Alt Text: IMG_5282.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 15:11:46,322 basehttp 24604 27100 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 221
+INFO 2025-01-30 15:11:46,406 basehttp 24604 27100 "GET /media/user_uploads/2025/01/30/IMG_5282_DdKXD9z.webp HTTP/1.1" 200 32452
+INFO 2025-01-30 15:12:21,230 basehttp 24604 27100 "GET /test_non_menu/gallery/ HTTP/1.1" 200 21701
+INFO 2025-01-30 15:12:21,301 basehttp 24604 25516 "GET /static/css/animations.css HTTP/1.1" 200 1421
+INFO 2025-01-30 15:12:21,301 basehttp 24604 27216 "GET /static/js/auth/logout.js HTTP/1.1" 200 2449
+INFO 2025-01-30 15:12:21,303 basehttp 24604 25516 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9447
+INFO 2025-01-30 15:12:21,304 basehttp 24604 27100 "GET /static/css/tailwind.css HTTP/1.1" 200 651387
+INFO 2025-01-30 15:12:21,333 basehttp 24604 27100 "GET /static/images/patrons-love-high-resolution-logo.png HTTP/1.1" 200 45893
+INFO 2025-01-30 15:12:21,402 basehttp 24604 27100 "GET /static/js/components/toast.js HTTP/1.1" 200 642
+INFO 2025-01-30 15:12:21,403 basehttp 24604 25516 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5050
+INFO 2025-01-30 15:12:21,428 basehttp 24604 27100 "GET /media/user_uploads/2025/01/30/IMG_5282_DdKXD9z.webp HTTP/1.1" 200 32452
+INFO 2025-01-30 15:12:21,433 basehttp 24604 27100 "GET /media/user_uploads/2025/01/30/Untitled_drawing_2.webp HTTP/1.1" 200 5264
+INFO 2025-01-30 15:12:21,434 basehttp 24604 27216 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 200 17310
+INFO 2025-01-30 15:12:21,435 basehttp 24604 25516 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 200 32452
+INFO 2025-01-30 15:12:21,435 basehttp 24604 17360 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 200 7658
+INFO 2025-01-30 15:12:21,435 basehttp 24604 33928 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 200 16720
+INFO 2025-01-30 15:12:21,496 basehttp 24604 27100 "GET /static/images/favicon.ico HTTP/1.1" 200 15406
+DEBUG 2025-01-30 15:12:25,469 media 24604 27100 Content type check: image/webp
+DEBUG 2025-01-30 15:12:25,473 media 24604 27100 
+            Saving Image:
+            - Alt Text: Han_Solo_where.webp
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: Han_Solo_where.webp
+        
+DEBUG 2025-01-30 15:12:25,475 media 24604 27100 Content type check: image/webp
+DEBUG 2025-01-30 15:12:25,524 media 24604 27100 
+            Image Saved:
+            - ID: 166
+            - Alt Text: Han_Solo_where.webp
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 15:12:25,525 basehttp 24604 27100 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 233
+INFO 2025-01-30 15:12:25,540 basehttp 24604 27100 "GET /media/user_uploads/2025/01/30/Han_Solo_where_7yokjn6.webp HTTP/1.1" 200 7658
+INFO 2025-01-30 15:12:37,789 basehttp 24604 27100 "GET /test_non_menu/gallery/ HTTP/1.1" 200 22703
+INFO 2025-01-30 15:12:37,931 basehttp 24604 27100 - Broken pipe from ('127.0.0.1', 54011)
+INFO 2025-01-30 15:12:37,932 basehttp 24604 25516 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9454
+INFO 2025-01-30 15:12:38,047 basehttp 24604 25516 - Broken pipe from ('127.0.0.1', 54021)
+INFO 2025-01-30 15:12:38,047 basehttp 24604 27216 - Broken pipe from ('127.0.0.1', 54022)
+INFO 2025-01-30 15:12:38,065 basehttp 24604 33928 "GET /media/user_uploads/2025/01/30/Han_Solo_where_7yokjn6.webp HTTP/1.1" 200 7658
+INFO 2025-01-30 15:12:38,066 basehttp 24604 30560 "GET /media/user_uploads/2025/01/30/Untitled_drawing_2.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:12:38,066 basehttp 24604 17360 "GET /media/user_uploads/2025/01/30/IMG_5282_DdKXD9z.webp HTTP/1.1" 200 32452
+INFO 2025-01-30 15:12:38,135 basehttp 24604 17360 - Broken pipe from ('127.0.0.1', 54184)
+INFO 2025-01-30 15:12:38,276 basehttp 24604 33928 "GET /static/css/animations.css HTTP/1.1" 200 1421
+DEBUG 2025-01-30 15:12:42,208 media 24604 33928 Content type check: image/jpeg
+DEBUG 2025-01-30 15:12:42,439 media 24604 33928 
+            Saving Image:
+            - Alt Text: registerimage.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: registerimage.jpg
+        
+DEBUG 2025-01-30 15:12:42,441 media 24604 33928 Content type check: image/jpeg
+DEBUG 2025-01-30 15:12:43,274 media 24604 33928 
+            Image Saved:
+            - ID: 167
+            - Alt Text: registerimage.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 15:12:43,275 basehttp 24604 33928 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 215
+INFO 2025-01-30 15:12:43,352 basehttp 24604 33928 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:14:06,738 basehttp 24604 33928 "GET /test_non_menu/gallery/ HTTP/1.1" 200 23694
+INFO 2025-01-30 15:14:06,840 basehttp 24604 33928 - Broken pipe from ('127.0.0.1', 54183)
+INFO 2025-01-30 15:14:06,840 basehttp 24604 30560 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9408
+INFO 2025-01-30 15:14:06,953 basehttp 24604 30560 - Broken pipe from ('127.0.0.1', 54246)
+INFO 2025-01-30 15:14:06,955 basehttp 24604 22348 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 200 5050
+INFO 2025-01-30 15:14:06,978 basehttp 24604 16836 "GET /media/user_uploads/2025/01/30/Han_Solo_where_7yokjn6.webp HTTP/1.1" 200 7658
+INFO 2025-01-30 15:14:06,978 basehttp 24604 18968 "GET /media/user_uploads/2025/01/30/Untitled_drawing_2.webp HTTP/1.1" 200 5264
+INFO 2025-01-30 15:14:06,978 basehttp 24604 14704 "GET /media/user_uploads/2025/01/30/IMG_5282.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:06,979 basehttp 24604 32176 "GET /media/user_uploads/2025/01/30/Screenshot_2024-05-29-16-07-03-10_96b26121e545231a3c569311a54cda96.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:06,979 basehttp 24604 22808 "GET /media/user_uploads/2025/01/30/IMG_5282_DdKXD9z.webp HTTP/1.1" 200 32452
+INFO 2025-01-30 15:14:06,980 basehttp 24604 18968 "GET /media/user_uploads/2025/01/30/Han_Solo_where.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:06,980 basehttp 24604 16836 "GET /media/user_uploads/2025/01/30/WG.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:06,981 basehttp 24604 22348 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:14:07,022 basehttp 24604 22348 - Broken pipe from ('127.0.0.1', 54489)
+INFO 2025-01-30 15:14:07,150 basehttp 24604 22808 - Broken pipe from ('127.0.0.1', 54491)
+DEBUG 2025-01-30 15:14:10,874 media 24604 16836 Content type check: image/webp
+DEBUG 2025-01-30 15:14:10,878 media 24604 16836 
+            Saving Image:
+            - Alt Text: WG.webp
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: WG.webp
+        
+DEBUG 2025-01-30 15:14:10,880 media 24604 16836 Content type check: image/webp
+DEBUG 2025-01-30 15:14:10,929 media 24604 16836 
+            Image Saved:
+            - ID: 168
+            - Alt Text: WG.webp
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 15:14:10,930 basehttp 24604 16836 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 209
+INFO 2025-01-30 15:14:11,008 basehttp 24604 16836 "GET /media/user_uploads/2025/01/30/WG_Dn21OMg.webp HTTP/1.1" 200 16720
+INFO 2025-01-30 15:14:13,752 basehttp 24604 16836 "GET /test_non_menu/gallery/ HTTP/1.1" 200 24672
+INFO 2025-01-30 15:14:13,792 basehttp 24604 16836 "GET /static/js/subpages/gallery.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:13,933 basehttp 24604 16836 "GET /media/user_uploads/2025/01/30/WG_Dn21OMg.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:14,093 basehttp 24604 16836 - Broken pipe from ('127.0.0.1', 54490)
+INFO 2025-01-30 15:14:29,670 basehttp 24604 18968 "GET /test_non_menu/gallery/ HTTP/1.1" 200 24672
+INFO 2025-01-30 15:14:29,747 basehttp 24604 18968 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9417
+INFO 2025-01-30 15:14:29,918 basehttp 24604 18968 "GET /media/user_uploads/2025/01/30/WG_Dn21OMg.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:29,918 basehttp 24604 14704 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:29,919 basehttp 24604 32176 "GET /media/user_uploads/2025/01/30/Han_Solo_where_7yokjn6.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:29,920 basehttp 24604 32356 "GET /media/user_uploads/2025/01/30/IMG_5282_DdKXD9z.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:29,920 basehttp 24604 18968 "GET /media/user_uploads/2025/01/30/Untitled_drawing_2.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:30,066 basehttp 24604 18968 "GET /static/css/animations.css HTTP/1.1" 200 1421
+DEBUG 2025-01-30 15:14:33,637 media 24604 18968 Content type check: image/webp
+DEBUG 2025-01-30 15:14:33,660 media 24604 18968 
+            Saving Image:
+            - Alt Text: blue-ball-lightning-abstract-electric-lightning-strike-light-fl_Aub1qrb.webp
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: blue-ball-lightning-abstract-electric-lightning-strike-light-fl_Aub1qrb.webp
+        
+DEBUG 2025-01-30 15:14:33,662 media 24604 18968 Content type check: image/webp
+DEBUG 2025-01-30 15:14:33,851 media 24604 18968 
+            Image Saved:
+            - ID: 169
+            - Alt Text: blue-ball-lightning-abstract-electric-lightning-strike-light-fl_Aub1qrb.webp
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 15:14:33,852 basehttp 24604 18968 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 327
+INFO 2025-01-30 15:14:33,872 basehttp 24604 18968 "GET /media/user_uploads/2025/01/30/blue-ball-lightning-abstract-electric-lightning-strike-light-fl_Aub1qrb.webp HTTP/1.1" 200 70994
+INFO 2025-01-30 15:14:44,487 basehttp 24604 18968 "GET /test_non_menu/gallery/ HTTP/1.1" 200 25780
+INFO 2025-01-30 15:14:44,558 basehttp 24604 18968 "GET /static/js/subpages/gallery.js HTTP/1.1" 200 9418
+INFO 2025-01-30 15:14:44,684 basehttp 24604 18968 "GET /static/js/utils/subpagesAPI.js HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:44,731 basehttp 24604 32356 "GET /media/user_uploads/2025/01/30/Han_Solo_where_7yokjn6.webp HTTP/1.1" 304 0
+INFO 2025-01-30 15:14:44,731 basehttp 24604 14704 "GET /media/user_uploads/2025/01/30/WG_Dn21OMg.webp HTTP/1.1" 200 16720
+INFO 2025-01-30 15:14:44,732 basehttp 24604 18968 "GET /media/user_uploads/2025/01/30/blue-ball-lightning-abstract-electric-lightning-strike-light-fl_Aub1qrb.webp HTTP/1.1" 200 70994
+INFO 2025-01-30 15:14:44,732 basehttp 24604 32176 "GET /media/user_uploads/2025/01/30/registerimage.webp HTTP/1.1" 200 116670
+INFO 2025-01-30 15:14:44,827 basehttp 24604 32176 - Broken pipe from ('127.0.0.1', 54494)
+INFO 2025-01-30 15:14:44,920 basehttp 24604 18968 - Broken pipe from ('127.0.0.1', 54492)
+DEBUG 2025-01-30 15:14:48,544 media 24604 14704 Content type check: image/jpeg
+DEBUG 2025-01-30 15:14:48,682 media 24604 14704 
+            Saving Image:
+            - Alt Text: createimage.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+            - Content Object: GalleryPage object (1)
+            - Image Path: createimage.jpg
+        
+DEBUG 2025-01-30 15:14:48,684 media 24604 14704 Content type check: image/jpeg
+DEBUG 2025-01-30 15:14:49,195 media 24604 14704 
+            Image Saved:
+            - ID: 170
+            - Alt Text: createimage.jpg
+            - Content Type: Restaurants | gallery page
+            - Object ID: 1
+        
+INFO 2025-01-30 15:14:49,196 basehttp 24604 14704 "POST /test_non_menu/gallery/upload/ HTTP/1.1" 200 211
+INFO 2025-01-30 15:14:49,279 basehttp 24604 14704 "GET /media/user_uploads/2025/01/30/createimage.webp HTTP/1.1" 200 166166
+INFO 2025-01-30 15:14:57,603 basehttp 24604 14704 "GET /test_non_menu/dashboard/ HTTP/1.1" 200 18249

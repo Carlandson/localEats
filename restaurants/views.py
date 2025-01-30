@@ -23,7 +23,7 @@ from .models import (Image,
     CuisineCategory, SideOption, HomePage, 
     NewsPost, ContactPage, ContactMessage, 
     ProductsPage, Product, ServicesPage, 
-    Service)
+    Service, GalleryPage)
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -43,7 +43,7 @@ from .forms import (
     DishSubmit, EventForm, HomePageForm,
     AboutUsForm, ImageUploadForm, NewsPostForm,
     ProductForm, ProductPageForm, ServiceForm,
-    ServicePageForm,
+    ServicePageForm, GalleryPageForm
 )
 from django.core.exceptions import PermissionDenied
 from django.contrib.contenttypes.models import ContentType
@@ -440,8 +440,22 @@ def get_editor_context(base_context, business, subpage, page_type):
         context['description_form'] = ServicePageForm(instance=services_page)
         context['services_page'] = services_page
     if page_type == 'gallery':
-        images = get_business_images(business)
-        context['images'] = images
+        gallery_page = getattr(subpage, 'gallery_content', None)
+        if not gallery_page:
+            gallery_page = GalleryPage.objects.create(subpage=subpage)
+        
+        # Get images with an efficient query
+        images = gallery_page.get_images().select_related('uploaded_by').prefetch_related('content_type')
+        
+        context.update({
+            'description_form': GalleryPageForm(instance=gallery_page),
+            'gallery_page': gallery_page,
+            'images': images,
+            'can_upload': True,  # Or whatever permission logic you need
+            'max_file_size': Image.MAX_FILE_SIZE,
+            'allowed_extensions': Image.ALLOWED_EXTENSIONS,
+        })
+
     elif page_type == 'menu':
         context['menu_data'] = {
             'menus': Menu.objects.filter(business=business).prefetch_related(
@@ -3535,7 +3549,108 @@ def update_services_page_settings(request, business_subdirectory):
     except (Business.DoesNotExist, SubPage.DoesNotExist, json.JSONDecodeError) as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+@login_required
+def update_gallery_page_settings(request, business_subdirectory):
+    try:
+        business = Business.objects.get(subdirectory=business_subdirectory)
+        subpage = SubPage.objects.get(business=business, page_type='gallery')
+        gallery_page = getattr(subpage, 'gallery_content', None)
+        
+        if not gallery_page:
+            return JsonResponse({'error': 'Gallery page not found'}, status=404)
 
+        data = json.loads(request.body)
+        field_name = data.get('fieldName')
+        
+        if field_name == 'description':
+            gallery_page.description = data.get('description', '')
+            gallery_page.save()
+        elif field_name == 'show_description':
+            gallery_page.show_description = data.get('value', False)
+            gallery_page.save()
+        else:
+            return JsonResponse({'error': 'Invalid field name'}, status=400)
+            
+        return JsonResponse({'status': 'success'})
+        
+    except (Business.DoesNotExist, SubPage.DoesNotExist, json.JSONDecodeError) as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+@login_required
+@require_POST
+def upload_gallery_image(request, business_subdirectory):
+    try:
+        business = get_object_or_404(Business, subdirectory=business_subdirectory)
+        if request.user != business.owner:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
+
+        subpage = get_object_or_404(SubPage, business=business, page_type='gallery')
+        gallery_page = getattr(subpage, 'gallery_content', None)
+        
+        if not gallery_page:
+            gallery_page = GalleryPage.objects.create(subpage=subpage)
+
+        file = request.FILES.get('image')  # Changed from getlist to get
+
+        if not file:
+            return JsonResponse({"error": "No image provided"}, status=400)
+
+        # Create and save single image
+        image = Image(
+            image=file,
+            uploaded_by=request.user,
+            content_type=ContentType.objects.get_for_model(gallery_page),
+            object_id=gallery_page.id,
+            alt_text=file.name
+        )
+        image.full_clean()  # This will validate the image
+        image.save()
+
+        return JsonResponse({
+            "success": True,
+            "message": "Successfully uploaded image",
+            "image": {  # Changed from images to image
+                'id': image.id,
+                'url': image.image.url,
+                'thumbnail_url': image.thumbnail.url if image.thumbnail else None,
+            }
+        })
+
+    except ValidationError as e:
+        return JsonResponse({"error": str(e)}, status=400)
+    except Exception as e:
+        logger.error(f"Error uploading gallery image: {str(e)}")
+        return JsonResponse({"error": "Server error"}, status=500)
+
+
+@login_required
+@require_http_methods(['DELETE'])
+def delete_gallery_image(request, business_subdirectory, image_id):
+    try:
+        business = get_object_or_404(Business, subdirectory=business_subdirectory)
+        if request.user != business.owner:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
+
+        subpage = get_object_or_404(SubPage, business=business, page_type='gallery')
+        gallery_page = getattr(subpage, 'gallery_content', None)
+        
+        if not gallery_page:
+            return JsonResponse({"error": "Gallery page not found"}, status=404)
+
+        image = get_object_or_404(Image, id=image_id, content_type=ContentType.objects.get_for_model(gallery_page), object_id=gallery_page.id)
+        
+        # Delete the image file and record
+        image.image.delete(save=False)
+        image.thumbnail.delete(save=False)
+        image.delete()
+
+        return JsonResponse({"success": True})
+
+    except Exception as e:
+        logger.error(f"Error deleting gallery image: {str(e)}")
+        return JsonResponse({"error": "Server error"}, status=500)
+    
+    
 @login_required
 def seo(request, business_subdirectory):
     return render(request, 'subpages/seo.html')
