@@ -349,15 +349,15 @@ function restoreAddButton(course, currentCourse, formDiv) {
     formDiv.replaceWith(buttonContainer);
 }
 
-function restoreAddButton(course, currentCourse) {
-    const swapDiv = document.querySelector('#createDish').parentElement;
-    const addButton = document.createElement('button');
-    addButton.id = course;
-    addButton.className = 'submitDish text-center w-60 rounded m-2 bg-emerald-300 md:w-96';
-    addButton.textContent = `Add a dish to ${currentCourse}`;
-    addButton.addEventListener('click', () => addDish(course));
-    swapDiv.replaceWith(addButton);
-}
+// function restoreAddButton(course, currentCourse) {
+//     const swapDiv = document.querySelector('#createDish').parentElement;
+//     const addButton = document.createElement('button');
+//     addButton.id = course;
+//     addButton.className = 'submitDish text-center w-60 rounded m-2 bg-emerald-300 md:w-96';
+//     addButton.textContent = `Add a dish to ${currentCourse}`;
+//     addButton.addEventListener('click', () => addDish(course));
+//     swapDiv.replaceWith(addButton);
+// }
 
 function cancelAdd(course) {
     const currentCourse = course.replace('submit', "");
@@ -523,22 +523,6 @@ function deleteDish(dishId) {
         buttons.forEach(button => button.disabled = false);
         alert('Error deleting dish. Please try again.');
     });
-}
-
-// Add this if you haven't already
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
 }
 
 // function deleteCourse(course) {

@@ -1,13 +1,16 @@
 import environ
 from pathlib import Path
 import os
+import dj_database_url
 
 env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
 
 GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY', default=None)
 
@@ -18,22 +21,43 @@ GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY', default=None)
 SECRET_KEY = env('SECRET_KEY', default=None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=False)
+# DEBUG = env.bool('DEBUG', default=False)
+
+if IS_HEROKU_APP:  # Only enable SSL related settings on Heroku
+    DEBUG = False  # Make sure debug is False in production
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    ALLOWED_HOSTS = ['patrons.love', 'www.patrons.love', '.herokuapp.com', 'dev.patrons.love'] 
+else:
+    # Development settings (locally)
+    DEBUG = True
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 PRINTFUL_REDIRECT_URI = 'https://17115eed1538e7.lhr.life/callback' 
 
 PRINTFUL_CLIENT_ID = env('PRINTFUL_CLIENT_ID', default=None)
 
-
+if not DEBUG:
+    BASIC_AUTH_USERNAME = env('BASIC_AUTH_USERNAME', default=None)
+    BASIC_AUTH_PASSWORD = env('BASIC_AUTH_PASSWORD', default=None)
 
 ACCOUNT_TEMPLATE_DIR = os.path.join(BASE_DIR, 'restaurants', 'templates', 'account')
 # Application definition
-NGROK_URL = env('NGROK_URL', default=None)
+
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '17115eed1538e7.lhr.life'
+    '.herokuapp.com',
+    'dev.patrons.love',
 ]
 
 
@@ -42,16 +66,15 @@ CSRF_TRUSTED_ORIGINS = [
     'https://localhost:8000',
     'http://127.0.0.1:8000',
     'https://127.0.0.1:8000',
-    'https://17115eed1538e7.lhr.life',
-    'https://17115eed1538e7.lhr.life'
+    'https://*.herokuapp.com',
+    'https://dev.patrons.love',
+    # 'https://patrons.love',
 ]
 
 
 
-if NGROK_URL:
-    ALLOWED_HOSTS.append(NGROK_URL)
-
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'restaurants',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -112,6 +135,7 @@ SOCIALACCOUNT_ADAPTER = 'restaurants.adapters.CustomSocialAccountAdapter'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -121,6 +145,9 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
     'restaurants.middleware.ClearMessagesMiddleware', 
     'restaurants.middleware.JavaScriptMimeTypeMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.RemoteUserMiddleware',
+    'restaurants.middleware.BasicAuthMiddleware', 
 ]
 
 # WebP settings
@@ -170,20 +197,23 @@ ACCOUNT_RATE_LIMITS = {
     'confirm_email': '3/h',  # 3 per hour
 }
 
-# Mailpit
-if DEBUG and not env.bool('USE_MAILGUN', default=False):
+# Mailgun
+ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
+if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = '127.0.0.1'
+
     EMAIL_PORT = 1025
     EMAIL_HOST_USER = ''
     EMAIL_HOST_PASSWORD = ''
     EMAIL_USE_TLS = False
     DEFAULT_FROM_EMAIL = 'development@localhost'
 else:
+    # Production using Mailgun
     EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-    MAILGUN_ACCESS_KEY = env('MAILGUN_ACCESS_KEY', default=None)
-    MAILGUN_SERVER_NAME = env('MAILGUN_SERVER_NAME', default=None)
-    DEFAULT_FROM_EMAIL = f'noreply@{MAILGUN_SERVER_NAME}'
+    MAILGUN_API = os.environ.get('MAILGUN_API')  # Using your existing env var
+    MAILGUN_DOMAIN = 'patrons.love'  # Your domain
+    DEFAULT_FROM_EMAIL = f'noreply@{MAILGUN_DOMAIN}'
 # Login/out URLs
 
 LOGIN_REDIRECT_URL = '/'
@@ -191,31 +221,25 @@ LOGOUT_REDIRECT_URL = '/'
 
 
 ACCOUNT_TEMPLATE_EXTENSION = 'html'
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-
-# SQLITE3
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'localeats',
-        'USER': 'postgres',
-        'PASSWORD': '123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+if IS_HEROKU_APP:
+    DATABASES = {
+        "default": dj_database_url.config(
+            conn_max_age=600,
+            conn_health_checks=True,
+        ),
     }
-}
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+else:
+    DATABASES = {
+        "default": {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': env('DB_NAME'),
+            'USER': env('DB_USER'),
+            'PASSWORD': env('DB_PASSWORD'),
+            'HOST': env('DB_HOST'),
+            'PORT': env('DB_PORT'),
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -244,10 +268,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
@@ -258,7 +278,25 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
+if IS_HEROKU_APP:
+    # Production storage settings
+    STORAGES = {
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+else:
+    # Development storage settings
+    STORAGES = {
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+    if os.path.exists(os.path.join(BASE_DIR, "static")):
+        STATICFILES_DIRS = [
+            os.path.join(BASE_DIR, "static"),
+        ]
+        
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ADMIN_EMAIL = 'admin@example.com'

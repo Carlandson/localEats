@@ -4,12 +4,27 @@ module.exports = {
     // Entry point is your main layoutEditor.js
     entry: {
         layoutEditor: './restaurants/static/js/layoutEditor.js',
-        auth: './restaurants/static/js/auth/logout.js'
+        auth: './restaurants/static/js/auth/logout.js',
+        edit_business: './restaurants/static/js/subpages/editBusiness.js',
+        about: './restaurants/static/js/subpages/about.js',
+        gallery: './restaurants/static/js/subpages/gallery.js',
+        home: './restaurants/static/js/subpages/home.js',
+        menu: './restaurants/static/js/subpages/menuBuilder.js',
+        events: './restaurants/static/js/subpages/events.js',
+        products: './restaurants/static/js/subpages/products.js',
+        merch: './restaurants/static/js/subpages/merch.js',
+        services: './restaurants/static/js/subpages/services.js',
+        contact: './restaurants/static/js/subpages/contact.js',
+        layoutEditor: './restaurants/static/js/layoutEditor.js',
+        
+
     },
     output: {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'restaurants/static/dist')
     },
+
+
     // Help webpack resolve imports without full paths
     resolve: {
         alias: {

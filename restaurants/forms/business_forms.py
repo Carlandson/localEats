@@ -6,7 +6,10 @@ from phonenumber_field.formfields import PhoneNumberField
 from django.utils.text import slugify
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 import logging
+
 
 logger = logging.getLogger(__name__)
 
@@ -57,30 +60,43 @@ class BusinessCreateForm(forms.ModelForm):
         return cleaned_data
 
     def send_verification_email(self, instance):
-        subject = 'New Business Submission'
-        message = f"""
-        A new business has been submitted for verification:
-        
-        Name: {instance.business_name}
-        Phone: {instance.phone_number}
-        Address: {instance.address}
-        City: {instance.city}
-        State: {instance.state}
-        Country: {instance.country}
-        Business Type: {instance.business_type}
-        Description: {instance.description}
-        
-        Please verify this information and update the verification status in the admin panel.
-        """
-        from_email = settings.DEFAULT_FROM_EMAIL
-        recipient_list = [settings.ADMIN_EMAIL]  # Make sure to set this in your settings.py
-        
-        send_mail(subject, message, from_email, recipient_list, fail_silently=False)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['business_name'].widget.attrs.update({'placeholder': 'Name of business'})
-        self.fields['description'].required = False  # Add this   
+        try:
+            subject = 'New Business Submission'
+            
+            # Create HTML version
+            html_message = render_to_string('emails/business_verification.html', {
+                'business': instance,
+            })
+            
+            # Create plain text version
+            text_message = f"""
+            A new business has been submitted for verification:
+            
+            Name: {instance.business_name}
+            Phone: {instance.phone_number}
+            Address: {instance.address}
+            City: {instance.city}
+            State: {instance.state}
+            Country: {instance.country}
+            Business Type: {instance.business_type}
+            Description: {instance.description}
+            
+            Please verify this information and update the verification status in the admin panel.
+            """
+            
+            email = EmailMessage(
+                subject=subject,
+                body=html_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[settings.ADMIN_EMAIL],
+                reply_to=[settings.DEFAULT_FROM_EMAIL],
+            )
+            email.content_subtype = "html"  # Main content is HTML
+            email.send(fail_silently=False)
+            
+        except Exception as e:
+            # Log the error but don't prevent form submission
+            logger.error(f"Failed to send verification email: {str(e)}") 
 
 class BusinessEditForm(BusinessCreateForm):
     class Meta(BusinessCreateForm.Meta):
