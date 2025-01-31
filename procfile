@@ -1,2 +1,0 @@
-release: npm install && npm run build && python manage.py collectstatic --noinput
-web: gunicorn localeats.wsgi
