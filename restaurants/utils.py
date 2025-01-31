@@ -1,7 +1,13 @@
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
+import requests
+from django.conf import settings
+from typing import Dict, Any, List
+import json
 import logging
-
+from django.utils import timezone
+from .models import PODAccount, PODProduct
+from urllib.parse import urlencode
 logger = logging.getLogger(__name__)
 
 def get_business_images(business):
@@ -105,3 +111,43 @@ def get_business_images(business):
     images_data.sort(key=lambda x: x['upload_date'], reverse=True)
     
     return images_data
+
+class PrintfulClient:
+    BASE_URL = 'https://api.printful.com'
+    OAUTH_URL = 'https://www.printful.com/oauth/authorize'
+    TOKEN_URL = 'https://www.printful.com/oauth/token'
+
+    @classmethod
+    def get_oauth_url(cls, state: str, redirect_uri: str) -> str:
+        """Generate OAuth URL for Printful authorization"""
+        params = {
+            'client_id': settings.PRINTFUL_CLIENT_ID,
+            'redirect_uri': redirect_uri,  # Use the formatted redirect URI
+            'response_type': 'code',
+            'state': state,
+            'scope': 'all'
+        }
+        query_string = urlencode(params)
+        return f"{cls.OAUTH_URL}?{query_string}"
+
+    @classmethod
+    def exchange_code_for_token(cls, code: str, redirect_uri: str) -> Dict[str, Any]:
+        """Exchange authorization code for access token"""
+        try:
+            response = requests.post(
+                cls.TOKEN_URL,
+                data={
+                    'grant_type': 'authorization_code',
+                    'client_id': settings.PRINTFUL_CLIENT_ID,
+                    'client_secret': settings.PRINTFUL_SECRET_KEY,
+                    'code': code,
+                    'redirect_uri': redirect_uri
+                }
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Error exchanging code for token: {e}")
+            if hasattr(e.response, 'text'):
+                logger.error(f"Response content: {e.response.text}")
+            raise

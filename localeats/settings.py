@@ -20,11 +20,36 @@ SECRET_KEY = env('SECRET_KEY', default=None)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-# ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+PRINTFUL_REDIRECT_URI = 'https://17115eed1538e7.lhr.life/callback' 
+
+PRINTFUL_CLIENT_ID = env('PRINTFUL_CLIENT_ID', default=None)
+
 
 
 ACCOUNT_TEMPLATE_DIR = os.path.join(BASE_DIR, 'restaurants', 'templates', 'account')
 # Application definition
+NGROK_URL = env('NGROK_URL', default=None)
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '17115eed1538e7.lhr.life'
+]
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+    'https://localhost:8000',
+    'http://127.0.0.1:8000',
+    'https://127.0.0.1:8000',
+    'https://17115eed1538e7.lhr.life',
+    'https://17115eed1538e7.lhr.life'
+]
+
+
+
+if NGROK_URL:
+    ALLOWED_HOSTS.append(NGROK_URL)
 
 INSTALLED_APPS = [
     'restaurants',
@@ -261,27 +286,40 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
+            'level': 'INFO',  # Changed from DEBUG to INFO
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
+            'formatter': 'simple',  # Changed to simple for console
         },
         'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'level': 'WARNING',  # Changed from DEBUG to WARNING
+            'class': 'logging.handlers.RotatingFileHandler',  # Changed to RotatingFileHandler
             'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'maxBytes': 5 * 1024 * 1024,  # 5 MB
+            'backupCount': 3,  # Keep 3 backup files
             'formatter': 'verbose',
+            'encoding': 'utf-8',
         },
     },
     'loggers': {
         'restaurants': {
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': 'WARNING',  # Changed from DEBUG to WARNING
             'propagate': True,
         },
         'django': {
             'handlers': ['console', 'file'],
-            'level': 'INFO',
+            'level': 'WARNING',  # Changed from INFO to WARNING
             'propagate': True,
+        },
+        'django.server': {  # Added to reduce server logs
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'django.db.backends': {  # Added to reduce SQL query logs
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
         },
     },
 }

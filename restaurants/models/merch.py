@@ -1,6 +1,4 @@
 from django.db import models
-
-
 """
 Printful
 1. Create developer account
