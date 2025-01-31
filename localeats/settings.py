@@ -309,64 +309,57 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
 
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
+# Only set up logging for local development
+if DEBUG:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+                'style': '{',
+            },
+            'simple': {
+                'format': '{levelname} {message}',
+                'style': '{',
+            },
         },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
+        'handlers': {
+            'console': {
+                'level': 'INFO',
+                'class': 'logging.StreamHandler',
+                'formatter': 'simple',
+            },
+            'file': {
+                'level': 'WARNING',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': os.path.join(BASE_DIR, 'debug.log'),
+                'maxBytes': 5 * 1024 * 1024,
+                'backupCount': 3,
+                'formatter': 'verbose',
+                'encoding': 'utf-8',
+            },
         },
-    },
-    'handlers': {
-        'console': {
-            'level': 'INFO',  # Changed from DEBUG to INFO
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple',  # Changed to simple for console
+        'loggers': {
+            'restaurants': {
+                'handlers': ['console', 'file'],
+                'level': 'WARNING',
+                'propagate': True,
+            },
+            'django': {
+                'handlers': ['console', 'file'],
+                'level': 'WARNING',
+                'propagate': True,
+            },
+            'django.server': {
+                'handlers': ['console'],
+                'level': 'WARNING',
+                'propagate': False,
+            },
+            'django.db.backends': {
+                'handlers': ['console'],
+                'level': 'WARNING',
+                'propagate': False,
+            },
         },
-        'file': {
-            'level': 'WARNING',  # Changed from DEBUG to WARNING
-            'class': 'logging.handlers.RotatingFileHandler',  # Changed to RotatingFileHandler
-            'filename': os.path.join(BASE_DIR, 'debug.log'),
-            'maxBytes': 5 * 1024 * 1024,  # 5 MB
-            'backupCount': 3,  # Keep 3 backup files
-            'formatter': 'verbose',
-            'encoding': 'utf-8',
-        },
-    },
-    'loggers': {
-        'restaurants': {
-            'handlers': ['console', 'file'],
-            'level': 'WARNING',  # Changed from DEBUG to WARNING
-            'propagate': True,
-        },
-        'django': {
-            'handlers': ['console', 'file'],
-            'level': 'WARNING',  # Changed from INFO to WARNING
-            'propagate': True,
-        },
-        'django.server': {  # Added to reduce server logs
-            'handlers': ['console'],
-            'level': 'WARNING',
-            'propagate': False,
-        },
-        'django.db.backends': {  # Added to reduce SQL query logs
-            'handlers': ['console'],
-            'level': 'WARNING',
-            'propagate': False,
-        },
-    },
-}
-
-# If you want to switch between development and production configs:
-if not DEBUG:
-    # Production logging settings
-    LOGGING['handlers']['file']['filename'] = '/var/log/localeats/error.log'
-    LOGGING['handlers']['file']['level'] = 'ERROR'
-    for logger in LOGGING['loggers'].values():
-        logger['level'] = 'ERROR'
-        logger['handlers'] = ['file']
+    }
