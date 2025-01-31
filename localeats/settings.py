@@ -58,7 +58,10 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '.herokuapp.com',
     'dev.patrons.love',
+    'www.patrons.love',
+    '.patrons.love'
 ]
+
 
 
 CSRF_TRUSTED_ORIGINS = [
@@ -363,3 +366,4 @@ if DEBUG:
             },
         },
     }
+
