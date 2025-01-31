@@ -41,5 +41,31 @@ module.exports = {
             }
         ]
     },
-    devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-source-map'
+    devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-source-map',
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+            minSize: 20000,
+            maxSize: 244000,
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all'
+                },
+                common: {
+                    name: 'common',
+                    minChunks: 2,
+                    chunks: 'all',
+                    priority: -20
+                }
+            }
+        }
+    },
+    
+    // Increase limits to accommodate layoutEditor.bundle.js
+    performance: {
+        maxEntrypointSize: 800000,    // Increased to 800 KiB
+        maxAssetSize: 800000          // Increased to 800 KiB
+    }
 };
