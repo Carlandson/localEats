@@ -12,10 +12,10 @@
         <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
         <link rel="stylesheet" href="{% static 'css/animations.css' %}">
         {% if debug %}
-            <script type="module" src="{% static 'js/bundles/common.bundle.js' %}"></script>
+            <script type="module" src="{% static 'js/bundles/index.bundle.js' %}"></script>
             {% block dev_scripts %}{% endblock %}
         {% else %}
-            <script defer src="{% static 'dist/common.bundle.js' %}"></script>
+            <script defer src="{% static 'dist/index.bundle.js' %}"></script>
             {% block prod_scripts %}{% endblock %}
         {% endif %}
         

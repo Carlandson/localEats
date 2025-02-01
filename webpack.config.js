@@ -15,7 +15,7 @@ module.exports = {
         services: './restaurants/static/js/subpages/services.js',
         contact: './restaurants/static/js/subpages/contact.js',
         login: './restaurants/static/js/auth/login.js',
-        common: './restaurants/static/js/bundles/common.bundle.js',
+        index: './restaurants/static/js/bundles/index.bundle.js',
     },
     output: {
         filename: '[name].bundle.js',
