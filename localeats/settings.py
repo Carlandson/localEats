@@ -325,57 +325,57 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
 
 
 # Only set up logging for local development
-if DEBUG:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'verbose': {
-                'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-                'style': '{',
-            },
-            'simple': {
-                'format': '{levelname} {message}',
-                'style': '{',
-            },
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
         },
-        'handlers': {
-            'console': {
-                'level': 'INFO',
-                'class': 'logging.StreamHandler',
-                'formatter': 'simple',
-            },
-            'file': {
-                'level': 'WARNING',
-                'class': 'logging.handlers.RotatingFileHandler',
-                'filename': os.path.join(BASE_DIR, 'debug.log'),
-                'maxBytes': 5 * 1024 * 1024,
-                'backupCount': 3,
-                'formatter': 'verbose',
-                'encoding': 'utf-8',
-            },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
         },
-        'loggers': {
-            'restaurants': {
-                'handlers': ['console', 'file'],
-                'level': 'WARNING',
-                'propagate': True,
-            },
-            'django': {
-                'handlers': ['console', 'file'],
-                'level': 'WARNING',
-                'propagate': True,
-            },
-            'django.server': {
-                'handlers': ['console'],
-                'level': 'WARNING',
-                'propagate': False,
-            },
-            'django.db.backends': {
-                'handlers': ['console'],
-                'level': 'WARNING',
-                'propagate': False,
-            },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
         },
-    }
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'maxBytes': 5 * 1024 * 1024,
+            'backupCount': 3,
+            'formatter': 'verbose',
+            'encoding': 'utf-8',
+        },
+    },
+    'loggers': {
+        'restaurants': {
+            'handlers': ['console', 'file'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'django.server': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    },
+}
 
