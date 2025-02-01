@@ -16,6 +16,7 @@ module.exports = {
         contact: './restaurants/static/js/subpages/contact.js',
         login: './restaurants/static/js/auth/login.js',
         index: './restaurants/static/js/bundles/index.bundle.js',
+        register: './restaurants/static/js/auth/register.js',
     },
     output: {
         filename: '[name].bundle.js',
