@@ -6,16 +6,18 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileMenuButton.addEventListener('click', function() {
         mobileMenu.classList.toggle('hidden');
     });
-    document.querySelector('.prev').addEventListener('click', () => plusSlides(-1));
-    document.querySelector('.next').addEventListener('click', () => plusSlides(1));
+    document?.querySelector('.prev')?.addEventListener('click', () => plusSlides(-1));
+    document?.querySelector('.next')?.addEventListener('click', () => plusSlides(1));
     // slider
     let slideIndex = 0;
     let slideInterval;
 
+
     function showSlides(n) {
-        let slides = document.getElementsByClassName("mySlides");
-        let dots = document.getElementsByClassName("dot");
+        let slides = document?.getElementsByClassName("mySlides");
+        let dots = document?.getElementsByClassName("dot");
     
+
         if (n !== undefined) {
             slideIndex = n;
         } else {

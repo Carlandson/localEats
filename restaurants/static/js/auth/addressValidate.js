@@ -6,6 +6,7 @@ import {
 } from '../constants/businessTypes.js';
 
 
+
 class AddressAutocomplete {
     constructor() {
         this.addressInput = document.getElementById('id_address');
@@ -314,11 +315,12 @@ window.removeCuisine = function(cuisine) {
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Initialize address autocomplete
-        const apiKey = document.querySelector('[data-maps-api-key]')?.dataset.mapsApiKey;
+        const apiKey = window.__GOOGLE_MAPS_API_KEY__;
         if (apiKey) {
             const maps = await GoogleMapsLoader.loadAPI(apiKey);
             const addressAutocomplete = new AddressAutocomplete();
             addressAutocomplete.initialize(maps);
+            delete window.__GOOGLE_MAPS_API_KEY__;
         }
 
         // Initialize business form and store the instance

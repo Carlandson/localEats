@@ -8,20 +8,14 @@
         <meta name="csrf-token" content="{{ csrf_token }}">
         
         <title>{% block title %}Restaurant Website{% endblock %}</title>
-        
-        <!-- Favicon -->
         <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
-        
-        <!-- Stylesheets -->
         <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
         <link rel="stylesheet" href="{% static 'css/animations.css' %}">
-        
-        <!-- Scripts -->
         {% if debug %}
-            <script type="module" src="{% static 'js/index.js' %}"></script>
-            <script type="module" src="{% static 'js/auth/logout.js' %}"></script>
+            <script type="module" src="{% static 'js/bundles/common.bundle.js' %}"></script>
+            {% block dev_scripts %}{% endblock %}
         {% else %}
-            <script defer src="{% static 'dist/auth.bundle.js' %}"></script>
+            <script defer src="{% static 'dist/common.bundle.js' %}"></script>
             {% block prod_scripts %}{% endblock %}
         {% endif %}
         

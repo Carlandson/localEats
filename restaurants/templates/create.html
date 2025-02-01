@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{% static 'css/cuisines.css' %}">
 {% endblock %}
 
+
 {% block body %}
 <div class="container mx-auto px-4 py-8">
     {% if messages %}
@@ -143,10 +144,27 @@
     </div>
 {% endblock %}
 
-{% block script %}             
+
+{% if debug %}
+    {% block dev_scripts %}
     {{ block.super }}
-    <script type="module" src="{% static 'js/auth/addressValidate.js' %}" 
-        data-maps-api-key="{{ google_maps_api_key }}">
-    </script>
-    <script type="module" src="{% static 'js/constants/businessTypes.js' %}"></script>
-{% endblock %}
+        <script>
+            // Store key in a closure
+            (function() {
+                window.__GOOGLE_MAPS_API_KEY__ = '{{ google_maps_api_key }}';
+            })();
+        </script>
+        <script type="module" src="{% static 'js/auth/addressValidate.js' %}"></script>
+        <script type="module" src="{% static 'js/constants/businessTypes.js' %}"></script>
+    {% endblock dev_scripts %}
+{% else %}
+    {% block prod_scripts %}
+        <script>
+            // Store key in a closure
+            (function() {
+                window.__GOOGLE_MAPS_API_KEY__ = '{{ google_maps_api_key }}';
+            })();
+        </script>
+        <script src="{% static 'dist/create.bundle.js' %}"></script>
+    {% endblock prod_scripts %}
+{% endif %}

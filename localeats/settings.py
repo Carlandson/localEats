@@ -111,22 +111,33 @@ AUTHENTICATION_BACKENDS = [
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [
-            'https://www.googleapis.com/auth/userinfo.profile',
-            'https://www.googleapis.com/auth/userinfo.email',
+            'profile',
+            'email',
             'https://www.googleapis.com/auth/business.manage',
         ],
         'AUTH_PARAMS': {
             'access_type': 'offline',
             'prompt': 'consent',
         },
-        'APP' : {
+        'APP': {
             'client_id': env('CLIENT_ID', default=None),
             'secret': env('GOOGLE_SECRET', default=None),
             'key': '',
         }
-
     }
 }
+
+# Add environment-specific AUTH_PARAMS
+if DEBUG:
+    SOCIALACCOUNT_PROVIDERS['AUTH_PARAMS'] = {
+        'access_type': 'offline',
+        'prompt': 'consent',
+    }
+else:
+    SOCIALACCOUNT_PROVIDERS['AUTH_PARAMS'] = {
+        'access_type': 'online',
+    }
+
 
 SOCIALACCOUNT_STORE_TOKENS = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
@@ -189,6 +200,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
@@ -205,7 +218,6 @@ ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = '127.0.0.1'
-
     EMAIL_PORT = 1025
     EMAIL_HOST_USER = ''
     EMAIL_HOST_PASSWORD = ''

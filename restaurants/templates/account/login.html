@@ -3,11 +3,6 @@
 {% load i18n %}
 {% load account socialaccount %}
 
-{% block extra_head %}
-    <script src="{% static 'js/auth/login.js' %}"></script>
-    <script src="{% static 'js/auth/googleSignIn.js' %}"></script>
-{% endblock %}
-
 {% block body %}
 <div class="flex items-center justify-center min-h-[calc(100vh-theme('spacing.32')-theme('spacing.16'))] bg-gray-100 p-4">
     <div class="flex w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden">
@@ -105,3 +100,13 @@
     </div>
 </div>
 {% endblock %}
+
+{% if debug %}
+    {% block dev_scripts %}
+        <script type="module" src="{% static 'js/auth/login.js' %}"></script>
+    {% endblock dev_scripts %}
+{% else %}
+    {% block prod_scripts %}
+        <script src="{% static 'dist/login.bundle.js' %}"></script>
+    {% endblock prod_scripts %}
+{% endif %}

@@ -70,6 +70,12 @@
         </div>
     </div>
 {% endblock %}
+{% if debug %}
 {% block script %}
-    <script src="{% static 'js/menubuilder.js' %}"></script>
+    <script src="{% static 'js/subpages/menubuilder.js' %}"></script>
 {% endblock %}
+{% else %}
+{% block prod_scripts %}
+    <script src="{% static 'dist/menubuilder.bundle.js' %}"></script>
+{% endblock %}
+{% endif %}
