@@ -144,27 +144,21 @@
     </div>
 {% endblock %}
 
+{% block scripts %}
+    <script>
 
-{% if debug %}
-    {% block dev_scripts %}
-    {{ block.super }}
-        <script>
-            // Store key in a closure
-            (function() {
-                window.__GOOGLE_MAPS_API_KEY__ = '{{ google_maps_api_key }}';
-            })();
-        </script>
-        <script type="module" src="{% static 'js/auth/addressValidate.js' %}"></script>
-        <script type="module" src="{% static 'js/constants/businessTypes.js' %}"></script>
-    {% endblock dev_scripts %}
-{% else %}
-    {% block prod_scripts %}
-        <script>
-            // Store key in a closure
-            (function() {
-                window.__GOOGLE_MAPS_API_KEY__ = '{{ google_maps_api_key }}';
-            })();
-        </script>
-        <script src="{% static 'dist/create.bundle.js' %}"></script>
-    {% endblock prod_scripts %}
-{% endif %}
+        (function() {
+            window.__GOOGLE_MAPS_API_KEY__ = '{{ google_maps_api_key }}';
+        })();
+    </script>
+    {% if debug %}
+        {% block dev_scripts %}
+            <script type="module" src="{% static 'js/auth/addressValidate.js' %}"></script>
+            <script type="module" src="{% static 'js/constants/businessTypes.js' %}"></script>
+        {% endblock dev_scripts %}
+    {% else %}
+        {% block prod_scripts %}
+            <script defer src="{% static 'dist/create.bundle.js' %}"></script>
+        {% endblock prod_scripts %}
+    {% endif %}
+{% endblock scripts %}

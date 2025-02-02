@@ -3,6 +3,10 @@ const path = require('path');
 module.exports = {
     entry: {
         layoutEditor: './restaurants/static/js/layoutEditor.js',
+        create: [
+            './restaurants/static/js/auth/addressValidate.js',
+            './restaurants/static/js/constants/businessTypes.js',
+        ],
         auth: './restaurants/static/js/auth/logout.js',
         edit_business: './restaurants/static/js/subpages/editBusiness.js',
         about: './restaurants/static/js/subpages/about.js',
@@ -15,7 +19,10 @@ module.exports = {
         services: './restaurants/static/js/subpages/services.js',
         contact: './restaurants/static/js/subpages/contact.js',
         login: './restaurants/static/js/auth/login.js',
-        index: './restaurants/static/js/bundles/index.bundle.js',
+        index: [
+            './restaurants/static/js/auth/logout.js',
+            './restaurants/static/js/index.js',
+        ],
         register: './restaurants/static/js/auth/register.js',
     },
     output: {

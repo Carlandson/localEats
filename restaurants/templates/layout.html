@@ -12,20 +12,26 @@
         <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
         <link rel="stylesheet" href="{% static 'css/animations.css' %}">
         {% if debug %}
-            <script type="module" src="{% static 'js/bundles/index.bundle.js' %}"></script>
-            {% block dev_scripts %}{% endblock %}
+            <script type="module" src="{% static 'js/index.js' %}"></script>
+            <script type="module" src="{% static 'js/auth/logout.js' %}"></script>
         {% else %}
             <script defer src="{% static 'dist/index.bundle.js' %}"></script>
-            {% block prod_scripts %}{% endblock %}
         {% endif %}
         
         <!-- Additional head elements -->
         {% block extra_head %}{% endblock %}
         
         <!-- Page-specific scripts -->
-        {% block script %}{% endblock %}
+        {% block script %}
+            {% if debug %}
+                {% block dev_scripts %}{% endblock %}
+            {% else %}
+                {% block prod_scripts %}{% endblock %}
+            {% endif %}
+        {% endblock %}
     </head>
     <body>
+
         <header>
             <!-- Top navigation bar -->
             <nav class="py-2 relative">
