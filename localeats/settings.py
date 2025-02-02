@@ -215,7 +215,7 @@ ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
 
 ANYMAIL = {
     "MAILGUN_API_KEY": env('MAILGUN_API_KEY', default=None),
-    "MAILGUN_SENDER_DOMAIN": "sandboxc9646684981441848764d2d9d4b7997f.mailgun.org"
+    "MAILGUN_SENDER_DOMAIN": "admin.patrons.love"
 }
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -228,8 +228,9 @@ if DEBUG:
 else:
     # Production using Mailgun
     EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
-    DEFAULT_FROM_EMAIL = 'noreply@patrons.love'
-    SERVER_EMAIL = "patronslove@gmail.com"
+    DEFAULT_FROM_EMAIL = 'noreply@admin.patrons.love'
+    SERVER_EMAIL = "noreply@admin.patrons.love"
+
 
 # Login/out URLs
 
