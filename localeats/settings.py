@@ -78,6 +78,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
+    'anymail',
     'restaurants',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -211,6 +212,11 @@ ACCOUNT_RATE_LIMITS = {
 
 # Mailgun
 ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
+
+ANYMAIL = {
+    "MAILGUN_API_KEY": env('MAILGUN_API_KEY', default=None),
+    "MAILGUN_SENDER_DOMAIN": "sandboxc9646684981441848764d2d9d4b7997f.mailgun.org"
+}
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = '127.0.0.1'
@@ -221,10 +227,10 @@ if DEBUG:
     DEFAULT_FROM_EMAIL = 'development@localhost'
 else:
     # Production using Mailgun
-    EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-    MAILGUN_ACCESS_KEY = os.environ.get('MAILGUN_API') 
-    MAILGUN_DOMAIN = 'patrons.love'  # Your domain
-    DEFAULT_FROM_EMAIL = f'noreply@{MAILGUN_DOMAIN}'
+    EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
+    DEFAULT_FROM_EMAIL = 'noreply@patrons.love'
+    SERVER_EMAIL = "patronslove@gmail.com"
+
 # Login/out URLs
 
 LOGIN_REDIRECT_URL = '/'
