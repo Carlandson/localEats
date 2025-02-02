@@ -22,6 +22,7 @@ module.exports = {
             './restaurants/static/js/auth/logout.js',
             './restaurants/static/js/index.js',
         ],
+        auth: './restaurants/static/js/auth/logout.js',
         register: './restaurants/static/js/auth/register.js',
     },
     output: {
