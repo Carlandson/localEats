@@ -3,6 +3,7 @@ import { makeRequest } from '../utils/subpagesAPI.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     const business = JSON.parse(document.getElementById('business').textContent);
+    console.log('🏠 DOM LOADED IN HOME.JS 🏠');
     // Accordion functionality
     const accordionHeaders = document.querySelectorAll('.accordion-header');
     
