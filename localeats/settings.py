@@ -115,10 +115,6 @@ SOCIALACCOUNT_PROVIDERS = {
             'email',
             'https://www.googleapis.com/auth/business.manage',
         ],
-        'AUTH_PARAMS': {
-            'access_type': 'offline',
-            'prompt': 'consent',
-        },
         'APP': {
             'client_id': env('CLIENT_ID', default=None),
             'secret': env('GOOGLE_SECRET', default=None),
