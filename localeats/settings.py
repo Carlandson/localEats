@@ -226,7 +226,7 @@ if DEBUG:
 else:
     # Production using Mailgun
     EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-    MAILGUN_API = os.environ.get('MAILGUN_API')  # Using your existing env var
+    MAILGUN_ACCESS_KEY = os.environ.get('MAILGUN_API') 
     MAILGUN_DOMAIN = 'patrons.love'  # Your domain
     DEFAULT_FROM_EMAIL = f'noreply@{MAILGUN_DOMAIN}'
 # Login/out URLs
