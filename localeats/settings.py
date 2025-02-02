@@ -300,6 +300,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 if IS_HEROKU_APP:
     # Production storage settings
     STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
         "staticfiles": {
             "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
         },
@@ -307,6 +310,9 @@ if IS_HEROKU_APP:
 else:
     # Development storage settings
     STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
         "staticfiles": {
             "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
         },

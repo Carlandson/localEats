@@ -98,6 +98,6 @@
     {% endblock dev_scripts %}
 {% else %}
     {% block prod_scripts %}
-    <script src="{% static 'dist/services.bundle.js' %}"></script>
+    <script defer src="{% static 'dist/services.bundle.js' %}"></script>
     {% endblock prod_scripts %}
 {% endif %}

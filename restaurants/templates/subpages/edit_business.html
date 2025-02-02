@@ -21,6 +21,6 @@
     {% endblock dev_scripts %}
 {% else %}
     {% block prod_scripts %}
-    <script src="{% static 'dist/edit_business.bundle.js' %}"></script>
+    <script defer src="{% static 'dist/edit_business.bundle.js' %}"></script>
     {% endblock prod_scripts %}
 {% endif %}

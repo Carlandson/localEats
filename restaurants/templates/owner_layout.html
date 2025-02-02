@@ -17,7 +17,7 @@
             {% block dev_scripts %}{% endblock %}
         {% else %}
             {# Production scripts #}
-                <script src="{% static 'dist/auth.bundle.js' %}"></script>
+                <script defer src="{% static 'dist/auth.bundle.js' %}"></script>
             {% block prod_scripts %}{% endblock %}
         {% endif %}
     </head>
