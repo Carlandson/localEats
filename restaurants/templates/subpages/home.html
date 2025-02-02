@@ -261,6 +261,6 @@
     {% endblock dev_scripts %}
 {% else %}
     {% block prod_scripts %}
-    <script module src="{% static 'dist/home.bundle.js' %}"></script>
+    <script type="module" src="{% static 'dist/home.bundle.js' %}"></script>
     {% endblock prod_scripts %}
 {% endif %}
