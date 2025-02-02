@@ -7,7 +7,6 @@ module.exports = {
             './restaurants/static/js/auth/addressValidate.js',
             './restaurants/static/js/constants/businessTypes.js',
         ],
-        auth: './restaurants/static/js/auth/logout.js',
         edit_business: './restaurants/static/js/subpages/editBusiness.js',
         about: './restaurants/static/js/subpages/about.js',
         gallery: './restaurants/static/js/subpages/gallery.js',
