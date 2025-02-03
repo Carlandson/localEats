@@ -90,6 +90,7 @@
     {% endblock %}
 {% else %}
     {% block prod_scripts %}
+        <script defer src="{% static 'dist/common.bundle.js' %}"></script>
         <script defer src="{% static 'dist/layoutEditor.bundle.js' %}"></script>
     {% endblock %}
 {% endif %}

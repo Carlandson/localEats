@@ -76,7 +76,8 @@ module.exports = {
                     name: 'common',
                     minChunks: 2,
                     chunks: 'all',
-                    priority: -20
+                    priority: -20,
+                    reuseExistingChunk: true
                 }
             }
         }
