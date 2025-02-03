@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    mode: 'development',
+    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     entry: {
         layoutEditor: './restaurants/static/js/layoutEditor.js',
         create: [
@@ -30,14 +30,20 @@ module.exports = {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'restaurants/static/dist')
     },
-
     resolve: {
-        alias: {
-            '@utils': path.resolve(__dirname, 'localeats/restaurants/static/js/utils/'),
-            '@handlers': path.resolve(__dirname, 'localeats/restaurants/static/js/handlers/'),
-            '@components': path.resolve(__dirname, 'localeats/restaurants/static/js/components/')
-        }
+        extensions: ['.js'],
+        modules: [
+            path.resolve(__dirname, 'restaurants/static/js'),
+            'node_modules'
+        ]
     },
+    // resolve: {
+    //     alias: {
+    //         '@utils': path.resolve(__dirname, 'localeats/restaurants/static/js/utils/'),
+    //         '@handlers': path.resolve(__dirname, 'localeats/restaurants/static/js/handlers/'),
+    //         '@components': path.resolve(__dirname, 'localeats/restaurants/static/js/components/')
+    //     }
+    // },
     module: {
         rules: [
             {
