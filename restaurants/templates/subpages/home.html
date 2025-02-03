@@ -261,12 +261,6 @@
     {% endblock dev_scripts %}
 {% else %}
     {% block prod_scripts %}
-    <script>
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
-            return false;
-        };
-    </script>
     <script type="module" src="{% static 'dist/home.bundle.js' %}"></script>
     {% endblock prod_scripts %}
 {% endif %}

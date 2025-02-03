@@ -11,6 +11,7 @@ function testImports() {
 
 
 document.addEventListener('DOMContentLoaded', function() {
+    testImports();
     const business = JSON.parse(document.getElementById('business').textContent);
     console.log('🏠 DOM LOADED IN HOME.JS 🏠');
     // Accordion functionality
