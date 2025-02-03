@@ -1,15 +1,7 @@
 import { showToast } from '../components/toast.js';
 import { makeRequest } from '../utils/subpagesAPI.js';
 
-console.log('🔥 Testing imports 🔥');
-
-function testImports() {
-    console.log('Testing imports...');
-    showToast('Testing toast!');
-    makeRequest('/test', { method: 'GET' });
-}
-
-
+//eventually use makerequest for api
 document.addEventListener('DOMContentLoaded', function() {
     testImports();
     const business = JSON.parse(document.getElementById('business').textContent);
