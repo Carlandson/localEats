@@ -9,8 +9,9 @@
     "watch:css": "tailwindcss -i ./static/css/main.css -o ./static/css/tailwind.css --watch",
     "build:js": "webpack --mode production",
     "watch:js": "webpack --mode development --watch",
-    "build": "npm run build:css && npm run build:js",
-    "dev": "concurrently \"npm run watch:css\" \"npm run watch:js\""
+    "build": "npm run build:dev",
+    "build:dev": "cross-env NODE_ENV=development webpack --progress --stats detailed",
+    "build:prod": "cross-env NODE_ENV=production webpack --progress"
   },
   "keywords": [],
   "author": "",
@@ -25,5 +26,8 @@
     "tailwindcss": "^3.4.17",
     "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

@@ -261,6 +261,18 @@
     {% endblock dev_scripts %}
 {% else %}
     {% block prod_scripts %}
-    <script type="module" src="{% static 'dist/home.bundle.js' %}"></script>
+    <script defer src="{% static 'dist/home.bundle.js' %}"></script>
+    <script>
+        console.log('Scripts loaded');
+        window.addEventListener('error', (event) => {
+            console.error('Script error:', {
+                message: event.message,
+                source: event.source,
+                lineno: event.lineno,
+                colno: event.colno,
+                error: event.error
+            });
+        });
+    </script>
     {% endblock prod_scripts %}
 {% endif %}

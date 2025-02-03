@@ -1,9 +1,8 @@
 import { showToast } from '../components/toast.js';
-import { makeRequest } from '../utils/subpagesAPI.js';
+// import { makeRequest } from '../utils/subpagesAPI.js';
 
 //eventually use makerequest for api
 document.addEventListener('DOMContentLoaded', function() {
-    testImports();
     const business = JSON.parse(document.getElementById('business').textContent);
     console.log('🏠 DOM LOADED IN HOME.JS 🏠');
     // Accordion functionality
