@@ -89,6 +89,77 @@ class ServiceAdmin(admin.ModelAdmin):
         }),
     )
 
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('thumbnail_preview', 'content_type_name', 'uploaded_by', 'upload_date', 'preview_caption')
+    list_filter = ('upload_date', 'content_type', 'uploaded_by')
+    search_fields = ('alt_text', 'caption', 'uploaded_by__username')
+    readonly_fields = ('display_image', 'upload_date', 'uploaded_by', 'content_type', 'object_id')
+
+    def thumbnail_preview(self, obj):
+        if obj.thumbnail:
+            return format_html(
+                '<img src="{}" width="50" height="50" style="object-fit: cover; border-radius: 4px;"/>',
+                obj.thumbnail.url
+            )
+        return "No thumbnail"
+    thumbnail_preview.short_description = 'Preview'
+
+    def display_image(self, obj):
+        if obj.image:
+            return format_html("""
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <img src="{}" style="max-width: 500px; border-radius: 8px;"/>
+                    <a href="{}" target="_blank" class="button" style="text-decoration: none; width: fit-content;">
+                        View Full Size
+                    </a>
+                </div>
+            """, obj.image.url, obj.image.url)
+        return "No image"
+    display_image.short_description = 'Image'
+
+    def content_type_name(self, obj):
+        if obj.content_object:
+            return f"{obj.content_type.model.title()} - {obj.content_object}"
+        return f"{obj.content_type.model.title()}"
+    content_type_name.short_description = 'Associated With'
+
+    def preview_caption(self, obj):
+        if obj.caption:
+            return obj.caption[:100] + '...' if len(obj.caption) > 100 else obj.caption
+        return '-'
+    preview_caption.short_description = 'Caption Preview'
+
+    fieldsets = (
+        ('Image', {
+            'fields': ('display_image', 'image', 'thumbnail'),
+            'classes': ('wide',)
+        }),
+        ('Metadata', {
+            'fields': (
+                'alt_text', 
+                'caption', 
+                'uploaded_by', 
+                'upload_date'
+            ),
+        }),
+        ('Association', {
+            'fields': ('content_type', 'object_id'),
+            'classes': ('collapse',),
+            'description': 'Shows which content this image is associated with'
+        }),
+    )
+
+    def save_model(self, request, obj, form, change):
+        if not change:  # Only set uploaded_by on creation
+            obj.uploaded_by = request.user
+        super().save_model(request, obj, form, change)
+
+    class Media:
+        css = {
+            'all': ('admin/css/images.css',)
+        }
+        js = ('admin/js/images.js',)
 class GalleryImageInline(GenericTabularInline):
     model = Image
     fields = ('display_image', 'alt_text', 'caption', 'upload_date', 'uploaded_by')
@@ -178,3 +249,4 @@ business_admin.register(ProductsPage)
 business_admin.register(ServicesPage)
 business_admin.register(Service, ServiceAdmin)
 business_admin.register(GalleryPage, GalleryPageAdmin)
+business_admin.register(Image, ImageAdmin)
