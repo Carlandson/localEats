@@ -3,6 +3,8 @@ function getCsrfToken() {
 }
 
 export async function makeRequest(url, method, data) {
+    console.log('Making request:', url, method, data);
+    return fetch(url, options);
     try {
         const headers = {
             'X-CSRFToken': getCsrfToken(),

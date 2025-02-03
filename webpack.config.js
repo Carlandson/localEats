@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+    mode: 'development',
     entry: {
         layoutEditor: './restaurants/static/js/layoutEditor.js',
         create: [

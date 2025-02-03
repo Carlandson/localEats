@@ -1,6 +1,15 @@
 import { showToast } from '../components/toast.js';
 import { makeRequest } from '../utils/subpagesAPI.js';
 
+console.log('🔥 Testing imports 🔥');
+
+function testImports() {
+    console.log('Testing imports...');
+    showToast('Testing toast!');
+    makeRequest('/test', { method: 'GET' });
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const business = JSON.parse(document.getElementById('business').textContent);
     console.log('🏠 DOM LOADED IN HOME.JS 🏠');
