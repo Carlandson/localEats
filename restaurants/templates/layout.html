@@ -15,6 +15,7 @@
             <script type="module" src="{% static 'js/index.js' %}"></script>
             <script type="module" src="{% static 'js/auth/logout.js' %}"></script>
         {% else %}
+            <script defer src="{% static 'dist/common.bundle.js' %}"></script>
             <script defer src="{% static 'dist/index.bundle.js' %}"></script>
         {% endif %}
         
