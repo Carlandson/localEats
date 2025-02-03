@@ -17,7 +17,7 @@
             {% block dev_scripts %}{% endblock %}
         {% else %}
             {# Production scripts #}
-                <script defer src="{% static 'dist/owner.js' %}"></script>
+                <script defer src="{% static 'dist/owner.bundle.js' %}"></script>
             {% block prod_scripts %}{% endblock %}
         {% endif %}
     </head>
