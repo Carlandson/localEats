@@ -42,3 +42,11 @@
 {% block script %}
     <script src="{% static 'js/components/paginate.js' %}"></script>
 {% endblock %}
+
+{% if debug %}
+    {% block dev_scripts %}
+    <script type="module" src="{% static 'js/index.js' %}"></script>
+    {% endblock dev_scripts %}
+{% else %}
+
+
