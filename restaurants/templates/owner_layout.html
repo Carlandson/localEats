@@ -13,11 +13,11 @@
         {# Scripts block #}
         {% if debug %}
             {# Development scripts #}
-            <script type="module" src="{% static 'js/auth/logout.js' %}"></script>
+            <script type="module" src="{% static 'js/owner.js' %}"></script>
             {% block dev_scripts %}{% endblock %}
         {% else %}
             {# Production scripts #}
-                <script defer src="{% static 'dist/auth.bundle.js' %}"></script>
+                <script defer src="{% static 'dist/owner.js' %}"></script>
             {% block prod_scripts %}{% endblock %}
         {% endif %}
     </head>

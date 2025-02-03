@@ -1,9 +1,14 @@
 const path = require('path');
+// Log the absolute paths for debugging
+const entryPath = path.resolve(__dirname, './restaurants/static/js/auth/logout.js');
+console.log('Entry path:', entryPath);
+console.log('File exists:', require('fs').existsSync(entryPath));
 
 module.exports = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     entry: {
         layoutEditor: './restaurants/static/js/layoutEditor.js',
+        owner: './restaurants/static/js/owner.js',
         create: [
             './restaurants/static/js/auth/addressValidate.js',
             './restaurants/static/js/constants/businessTypes.js',
@@ -19,11 +24,7 @@ module.exports = {
         services: './restaurants/static/js/subpages/services.js',
         contact: './restaurants/static/js/subpages/contact.js',
         login: './restaurants/static/js/auth/login.js',
-        index: [
-            './restaurants/static/js/auth/logout.js',
-            './restaurants/static/js/index.js',
-        ],
-        auth: './restaurants/static/js/auth/logout.js',
+        index: './restaurants/static/js/index.js',
         register: './restaurants/static/js/auth/register.js',
     },
     output: {

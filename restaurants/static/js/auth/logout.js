@@ -1,17 +1,22 @@
-document.addEventListener('DOMContentLoaded', function() {
+import {getCookie} from '../utils/cookies.js'
+
+// Main initialization function
+export function initLogout() {
+    console.log('🔑 Initializing logout functionality');
+    
     const logoutBtn = document.getElementById('logoutBtn');
     const logoutPopup = document.getElementById('logoutPopup');
     const confirmLogout = document.getElementById('confirmLogout');
     const cancelLogout = document.getElementById('cancelLogout');
 
     if (logoutBtn) {
-        logoutBtn.addEventListener('click', function() {
+        logoutBtn.addEventListener('click', () => {
             logoutPopup.classList.remove('hidden');
         });
     }
 
     if (cancelLogout) {
-        cancelLogout.addEventListener('click', function() {
+        cancelLogout.addEventListener('click', () => {
             logoutPopup.classList.add('hidden');
         });
     }
@@ -24,22 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // Function to get CSRF token from cookies
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    const cookies = document.cookie.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-
             const csrfToken = getCookie('csrftoken');
 
             fetch(logoutUrl, {
@@ -48,11 +37,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     'X-CSRFToken': csrfToken,
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                credentials: 'same-origin'  // This ensures cookies are sent with the request
+                credentials: 'same-origin'
             })
             .then(response => {
                 if (response.ok) {
-                    window.location.href = '/';  // Redirect to index page after logout
+                    window.location.href = '/';
                 } else {
                     console.error('Logout failed');
                 }
@@ -62,4 +51,4 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-});
+}

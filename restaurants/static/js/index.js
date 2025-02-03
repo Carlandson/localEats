@@ -1,5 +1,8 @@
+import {initLogout} from './auth/logout.js'
+
 document.addEventListener('DOMContentLoaded', () => {
     // Mobile button
+    initLogout();
     const mobileMenuButton = document.querySelector('.mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
 
