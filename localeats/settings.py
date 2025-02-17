@@ -45,6 +45,8 @@ PRINTFUL_REDIRECT_URL = 'https://patrons.love/{business_subdirectory}/callback'
 
 PRINTFUL_CLIENT_ID = env('PRINTFUL_CLIENT_ID', default=None)
 
+PRINTFUL_SECRET_KEY = env('PRINTFUL_SECRET_KEY', default=None)
+
 if not DEBUG:
     BASIC_AUTH_USERNAME = env('BASIC_AUTH_USERNAME', default=None)
     BASIC_AUTH_PASSWORD = env('BASIC_AUTH_PASSWORD', default=None)
