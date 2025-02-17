@@ -132,13 +132,20 @@ class PrintfulClient:
         """Generate OAuth URL for Printful authorization"""
         logger.info(f"PRINTFUL_CLIENT_ID: {settings.PRINTFUL_CLIENT_ID}")
         logger.info(f"PRINTFUL_REDIRECT_URL: {settings.PRINTFUL_REDIRECT_URL}")
-        
+        scopes = [
+            'sync_products',
+            'sync_products/read',
+            'file_library',
+            'product_templates',
+            'stores_list',  # Add this scope
+            'stores_list/read'  # Add this scope
+        ]
         params = {
             'client_id': settings.PRINTFUL_CLIENT_ID,
             'redirect_url': settings.PRINTFUL_REDIRECT_URL.rstrip('/'),
             'response_type': 'code',
             'state': state,
-            'scope': 'sync_products sync_products/read file_library product_templates'  # Updated scopes
+            'scope': ' '.join(scopes)  # Join scopes with spaces
         }
         query_string = urlencode(params)
         oauth_url = f"{cls.OAUTH_URL}?{query_string}"

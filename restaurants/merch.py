@@ -237,6 +237,14 @@ def connect_printful(request, business_subdirectory):
         business_subdirectory=business_subdirectory
     )
     
+    scopes = [
+        'sync_products',
+        'sync_products/read',
+        'file_library',
+        'product_templates',
+        'stores_list',  # Add this scope
+        'stores_list/read'  # Add this scope
+    ]
     # Build the OAuth URL with correct parameter name
     oauth_url = (
         f'https://www.printful.com/oauth/authorize'
@@ -244,7 +252,7 @@ def connect_printful(request, business_subdirectory):
         f'&redirect_url={quote(redirect_url)}'
         f'&response_type=code'
         f'&state={state}'
-        f'&scope={quote("sync_products sync_products/read file_library product_templates")}'  # Updated scopes
+        f'&scope={quote(" ".join(scopes))}'  # Join scopes with spaces
     )
     
     logger.info(f"Redirecting to Printful OAuth URL: {oauth_url}")
