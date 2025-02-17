@@ -244,7 +244,7 @@ def connect_printful(request, business_subdirectory):
         f'&redirect_url={quote(redirect_url)}'
         f'&response_type=code'
         f'&state={state}'
-        f'&scope=all'
+        f'&scope={quote("sync_products sync_products/read file_library product_templates")}'  # Updated scopes
     )
     
     logger.info(f"Redirecting to Printful OAuth URL: {oauth_url}")
