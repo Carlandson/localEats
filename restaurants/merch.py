@@ -5,7 +5,6 @@ from django.http import JsonResponse
 from .models import PODAccount, PODProduct, Business
 from .utils import PrintfulClient
 from decimal import Decimal
-import json
 import secrets
 from django.core.cache import cache
 from django.utils import timezone
