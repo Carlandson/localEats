@@ -21,17 +21,29 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def merch_dashboard(request, business_subdirectory):
+    """Display the merch dashboard for a business."""
     business = get_object_or_404(Business, subdirectory=business_subdirectory)
-    # Verify user has permission to access this business
     if request.user != business.owner:
         raise PermissionDenied
     
-
+    # Get the POD account for this business
+    try:
+        pod_account = PODAccount.objects.get(business=business)
+    except PODAccount.DoesNotExist:
+        pod_account = None
+    
+    # Get products if there's a POD account
+    products = []
+    if pod_account:
+        # Your product fetching logic here
+        pass
+    
     context = {
         'business_details': business,
-        'pod_account': PODAccount.objects.filter(business=business).first(),
-        'products': PODProduct.objects.filter(business=business).order_by('-created_at')
+        'pod_account': pod_account,  # Make sure this is being passed
+        'products': products,
     }
+    
     return render(request, 'subpages/merch.html', context)
 
 
@@ -290,11 +302,14 @@ def oauth_callback(request, business_subdirectory):  # Add business_subdirectory
             }
         )
         
+        logger.info(f"POD Account {'created' if created else 'updated'} for business {business_subdirectory}")
+        logger.debug(f"POD Account details: {pod_account}")
+        
+        
         messages.success(request, 'Successfully connected to Printful!')
         
-    except PermissionDenied as e:
-        messages.error(request, str(e))
     except Exception as e:
+        logger.error(f"Error in oauth_callback: {str(e)}")
         messages.error(request, f'Error connecting to Printful: {str(e)}')
     
     return redirect('merch_dashboard', business_subdirectory=business_subdirectory)
