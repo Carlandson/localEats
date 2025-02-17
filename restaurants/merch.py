@@ -254,6 +254,7 @@ def connect_printful(request, business_subdirectory):
 @csrf_exempt
 def oauth_callback(request, business_subdirectory):  # Add business_subdirectory parameter
     """Handle the OAuth callback from Printful."""
+    logger.debug("=== Starting OAuth Callback ===")
     logger.debug(f"Received OAuth callback. GET params: {request.GET}")
     logger.debug(f"Business subdirectory from URL: {business_subdirectory}")
     
@@ -261,35 +262,44 @@ def oauth_callback(request, business_subdirectory):  # Add business_subdirectory
     
     # Handle OAuth errors
     if error:
+        logger.error(f"OAuth error received: {error}")
         messages.error(request, f'Printful authorization failed: {error}')
         return redirect('merch_dashboard', business_subdirectory=business_subdirectory)
+
 
     # Get code and state from the request
     code = request.GET.get('code')
     state = request.GET.get('state')
+    logger.debug(f"Received code and state: {code[:5]}... {state[:5]}...")  # Truncate for security
+
 
         # Build the redirect URI
     redirect_uri = settings.PRINTFUL_REDIRECT_URL.format(
         business_subdirectory=business_subdirectory
     )
+    logger.debug(f"Built redirect URI: {redirect_uri}")
+
     
     # Verify state token
     cached_data = cache.get(f'printful_oauth_state_{state}')
     if not cached_data or cached_data.get('user_id') != request.user.id:
+        logger.error("Invalid state token or user ID mismatch")
         messages.error(request, 'Invalid authorization state')
         return redirect('merch_dashboard', business_subdirectory=business_subdirectory)
     
     # Verify the business subdirectory matches what was stored in the state
     if cached_data.get('business_subdirectory') != business_subdirectory:
+        logger.error(f"Business subdirectory mismatch. Expected: {cached_data.get('business_subdirectory')}, Got: {business_subdirectory}")
         messages.error(request, 'Business mismatch')
         return redirect('merch_dashboard', business_subdirectory=business_subdirectory)
     
     try:
         # Get the business
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
-        logger.info(f"Found business: {business.business_name}")  # Add this log
+        logger.debug(f"Found business: {business.business_name}")
 
         if request.user != business.owner:
+            logger.error(f"Permission denied for user {request.user.id} on business {business_subdirectory}")
             raise PermissionDenied('You do not have permission to connect this business to Printful.')
         
         # Exchange code for access token
@@ -307,26 +317,24 @@ def oauth_callback(request, business_subdirectory):  # Add business_subdirectory
                 'token_expires_at': timezone.now() + timezone.timedelta(seconds=token_data.get('expires_in', 0))
             }
         )
+        logger.debug(f"POD account {'created' if created else 'updated'}")
 
         printful_client = PrintfulClient(pod_account.api_key)
         store_data = {
             'name': business.business_name,  # Use the business name
             'website': f'https://patrons.love/{business_subdirectory}'  # Optional: include website
         }
-        logger.info(f"Attempting to update store with data: {store_data}")  # Add this log
-
-        printful_client.update_store(store_data)
-
-
-        
-        logger.info(f"POD Account {'created' if created else 'updated'} for business {business_subdirectory}")
-        logger.debug(f"POD Account details: {pod_account}")
-        
-        
-        messages.success(request, 'Successfully connected to Printful!')
+        logger.debug(f"Attempting to update store with name: {store_data['name']}")
+        try:
+            store_response = printful_client.update_store(store_data)
+            logger.debug(f"Store update successful: {store_response}")
+        except Exception as store_error:
+            logger.error(f"Store update failed: {str(store_error)}", exc_info=True)
+            # Continue execution even if store update fails
         
     except Exception as e:
         logger.error(f"Error in oauth_callback: {str(e)}")
         messages.error(request, f'Error connecting to Printful: {str(e)}')
     
+    logger.debug("=== Finishing OAuth Callback ===")
     return redirect('merch_dashboard', business_subdirectory=business_subdirectory)
