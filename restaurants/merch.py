@@ -240,19 +240,13 @@ def connect_printful(request, business_subdirectory):
     return redirect(oauth_url)
 
 @csrf_exempt
-def oauth_callback(request):
+def oauth_callback(request, business_subdirectory):  # Add business_subdirectory parameter
     """Handle the OAuth callback from Printful."""
     print('test')
     logger.debug(f"Received OAuth callback. GET params: {request.GET}")
-    logger.debug(f"Session data: {request.session.get('printful_business')}")
+    logger.debug(f"Business subdirectory from URL: {business_subdirectory}")
     
     error = request.GET.get('error')
-    business_subdirectory = request.session.get('printful_business')
-    
-    # Check if business context exists
-    if not business_subdirectory:
-        messages.error(request, 'No business context found')
-        return redirect('home')  # or wherever you want to redirect on error
     
     # Handle OAuth errors
     if error:
@@ -267,6 +261,11 @@ def oauth_callback(request):
     cached_data = cache.get(f'printful_oauth_state_{state}')
     if not cached_data or cached_data.get('user_id') != request.user.id:
         messages.error(request, 'Invalid authorization state')
+        return redirect('merch_dashboard', business_subdirectory=business_subdirectory)
+    
+    # Verify the business subdirectory matches what was stored in the state
+    if cached_data.get('business_subdirectory') != business_subdirectory:
+        messages.error(request, 'Business mismatch')
         return redirect('merch_dashboard', business_subdirectory=business_subdirectory)
     
     try:
@@ -293,9 +292,6 @@ def oauth_callback(request):
         
         messages.success(request, 'Successfully connected to Printful!')
         
-        # Clean up session
-        request.session.pop('printful_business', None)
-    
     except PermissionDenied as e:
         messages.error(request, str(e))
     except Exception as e:
