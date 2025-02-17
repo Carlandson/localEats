@@ -239,11 +239,11 @@ def connect_printful(request, business_subdirectory):
     
     scopes = [
         'sync_products',
-        'sync_products/read',
+        'sync_products:read',  # Changed from sync_products/read
         'file_library',
         'product_templates',
-        'stores_list',  # Add this scope
-        'stores_list/read'  # Add this scope
+        'stores',              # Changed from stores_list
+        'stores:read'          # Changed from stores_list/read
     ]
     # Build the OAuth URL with correct parameter name
     oauth_url = (
