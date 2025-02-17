@@ -313,8 +313,7 @@ def oauth_callback(request, business_subdirectory):  # Add business_subdirectory
             defaults={
                 'provider': 'PRINTFUL',
                 'api_key': token_data['access_token'],
-                'refresh_token': token_data.get('refresh_token'),
-                'token_expires_at': timezone.now() + timezone.timedelta(seconds=token_data.get('expires_in', 0))
+                'is_active': True
             }
         )
         logger.debug(f"POD account {'created' if created else 'updated'}")
