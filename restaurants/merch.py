@@ -268,6 +268,11 @@ def oauth_callback(request, business_subdirectory):  # Add business_subdirectory
     # Get code and state from the request
     code = request.GET.get('code')
     state = request.GET.get('state')
+
+        # Build the redirect URI
+    redirect_uri = settings.PRINTFUL_REDIRECT_URL.format(
+        business_subdirectory=business_subdirectory
+    )
     
     # Verify state token
     cached_data = cache.get(f'printful_oauth_state_{state}')
@@ -287,7 +292,7 @@ def oauth_callback(request, business_subdirectory):  # Add business_subdirectory
             raise PermissionDenied('You do not have permission to connect this business to Printful.')
         
         # Exchange code for access token
-        token_data = PrintfulClient.exchange_code_for_token(code)
+        token_data = PrintfulClient.exchange_code_for_token(code, redirect_uri)
         if not token_data or 'access_token' not in token_data:
             raise ValueError('Invalid token data received from Printful.')
         
