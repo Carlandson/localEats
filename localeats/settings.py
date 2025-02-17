@@ -76,7 +76,28 @@ CSRF_TRUSTED_ORIGINS = [
     # 'https://patrons.love',
 ]
 
-
+# Cache settings
+if IS_HEROKU_APP:
+    # Production cache - using Redis
+    REDIS_URL = os.environ.get('REDISCLOUD_URL')
+    
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": REDIS_URL,
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            }
+        }
+    }
+else:
+    # Development cache - using local memory
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'unique-snowflake',
+        }
+    }
 
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
