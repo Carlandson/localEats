@@ -41,7 +41,7 @@ else:
     CSRF_COOKIE_SECURE = False
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-PRINTFUL_REDIRECT_URI = 'https://patrons.love/callback' 
+PRINTFUL_REDIRECT_URL = 'https://patrons.love/callback' 
 
 PRINTFUL_CLIENT_ID = env('PRINTFUL_CLIENT_ID', default=None)
 

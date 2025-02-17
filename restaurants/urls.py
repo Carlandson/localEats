@@ -111,10 +111,9 @@ urlpatterns = [
     path('<str:business_subdirectory>/gallery/delete/<int:image_id>/', views.delete_gallery_image, name='delete_gallery_image'),
 
     # Merch Content Editor
-    path('callback', merch.oauth_callback, name='printful_oauth_callback'),
     path('<str:business_subdirectory>/merch/', merch.merch_dashboard, name='merch_dashboard'),
     path('<str:business_subdirectory>/merch/setup-pod-account/', merch.setup_pod_account, name='setup_pod_account'),
-
+    path('<str:business_subdirectory>/callback', merch.oauth_callback, name='printful_oauth_callback'),
     path('<str:business_subdirectory>/merch/disconnect-pod-account/', merch.disconnect_pod_account, name='disconnect_pod_account'),
     path('<str:business_subdirectory>/merch/create-product/', merch.create_product, name='create_product'),
     path('<str:business_subdirectory>/merch/toggle-product/<int:product_id>/', merch.toggle_product, name='toggle_product'),

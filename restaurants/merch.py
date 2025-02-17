@@ -13,6 +13,7 @@ from django.core.exceptions import PermissionDenied
 from django.views.decorators.csrf import csrf_exempt
 import logging
 from django.conf import settings
+from urllib.parse import quote
 
 logger = logging.getLogger(__name__)
 
@@ -220,13 +221,20 @@ def connect_printful(request, business_subdirectory):
         'business_subdirectory': business_subdirectory
     }, timeout=3600)
     
-    # Format the redirect URI with the business subdirectory
-    redirect_uri = settings.PRINTFUL_REDIRECT_URI.format(
+    # Use settings REDIRECT_URL and format with business subdirectory
+    redirect_url = settings.PRINTFUL_REDIRECT_URL.format(
         business_subdirectory=business_subdirectory
     )
     
-    # Generate OAuth URL with formatted redirect URI
-    oauth_url = PrintfulClient.get_oauth_url(state, redirect_uri)
+    # Build the OAuth URL with correct parameter name
+    oauth_url = (
+        f'https://www.printful.com/oauth/authorize'
+        f'?client_id={settings.PRINTFUL_CLIENT_ID}'
+        f'&redirect_url={quote(redirect_url)}'
+        f'&response_type=code'
+        f'&state={state}'
+        f'&scope=all'
+    )
     
     logger.info(f"Redirecting to Printful OAuth URL: {oauth_url}")
     return redirect(oauth_url)
