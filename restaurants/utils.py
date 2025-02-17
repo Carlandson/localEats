@@ -130,48 +130,47 @@ class PrintfulClient:
     @classmethod
     def get_oauth_url(cls, state: str) -> str:
         """Generate OAuth URL for Printful authorization"""
-        logger.info(f"PRINTFUL_CLIENT_ID: {settings.PRINTFUL_CLIENT_ID}")
-        logger.info(f"PRINTFUL_REDIRECT_URL: {settings.PRINTFUL_REDIRECT_URL}")
-        scopes = [
-            'orders',
-            'sync_products',
-            'file_library',
-            'product_templates'
-        ]
         params = {
             'client_id': settings.PRINTFUL_CLIENT_ID,
-            'redirect_url': settings.PRINTFUL_REDIRECT_URL.rstrip('/'),
+            'redirect_uri': settings.PRINTFUL_REDIRECT_URL.rstrip('/'),  # Changed to redirect_uri
             'response_type': 'code',
             'state': state,
-            'scope': ' '.join(scopes)  # Join scopes with spaces
+            'scope': 'stores_list'
         }
         query_string = urlencode(params)
         oauth_url = f"{cls.OAUTH_URL}?{query_string}"
         
-        logger.info(f"Generated OAuth URL: {oauth_url}")
+        logger.info(f"Generated OAuth URL with scopes")
         return oauth_url
+
 
     @classmethod
     def exchange_code_for_token(cls, code: str, redirect_url: str) -> Dict[str, Any]:
         """Exchange authorization code for access token"""
         logger.debug("Exchanging code for token")
         try:
+            data = {
+                'grant_type': 'authorization_code',
+                'code': code,
+                'client_id': settings.PRINTFUL_CLIENT_ID,
+                'client_secret': settings.PRINTFUL_SECRET_KEY,
+                'redirect_uri': redirect_url,  # Changed to redirect_uri
+            }
+            logger.debug(f"Token exchange request data: {data}")
+            
             response = requests.post(
                 cls.TOKEN_URL,
-                data={
-                    'grant_type': 'authorization_code',
-                    'code': code,
-                    'client_id': settings.PRINTFUL_CLIENT_ID,
-                    'client_secret': settings.PRINTFUL_SECRET_KEY,
-                    'redirect_url': redirect_url
-                }
+                data=data
             )
             response.raise_for_status()
             token_data = response.json()
             logger.debug("Successfully exchanged code for token")
+            logger.debug(f"Token response scopes: {token_data.get('scope', 'no scope in response')}")
             return token_data
         except Exception as e:
             logger.error(f"Error exchanging code for token: {str(e)}")
+            if hasattr(e, 'response'):
+                logger.error(f"Token exchange error response: {e.response.text}")
             raise
 
     def update_store(self, store_data: Dict[str, Any]) -> Dict[str, Any]:
