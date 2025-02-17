@@ -135,7 +135,7 @@ class PrintfulClient:
             'redirect_uri': settings.PRINTFUL_REDIRECT_URL.rstrip('/'),  # Changed to redirect_uri
             'response_type': 'code',
             'state': state,
-            'scope': 'stores_list'
+            'scope': 'stores_list/read'
         }
         query_string = urlencode(params)
         oauth_url = f"{cls.OAUTH_URL}?{query_string}"

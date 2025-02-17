@@ -247,10 +247,10 @@ def connect_printful(request, business_subdirectory):
     oauth_url = (
         f'https://www.printful.com/oauth/authorize'
         f'?client_id={settings.PRINTFUL_CLIENT_ID}'
-        f'&redirect_url={quote(redirect_url)}'
+        f'&redirect_uri={quote(redirect_url)}'
         f'&response_type=code'
         f'&state={state}'
-        f'&scope=stores_list'  # Join scopes with spaces
+        f'&scope={quote("stores_list/read")}'  # Join scopes with spaces
     )
     
     logger.info(f"Redirecting to Printful OAuth URL: {oauth_url}")
@@ -333,7 +333,7 @@ def oauth_callback(request, business_subdirectory):  # Add business_subdirectory
         store_data = {
             'name': business.business_name,  # Use the business name
             'website': f'https://patrons.love/{business_subdirectory}',
-            'scope': 'stores_list'
+            'scope': 'stores_list/read'
         }
         logger.debug(f"Attempting to update store with name: {store_data['name']}")
         try:
