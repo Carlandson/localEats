@@ -1,4 +1,9 @@
 from django.db import models
+import requests
+import logging
+
+logger = logging.getLogger(__name__)
+
 """
 Printful
 1. Create developer account
@@ -31,7 +36,21 @@ class PODProduct(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    def update_store(self, store_data):
+        """Update store information"""
+        try:
+            response = requests.put(
+                f'{self.API_URL}/store',
+                headers=self.get_headers(),
+                json=store_data
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Failed to update store: {str(e)}")
+            if hasattr(e.response, 'text'):
+                logger.error(f"Printful API response: {e.response.text}")
+            raise
     class Meta:
         indexes = [
             models.Index(fields=['provider_product_id']),

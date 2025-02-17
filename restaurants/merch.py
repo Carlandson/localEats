@@ -254,7 +254,6 @@ def connect_printful(request, business_subdirectory):
 @csrf_exempt
 def oauth_callback(request, business_subdirectory):  # Add business_subdirectory parameter
     """Handle the OAuth callback from Printful."""
-    print('test')
     logger.debug(f"Received OAuth callback. GET params: {request.GET}")
     logger.debug(f"Business subdirectory from URL: {business_subdirectory}")
     
@@ -288,6 +287,8 @@ def oauth_callback(request, business_subdirectory):  # Add business_subdirectory
     try:
         # Get the business
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
+        logger.info(f"Found business: {business.business_name}")  # Add this log
+
         if request.user != business.owner:
             raise PermissionDenied('You do not have permission to connect this business to Printful.')
         
@@ -306,6 +307,17 @@ def oauth_callback(request, business_subdirectory):  # Add business_subdirectory
                 'token_expires_at': timezone.now() + timezone.timedelta(seconds=token_data.get('expires_in', 0))
             }
         )
+
+        printful_client = PrintfulClient(pod_account.api_key)
+        store_data = {
+            'name': business.business_name,  # Use the business name
+            'website': f'https://patrons.love/{business_subdirectory}'  # Optional: include website
+        }
+        logger.info(f"Attempting to update store with data: {store_data}")  # Add this log
+
+        printful_client.update_store(store_data)
+
+
         
         logger.info(f"POD Account {'created' if created else 'updated'} for business {business_subdirectory}")
         logger.debug(f"POD Account details: {pod_account}")
