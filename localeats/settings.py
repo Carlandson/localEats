@@ -374,18 +374,18 @@ LOGGING = {
             'style': '{',
         },
         'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
+            'format': '%(levelname)s %(message)s',
+            'style': '%',
         },
     },
     'handlers': {
         'console': {
-            'level': 'INFO',
+            'level': 'DEBUG',  # Changed from INFO
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
         'file': {
-            'level': 'WARNING',
+            'level': 'DEBUG',  # Changed from WARNING
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'debug.log'),
             'maxBytes': 5 * 1024 * 1024,
@@ -395,26 +395,25 @@ LOGGING = {
         },
     },
     'loggers': {
-        'restaurants': {
+        'restaurants': {  # Your app's logger
             'handlers': ['console', 'file'],
-            'level': 'WARNING',
+            'level': 'DEBUG',  # Changed from WARNING
             'propagate': True,
         },
         'django': {
             'handlers': ['console', 'file'],
-            'level': 'WARNING',
+            'level': 'INFO',  # Changed from WARNING
             'propagate': True,
         },
         'django.server': {
             'handlers': ['console'],
-            'level': 'WARNING',
+            'level': 'INFO',  # Changed from WARNING
             'propagate': False,
         },
         'django.db.backends': {
             'handlers': ['console'],
-            'level': 'WARNING',
+            'level': 'INFO',  # Changed from WARNING
             'propagate': False,
         },
     },
 }
-
