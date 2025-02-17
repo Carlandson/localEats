@@ -238,12 +238,10 @@ def connect_printful(request, business_subdirectory):
     )
     
     scopes = [
+        'orders',
         'sync_products',
-        'sync_products:read',  # Changed from sync_products/read
         'file_library',
-        'product_templates',
-        'stores',              # Changed from stores_list
-        'stores:read'          # Changed from stores_list/read
+        'product_templates'
     ]
     # Build the OAuth URL with correct parameter name
     oauth_url = (
@@ -326,9 +324,16 @@ def oauth_callback(request, business_subdirectory):  # Add business_subdirectory
         logger.debug(f"POD account {'created' if created else 'updated'}")
 
         printful_client = PrintfulClient(pod_account.api_key)
+        scopes = [
+            'orders',
+            'sync_products',
+            'file_library',
+            'product_templates'
+        ]
         store_data = {
             'name': business.business_name,  # Use the business name
-            'website': f'https://patrons.love/{business_subdirectory}'  # Optional: include website
+            'website': f'https://patrons.love/{business_subdirectory}',
+            'scope': ' '.join(scopes)
         }
         logger.debug(f"Attempting to update store with name: {store_data['name']}")
         try:
