@@ -250,7 +250,7 @@ def connect_printful(request, business_subdirectory):
         f'&redirect_url={quote(redirect_url)}'
         f'&response_type=code'
         f'&state={state}'
-        f'&scopes={quote("stores_list/read")}'
+        f'&scope={quote("stores_list/read")}'
     )
     
     logger.info(f"Redirecting to Printful OAuth URL: {oauth_url}")
@@ -324,16 +324,9 @@ def oauth_callback(request, business_subdirectory):  # Add business_subdirectory
         logger.debug(f"POD account {'created' if created else 'updated'}")
 
         printful_client = PrintfulClient(pod_account.api_key)
-        scopes = [
-            'orders',
-            'sync_products',
-            'file_library',
-            'product_templates'
-        ]
         store_data = {
             'name': business.business_name,  # Use the business name
             'website': f'https://patrons.love/{business_subdirectory}',
-            'scopes': ['stores_list/read']
         }
         logger.debug(f"Attempting to update store with name: {store_data['name']}")
         try:

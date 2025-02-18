@@ -135,7 +135,7 @@ class PrintfulClient:
             'redirect_url': settings.PRINTFUL_REDIRECT_URL.rstrip('/'),  # Changed to redirect_uri
             'response_type': 'code',
             'state': state,
-            'scopes': 'stores_list/read'
+            'scope': 'stores_list/read'
         }
         query_string = urlencode(params)
         oauth_url = f"{cls.OAUTH_URL}?{query_string}"
@@ -154,7 +154,8 @@ class PrintfulClient:
                 'code': code,
                 'client_id': settings.PRINTFUL_CLIENT_ID,
                 'client_secret': settings.PRINTFUL_SECRET_KEY,
-                'redirect_uri': redirect_url,  # Changed to redirect_uri
+                'redirect_uri': redirect_url,
+                'scope': 'stores_list/read'
             }
             logger.debug(f"Token exchange request data: {data}")
             
