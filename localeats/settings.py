@@ -41,8 +41,9 @@ else:
     CSRF_COOKIE_SECURE = False
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-PRINTFUL_REDIRECT_URL = 'https://patrons.love/{business_subdirectory}/callback' 
+# PRINTFUL_REDIRECT_URL = 'https://patrons.love/{business_subdirectory}/callback' 
 
+PRINTFUL_REDIRECT_URL = env('PRINTFUL_REDIRECT_URL', default=None)
 PRINTFUL_CLIENT_ID = env('PRINTFUL_CLIENT_ID', default=None)
 
 PRINTFUL_SECRET_KEY = env('PRINTFUL_SECRET_KEY', default=None)
@@ -61,7 +62,8 @@ ALLOWED_HOSTS = [
     '.herokuapp.com',
     'dev.patrons.love',
     'www.patrons.love',
-    '.patrons.love'
+    '.patrons.love',
+    '46a4-2601-447-d181-1520-913c-35e5-c648-4c9f.ngrok-free.app'
 ]
 
 
@@ -73,6 +75,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://127.0.0.1:8000',
     'https://*.herokuapp.com',
     'https://dev.patrons.love',
+    'https://46a4-2601-447-d181-1520-913c-35e5-c648-4c9f.ngrok-free.app'
     # 'https://patrons.love',
 ]
 
