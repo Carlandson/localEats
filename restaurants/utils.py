@@ -154,8 +154,7 @@ class PrintfulClient:
                 'code': code,
                 'client_id': settings.PRINTFUL_CLIENT_ID,
                 'client_secret': settings.PRINTFUL_SECRET_KEY,
-                'redirect_uri': redirect_url,
-                'scope': 'stores_list/read'
+                'redirect_uri': redirect_url
             }
             logger.debug(f"Token exchange request data: {data}")
             

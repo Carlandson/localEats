@@ -250,7 +250,7 @@ def connect_printful(request, business_subdirectory):
         f'&redirect_url={quote(redirect_url)}'
         f'&response_type=code'
         f'&state={state}'
-        f'&scope={quote("stores_list/read")}'
+        f'&scope=stores_list%2Fread' 
     )
     
     logger.info(f"Redirecting to Printful OAuth URL: {oauth_url}")
