@@ -33,7 +33,7 @@
                             {% for page in subpages %}
                             <div class="flex justify-center">
                                 <a href="{% url 'business_page' business_details.subdirectory page.page_type %}" 
-                                    class="w-full text-center bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
+                                    class="w-fit text-center bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200">
                                     {{ page.page_type|title }}
                                 </a>
                             </div>

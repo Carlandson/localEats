@@ -1,8 +1,11 @@
 async function initializeMenuBuilder() {
     try {
+        const csrfToken = JSON.parse(document.getElementById('csrf_token').textContent);
+
         // Get required elements
         const kitchenConfig = JSON.parse(document.getElementById('kitchen').textContent);
-        
+        const existingCourses = JSON.parse(document.getElementById('existing_courses').textContent);
+
         if (!kitchenConfig) {
             throw new Error('Required kitchen configuration not found');
         }
@@ -10,7 +13,9 @@ async function initializeMenuBuilder() {
         // Create context object
         const context = {
             eatery: kitchenConfig,
-            accordionTriggers: document.querySelectorAll('.accordion-trigger')
+            accordionTriggers: document.querySelectorAll('.accordion-trigger'),
+            existingCourses: existingCourses,
+            csrfToken: csrfToken
         };
 
         // Initialize all handlers
@@ -56,12 +61,22 @@ function initializeEventListeners(context) {
     document.addEventListener('click', (e) => handleClicks(e, context));
 }
 
+function initializeSideOptions(context) {
+    for (const course of context.existingCourses) {
+        try {
+            updateSideOptionsList(course.id, context);
+        } catch (error) {
+            console.error('Error initializing side options:', error);
+        }
+    }
+}
+
 function handleClicks(e, context) {
     // Add Course button
     if (e.target.matches('#add')) {
         e.preventDefault();
         const submission = document.querySelector('#addCourse');
-        addCourse(submission.value, context);
+        addCourse(submission.value, context, context.existingCourses);
     }
 
     // Submit Dish button
@@ -134,47 +149,81 @@ function handleClicks(e, context) {
 
 function getFormHTML(isEdit = false, dishId = '', currentValues = {}) {
     return `
-        <form id="${isEdit ? 'editDish' + dishId : 'createDish'}" class="p-1" action="post">
-            <div class="form-group">
+        <form id="${isEdit ? 'editDish' + dishId : 'createDish'}" class="border-4 border-rose-300 shadow-lg rounded-lg p-4 mb-4 grid md:grid-cols-3 gap-4">
+            <div class="text-center">
                 <input type="text" 
-                       class="p-2 m-1 border-double border-4 border-indigo-200" 
-                       placeholder="Name of Dish" 
-                       id="${isEdit ? 'dishName' + dishId : 'dishName'}"
-                       value="${isEdit ? currentValues.name : ''}" 
-                       required>
-                <input type="number" 
-                       class="p-2 m-1 border-double border-4 border-indigo-200" 
-                       placeholder="Price" 
-                       step="any" 
-                       id="${isEdit ? 'dishPrice' + dishId : 'dishPrice'}"
-                       value="${isEdit ? currentValues.price : ''}" 
-                       required>
-                <div class="image-upload-container">
-                    <input type="file" 
-                           class="p-2 m-1 border-double border-4 border-indigo-200" 
-                           accept="image/*"
-                           id="${isEdit ? 'dishImage' + dishId : 'dishImage'}">
+                    class="border-4 border-rose-300 shadow-lg text-xl font-bold mb-2 w-fit mx-auto text-center bg-transparent rounded-lg focus:border-rose-500 focus:outline-none"
+                    placeholder="Name of Dish" 
+                    id="${isEdit ? 'dishName' + dishId : 'dishName'}"
+                    value="${isEdit ? currentValues.name : ''}" 
+                    required>
+                
+                <div class="relative h-40 w-40 mx-auto border-4 border-rose-300 shadow-lg rounded-lg w-fit h-auto">
                     ${isEdit && currentValues.image ? `
-                        <div class="current-image">
-                            <img src="${currentValues.image}" class="h-20 w-20 object-contain" alt="Current image">
-                            <p class="text-sm text-gray-500">Current image</p>
+                        <img src="${currentValues.image}" class="mx-auto object-contain h-40 w-40" alt="Current image" id="previewImage${dishId}">
+                    ` : `
+                        <div class="h-40 w-40 mx-auto flex items-center justify-center bg-gray-100 rounded-lg border-2 border-dashed border-gray-300" id="previewImage${dishId}">
+                            <span class="text-gray-400">No Image</span>
                         </div>
-                    ` : ''}
+                    `}
+                    <input type="file" 
+                        class="absolute inset-0 opacity-0 cursor-pointer w-40"
+                        accept="image/*"
+                        id="${isEdit ? 'dishImage' + dishId : 'dishImage'}"
+                        onchange="previewImage(this, 'previewImage${dishId}')">
                 </div>
-                <textarea class="form-control p-2 m-1" 
-                          id="${isEdit ? 'dishDescription' + dishId : 'dishDescription'}" 
-                          rows="3" 
-                          placeholder="Description">${isEdit ? currentValues.description : ''}</textarea>
+                
+                <div class="mt-2 font-semibold flex items-center justify-center gap-1">
+                    <span>Price: $</span>
+                    <input type="number" 
+                        class="border-4 border-rose-300 shadow-lg w-20 text-center bg-transparent focus:border-rose-500 focus:outline-none"
+                        placeholder="0.00" 
+                        step="any" 
+                        id="${isEdit ? 'dishPrice' + dishId : 'dishPrice'}"
+                        value="${isEdit ? currentValues.price : ''}" 
+                        required>
+                </div>
             </div>
-            <button type="submit" class="bg-blue-500 m-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                ${isEdit ? 'Save Changes' : 'Add Dish'}
-            </button>
-            <button type="button" 
-                    class="${isEdit ? 'cancel-edit' : 'cancel-add'} bg-gray-500 m-2 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                Cancel
-            </button>
+
+            <div class="text-center">
+                <h4 class="font-semibold mb-2">Description:</h4>
+                <textarea class="border-4 border-rose-300 shadow-lg w-full bg-transparent border-gray-300 rounded-md focus:border-emerald-500 focus:border-rose-500 focus:outline-none min-h-[100px]" 
+                        id="${isEdit ? 'dishDescription' + dishId : 'dishDescription'}" 
+                        placeholder="Description">${isEdit ? currentValues.description : ''}</textarea>
+            </div>
+
+            <div class="md:text-right flex md:justify-end items-center space-x-2">
+                <button type="submit" 
+                        class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200">
+                    ${isEdit ? 'Save Changes' : 'Add Dish'}
+                </button>
+                <button type="button" 
+                        class="${isEdit ? 'cancel-edit' : 'cancel-add'} px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded transition-colors duration-200">
+                    Cancel
+                </button>
+            </div>
         </form>
     `;
+}
+
+function previewImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            if (preview.tagName === 'IMG') {
+                preview.src = e.target.result;
+            } else {
+                // Replace the no-image div with an img
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'mx-auto object-contain h-40 w-40';
+                img.id = previewId;
+                preview.parentNode.replaceChild(img, preview);
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 
 function createDishHTML(dishId, formData, imageUrl = null) {
@@ -195,9 +244,13 @@ function createDishHTML(dishId, formData, imageUrl = null) {
         </div>
         <div class="md:text-right flex md:justify-end items-center space-x-2">
             <button class="editDish px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200" 
-                    id="e${dishId}">Edit</button>
+                    id="e${dishId}">
+                Edit
+            </button>
             <button class="deleteDish px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded transition-colors duration-200" 
-                    id="d${dishId}">Delete</button>
+                    id="d${dishId}">
+                Delete
+            </button>
         </div>
     `;
 }
@@ -223,13 +276,17 @@ async function handleImageUpload(fileInput) {
     });
 }
 
-async function addCourse(dishData, context) {
+async function addCourse(dishData, context, existingCourses) {
+    if (existingCourses.map(course => course.toLowerCase()).includes(dishData.toLowerCase())) {
+        alert('A course with this name already exists. Please choose a different name.');
+        return;
+    }
     try {
         const response = await fetch(`/${context.eatery}/menu/add_course/`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
+                'X-CSRFToken': context.csrfToken
             },
             body: JSON.stringify({
                 course_name: dishData
@@ -245,21 +302,6 @@ async function addCourse(dishData, context) {
     } catch (error) {
         console.error('Error:', error);
     }
-}
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
 }
 
 async function addDish(course, context) {
@@ -305,7 +347,7 @@ async function addDish(course, context) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
+                    'X-CSRFToken': context.csrfToken
                 },
                 body: JSON.stringify(formData)
             });
@@ -334,19 +376,33 @@ async function addDish(course, context) {
 
 async function editDish(dishId, context) {
     try {
-        const response = await fetch(`/${context.eatery}/menu/edit_dish/${dishId}/`);
-        if (!response.ok) throw new Error('Network response was not ok');
-        const dishData = await response.json();
+        const dishElement = document.getElementById(`o${dishId}`);
+        if (!dishElement) {
+            console.error('Could not find dish element');
+            return;
+        }
+    
+        // Get current dish data
+        const currentValues = {
+            name: dishElement.querySelector('h3')?.textContent || '',
+            price: dishElement.querySelector('.font-semibold')?.textContent.replace('Price: $', '') || '',
+            image: dishElement.querySelector('img')?.src || '',
+            description: dishElement.querySelector('[data-dish-description]')?.textContent || '',
+        };
 
-        const dishArticle = document.getElementById(`o${dishId}`);
-        if (!dishArticle) throw new Error('Dish article not found');
+        // Create edit form
+        const editDiv = document.createElement('div');
+        editDiv.innerHTML = getFormHTML(true, dishId, currentValues);
 
-        const originalContent = dishArticle.innerHTML;
-        dishArticle.innerHTML = getFormHTML(true, dishId, {
-            name: dishData.name,
-            price: dishData.price,
-            description: dishData.description,
-            image: dishData.image
+        // Store the original dish element
+        editDiv.originalDish = dishElement;
+
+        // Replace dish with form
+        dishElement.replaceWith(editDiv);
+            
+        // Add cancel button functionality
+        editDiv.querySelector('.cancel-edit').addEventListener('click', () => {
+            editDiv.replaceWith(dishElement);
         });
 
         const form = document.getElementById(`editDish${dishId}`);
@@ -369,24 +425,24 @@ async function editDish(dishId, context) {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
+                        'X-CSRFToken': context.csrfToken
                     },
                     body: JSON.stringify(formData)
                 });
 
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error);
-
-                dishArticle.innerHTML = createDishHTML(dishId, formData, data.image_url);
+                editDiv.className = 'border rounded-lg p-4 mb-4 grid md:grid-cols-3 gap-4';
+                editDiv.innerHTML = createDishHTML(dishId, formData, data.image_url);
             } catch (error) {
                 console.error('Error:', error);
                 alert(error.message || 'Error updating dish. Please try again.');
-                dishArticle.innerHTML = originalContent;
+                editDiv.innerHTML = originalContent;
             }
         });
 
         form.querySelector('.cancel-edit').addEventListener('click', () => {
-            dishArticle.innerHTML = originalContent;
+            editDiv.innerHTML = originalContent;
         });
     } catch (error) {
         console.error('Error:', error);
@@ -409,7 +465,8 @@ async function deleteDish(dishId, context) {
         const response = await fetch(`/${context.eatery}/menu/delete_dish/${dishId}/`, {
             method: 'DELETE',
             headers: {
-                'X-CSRFToken': getCookie('csrftoken')
+                'X-CSRFToken': context.csrfToken,
+                'Content-Type': 'application/json'
             }
         });
 
@@ -437,7 +494,8 @@ async function deleteCourse(courseId, context) {
         const response = await fetch(`/${context.eatery}/menu/delete_course/${courseId}/`, {
             method: 'DELETE',
             headers: {
-                'X-CSRFToken': getCookie('csrftoken')
+                'X-CSRFToken': context.csrfToken,
+                'Content-Type': 'application/json'
             }
         });
 
@@ -460,106 +518,226 @@ async function deleteCourse(courseId, context) {
     }
 }
 
-async function editCourseDescription(courseId, context) {
-    const descriptionDiv = document.querySelector(`#courseDescription${courseId}`);
-    const currentDescription = descriptionDiv.textContent.trim();
-    const editButton = document.querySelector(`.editDescription[data-course-id="${courseId}"]`);
-
-    // Create and show textarea
-    const textarea = document.createElement('textarea');
-    textarea.value = currentDescription;
-    textarea.className = 'w-full p-2 border rounded';
-    textarea.rows = 3;
-
-    // Create save button
-    const saveButton = document.createElement('button');
-    saveButton.textContent = 'Save';
-    saveButton.className = 'saveDescription px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200 mt-2';
-    saveButton.dataset.courseId = courseId;
-
-    // Replace content and hide edit button
-    descriptionDiv.textContent = '';
-    descriptionDiv.appendChild(textarea);
-    descriptionDiv.appendChild(saveButton);
-    editButton.style.display = 'none';
+async function editCourseDescription(courseId) {
+    const displayDiv = document.getElementById(`descriptionDisplay${courseId}`);
+    const formDiv = document.getElementById(`descriptionForm${courseId}`);
+    
+    if (!displayDiv || !formDiv) {
+        console.error('Required elements not found');
+        return;
+    }
+    
+    // Show form, hide display
+    displayDiv.classList.add('hidden');
+    formDiv.classList.remove('hidden');
+    
+    // Set textarea value to current description
+    const currentDescription = displayDiv.querySelector('p')?.textContent?.trim() || '';
+    const textarea = document.getElementById(`courseDescription${courseId}`);
+    if (textarea) {
+        textarea.value = currentDescription;
+        textarea.focus(); // Automatically focus the textarea for better UX
+    }
 }
+
 
 async function saveCourseDescription(courseId, context) {
     const descriptionDiv = document.querySelector(`#courseDescription${courseId}`);
-    const textarea = descriptionDiv.querySelector('textarea');
-    const editButton = document.querySelector(`.editDescription[data-course-id="${courseId}"]`);
-    const newDescription = textarea.value;
+    if (!descriptionDiv) {
+        console.error('Could not find description textarea');
+        return;
+    }
+    const newDescription = descriptionDiv.value;
 
     try {
-        const response = await fetch(`/${context.eatery}/menu/update_course/${courseId}/`, {
+        const response = await fetch(`/${context.eatery}/menu/update_course_description/${courseId}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
+                'X-CSRFToken': context.csrfToken
             },
             body: JSON.stringify({
                 description: newDescription
             })
         });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
-        if (!response.ok) throw new Error('Network response was not ok');
+        await response.json();
+        
+        // Create new container
+        const containerDiv = document.createElement('div');
+        containerDiv.className = 'mb-4';
+        
+        // Create display div
+        const displayDiv = document.createElement('div');
+        displayDiv.id = `descriptionDisplay${courseId}`;
+        displayDiv.classList.remove('hidden');
 
-        // Update UI
-        descriptionDiv.textContent = newDescription;
-        editButton.style.display = '';
+        // Create the edit button separately
+        const editButton = document.createElement('button');
+        editButton.className = 'editDescription text-blue-500 hover:text-blue-700 flex-shrink-0';
+        editButton.dataset.courseId = courseId;
+        editButton.innerHTML = `
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+        `;
+
+        // Add click handler to edit button
+        editButton.addEventListener('click', () => editCourseDescription(courseId, context));
+
+        // Create the display content
+        const displayContent = document.createElement('div');
+        displayContent.className = 'flex justify-between items-start gap-4';
+        displayContent.innerHTML = `
+            <p class="text-gray-600">${newDescription || 'No description added yet.'}</p>
+        `;
+        
+        // Append edit button to display content
+        displayContent.appendChild(editButton);
+        displayDiv.appendChild(displayContent);
+
+        // Create form div (hidden)
+        const formDiv = document.createElement('div');
+        formDiv.id = `descriptionForm${courseId}`;
+        formDiv.className = 'mt-2 hidden';
+        formDiv.innerHTML = `
+            <textarea id="courseDescription${courseId}" 
+                    class="w-full p-2 border rounded"
+                    rows="3"
+                    placeholder="Add a description for this course">${newDescription}</textarea>
+            <button class="saveDescription mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors duration-200"
+                    data-course-id="${courseId}">
+                Save Description
+            </button>
+        `;
+
+        // Add both divs to container
+        containerDiv.appendChild(displayDiv);
+        containerDiv.appendChild(formDiv);
+
+        // Find and replace the parent container
+        const parentContainer = document.getElementById(`descriptionForm${courseId}`);
+        if (!parentContainer) {
+            throw new Error('Could not find description form');
+        }
+        parentContainer.parentElement.replaceWith(containerDiv);
+
     } catch (error) {
         console.error('Error:', error);
         alert('Error saving description. Please try again.');
     }
 }
 
-async function editCourseNote(courseId, context) {
-    const noteDiv = document.querySelector(`#courseNote${courseId}`);
-    const currentNote = noteDiv.textContent.trim();
-    const editButton = document.querySelector(`.editNote[data-course-id="${courseId}"]`);
+function editCourseNote(courseId) {
+    const displayDiv = document.getElementById(`noteDisplay${courseId}`);
+    const formDiv = document.getElementById(`noteForm${courseId}`);
 
-    // Create and show textarea
-    const textarea = document.createElement('textarea');
-    textarea.value = currentNote;
-    textarea.className = 'w-full p-2 border rounded';
-    textarea.rows = 3;
-
-    // Create save button
-    const saveButton = document.createElement('button');
-    saveButton.textContent = 'Save';
-    saveButton.className = 'saveNote px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200 mt-2';
-    saveButton.dataset.courseId = courseId;
-
-    // Replace content and hide edit button
-    noteDiv.textContent = '';
-    noteDiv.appendChild(textarea);
-    noteDiv.appendChild(saveButton);
-    editButton.style.display = 'none';
+    if (!displayDiv || !formDiv) {
+        console.error('Required elements not found');
+        return;
+    }
+    // Show form, hide display
+    displayDiv.classList.add('hidden');
+    formDiv.classList.remove('hidden');
+    
+    // Set textarea value to current note
+    const currentNote = displayDiv.querySelector('p')?.textContent?.trim() || '';
+    const textarea = document.getElementById(`courseNote${courseId}`);
+    if (textarea) {
+        textarea.value = currentNote;
+        textarea.focus();
+    }
 }
 
 async function saveCourseNote(courseId, context) {
     const noteDiv = document.querySelector(`#courseNote${courseId}`);
-    const textarea = noteDiv.querySelector('textarea');
-    const editButton = document.querySelector(`.editNote[data-course-id="${courseId}"]`);
-    const newNote = textarea.value;
+    if (!noteDiv) {
+        console.error('Could not find note textarea');
+        return;
+    }
+    const newNote = noteDiv.value;
 
     try {
-        const response = await fetch(`/${context.eatery}/menu/update_course/${courseId}/`, {
+        const response = await fetch(`/${context.eatery}/menu/update_course_note/${courseId}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
+                'X-CSRFToken': context.csrfToken
             },
             body: JSON.stringify({
                 note: newNote
             })
         });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
-        if (!response.ok) throw new Error('Network response was not ok');
+        await response.json();
+        
+        // Create new container
+        const containerDiv = document.createElement('div');
+        containerDiv.className = 'mb-4';
+        
+        // Create display div
+        const displayDiv = document.createElement('div');
+        displayDiv.id = `noteDisplay${courseId}`;
+        displayDiv.classList.remove('hidden');
 
-        // Update UI
-        noteDiv.textContent = newNote;
-        editButton.style.display = '';
+        // Create the edit button separately
+        const editButton = document.createElement('button');
+        editButton.className = 'editNote text-blue-500 hover:text-blue-700 flex-shrink-0';
+        editButton.dataset.courseId = courseId;
+        editButton.innerHTML = `
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+        `;
+
+        // Add click handler to edit button
+        editButton.addEventListener('click', () => editCourseNote(courseId, context));
+
+        // Create the display content
+        const displayContent = document.createElement('div');
+        displayContent.className = 'flex justify-between items-start gap-4';
+        displayContent.innerHTML = `
+            <p class="text-gray-600">${newNote || 'No note added yet.'}</p>
+        `;
+        
+        // Append edit button to display content
+        displayContent.appendChild(editButton);
+        displayDiv.appendChild(displayContent);
+
+        // Create form div (hidden)
+        const formDiv = document.createElement('div');
+        formDiv.id = `noteForm${courseId}`;
+        formDiv.className = 'mt-2 hidden';
+        formDiv.innerHTML = `
+            <textarea id="courseNote${courseId}" 
+                    class="w-full p-2 border rounded"
+                    rows="3"
+                    placeholder="Add a note for this course">${newNote}</textarea>
+            <button class="saveNote mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors duration-200"
+                    data-course-id="${courseId}">
+                Save Note
+            </button>
+        `;
+
+        // Add both divs to container
+        containerDiv.appendChild(displayDiv);
+        containerDiv.appendChild(formDiv);
+
+        // Find and replace the parent container
+        const parentContainer = document.getElementById(`noteForm${courseId}`);
+        if (!parentContainer) {
+            throw new Error('Could not find note form');
+        }
+        parentContainer.parentElement.replaceWith(containerDiv);
+
     } catch (error) {
         console.error('Error:', error);
         alert('Error saving note. Please try again.');
@@ -567,38 +745,35 @@ async function saveCourseNote(courseId, context) {
 }
 
 function showSideOptionForm(courseId, context, sideOption = null) {
-    const listContainer = document.getElementById(`sideOptionsList${courseId}`);
-    if (!listContainer) return;
+    console.log("side option form called");
+    const formDiv = document.getElementById(`sideOptionsform${courseId}`);
+    formDiv.className = "w-full bg-white p-4 rounded-lg border border-gray-200 mt-2 mb-4";  // Adjust the container
 
-    const formDiv = document.createElement('div');
-    formDiv.className = 'bg-white p-4 rounded-lg shadow mb-4';
     formDiv.innerHTML = `
-        <form id="${sideOption ? 'editSideOption' : 'createSideOption'}" class="space-y-4">
-            <div>
+        <form id="${sideOption ? 'editSideOption' : 'createSideOption'}" class="grid grid-cols-6 gap-4">
+            <div class="col-span-6">
                 <label class="block text-sm font-medium text-gray-700">Name</label>
                 <input type="text" name="name" value="${sideOption?.name || ''}" 
                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required>
             </div>
-            <div>
+            <div class="col-span-6">
                 <label class="block text-sm font-medium text-gray-700">Description (optional)</label>
-                <textarea name="description" rows="2" 
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                <textarea name="description" 
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 h-16 resize-none"
                 >${sideOption?.description || ''}</textarea>
             </div>
-            <div class="flex items-center space-x-4">
-                <div class="flex items-center">
-                    <input type="checkbox" name="is_premium" id="is_premium" 
-                           ${sideOption?.is_premium ? 'checked' : ''}
-                           class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
-                    <label for="is_premium" class="ml-2 block text-sm text-gray-900">Premium Option</label>
-                </div>
-                <div class="premium-price ${sideOption?.is_premium ? '' : 'hidden'}">
-                    <label class="block text-sm font-medium text-gray-700">Additional Price</label>
-                    <input type="number" name="price" value="${sideOption?.price || ''}" step="0.01" min="0"
-                           class="mt-1 block w-24 rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
-                </div>
+            <div class="col-span-3 flex items-center">
+                <input type="checkbox" name="is_premium" id="is_premium" 
+                       ${sideOption?.is_premium ? 'checked' : ''}
+                       class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                <label for="is_premium" class="ml-2 block text-sm text-gray-900">Premium Option</label>
             </div>
-            <div class="flex justify-end space-x-2">
+            <div class="col-span-3 premium-price ${sideOption?.is_premium ? '' : 'hidden'}">
+                <label class="block text-sm font-medium text-gray-700">Additional Price</label>
+                <input type="number" name="price" value="${sideOption?.price || ''}" step="0.01" min="0"
+                       class="mt-1 block w-32 rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
+            </div>
+            <div class="col-span-6 flex justify-end space-x-2 mt-2">
                 <button type="button" class="cancelSideOption px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded transition-colors duration-200">
                     Cancel
                 </button>
@@ -614,13 +789,21 @@ function showSideOptionForm(courseId, context, sideOption = null) {
     if (buttonContainer) {
         buttonContainer.style.display = 'none';
     }
-    listContainer.appendChild(formDiv);
 
     // Handle premium checkbox toggle
     const premiumCheckbox = formDiv.querySelector('#is_premium');
     const priceDiv = formDiv.querySelector('.premium-price');
     premiumCheckbox.addEventListener('change', () => {
         priceDiv.classList.toggle('hidden', !premiumCheckbox.checked);
+    });
+
+    formDiv.querySelector('.cancelSideOption').addEventListener('click', () => {
+        // Clear and hide the form
+        formDiv.innerHTML = '';
+        formDiv.className = 'hidden';
+
+        // Show the add button again
+        buttonContainer.style.display = 'block';
     });
 
     // Handle form submission
@@ -639,13 +822,13 @@ function showSideOptionForm(courseId, context, sideOption = null) {
         try {
             const url = sideOption ? 
                 `/${context.eatery}/menu/side_options/${sideOption.id}/` :
-                `/${context.eatery}/menu/side_options/create/`;
+                `/${context.eatery}/menu/side_options/${courseId}/`;
                 
             const response = await fetch(url, {
-                method: sideOption ? 'PUT' : 'POST',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
+                    'X-CSRFToken': context.csrfToken
                 },
                 body: JSON.stringify(formData)
             });
@@ -656,7 +839,8 @@ function showSideOptionForm(courseId, context, sideOption = null) {
             await updateSideOptionsList(courseId, context);
             
             // Remove the form
-            formDiv.remove();
+            formDiv.innerHTML = '';
+            formDiv.className = 'hidden';
             if (buttonContainer) {
                 buttonContainer.style.display = '';
             }
@@ -720,7 +904,8 @@ async function deleteSideOption(sideId, context) {
         const response = await fetch(`/${context.eatery}/menu/side_options/${sideId}/`, {
             method: 'DELETE',
             headers: {
-                'X-CSRFToken': getCookie('csrftoken')
+                'X-CSRFToken': context.csrfToken,
+                'Content-Type': 'application/json'
             }
         });
 
@@ -756,7 +941,7 @@ async function deleteSideOption(sideId, context) {
 
 async function updateSideOptionsList(courseId, context) {
     try {
-        const response = await fetch(`/${context.eatery}/menu/side_options/${courseId}/`);
+        const response = await fetch(`/${context.eatery}/menu/side_options/${courseId}/`)
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         
@@ -828,19 +1013,6 @@ async function updateSideOptionsList(courseId, context) {
             noOptionsMessage.textContent = 'No side options available';
             sideOptionsContainer.appendChild(noOptionsMessage);
         }
-
-        // Add the button container
-        const buttonContainer = document.createElement('div');
-        buttonContainer.id = `addSideButtonContainer${courseId}`;
-        buttonContainer.className = 'flex justify-end mt-2';
-        buttonContainer.innerHTML = `
-            <button class="addSideOption text-sm px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded"
-                    data-course-id="${courseId}">
-                Add Side
-            </button>
-        `;
-        const parentContainer = listContainer.parentElement;
-        parentContainer.appendChild(buttonContainer);
 
     } catch (error) {
         console.error('Error:', error);

@@ -1,8 +1,6 @@
-let eatery;
-
 document.addEventListener('DOMContentLoaded', function() {
-    eatery = JSON.parse(document.getElementById('kitchen').textContent);
-    existingCourses = JSON.parse(document.getElementById('existing_courses').textContent);
+    const eatery = JSON.parse(document.getElementById('kitchen').textContent);
+    const existingCourses = JSON.parse(document.getElementById('existing_courses').textContent);
     const accordionTriggers = document.querySelectorAll('.accordion-trigger');
     
     accordionTriggers.forEach(trigger => {
@@ -13,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Toggle panel visibility
             target.classList.toggle('hidden');
     
-
             // Rotate the arrow based on panel's visibility
             if (target.classList.contains('hidden')) {
                 trigger.classList.remove('bg-gray-100', 'hover:bg-gray-400'); 

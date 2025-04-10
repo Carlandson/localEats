@@ -129,8 +129,14 @@
                             <div class="space-y-4">
                                 <div class="flex justify-between items-center">
                                     <label class="font-medium">Side Options:</label>
+                                    <div id="addSideButtonContainer{{ course.id }}" class="flex justify-end mt-2">
+                                        <button class="addSideOption text-sm px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded"
+                                                data-course-id="{{ course.id }}">
+                                            Add Side
+                                        </button>
+                                    </div>
                                 </div>
-                                
+                                <div id="sideOptionsform{{ course.id }}"></div>
                                 <div id="sideOptionsList{{ course.id }}" class="space-y-2 max-h-[200px] overflow-y-auto">
                                     {% for side in course.side_options.all %}
                                     <div id="sideOption{{ side.id }}" data-side-id="{{ side.id }}" data-course-id="{{ course.id }}"
@@ -165,12 +171,6 @@
                                     <p class="text-gray-500 text-center">No side options available</p>
                                     {% endfor %}
                                 </div>
-                                <div id="addSideButtonContainer{{ course.id }}" class="flex justify-end mt-2">
-                                    <button class="addSideOption text-sm px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded"
-                                            data-course-id="{{ course.id }}">
-                                        Add Side
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -190,7 +190,7 @@
                                 </div>
                                 <div class="text-center">
                                     <h4 class="font-semibold mb-2">Description:</h4>
-                                    <p>{{ dish.description }}</p>
+                                    <p data-dish-description>{{ dish.description }}</p>
                                 </div>
                                 {% if owner %}
                                 <div class="md:text-right flex md:justify-end items-center space-x-2">
@@ -237,7 +237,7 @@
 
 {% if debug %}
     {% block dev_scripts %}
-    <script src="{% static 'js/subpages/menuBuilder.js' %}"></script>
+    <script src="{% static 'js/subpages/menuBuilder2.js' %}"></script>
     {% endblock dev_scripts %}
 {% else %}
     {% block prod_scripts %}

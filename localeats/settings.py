@@ -4,11 +4,16 @@ import os
 import dj_database_url
 
 env = environ.Env()
+if 'PRINTFUL_SECRET_KEY' in os.environ:
+    del os.environ['PRINTFUL_SECRET_KEY']
+if 'PRINTFUL_CLIENT_ID' in os.environ:
+    del os.environ['PRINTFUL_CLIENT_ID']
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+ENV_PATH = BASE_DIR / '.env'
+environ.Env.read_env(ENV_PATH, overwrite=True)
 
 IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
 
@@ -45,7 +50,6 @@ else:
 
 PRINTFUL_REDIRECT_URL = env('PRINTFUL_REDIRECT_URL', default=None)
 PRINTFUL_CLIENT_ID = env('PRINTFUL_CLIENT_ID', default=None)
-
 PRINTFUL_SECRET_KEY = env('PRINTFUL_SECRET_KEY', default=None)
 
 if not DEBUG:

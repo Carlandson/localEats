@@ -109,4 +109,22 @@
         </div>
     </div>
 </div>
+<div id="fpd-target" class="fpd-sidebar fpd-shadow-2">
+    
+</div>
 {% endblock %}
+
+
+
+{% if debug %}
+    {% block dev_scripts %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/FancyProductDesigner.min.css' %}" />
+    <script src="{% static 'js/fabric-5.3.1.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/FancyProductDesigner.min.js' %}" type="text/javascript"></script>
+    <script type="module" src="{% static 'js/subpages/merch.js' %}"></script>
+    {% endblock dev_scripts %}
+{% else %}
+    {% block prod_scripts %}
+    <script defer src="{% static 'dist/merch.bundle.js' %}"></script>
+    {% endblock prod_scripts %}
+{% endif %}

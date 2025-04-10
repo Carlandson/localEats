@@ -88,9 +88,9 @@ def get_product_templates(request):
         return JsonResponse({'error': str(e)}, status=400)
 
 @login_required
-def create_product(request):
+def create_product(request, business_subdirectory):
     if request.method == 'POST':
-        business = request.user.business
+        business = get_object_or_404(Business, subdirectory=business_subdirectory)
         pod_account = get_object_or_404(PODAccount, business=business)
         client = PrintfulClient(pod_account.api_key)
 
@@ -158,12 +158,12 @@ def create_product(request):
         except Exception as e:
             messages.error(request, f'Error creating product: {str(e)}')
 
-    return redirect('merch_dashboard')
+    return redirect('merch_dashboard', business_subdirectory=business_subdirectory)
 
 @login_required
-def disconnect_pod_account(request):
+def disconnect_pod_account(request, business_subdirectory):
     if request.method == 'POST':
-        business = request.user.business
+        business = get_object_or_404(Business, subdirectory=business_subdirectory)
         try:
             pod_account = PODAccount.objects.get(business=business)
             
@@ -179,7 +179,7 @@ def disconnect_pod_account(request):
         except Exception as e:
             messages.error(request, f'Error disconnecting account: {str(e)}')
     
-    return redirect('merch_dashboard')
+    return redirect('merch_dashboard', business_subdirectory=business_subdirectory)
 
 @login_required
 def toggle_product(request, product_id):
@@ -250,9 +250,8 @@ def connect_printful(request, business_subdirectory):
         f'&redirect_url={quote(redirect_url)}'
         f'&response_type=code'
         f'&state={state}'
-        f'&scope=stores_list%2Fread' 
+        f'&scope={quote("stores_list")}'
     )
-    print(oauth_url, settings.PRINTFUL_SECRET_KEY)
     logger.info(f"Redirecting to Printful OAuth URL: {oauth_url}")
     return redirect(oauth_url)
 
@@ -309,24 +308,27 @@ def oauth_callback(request, business_subdirectory):  # Add business_subdirectory
         
         # Exchange code for access token
         token_data = PrintfulClient.exchange_code_for_token(code, redirect_uri)
+
         if not token_data or 'access_token' not in token_data:
             raise ValueError('Invalid token data received from Printful.')
         
+        access_token = token_data['access_token']
+
         # Create or update POD account
         pod_account, created = PODAccount.objects.update_or_create(
             business=business,
             defaults={
                 'provider': 'PRINTFUL',
-                'api_key': token_data['access_token'],
+                'api_key': access_token,
                 'is_active': True
             }
         )
         logger.debug(f"POD account {'created' if created else 'updated'}")
 
-        printful_client = PrintfulClient(pod_account.api_key)
+        printful_client = PrintfulClient(access_token)
         store_data = {
             'name': business.business_name,  
-            'website': f'https://patrons.love/{business_subdirectory}',
+            'website': f'https://patrons.love/{business_subdirectory}'
         }
         logger.debug(f"Attempting to update store with name: {store_data['name']}")
         try:

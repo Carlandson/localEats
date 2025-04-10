@@ -770,7 +770,7 @@ def menu(request, business_subdirectory):
     try:
         # Then get the menu associated with this subpage
         menu = Menu.objects.get(subpage=menu_subpage)
-        courses = Course.objects.filter(menu=menu).order_by('order')
+        courses = Course.objects.filter(menu=menu).prefetch_related('side_options').order_by('order')
         dishes = Dish.objects.filter(menu=menu)
         existing_course_names = list(courses.values_list('name', flat=True))
         available_course_options = [option for option in course_options 
@@ -894,8 +894,18 @@ def new_dish(request, business_name):
     if request.method == "GET":
         return render(request, "newdish.html", {"new_dish" : DishSubmit()})
     if request.method == "POST":
+        print("post request", request.POST)
         form = Dish(request.POST)
         user = request.user
+        # image = Image(
+        #     image=file,
+        #     uploaded_by=request.user,
+        #     content_type=ContentType.objects.get_for_model(gallery_page),
+        #     object_id=gallery_page.id,
+        #     alt_text=file.name
+        # )
+        # image.full_clean()  # This will validate the image
+        # image.save()
         if form.is_valid():
             name = form.cleaned_data["name"]
             price = form.cleaned_data["price"]
@@ -1032,6 +1042,7 @@ def add_dish(request, business_subdirectory):
             "error": str(e)
         }, status=400)
 
+# old search function
 def search(request, position, distance):
     if request.method != "GET":
         return JsonResponse({"error" : "GET request required."}, status=400)
@@ -1080,12 +1091,10 @@ def filter(request, place):
     location_businesss = Business.objects.filter(city__icontains = place)
     return JsonResponse([localEatery.serialize() for localEatery in location_businesss], safe=False)
 
-@csrf_exempt
+
+@ensure_csrf_cookie
 @login_required
 def edit_dish(request, business_subdirectory, dishid):
-    if request.method != "PUT":
-        return JsonResponse({"error": "PUT request required."}, status=400)
-    
     try:
         dish = Dish.objects.get(id=dishid)
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
@@ -1144,9 +1153,14 @@ def edit_dish(request, business_subdirectory, dishid):
 
 @csrf_exempt
 @login_required
-def delete_dish(request, dishid):
+def delete_dish(request, business_subdirectory, dishid):
     try:
         dish = Dish.objects.get(id=dishid)
+        business = get_object_or_404(Business, subdirectory=business_subdirectory)
+        
+        # Verify owner
+        if request.user != business.owner:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
         
         # Add owner verification
         if request.user != dish.menu.subpage.business.owner:
@@ -1295,25 +1309,36 @@ def update_course_note(request, business_subdirectory, course_id):
     
 
 @require_http_methods(["GET", "POST", "DELETE"])
-def side_options(request, business_subdirectory, id):
-    """
-    Handles all side option operations:
-    GET with course_id: Returns all side options for a course
-    GET with side_id: Returns a specific side option
-    POST with course_id: Creates a new side option
-    POST with side_id: Updates an existing side option
-    DELETE with side_id: Deletes a side option
-    """
+def side_options(request, business_subdirectory, id=None):
     try:
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
         if request.user != business.owner:
             return JsonResponse({"error": "Unauthorized"}, status=403)
 
-        # GET request handling
         if request.method == "GET":
+            # If no id is provided or id is 'all', return all side options for the business
+            if id is None or id == 'all':
+                side_options = SideOption.objects.filter(
+                    course__menu__business=business
+                ).select_related('course', 'course__menu')  # For efficiency
+                
+                return JsonResponse([{
+                    'id': side.id,
+                    'name': side.name,
+                    'description': side.description,
+                    'price': str(side.price),
+                    'is_premium': side.is_premium,
+                    'course_id': side.course.id,
+                    'course_name': side.course.name,
+                    'menu_name': side.course.menu.name
+                } for side in side_options], safe=False)
+
             try:
                 # Try to get a specific side option
-                side = SideOption.objects.get(id=id)
+                side = SideOption.objects.get(
+                    id=id,
+                    course__menu__business=business  # Ensure it belongs to this business
+                )
                 return JsonResponse({
                     'id': side.id,
                     'name': side.name,
@@ -1323,8 +1348,12 @@ def side_options(request, business_subdirectory, id):
                     'course_id': side.course.id
                 })
             except SideOption.DoesNotExist:
-                # If not found, assume id is course_id and return all side options
-                course = get_object_or_404(Course, id=id)
+                # If not found, assume id is course_id and return all side options for that course
+                course = get_object_or_404(
+                    Course, 
+                    id=id,
+                    menu__business=business  # Ensure it belongs to this business
+                )
                 side_options = course.side_options.all()
                 return JsonResponse([{
                     'id': side.id,
@@ -1337,10 +1366,13 @@ def side_options(request, business_subdirectory, id):
         # POST request handling
         elif request.method == "POST":
             data = json.loads(request.body)
-            
             try:
                 # Try to get existing side option (update case)
-                side = SideOption.objects.get(id=id)
+                # Make sure the side option belongs to this business
+                side = SideOption.objects.get(
+                    id=id,
+                    course__menu__business=business  # Add this filter
+                )
                 side.name = data.get('name', side.name)
                 side.description = data.get('description', side.description)
                 side.is_premium = data.get('is_premium', side.is_premium)
@@ -1349,7 +1381,12 @@ def side_options(request, business_subdirectory, id):
                 course = side.course
             except SideOption.DoesNotExist:
                 # If not found, create new side option
-                course = get_object_or_404(Course, id=id)
+                # Make sure the course belongs to this business
+                course = get_object_or_404(
+                    Course, 
+                    id=id,
+                    menu__business=business  # Add this filter
+                )
                 side = SideOption.objects.create(
                     course=course,
                     name=data.get('name'),

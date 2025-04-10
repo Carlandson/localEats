@@ -116,16 +116,40 @@ class PrintfulClient:
     OAUTH_URL = 'https://www.printful.com/oauth/authorize'
     TOKEN_URL = 'https://www.printful.com/oauth/token'
 
-    def __init__(self, api_key=None):
-        self.api_key = api_key or settings.PRINTFUL_SECRET_KEY
-        logger.debug(f"PrintfulClient initialized with API key: {api_key[:5]}..." if api_key else "default key")
+    def __init__(self, access_token):
+        self.access_token = access_token
+        self._store_id = None
+        logger.debug(f"PrintfulClient initialized with access token: {access_token[:5]}..." if access_token else "No token")
+
 
     def get_headers(self) -> Dict[str, str]:
         """Get headers for API requests"""
-        return {
-            'Authorization': f'Bearer {self.api_key}',
+        headers = {
+            'Authorization': f'Bearer {self.access_token}',
             'Content-Type': 'application/json'
         }
+        if self._store_id:
+            headers['X-PF-Store-Id'] = str(self._store_id)
+        return headers
+
+    def get_store_id(self):
+        """Get the store ID for the authenticated user"""
+        if not self._store_id:
+            try:
+                response = requests.get(
+                    f"{self.BASE_URL}/stores",
+                    headers=self.get_headers()
+                )
+                response.raise_for_status()
+                stores_data = response.json()
+                logger.debug(f"Stores response: {stores_data}")
+                
+                if stores_data.get('result'):
+                    self._store_id = stores_data['result'][0]['id']
+                    logger.debug(f"Found store ID: {self._store_id}")
+            except Exception as e:
+                logger.error(f"Error getting store ID: {str(e)}")
+                raise
 
     @classmethod
     def get_oauth_url(cls, state: str) -> str:
@@ -135,7 +159,7 @@ class PrintfulClient:
             'redirect_url': settings.PRINTFUL_REDIRECT_URL.rstrip('/'),  # Changed to redirect_uri
             'response_type': 'code',
             'state': state,
-            'scope': 'stores_list/read'
+            'scope': 'stores_list'
         }
         query_string = urlencode(params)
         oauth_url = f"{cls.OAUTH_URL}?{query_string}"
@@ -154,7 +178,8 @@ class PrintfulClient:
                 'code': code,
                 'client_id': settings.PRINTFUL_CLIENT_ID,
                 'client_secret': settings.PRINTFUL_SECRET_KEY,
-                'redirect_uri': redirect_url
+                'redirect_uri': redirect_url,
+                'scope': 'stores_list'
             }
             logger.debug(f"Token exchange request data: {data}")
             
@@ -162,9 +187,11 @@ class PrintfulClient:
                 cls.TOKEN_URL,
                 data=data
             )
+            print(response.text)
             response.raise_for_status()
             token_data = response.json()
             logger.debug("Successfully exchanged code for token")
+            logger.debug(f"Token response: {token_data}")
             logger.debug(f"Token response scopes: {token_data.get('scope', 'no scope in response')}")
             return token_data
         except Exception as e:
@@ -177,8 +204,11 @@ class PrintfulClient:
         """Update store information"""
         logger.debug(f"Attempting to update store with data: {store_data}")
         try:
+            # Get store ID first
+            self.get_store_id()
+            
             response = requests.put(
-                f"{self.BASE_URL}/store",
+                f"{self.BASE_URL}/stores/{self._store_id}",
                 headers=self.get_headers(),
                 json=store_data
             )

@@ -61,18 +61,12 @@ urlpatterns = [
     path('<slug:business_subdirectory>/menu/add_course/', views.add_course, name="add_course"),
     path('<slug:business_subdirectory>/menu/add_dish/', views.add_dish, name="add_dish"),
     path('<slug:business_subdirectory>/menu/', views.menu, name="menu"),
-    path("delete_dish/<int:dishid>", views.delete_dish, name="delete"),  # Consider making this consistent with other paths
+    path("<slug:business_subdirectory>/menu/delete_dish/<int:dishid>/", views.delete_dish, name="delete"),  # Consider making this consistent with other paths
     
     # Page data and content
     path('<slug:business_subdirectory>/get-page-data/<str:page_type>/', views.get_page_data, name='get_page_data'),
     path('<slug:business_subdirectory>/page-content/<str:page_type>/', views.page_content, name='page_content'),
     path('<slug:business_subdirectory>/create/<str:page_type>/', views.create_subpage, name="create_subpage"),
-    
-    # Business pages (catch-all patterns last)
-    path('<slug:business_subdirectory>/dashboard/', views.business_dashboard, name="business_dashboard"),
-    path('<slug:business_subdirectory>/', views.business_page, name="business_home"),
-    path('<slug:business_subdirectory>/<str:page_type>/', views.business_page, name="business_page"),
-    path('<slug:business_subdirectory>/events/delete/<int:event_id>/', views.delete_event, name='delete_event'),
 
     # SEO
     path('<slug:business_subdirectory>/SEO/', views.seo, name="SEO"),
@@ -113,12 +107,19 @@ urlpatterns = [
     # Merch Content Editor
     path('<str:business_subdirectory>/merch/', merch.merch_dashboard, name='merch_dashboard'),
     path('<str:business_subdirectory>/merch/setup-pod-account/', merch.setup_pod_account, name='setup_pod_account'),
-    path('<str:business_subdirectory>/callback', merch.oauth_callback, name='printful_oauth_callback'),
+    path('<str:business_subdirectory>/merch/callback/', merch.oauth_callback, name='printful_oauth_callback'),
     path('<str:business_subdirectory>/merch/disconnect-pod-account/', merch.disconnect_pod_account, name='disconnect_pod_account'),
     path('<str:business_subdirectory>/merch/create-product/', merch.create_product, name='create_product'),
     path('<str:business_subdirectory>/merch/toggle-product/<int:product_id>/', merch.toggle_product, name='toggle_product'),
     path('<str:business_subdirectory>/merch/product-templates/', merch.get_product_templates, name='get_product_templates'),
     path('<str:business_subdirectory>/merch/connect-printful/', merch.connect_printful, name='connect_printful'),
+
+    # Business pages (catch-all patterns last)
+    path('<slug:business_subdirectory>/dashboard/', views.business_dashboard, name="business_dashboard"),
+    path('<slug:business_subdirectory>/', views.business_page, name="business_home"),
+    path('<slug:business_subdirectory>/<str:page_type>/', views.business_page, name="business_page"),
+    path('<slug:business_subdirectory>/events/delete/<int:event_id>/', views.delete_event, name='delete_event'),
+
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

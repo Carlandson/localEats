@@ -10,7 +10,7 @@ from .models import (
     Business, HomePage, AboutUsPage, EventsPage, 
     SpecialsPage, Event, CuisineCategory, SubPage, 
     Menu, Product, ProductsPage, ServicesPage, Service,
-    Image, GalleryPage
+    Image, GalleryPage, SideOption, Course, Dish
 )
 
 class BusinessInline(admin.StackedInline):
@@ -49,6 +49,108 @@ class BusinessAdminSite(admin.AdminSite):
         extra_context['businesses'] = businesses
         extra_context['users'] = users
         return super().index(request, extra_context)
+
+class SideOptionInline(admin.TabularInline):
+    model = SideOption
+    extra = 0
+    fields = ('name', 'description', 'price', 'is_premium', 'available')
+
+class DishInline(admin.StackedInline):
+    model = Dish
+    extra = 0
+    fields = ('name', 'price', 'description', 'image')
+    classes = ('collapse',)
+
+class CourseInline(admin.StackedInline):
+    model = Course
+    extra = 0
+    inlines = [DishInline]
+    fields = ('name', 'description', 'note', 'order')
+    classes = ('collapse',)
+    show_change_link = True
+
+class MenuAdmin(admin.ModelAdmin):
+    list_display = ('name', 'business', 'get_courses_count', 'get_dishes_count')
+    list_filter = ('business',)
+    search_fields = ('name', 'business__business_name')
+    inlines = [CourseInline]
+
+    def get_courses_count(self, obj):
+        return obj.courses.count()
+    get_courses_count.short_description = 'Courses'
+
+    def get_dishes_count(self, obj):
+        return Dish.objects.filter(course__menu=obj).count()
+    get_dishes_count.short_description = 'Total Dishes'
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if not request.user.is_superuser:
+            return qs.filter(business__owner=request.user)
+        return qs
+
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ('name', 'menu', 'get_business', 'order', 'get_dishes_count', 'get_side_options_count')
+    list_filter = ('menu__business',)
+    search_fields = ('name', 'menu__name', 'menu__business__business_name')
+    inlines = [DishInline, SideOptionInline]
+    
+    def get_business(self, obj):
+        return obj.menu.business
+    get_business.short_description = 'Business'
+    
+    def get_dishes_count(self, obj):
+        return obj.dish_set.count()
+    get_dishes_count.short_description = 'Dishes'
+    
+    def get_side_options_count(self, obj):
+        return obj.side_options.count()
+    get_side_options_count.short_description = 'Side Options'
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if not request.user.is_superuser:
+            return qs.filter(menu__business__owner=request.user)
+        return qs
+
+class DishAdmin(admin.ModelAdmin):
+    list_display = ('name', 'course', 'get_menu', 'get_business', 'price')
+    list_filter = ('course__menu__business', 'course')
+    search_fields = ('name', 'description', 'course__name', 'course__menu__business__business_name')
+    
+    def get_menu(self, obj):
+        return obj.course.menu
+    get_menu.short_description = 'Menu'
+    
+    def get_business(self, obj):
+        return obj.course.menu.business
+    get_business.short_description = 'Business'
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if not request.user.is_superuser:
+            return qs.filter(course__menu__business__owner=request.user)
+        return qs
+
+class SideOptionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'course', 'get_menu', 'get_business', 'price', 'is_premium', 'available')
+    list_filter = ('course__menu__business', 'course', 'is_premium', 'available')
+    search_fields = ('name', 'description', 'course__name')
+    list_editable = ('price', 'is_premium', 'available')
+    
+    def get_menu(self, obj):
+        return obj.course.menu
+    get_menu.short_description = 'Menu'
+    
+    def get_business(self, obj):
+        return obj.course.menu.business
+    get_business.short_description = 'Business'
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if not request.user.is_superuser:
+            return qs.filter(course__menu__business__owner=request.user)
+        return qs
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('name', 'business', 'featured', 'display_image')
@@ -237,7 +339,6 @@ business_admin.register(User, CustomUserAdmin)
 # Register your other models
 business_admin.register(Business)
 business_admin.register(SubPage)
-business_admin.register(Menu)
 business_admin.register(HomePage)
 business_admin.register(AboutUsPage)
 business_admin.register(EventsPage)
@@ -250,3 +351,7 @@ business_admin.register(ServicesPage)
 business_admin.register(Service, ServiceAdmin)
 business_admin.register(GalleryPage, GalleryPageAdmin)
 business_admin.register(Image, ImageAdmin)
+business_admin.register(Menu, MenuAdmin)
+business_admin.register(Course, CourseAdmin)
+business_admin.register(Dish, DishAdmin)
+business_admin.register(SideOption, SideOptionAdmin)
