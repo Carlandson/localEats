@@ -63,10 +63,16 @@ urlpatterns = [
     path('<slug:business_subdirectory>/menu/', views.menu, name="menu"),
     path("<slug:business_subdirectory>/menu/delete_dish/<int:dishid>/", views.delete_dish, name="delete"),  # Consider making this consistent with other paths
     
+    # Menu API endpoints
+    # examples
+    #path('<slug:business_subdirectory>/menu/get-menu-data/', views.get_menu_data, name='get_menu_data'),
+    #path('<slug:business_subdirectory>/menu/get-menu-data/<int:dish_id>/', views.get_menu_data, name='get_menu_data'),
+    
     # Page data and content
     path('<slug:business_subdirectory>/get-page-data/<str:page_type>/', views.get_page_data, name='get_page_data'),
     path('<slug:business_subdirectory>/page-content/<str:page_type>/', views.page_content, name='page_content'),
     path('<slug:business_subdirectory>/create/<str:page_type>/', views.create_subpage, name="create_subpage"),
+    path('<slug:business_subdirectory>/create-business/', views.create_business, name="create_business"),
 
     # SEO
     path('<slug:business_subdirectory>/SEO/', views.seo, name="SEO"),
