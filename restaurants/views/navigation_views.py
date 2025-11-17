@@ -1,33 +1,8 @@
-def index(request): 
-    business_list = Business.objects.all().order_by('-created')
-    paginator = Paginator(business_list, 6)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        data = {
-            'businesses': [
-                {
-                    'name': business.business_name,
-                    'business_type': business.business_type,
-                    'city': business.city,
-                    'state': business.state,
-                    'cuisines': list(business.menus.first().cuisine.values_list('cuisine', flat=True)) if business.menus.exists() else [],
-                    'created': business.created.strftime('%B %d, %Y'),
-                    'url': reverse('business_home', args=[business.subdirectory])
-                } for business in page_obj
-            ],
-            'has_next': page_obj.has_next(),
-            'has_previous': page_obj.has_previous(),
-            'num_pages': paginator.num_pages,
-            'current_page': page_obj.number
-        }
-        return JsonResponse(data)
+# Django core imports
+from django.http import JsonResponse
 
-    return render(request, 'index.html', {'page_obj': page_obj})
-
-
-def aboutus(request):
-    return render(request, "aboutus.html")
+# Local imports
+from ..models import Business
 
 def search(request, position, distance):
     if request.method != "GET":

@@ -17,7 +17,6 @@ class AddressAutocomplete {
 
     initialize(maps) {
         if (!this.addressInput) return;
-
         this.autocomplete = new maps.places.Autocomplete(this.addressInput, {
             types: ['address'],
             componentRestrictions: { country: 'us' }
@@ -161,7 +160,6 @@ export class BusinessForm {
         console.log('Business Types object:', this.businessTypes);
         console.log('Business Categories object:', this.businessCategories);
         console.log('Available keys in Business Types:', Object.keys(this.businessTypes));
-        console.log('Trying to access:', this.businessTypes[category]);
         this.businessTypeSelect.innerHTML = '<option value="">Select a Business Type</option>';
         const types = this.businessTypes[this.businessCategories[category]];
         console.log('Found types:', types);

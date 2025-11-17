@@ -78,7 +78,7 @@ def some_view(request):
 logger = logging.getLogger(__name__)
 
 
-# Business.py
+# api_endpoints.py
 @login_required
 def fetch_business_info(request):
     try:
@@ -161,7 +161,7 @@ def fetch_business_info(request):
     
     return redirect('create')
 
-# index.py
+# core.py
 def index(request): 
     business_list = Business.objects.all().order_by('-created')
     paginator = Paginator(business_list, 6)
@@ -194,7 +194,7 @@ def custom_logout(request):
     logout(request)
     return JsonResponse({'success': True})
 
-# profile.py
+# core.py
 def profile(request):
     business_list = Business.objects.all()
     owner_business = []
@@ -206,13 +206,13 @@ def profile(request):
             owner_check = True
     return render(request, "profile.html", {"profile": profile, "owner_check" : owner_check, "owner_business" : owner_business})
 
-# index.py
+# core.py
 def aboutus(request):
     return render(request, "aboutus.html")
 
-# business.py
+# business.py changed from "create" to "create_business"
 @login_required
-def create(request):
+def create_business(request):
     user = request.user
     gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
@@ -875,7 +875,8 @@ def specials(request, business_subdirectory):
     
     else:
         return render(request, "owner_subpages/specials.html", context)
-    
+
+# events.py
 def events(request, business_subdirectory):
     business = get_object_or_404(Business, subdirectory=business_subdirectory)
     
@@ -1056,7 +1057,7 @@ def add_dish(request, business_subdirectory):
             "error": str(e)
         }, status=400)
 
-# old search function index.py
+# navigation.py
 def search(request, position, distance):
     if request.method != "GET":
         return JsonResponse({"error" : "GET request required."}, status=400)
@@ -1099,6 +1100,7 @@ def search(request, position, distance):
             test_dict.append(e)
     return JsonResponse([localbusiness for localbusiness in test_dict], safe=False)
 
+# navigation.py
 def filter(request, place):
     if request.method != "GET":
         return JsonResponse({"error" : "GET request required."}, status=400)
@@ -1598,7 +1600,7 @@ def edit_layout(request, business_subdirectory):
         logger.error(f"Error in edit_layout: {str(e)}\n{traceback.format_exc()}")
         return HttpResponse(f"Error loading layout editor: {str(e)}", status=500)
 
-# layout.py
+# api_endpoints.py
 @require_POST
 def update_layout(request, business_subdirectory):
     print("update_layout called")
@@ -1743,6 +1745,7 @@ def update_layout(request, business_subdirectory):
             'error': str(e)
         }, status=400)
 
+# preview.py
 @login_required
 def preview_page(request, business_subdirectory, page_type):
     print("preview_page called")
@@ -1937,7 +1940,7 @@ def get_page_data(request, business_subdirectory, page_type):
         logger.exception("Full traceback:")
         return JsonResponse({'error': str(e)}, status=500)
     
-# layout.py
+# preview.py
 @login_required
 def preview_component(request, business_subdirectory):
     print("preview_component called")
@@ -2009,7 +2012,7 @@ def preview_component(request, business_subdirectory):
         }, status=500)
 
 
-# layout.py
+# preview.py
 @login_required
 def preview_navigation(request, business_subdirectory, style):
     print("preview_navigation called")
@@ -2034,7 +2037,7 @@ def preview_navigation(request, business_subdirectory, style):
         logger.error(f"Error in preview_navigation: {str(e)}")
         return HttpResponse(f"Error: {str(e)}", status=500)
 
-# layout.py
+# update_component.py
 def update_global_component(request, business_subdirectory):
     print("update_global_component called")
     try:
@@ -2172,7 +2175,7 @@ def update_global_component(request, business_subdirectory):
     except Exception as e:
         logger.error(f"Error in update_global_component: {str(e)}")
         return JsonResponse({'error': str(e)}, status=500)
-    
+
 # layout.py
 @require_POST
 @login_required
@@ -2193,7 +2196,7 @@ def save_layout(request, business_subdirectory):
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
 
-# layout.py
+# impage_handlers.py
 @login_required
 @require_POST
 def upload_hero_image(request, business_subdirectory):
@@ -2340,7 +2343,7 @@ def upload_hero_image(request, business_subdirectory):
         logger.error(f"Error in upload_hero_image: {str(e)}")
         return JsonResponse({'success': False, 'error': str(e)})
 
-# layout.py
+# image_handlers.py
 @login_required
 def remove_hero_image(request, business_subdirectory):
     print("remove_hero_image called")
@@ -2446,7 +2449,7 @@ def update_subpage_hero(request, business_subdirectory, subpage_id):
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
  
 
-# layout.py
+# update_component.py
 @require_POST
 def update_hero(request, business_subdirectory):
     # Convert old format to new format
@@ -2577,7 +2580,7 @@ def page_content(request, business_subdirectory, page_type):
         logger.exception("Full traceback:")
         return HttpResponse(f"Error loading page content: {str(e)}", status=500)
 
-# layout.py
+# update_component.py
 @login_required
 def update_brand_colors(request, business_subdirectory):
     if request.method != 'POST':
@@ -2876,6 +2879,7 @@ def delete_event(request, business_subdirectory, event_id):
         }, status=500)
 
 # customize.py
+# update_subpage.py
 @login_required
 @require_http_methods(["POST"])
 def update_home_page_settings(request, business_subdirectory):
@@ -2946,6 +2950,52 @@ def update_home_page_settings(request, business_subdirectory):
             'message': str(e)
         }, status=500)
 
+
+# universal page settings
+# update_subpage.py
+@login_required
+@require_http_methods(["POST"])
+def update_page_settings(request, business_subdirectory):
+    try:
+        data = json.loads(request.body)
+        subpage_type = data.get('page_type')
+        subpage = SubPage.objects.get(business__subdirectory=business_subdirectory, page_type=subpage_type)
+        PageModel = apps.get_model('restaurants', subpage_type)
+        page_object, created = PageModel.objects.get_or_create(subpage=subpage)
+        # Handle welcome section update
+        field_name = data.get('fieldName')
+        if not hasattr(page_object, field_name):
+            return JsonResponse({'status': 'error', 'message': 'Invalid field name'}, status=400)
+        value = data.get(field_name, getattr(page_object, field_name))
+        setattr(page_object, field_name, value)
+        page_object.save()
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Setting updated successfully',
+            'field': field_name,
+            'value': value
+        })
+
+    except SubPage.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Subpage not found'
+        }, status=404)
+        
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Invalid JSON data'
+        }, status=400)
+        
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
+    
+
 # customize.py
 @login_required
 @require_http_methods(["POST"])
@@ -2984,15 +3034,15 @@ def create_news_post(request, business_subdirectory):
         return redirect('home')
 
 # customize.py
+# update_subpage.py
 @login_required
 @require_http_methods(["POST"])
 def update_about_page_settings(request, business_subdirectory):
-
     try:
         data = json.loads(request.body)
         subpage = SubPage.objects.get(business__subdirectory=business_subdirectory, page_type='about')
         about_page, created = AboutUsPage.objects.get_or_create(subpage=subpage)
-        print(data.get('fieldName'))
+        print(data)
         # Handle content section updates
         if data.get('fieldName') in ['content', 'history', 'team_members', 'mission_statement', 'core_values']:
             field_name = data.get('fieldName')
@@ -3056,6 +3106,7 @@ def update_about_page_settings(request, business_subdirectory):
         }, status=500)
 
 # customize.py
+# update_subpage.py
 @login_required
 @require_http_methods(["POST"])
 def update_contact_page_settings(request, business_subdirectory):
@@ -3123,7 +3174,7 @@ def update_contact_page_settings(request, business_subdirectory):
             'message': str(e)
         }, status=500)
 
-# customize.py
+# core.py
 @login_required
 def edit_business(request, business_subdirectory):
     business = get_object_or_404(Business, subdirectory=business_subdirectory, owner=request.user)
@@ -3151,7 +3202,7 @@ def edit_business(request, business_subdirectory):
         'is_owner': True,
     })
 
-# customize.py
+# core.py
 @login_required
 def update_business_field(request, business_subdirectory):
     if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -3223,6 +3274,7 @@ def update_business_field(request, business_subdirectory):
         'errors': form.errors.get(field_name, ['Invalid data'])
     }, status=400)
 
+# communication.py
 @require_POST
 def submit_contact_form(request, business_subdirectory):
     if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -3279,6 +3331,7 @@ def submit_contact_form(request, business_subdirectory):
         'errors': form.errors
     }, status=400)
 
+# products.py
 @require_POST
 @login_required
 def create_product(request, business_subdirectory):
@@ -3339,6 +3392,7 @@ def create_product(request, business_subdirectory):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+#products.py
 @login_required
 @require_http_methods(['GET', 'POST', 'DELETE'])  # Changed from PUT to POST
 def product_detail(request, business_subdirectory, product_id):
@@ -3427,6 +3481,8 @@ def get_product_form(request, business_subdirectory, product_id):
         'current_image_url': product.image.image.url if product.image else None
     })
 
+
+# update_subpage.py
 @login_required
 @require_POST
 def update_products_page_settings(request, business_subdirectory):
@@ -3455,6 +3511,7 @@ def update_products_page_settings(request, business_subdirectory):
     except (Business.DoesNotExist, SubPage.DoesNotExist, json.JSONDecodeError) as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+# services.py
 @login_required
 def create_service(request, business_subdirectory):
     try:
@@ -3511,6 +3568,7 @@ def create_service(request, business_subdirectory):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+# services.py
 @login_required
 def service_detail(request, business_subdirectory, service_id):
     service = get_object_or_404(
@@ -3580,6 +3638,7 @@ def service_detail(request, business_subdirectory, service_id):
                 'error': f'Failed to delete service: {str(e)}'
             }, status=500)
 
+# services.py
 @login_required
 def get_service_form(request, business_subdirectory, service_id):
     service = get_object_or_404(
@@ -3604,6 +3663,7 @@ def get_service_form(request, business_subdirectory, service_id):
         'current_image_url': service.image.image.url if service.image else None
     })
 
+# update_subpage.py
 @login_required
 def update_services_page_settings(request, business_subdirectory):
     try:
@@ -3631,6 +3691,7 @@ def update_services_page_settings(request, business_subdirectory):
     except (Business.DoesNotExist, SubPage.DoesNotExist, json.JSONDecodeError) as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+# update_subpage.py
 @login_required
 def update_gallery_page_settings(request, business_subdirectory):
     try:
@@ -3658,6 +3719,7 @@ def update_gallery_page_settings(request, business_subdirectory):
     except (Business.DoesNotExist, SubPage.DoesNotExist, json.JSONDecodeError) as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+# image_handlers.py
 @login_required
 @require_POST
 def upload_gallery_image(request, business_subdirectory):
@@ -3704,7 +3766,7 @@ def upload_gallery_image(request, business_subdirectory):
         logger.error(f"Error uploading gallery image: {str(e)}")
         return JsonResponse({"error": "Server error"}, status=500)
 
-
+# image_handlers.py
 @login_required
 @require_http_methods(['DELETE'])
 def delete_gallery_image(request, business_subdirectory, image_id):
@@ -3732,14 +3794,17 @@ def delete_gallery_image(request, business_subdirectory, image_id):
         logger.error(f"Error deleting gallery image: {str(e)}")
         return JsonResponse({"error": "Server error"}, status=500)
     
-    
+
+# advert.py
 @login_required
 def seo(request, business_subdirectory):
     return render(request, 'subpages/seo.html')
 
+# advert.py
 @login_required
 def advertising(request, business_subdirectory):
     return render(request, 'subpages/advertising.html')
 
+# error.py
 def custom_404(request, exception):
     return render(request, '404.html', status=404)

@@ -1,7 +1,7 @@
 {% load static %}
 
 <div class="hero-section relative">
-    {% if hero_primary %}
+    {% if page_data.hero_primary.url %}
     <div class="relative w-full h-screen">
         <img src="{{ hero_primary.image.url }}" 
              alt="{{ hero_primary.alt_text }}"

@@ -13,14 +13,14 @@
         <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     </head>
-    <body>
+    <body style="display: flex; flex-direction: column; min-height: 100vh;">
         <!-- Navigation -->
         {% with nav_colors=business_details %}
             {% include "components/navigation/top-nav/"|add:business_details.navigation_style|add:".html" with business_subdirectory=business_details.subdirectory primary_color=nav_colors.primary_color secondary_color=nav_colors.secondary_color text_color=nav_colors.text_color hover_color=nav_colors.hover_color %}
         {% endwith %}
 
         <!-- Main Content -->
-        <main>
+        <main style="flex: 1;">
             {% block content %}{% endblock %}
         </main>
 

@@ -1,22 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const togglePass = document.getElementById('toggleVis');
-    togglePass.addEventListener('click', () => {
-        togglePasswordVisibility();
-    });
-    const switchToGoogleBtn = document.getElementById('switchToGoogleBtn');
+    if (togglePass) {
+        togglePass.addEventListener('click', () => {
+            togglePasswordVisibility();
+        });
+    }
     const backToLoginBtn = document.getElementById('backToLoginBtn');
     const regularLoginContainer = document.getElementById('regularLoginContainer');
     const googleSignInContainer = document.getElementById('googleSignInContainer');
 
-    if (switchToGoogleBtn) {
-        switchToGoogleBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            regularLoginContainer.classList.add('hidden');
-            googleSignInContainer.classList.remove('hidden');
-        });
-    }
-
-    if (backToLoginBtn) {
+    if (backToLoginBtn && regularLoginContainer && googleSignInContainer) {
         backToLoginBtn.addEventListener('click', function(e) {
             e.preventDefault();
             googleSignInContainer.classList.add('hidden');

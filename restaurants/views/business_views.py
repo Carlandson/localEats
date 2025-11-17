@@ -1,21 +1,29 @@
-def profile(request):
-    business_list = Business.objects.all()
-    owner_business = []
-    owner_check = False
-    print(business_list)
-    for business in business_list:
-        if business.owner == request.user:
-            owner_business.append(business)
-            owner_check = True
-    return render(request, "profile.html", {"profile": profile, "owner_check" : owner_check, "owner_business" : owner_business})
+# Django core imports
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.urls import reverse
+from django.http import JsonResponse
+from django.core.exceptions import ValidationError
+from django.conf import settings
 
+# Third-party imports
+import googlemaps
+import logging
+
+# Local imports
+from ..models import Business, SubPage
+from ..forms import BusinessCreateForm
+from .customize_views import get_editor_context
+from .layout_views import get_visitor_context
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
-def create(request):
+def create_business(request):
     user = request.user
     gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
-
     if request.method == "GET":
         context = {
             "create": BusinessCreateForm(),
@@ -115,3 +123,114 @@ def create(request):
             "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
         }
         return render(request, "create.html", context)
+
+
+def get_business_context(business, user, page_type='home'):
+    """Base context for both editor and visitor views"""
+    is_dashboard = page_type == 'dashboard'
+    is_owner = user == business.owner
+    
+    # Get the requested subpage
+    subpage = SubPage.objects.filter(
+        business=business, 
+        page_type=page_type if not is_dashboard else 'home'
+    ).first()
+    print(subpage)
+    # Base context needed for both views
+    base_context = {
+        'business_details': business,
+        'business_subdirectory': business.subdirectory,
+        'subpage': subpage,
+        'is_owner': is_owner,
+        'is_edit_page': is_owner and not is_dashboard,
+    }
+
+    if is_owner:
+        return get_editor_context(base_context, business, subpage, page_type)
+    else:
+        return get_visitor_context(base_context, business, subpage, page_type)
+    
+
+def business_dashboard(request, business_subdirectory):
+    business = get_object_or_404(Business, subdirectory=business_subdirectory)
+    
+    # Check if user is the business owner
+    if request.user != business.owner:
+        return redirect('business_home', business_subdirectory=business_subdirectory)
+    
+    if request.method != "GET":
+        return JsonResponse({"error": "GET request required."}, status=400)
+
+    # Get context for the dashboard
+    context = get_business_context(business, request.user, 'dashboard')
+    
+    return render(request, "eatery_owner.html", context)
+
+def business_subpage_editor(request, business_subdirectory, page_type):
+    business = get_object_or_404(Business, subdirectory=business_subdirectory)
+    context = get_business_context(business, request.user, page_type)
+    return render(request, "subpages/events.html", context)
+
+
+def business_page(request, business_subdirectory, page_type="home"):
+    business = get_object_or_404(Business, subdirectory=business_subdirectory)
+    
+    if request.method != "GET":
+        return JsonResponse({"error": "GET request required."}, status=400)
+
+    # Get context with specified page type
+    context = get_business_context(business, request.user, page_type)
+    # Check verification status
+    if not business.is_verified and request.user != business.owner:
+        return render(request, "business_under_construction.html", context)
+
+    # Determine which template to use
+    if request.user == business.owner:
+        template = f"subpages/{page_type}.html" 
+    else:
+        template = f"visitor_pages/{page_type}.html"
+
+    return render(request, template, context)
+
+
+def business_main(request, business_subdirectory):
+    business = get_object_or_404(Business, subdirectory=business_subdirectory)
+    
+    if request.method != "GET":
+        return JsonResponse({"error": "GET request required."}, status=400)
+
+    # Get or create home subpage
+    subpage, created = SubPage.objects.get_or_create(
+        business=business,
+        page_type='home',
+        defaults={
+            'title': business.business_name,
+            'slug': business.subdirectory,
+            'is_published': True
+        }
+    )
+    # Get your existing context
+    context = get_business_context(business, request.user)
+    
+    # Add subpage to context
+    context.update({
+        'subpage': subpage,
+        'is_home': True
+    })
+    print(business.is_verified)
+
+    if not business.is_verified and request.user != business.owner:
+        return render(request, "business_under_construction.html", context)
+
+    if request.user == business.owner:
+        return render(request, "eatery_owner.html", context)
+    else:
+        return render(request, "visitor_pages/home.html", context)
+    
+
+def get_business(request, business_id):
+    try:
+        business_obj = Business.objects.get(id=business_id)
+        return JsonResponse(business_obj.serialize())
+    except Business.DoesNotExist:
+        return JsonResponse({"error": "Business not found"}, status=404)

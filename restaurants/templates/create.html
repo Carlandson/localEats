@@ -57,7 +57,7 @@
                           <span class="bg-white px-3 text-gray-600 italic text-sm">Or Register Manually</span>
                         </div>
                       </div>
-                      <form action="{% url 'create' %}" method="POST">
+                      <form action="{% url 'create_business' %}" method="POST">
                         {% csrf_token %}
                         <ul class="space-y-4">
                             {% for field in create %}
@@ -144,9 +144,8 @@
     </div>
 {% endblock %}
 
-{% block scripts %}
+{% block script %}
     <script>
-
         (function() {
             window.__GOOGLE_MAPS_API_KEY__ = '{{ google_maps_api_key }}';
         })();
@@ -159,6 +158,7 @@
     {% else %}
         {% block prod_scripts %}
             <script defer src="{% static 'dist/create.bundle.js' %}"></script>
+
         {% endblock prod_scripts %}
     {% endif %}
-{% endblock scripts %}
+{% endblock script %}
