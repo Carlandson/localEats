@@ -878,6 +878,7 @@ def specials(request, business_subdirectory):
 
 # events.py
 def events(request, business_subdirectory):
+    print("views.py")
     business = get_object_or_404(Business, subdirectory=business_subdirectory)
     
     # First get the subpage for this business
@@ -2634,7 +2635,7 @@ def add_event(request, business_subdirectory):
         events_page = EventsPage.objects.get_or_create(subpage=subpage)[0]
 
         # Get form data
-        form = EventForm(request.POST, request.FILES)
+        form = EventForm(request.POST, request.FILES, business=business)
         if not form.is_valid():
             return JsonResponse({
                 'success': False,
@@ -2792,7 +2793,7 @@ def edit_event(request, business_subdirectory, event_id):
             return JsonResponse({'error': 'Unauthorized'}, status=403)
 
         event = get_object_or_404(Event, id=event_id)
-        form = EventForm(request.POST, request.FILES, instance=event)
+        form = EventForm(request.POST, request.FILES, instance=event, business=business)
         
         if form.is_valid():
             event = form.save()

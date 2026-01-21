@@ -173,6 +173,7 @@ def business_subpage_editor(request, business_subdirectory, page_type):
 
 
 def business_page(request, business_subdirectory, page_type="home"):
+    print("business_page")
     business = get_object_or_404(Business, subdirectory=business_subdirectory)
     
     if request.method != "GET":

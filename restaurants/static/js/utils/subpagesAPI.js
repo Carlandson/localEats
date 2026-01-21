@@ -4,7 +4,6 @@ function getCsrfToken() {
 
 export async function makeRequest(url, method, data) {
     console.log('Making request:', url, method, data);
-    return fetch(url, options);
     try {
         const headers = {
             'X-CSRFToken': getCsrfToken(),
@@ -21,7 +20,29 @@ export async function makeRequest(url, method, data) {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || 'Server error');
+            let errorMessage = 'Server error';
+            
+            // Handle form.errors dict format
+            if (errorData.error && typeof errorData.error === 'object') {
+                const errors = [];
+                for (const [field, messages] of Object.entries(errorData.error)) {
+                    if (Array.isArray(messages)) {
+                        errors.push(`${field}: ${messages.join(', ')}`);
+                    } else {
+                        errors.push(`${field}: ${messages}`);
+                    }
+                }
+                errorMessage = errors.join('; ');
+            } 
+            // Handle string error or message
+            else if (errorData.error) {
+                errorMessage = errorData.error;
+            } 
+            else if (errorData.message) {
+                errorMessage = errorData.message;
+            }
+            
+            throw new Error(errorMessage);
         }
 
         return await response.json();
@@ -32,6 +53,19 @@ export async function makeRequest(url, method, data) {
 }
 
 export const api = {
+    // About Us page settings
+    aboutUs: {
+        updateSettings: async (business, data) => {
+            return makeRequest(`/${business}/about/settings/`, 'POST', data);
+        },
+        toggleSection: async (business, data) => {
+            return makeRequest(`/${business}/about/settings/`, 'POST', {
+                fieldType: 'boolean',
+                page_type: 'about',
+                ...data
+            });
+        }
+    },
     // Home page settings
     home: {
         updateSettings: async (business, data) => {
@@ -59,9 +93,20 @@ export const api = {
     // Events
     events: {
         create: async (business, formData) => {
-            return makeRequest(`/api/${business}/events/`, 'POST', formData);
-        }
+            return makeRequest(`/${business}/events/add/`, 'POST', formData);
+        },
+        update: async (business, eventId, formData) => {
+            return makeRequest(`/${business}/events/edit/${eventId}/`, 'POST', formData);
+        },
+        delete: async (business, eventId) => {
+            return makeRequest(`/${business}/events/delete/${eventId}/`, 'DELETE');
+        },
+        getEditForm: async (business, eventId) => {
+            return makeRequest(`/${business}/events/get-form/${eventId}/`, 'GET');
+        },
     },
+    
+    // contact page
     contact: {
         updateSettings: async (business, data) => {
             return makeRequest(`/${business}/contact/settings/`, 'POST', data);

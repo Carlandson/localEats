@@ -24,7 +24,7 @@ from .navigation_views import search, filter
 from .profile_views import profile, create
 
 # Events views
-from .events_views import events
+from .events_views import events, get_events_context, delete_event, add_event, get_event_form, edit_event
 
 # Products views
 from .products_views import create_product, product_detail, get_product_form
@@ -51,13 +51,16 @@ from .imagehandling_views import upload_hero_image, remove_hero_image, upload_ga
 from .content_views import page_content
 
 # Customize views
-from .customize_views import get_editor_context, create_subpage, update_home_page_settings, create_news_post, add_event, get_event_form, edit_event, delete_event, update_about_page_settings, update_contact_page_settings
+from .customize_views import get_editor_context, create_subpage, update_home_page_settings, create_news_post, update_about_page_settings, update_contact_page_settings
 
 # Communication views
 from .communication_views import submit_contact_form
 
 # Advert views
 from .advert_views import seo, advertising
+
+# Patronage views
+from .patronage_portal_views import patronage_portal
 
 __all__ = [
     # Core views

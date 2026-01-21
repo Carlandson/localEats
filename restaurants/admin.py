@@ -49,6 +49,110 @@ class BusinessAdminSite(admin.AdminSite):
         extra_context['businesses'] = businesses
         extra_context['users'] = users
         return super().index(request, extra_context)
+    
+    def get_app_list(self, request):
+        """
+        Return a sorted list of all the installed apps that have been
+        registered in this site, with their models grouped into categories.
+        """
+        app_dict = {}
+        
+        # Define categories
+        categories = {
+            'Business Management': {
+                'models': ['Business', 'User'],
+                'icon': '🏢'
+            },
+            'Business Pages': {
+                'models': ['SubPage', 'HomePage', 'AboutUsPage', 'EventsPage', 
+                          'SpecialsPage', 'ProductsPage', 'ServicesPage', 'GalleryPage'],
+                'icon': '📄'
+            },
+            'Content': {
+                'models': ['Event', 'Product', 'Service', 'Image'],
+                'icon': '📝'
+            },
+            'Menu Management': {
+                'models': ['Menu', 'Course', 'Dish', 'SideOption'],
+                'icon': '🍽️'
+            },
+            'Settings': {
+                'models': ['CuisineCategory'],
+                'icon': '⚙️'
+            }
+        }
+        
+        # Get all registered models
+        for model, model_admin in self._registry.items():
+            app_label = model._meta.app_label
+            model_name = model.__name__
+            
+            # Find which category this model belongs to
+            category_name = None
+            for cat_name, cat_info in categories.items():
+                if model_name in cat_info['models']:
+                    category_name = cat_name
+                    break
+            
+            # If not found in categories, put in "Other"
+            if not category_name:
+                category_name = 'Other'
+                if category_name not in categories:
+                    categories[category_name] = {'models': [], 'icon': '📦'}
+            
+            # Create app structure if it doesn't exist
+            if category_name not in app_dict:
+                app_dict[category_name] = {
+                    'name': category_name,
+                    'app_label': category_name.lower().replace(' ', '_'),
+                    'app_url': '#',
+                    'has_module_perms': True,
+                    'models': []
+                }
+            
+            # Add model to category
+            if model_admin:
+                perms = model_admin.get_model_perms(request)
+                if True in perms.values():
+                    model_dict = {
+                        'name': model._meta.verbose_name_plural or model._meta.verbose_name or model_name,
+                        'object_name': model_name,
+                        'perms': perms,
+                        'admin_url': None,
+                        'add_url': None,
+                    }
+                    
+                    if perms.get('change') or perms.get('view'):
+                        try:
+                            model_dict['admin_url'] = self.get_model_admin_url(model, 'changelist')
+                        except:
+                            pass
+                    
+                    if perms.get('add'):
+                        try:
+                            model_dict['add_url'] = self.get_model_admin_url(model, 'add')
+                        except:
+                            pass
+                    
+                    app_dict[category_name]['models'].append(model_dict)
+        
+        # Sort models within each category
+        for category in app_dict.values():
+            category['models'].sort(key=lambda x: x['name'])
+        
+        # Return sorted list of categories
+        app_list = sorted(app_dict.values(), key=lambda x: x['name'])
+        return app_list
+    
+    def get_model_admin_url(self, model, url_type):
+        """Helper to get admin URLs for models"""
+        model_name = model._meta.model_name
+        app_label = model._meta.app_label
+        if url_type == 'changelist':
+            return reverse(f'{self.name}:{app_label}_{model_name}_changelist')
+        elif url_type == 'add':
+            return reverse(f'{self.name}:{app_label}_{model_name}_add')
+        return None
 
 class SideOptionInline(admin.TabularInline):
     model = SideOption
@@ -100,7 +204,7 @@ class CourseAdmin(admin.ModelAdmin):
     get_business.short_description = 'Business'
     
     def get_dishes_count(self, obj):
-        return obj.dish_set.count()
+        return obj.dishes.count()
     get_dishes_count.short_description = 'Dishes'
     
     def get_side_options_count(self, obj):
@@ -262,6 +366,7 @@ class ImageAdmin(admin.ModelAdmin):
             'all': ('admin/css/images.css',)
         }
         js = ('admin/js/images.js',)
+
 class GalleryImageInline(GenericTabularInline):
     model = Image
     fields = ('display_image', 'alt_text', 'caption', 'upload_date', 'uploaded_by')
@@ -330,28 +435,179 @@ class GalleryPageAdmin(admin.ModelAdmin):
         }
 
         js = ('admin/js/gallery.js',) 
+
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('title', 'get_business', 'get_owner', 'date', 'end_date')
+    list_filter = ('events_page__subpage__business', 'events_page__subpage__business__owner', 'date')
+    search_fields = ('title', 'description', 'events_page__subpage__business__business_name', 
+                     'events_page__subpage__business__owner__username')
+    date_hierarchy = 'date'
+    ordering = ('-date',)
+    
+    def get_business(self, obj):
+        """Display the business name"""
+        if obj.events_page and obj.events_page.subpage:
+            return obj.events_page.subpage.business.business_name
+        return "—"
+    get_business.short_description = 'Business'
+    get_business.admin_order_field = 'events_page__subpage__business__business_name'
+    
+    def get_owner(self, obj):
+        """Display the business owner"""
+        if obj.events_page and obj.events_page.subpage:
+            return obj.events_page.subpage.business.owner.username
+        return "—"
+    get_owner.short_description = 'Owner'
+    get_owner.admin_order_field = 'events_page__subpage__business__owner__username'
+    
+    def get_queryset(self, request):
+        """Filter events based on user permissions"""
+        qs = super().get_queryset(request)
+        if not request.user.is_superuser:
+            # Non-superusers only see events for their own businesses
+            qs = qs.filter(events_page__subpage__business__owner=request.user)
+        return qs.select_related('events_page__subpage__business__owner')
+
+# Base admin class for page models (to avoid repetition)
+class BasePageAdmin(admin.ModelAdmin):
+    list_display = ('get_business_link', 'get_owner_link', 'get_subpage_info')
+    list_filter = ('subpage__business', 'subpage__business__owner')
+    search_fields = ('subpage__business__business_name', 'subpage__business__owner__username')
+    
+    def get_business_link(self, obj):
+        """Create a clickable link to the business"""
+        if obj.subpage and obj.subpage.business:
+            business = obj.subpage.business
+            url = reverse('business_admin:restaurants_business_change', args=[business.id])
+            return format_html('<a href="{}">{}</a>', url, business.business_name)
+        return "—"
+    get_business_link.short_description = 'Business'
+    get_business_link.admin_order_field = 'subpage__business__business_name'
+    
+    def get_owner_link(self, obj):
+        """Create a clickable link to the owner/user"""
+        if obj.subpage and obj.subpage.business and obj.subpage.business.owner:
+            owner = obj.subpage.business.owner
+            url = reverse('business_admin:auth_user_change', args=[owner.id])
+            return format_html('<a href="{}">{}</a>', url, owner.username)
+        return "—"
+    get_owner_link.short_description = 'Owner'
+    get_owner_link.admin_order_field = 'subpage__business__owner__username'
+    
+    def get_subpage_info(self, obj):
+        """Display subpage title and type"""
+        if obj.subpage:
+            return f"{obj.subpage.title} ({obj.subpage.get_page_type_display()})"
+        return "—"
+    get_subpage_info.short_description = 'SubPage'
+    
+    def get_queryset(self, request):
+        """Filter pages based on user permissions"""
+        qs = super().get_queryset(request)
+        if not request.user.is_superuser:
+            qs = qs.filter(subpage__business__owner=request.user)
+        return qs.select_related('subpage__business__owner')
+
+# Specific admin classes for each page type
+class HomePageAdmin(BasePageAdmin):
+    list_display = BasePageAdmin.list_display + ('subpage',)
+    
+class AboutUsPageAdmin(BasePageAdmin):
+    list_display = BasePageAdmin.list_display + ('show_history', 'show_team', 'show_mission')
+    
+class EventsPageAdmin(BasePageAdmin):
+    list_display = BasePageAdmin.list_display + ('show_description',)
+    
+class SpecialsPageAdmin(BasePageAdmin):
+    list_display = BasePageAdmin.list_display + ('happy_hour_start', 'happy_hour_end')
+    
+class ProductsPageAdmin(BasePageAdmin):
+    list_display = BasePageAdmin.list_display + ('show_description',)
+    
+class ServicesPageAdmin(BasePageAdmin):
+    list_display = BasePageAdmin.list_display + ('show_description',)
+
+# GalleryPageAdmin already exists, so extend it
+class GalleryPageAdminExtended(GalleryPageAdmin, BasePageAdmin):
+    list_display = ('get_business_link', 'get_owner_link', 'get_subpage_info', 
+                    'image_count', 'show_description', 'preview_description')
+    
+    def get_queryset(self, request):
+        """Filter pages based on user permissions"""
+        qs = super().get_queryset(request)
+        if not request.user.is_superuser:
+            qs = qs.filter(subpage__business__owner=request.user)
+        return qs.select_related('subpage__business__owner')
+
+# SubPage admin
+class SubPageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'get_business_link', 'get_owner_link', 'page_type', 'is_published', 'order')
+    list_filter = ('business', 'business__owner', 'page_type', 'is_published')
+    search_fields = ('title', 'business__business_name', 'business__owner__username')
+    
+    def get_business_link(self, obj):
+        """Create a clickable link to the business"""
+        if obj.business:
+            url = reverse('business_admin:restaurants_business_change', args=[obj.business.id])
+            return format_html('<a href="{}">{}</a>', url, obj.business.business_name)
+        return "—"
+    get_business_link.short_description = 'Business'
+    get_business_link.admin_order_field = 'business__business_name'
+    
+    def get_owner_link(self, obj):
+        """Create a clickable link to the owner/user"""
+        if obj.business and obj.business.owner:
+            url = reverse('business_admin:auth_user_change', args=[obj.business.owner.id])
+            return format_html('<a href="{}">{}</a>', url, obj.business.owner.username)
+        return "—"
+    get_owner_link.short_description = 'Owner'
+    get_owner_link.admin_order_field = 'business__owner__username'
+    
+    def get_queryset(self, request):
+        """Filter subpages based on user permissions"""
+        qs = super().get_queryset(request)
+        if not request.user.is_superuser:
+            qs = qs.filter(business__owner=request.user)
+        return qs.select_related('business__owner')
+
 # Create instance of custom admin site
 business_admin = BusinessAdminSite(name='business_admin')
 
-# Register User model with custom admin
+# ============================================
+# BUSINESS MANAGEMENT
+# ============================================
 business_admin.register(User, CustomUserAdmin)
-
-# Register your other models
 business_admin.register(Business)
-business_admin.register(SubPage)
-business_admin.register(HomePage)
-business_admin.register(AboutUsPage)
-business_admin.register(EventsPage)
-business_admin.register(SpecialsPage)
-business_admin.register(Event)
-business_admin.register(CuisineCategory)
+
+# ============================================
+# BUSINESS PAGES
+# ============================================
+business_admin.register(SubPage, SubPageAdmin)
+business_admin.register(HomePage, HomePageAdmin)
+business_admin.register(AboutUsPage, AboutUsPageAdmin)
+business_admin.register(EventsPage, EventsPageAdmin)
+business_admin.register(SpecialsPage, SpecialsPageAdmin)
+business_admin.register(ProductsPage, ProductsPageAdmin)
+business_admin.register(ServicesPage, ServicesPageAdmin)
+business_admin.register(GalleryPage, GalleryPageAdminExtended)
+
+# ============================================
+# CONTENT
+# ============================================
+business_admin.register(Event, EventAdmin)
 business_admin.register(Product)
-business_admin.register(ProductsPage)
-business_admin.register(ServicesPage)
 business_admin.register(Service, ServiceAdmin)
-business_admin.register(GalleryPage, GalleryPageAdmin)
 business_admin.register(Image, ImageAdmin)
+
+# ============================================
+# MENU MANAGEMENT
+# ============================================
 business_admin.register(Menu, MenuAdmin)
 business_admin.register(Course, CourseAdmin)
 business_admin.register(Dish, DishAdmin)
 business_admin.register(SideOption, SideOptionAdmin)
+
+# ============================================
+# SETTINGS
+# ============================================
+business_admin.register(CuisineCategory)

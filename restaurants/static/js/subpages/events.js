@@ -1,3 +1,6 @@
+import { api } from '../utils/subpagesAPI.js';
+import { showToast } from '../components/toast.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     const business = JSON.parse(document.getElementById('business').textContent);
     const formContainer = document.getElementById('event-form-container');
@@ -38,22 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     
         try {
-            const response = await fetch(`/${business}/events/add/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: formData
-            });
-    
-            const data = await response.json();
-            
-            if (!response.ok) {
-                errorDisplay.textContent = typeof data.error === 'string' ? 
-                    data.error : 'Error creating event';
-                errorDisplay.classList.remove('hidden');
-                return;
-            }
+            await api.events.create(business, formData);
     
             // Success - refresh the events list
             location.reload();
@@ -64,7 +52,34 @@ document.addEventListener('DOMContentLoaded', function() {
             errorDisplay.classList.remove('hidden');
         }
     });
-
+    // Image preview for create form (same logic as edit form)
+    const createForm = document.getElementById('createEvent');
+    const createImageInput = createForm?.querySelector('input[type="file"]');
+    if (createImageInput) {
+        createImageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Find existing preview or create new one
+                    let previewDiv = createForm.querySelector('.image-preview');
+                    if (!previewDiv) {
+                        previewDiv = document.createElement('div');
+                        previewDiv.className = 'image-preview mt-2';
+                        createImageInput.parentNode.appendChild(previewDiv);
+                    }
+                    
+                    previewDiv.innerHTML = `
+                        <p class="text-sm text-gray-600 mb-2">Image Preview:</p>
+                        <img src="${e.target.result}" 
+                             alt="Preview" 
+                             class="h-32 w-32 object-cover rounded-lg border border-gray-200">
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
     // Edit/Delete handlers
     document.querySelectorAll('.editEvent').forEach(button => {
         button.addEventListener('click', () => {
@@ -77,25 +92,25 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.deleteEvent').forEach(button => {
         button.addEventListener('click', () => {
             const eventId = button.id.substring(1);
-            if (confirm('Are you sure you want to delete this event?')) {
-                deleteEvent(business, eventId);
-            }
+            deleteEvent(business, eventId);
         });
     });
 });
 
 
 async function deleteEvent(business, eventId) {
-    if (!confirm('Are you sure you want to delete this event?')) {
-        return;
+
+    const confirmed = window.confirm('Are you sure you want to delete this event?');
+    if (!confirmed) {
+        return; // User cancelled, exit early
     }
 
     const eventElement = document.getElementById(`event${eventId}`);
     if (!eventElement) {
-        console.error('Could not find event element');
+        console.error(`Could not find event element for ID: event${eventId}`);
         return;
     }
-
+    const originalElementClone = eventElement.cloneNode(true);
     // Add loading state with transition
     eventElement.style.transition = 'all 0.3s ease-out';
     eventElement.style.opacity = '0.5';
@@ -103,41 +118,32 @@ async function deleteEvent(business, eventId) {
     buttons.forEach(button => button.disabled = true);
 
     try {
-        const response = await fetch(`/${business}/events/delete/${eventId}/`, {
-            method: 'POST',  
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken'),
-                'Content-Type': 'application/json'
-            }
-        });
+        await api.events.delete(business, eventId);
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to delete event');
-        }
-
-        const data = await response.json();
-        if (data.success) {
-            // Animate the removal
-            eventElement.style.transform = 'translateX(100%)';
-            eventElement.style.opacity = '0';
+        // Animate the removal
+        eventElement.style.transform = 'translateX(100%)';
+        eventElement.style.opacity = '0';
+        
+        // Remove element after animation
+        setTimeout(() => {
+            eventElement.remove();
             
-            // Remove element after animation
-            setTimeout(() => {
-                eventElement.remove();
-                
-                // Check if this was the last event
-                const eventsList = document.getElementById('events-list');
-                if (eventsList && eventsList.children.length === 0) {
-                    const noEventsMessage = document.getElementById('no-events-message');
-                    if (noEventsMessage) {
-                        noEventsMessage.classList.remove('hidden');
-                    }
+            // Check if this was the last event in any list
+            const upcomingList = document.getElementById('upcoming-events-list');
+            const currentList = document.getElementById('current-events-list');
+            const pastList = document.getElementById('past-events-list');
+            
+            const hasEvents = (upcomingList && upcomingList.children.length > 0) ||
+                             (currentList && currentList.children.length > 0) ||
+                             (pastList && pastList.children.length > 0);
+            
+            if (!hasEvents) {
+                const noEventsMessage = document.getElementById('no-upcoming-events-message');
+                if (noEventsMessage) {
+                    noEventsMessage.classList.remove('hidden');
                 }
-            }, 300);
-        } else {
-            throw new Error(data.error || 'Failed to delete event');
-        }
+            }
+        }, 300);
 
     } catch (error) {
         console.error('Error:', error);
@@ -157,13 +163,11 @@ async function editEvent(business, eventId) {
         return;
     }
 
+    const originalElementClone = eventElement.cloneNode(true);
+
     try {
         // Fetch the pre-populated form from Django
-        const response = await fetch(`/${business}/events/get-form/${eventId}/`);
-        if (!response.ok) {
-            throw new Error('Failed to get edit form');
-        }
-        const data = await response.json();
+        const data = await api.events.getEditForm(business, eventId);
 
         // Create edit container
         const editDiv = document.createElement('div');
@@ -201,7 +205,7 @@ async function editEvent(business, eventId) {
         }
         // Add cancel button functionality
         editDiv.querySelector('.cancel-edit').addEventListener('click', () => {
-            editDiv.replaceWith(eventElement);
+            editDiv.replaceWith(originalElementClone);
         });
 
         // Add form submission handler
@@ -211,19 +215,8 @@ async function editEvent(business, eventId) {
             const formData = new FormData(editForm);
 
             try {
-                const response = await fetch(`/${business}/events/edit/${eventId}/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: formData
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Failed to update event');
-                }
-
+                await api.events.update(business, eventId, formData);
+                showToast('Event updated successfully!');
                 // Refresh the page to show updated event
                 location.reload();
 
@@ -237,19 +230,4 @@ async function editEvent(business, eventId) {
         console.error('Error:', error);
         alert('Error loading edit form. Please try again.');
     }
-}
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
 }

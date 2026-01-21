@@ -15,8 +15,7 @@ import traceback
 import base64
 from django.apps import apps
 from ..constants import get_font_choices, get_font_sizes
-
-
+    
 # Third-party imports
 from PIL import Image as PILImage
 

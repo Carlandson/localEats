@@ -25,10 +25,10 @@
         <div id="event-form-container" class="hidden mt-4">
             {% crispy form %}
         </div>
-        <!-- Events list -->
+        <!-- Upcoming Events list -->
         <div id="events-list" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {% if events_data %}
-                {% for event in events_data %}
+            {% if upcoming_events %}
+                {% for event in upcoming_events %}
                     <article id="event{{ event.id }}" class="border rounded-lg p-4 bg-white shadow-sm">
                         <div class="text-center">
                             <h3 class="text-xl font-bold mb-2">{{ event.title }}</h3>
@@ -60,24 +60,101 @@
                         {% endif %}
                     </article>
                 {% endfor %}
+            {% else %}
+                <div class="col-span-full text-center py-8 text-gray-500">
+                    <p class="text-lg">No upcoming events scheduled.</p>
+                    <p class="text-sm mt-2">Click the "Add New Event" button to create your first event.</p>
+                </div>
             {% endif %}
         </div>
-
-        <!-- No events message -->
-        <div id="no-events-message" class="text-center py-8 text-gray-500 {% if events_data %}hidden{% endif %}">
-            <p class="text-lg">No upcoming events scheduled.</p>
-            <p class="text-sm mt-2">Click the "Add New Event" button to create your first event.</p>
-        </div>
-    </div>
-    <div id="past-events-container" class="bg-white rounded-lg shadow-sm p-6 mb-6">
-        <h2 class="text-2xl font-semibold mb-4">Past Events</h2>
+</div>
+<!-- Current Events Section -->
+<div id="current-events-container" class="bg-white rounded-lg shadow-sm p-6 mb-6">
+    <h2 class="text-2xl font-semibold mb-4">Current Events</h2>
+    <div id="current-events-list" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {% if current_events %}
+            {% for event in current_events %}
+                <article id="event{{ event.id }}" class="border rounded-lg p-4 bg-white shadow-sm">
+                    <div class="text-center">
+                        <h3 class="text-xl font-bold mb-2">{{ event.title }}</h3>
+                        {% if event.image_url %}
+                            <img src="{{ event.image_url }}" 
+                                    class="mx-auto object-contain h-40 w-40" 
+                                    alt="{{ event.title }}">
+                        {% else %}
+                            <div class="h-40 w-40 mx-auto flex items-center justify-center bg-gray-100 rounded-lg border-2 border-dashed border-gray-300">
+                                <span class="text-gray-400">No Image</span>
+                            </div>
+                        {% endif %}
+                        <p class="mt-2 font-semibold">Start Date: {{ event.datetime|date:"F j, Y g:i A" }}</p>
+                        {% if event.end_date %}
+                            <p class="mt-2 font-semibold">End Date: {{ event.end_date|date:"F j, Y g:i A" }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="text-center mt-4">
+                        <h4 class="font-semibold mb-2">Description:</h4>
+                        <p>{{ event.description }}</p>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">Currently Active</span>
+                    </div>
+                </article>
+            {% endfor %}
+        {% else %}
+            <div class="col-span-full text-center py-8 text-gray-500">
+                <p class="text-lg">No current events.</p>
+            </div>
+        {% endif %}
     </div>
 </div>
+<!-- Past Events Section -->
+<div id="past-events-container" class="bg-white rounded-lg shadow-sm p-6 mb-6">
+    <h2 class="text-2xl font-semibold mb-4">Past Events</h2>
+    <div id="past-events-list" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {% if past_events %}
+            {% for event in past_events %}
+                <article id="event{{ event.id }}" class="border rounded-lg p-4 bg-white shadow-sm opacity-75">
+                    <div class="text-center">
+                        <h3 class="text-xl font-bold mb-2">{{ event.title }}</h3>
+                        {% if event.image_url %}
+                            <img src="{{ event.image_url }}" 
+                                    class="mx-auto object-contain h-40 w-40" 
+                                    alt="{{ event.title }}">
+                        {% else %}
+                            <div class="h-40 w-40 mx-auto flex items-center justify-center bg-gray-100 rounded-lg border-2 border-dashed border-gray-300">
+                                <span class="text-gray-400">No Image</span>
+                            </div>
+                        {% endif %}
+                        <p class="mt-2 font-semibold">Start Date: {{ event.datetime|date:"F j, Y g:i A" }}</p>
+                        {% if event.end_date %}
+                            <p class="mt-2 font-semibold">End Date: {{ event.end_date|date:"F j, Y g:i A" }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="text-center mt-4">
+                        <h4 class="font-semibold mb-2">Description:</h4>
+                        <p>{{ event.description }}</p>
+                    </div>
+                    {% if is_owner %}
+                        <div class="mt-4 flex justify-end items-center space-x-2">
+                            <button class="deleteEvent px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded transition-colors duration-200" 
+                                    id="d{{ event.id }}">Delete</button>
+                        </div>
+                    {% endif %}
+                </article>
+            {% endfor %}
+        {% else %}
+            <div class="col-span-full text-center py-8 text-gray-500">
+                <p class="text-lg">No past events.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
 {% endblock %}
 
 {% if debug %}
     {% block dev_scripts %}
-    <script src="{% static 'js/subpages/events.js' %}"></script>
+    <script type="module" src="{% static 'js/subpages/events.js' %}"></script>
     {% endblock dev_scripts %}
 {% else %}
     {% block prod_scripts %}

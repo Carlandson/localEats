@@ -16,6 +16,7 @@ urlpatterns = [
     path("create/", views.create_business, name="create_business"),
     path('<slug:business_subdirectory>/edit-business/', views.edit_business, name="edit_business"),
     path('<slug:business_subdirectory>/edit-business/update/', views.update_business_field, name="update_business_field"),
+    path("patronage-portal/", views.patronage_portal, name="patronage_portal"),
     
     # auth.py
     path('accounts/signup/', custom_signup, name='account_signup'),
@@ -81,8 +82,8 @@ urlpatterns = [
 
     # Events Content Editor
     path('<slug:business_subdirectory>/events/add/', views.add_event, name="add_event"),
-    path('<str:business_subdirectory>/events/get-form/<int:event_id>/', views.get_event_form, name='get_event_form'),
-    path('<str:business_subdirectory>/events/edit/<int:event_id>/', views.edit_event, name='edit_event'),
+    path('<slug:business_subdirectory>/events/get-form/<int:event_id>/', views.get_event_form, name='get_event_form'),
+    path('<slug:business_subdirectory>/events/edit/<int:event_id>/', views.edit_event, name='edit_event'),
     path('<slug:business_subdirectory>/events/delete/<int:event_id>/', views.delete_event, name='delete_event'),
 
     # About Content Editor

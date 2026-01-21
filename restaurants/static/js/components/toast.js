@@ -1,6 +1,5 @@
 export function showToast(message, duration = 3000) {
     console.log('Showing toast:', message);
-    alert(`Toast: ${message}`);
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toast-message');
     

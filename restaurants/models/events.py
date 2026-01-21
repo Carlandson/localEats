@@ -10,6 +10,9 @@ class Event(models.Model):
     end_date = models.DateTimeField(null=True, blank=True)
     images = GenericRelation('Image')
 
+    def __str__(self):
+        return f"{self.title} - {self.date.strftime('%Y-%m-%d')}"
+
     @property
     def image(self):
         """Returns the first image associated with this event"""

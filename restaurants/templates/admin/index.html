@@ -7,28 +7,56 @@
     {% if user.is_superuser %}
     <div class="admin-section">
         <h2 class="text-2xl font-bold mb-4">Users</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {% for user_obj in users %}
-            <div class="bg-white rounded-lg shadow p-6">
-                <h3 class="text-xl font-semibold mb-2">{{ user_obj.username }}</h3>
-                <p class="text-gray-600">{{ user_obj.email }}</p>
-                <div class="mt-2">
-                    <strong>Businesses:</strong>
-                    {% with user_businesses=user_obj.owner.all %}
-                        {% if user_businesses %}
-                            <ul class="list-disc ml-4">
-                            {% for business in user_businesses %}
-                                <li>{{ business.business_name }}</li>
-                            {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p class="text-gray-500">No businesses</p>
-                        {% endif %}
-                    {% endwith %}
-                </div>
+        {% if users %}
+            <div class="results">
+                <table id="result_list" class="w-full">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="sortable">
+                                <div class="text">Username</div>
+                            </th>
+                            <th scope="col" class="sortable">
+                                <div class="text">Email</div>
+                            </th>
+                            <th scope="col">
+                                <div class="text">Businesses</div>
+                            </th>
+                            <th scope="col">
+                                <div class="text">Actions</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user_obj in users %}
+                        <tr class="{% cycle 'row1' 'row2' %}">
+                            <td class="field-username">
+                                <strong>{{ user_obj.username }}</strong>
+                            </td>
+                            <td class="field-email">{{ user_obj.email|default:"—" }}</td>
+                            <td class="field-businesses">
+                                {% with user_businesses=user_obj.owner.all %}
+                                    {% if user_businesses %}
+                                        <ul class="list-disc ml-4 text-sm">
+                                        {% for business in user_businesses %}
+                                            <li>{{ business.business_name }}</li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <span class="text-gray-500">No businesses</span>
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                            <td class="action-links">
+                                <a href="{% url 'admin:auth_user_change' user_obj.id %}" class="changelink">Edit</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            {% endfor %}
-        </div>
+        {% else %}
+            <p class="text-gray-500">No users found.</p>
+        {% endif %}
     </div>
     {% endif %}
 
@@ -43,26 +71,62 @@
         </h2>
         
         {% if businesses %}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {% for business in businesses %}
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h3 class="text-xl font-semibold mb-4">{{ business.business_name }}</h3>
-                        <ul class="space-y-2">
-                            <li><a href="{% url 'admin:restaurants_subpage_changelist' %}?business__id__exact={{ business.id }}"
-                                class="block px-4 py-2 bg-indigo-50 text-indigo-700 rounded hover:bg-indigo-100 transition-colors">
-                                Pages
-                            </a></li>
-                            <li><a href="{% url 'admin:restaurants_menu_changelist' %}?business__id__exact={{ business.id }}"
-                                class="block px-4 py-2 bg-indigo-50 text-indigo-700 rounded hover:bg-indigo-100 transition-colors">
-                                Menus
-                            </a></li>
-                            <li><a href="{% url 'admin:restaurants_event_changelist' %}?business__id__exact={{ business.id }}"
-                                class="block px-4 py-2 bg-indigo-50 text-indigo-700 rounded hover:bg-indigo-100 transition-colors">
-                                Events
-                            </a></li>
-                        </ul>
-                    </div>
-                {% endfor %}
+            <div class="results">
+                <table id="result_list" class="w-full">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="sortable">
+                                <div class="text">Business Name</div>
+                            </th>
+                            {% if user.is_superuser %}
+                            <th scope="col" class="sortable">
+                                <div class="text">Owner</div>
+                            </th>
+                            {% endif %}
+                            <th scope="col">
+                                <div class="text">Pages</div>
+                            </th>
+                            <th scope="col">
+                                <div class="text">Menus</div>
+                            </th>
+                            <th scope="col">
+                                <div class="text">Events</div>
+                            </th>
+                            <th scope="col">
+                                <div class="text">Actions</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for business in businesses %}
+                        <tr class="{% cycle 'row1' 'row2' %}">
+                            <td class="field-business_name">
+                                <strong>{{ business.business_name }}</strong>
+                            </td>
+                            {% if user.is_superuser %}
+                            <td class="field-owner">
+                                {{ business.owner.username|default:"—" }}
+                            </td>
+                            {% endif %}
+                            <td class="field-pages">
+                                <a href="{% url 'admin:restaurants_subpage_changelist' %}?business__id__exact={{ business.id }}" 
+                                   class="button">View Pages</a>
+                            </td>
+                            <td class="field-menus">
+                                <a href="{% url 'admin:restaurants_menu_changelist' %}?business__id__exact={{ business.id }}" 
+                                   class="button">View Menus</a>
+                            </td>
+                            <td class="field-events">
+                                <a href="{% url 'admin:restaurants_event_changelist' %}?business__id__exact={{ business.id }}" 
+                                   class="button">View Events</a>
+                            </td>
+                            <td class="action-links">
+                                <a href="{% url 'admin:restaurants_business_change' business.id %}" class="changelink">Edit</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         {% else %}
             <p class="text-gray-500">No businesses found.</p>
@@ -73,8 +137,107 @@
 <style>
 .admin-section {
     padding: 20px;
-    background-color: #030608;
     border-radius: 8px;
+    background-color: var(--body-bg, #fff);
+}
+
+.admin-section h2 {
+    color: var(--body-fg, #333);
+    margin-bottom: 15px;
+}
+
+.results {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.results table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--body-bg, #fff);
+}
+
+.results table thead th {
+    padding: 10px;
+    background-color: var(--darkened-bg, #f8f8f8);
+    border-bottom: 2px solid var(--hairline-color, #e8e8e8);
+    font-weight: 600;
+    text-align: left;
+    color: var(--body-fg, #333);
+}
+
+.results table tbody td {
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--hairline-color, #e8e8e8);
+    color: var(--body-fg, #333);
+}
+
+.results table tbody tr.row1 {
+    background-color: var(--body-bg, #fff);
+}
+
+.results table tbody tr.row2 {
+    background-color: var(--darkened-bg, #f8f8f8);
+}
+
+.results table tbody tr:hover {
+    background-color: var(--selected-bg, #e4e4e4);
+}
+
+.action-links a {
+    color: var(--link-fg, #417893);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.action-links a:hover {
+    background-color: var(--selected-bg, #e4e4e4);
+}
+
+.action-links .changelink {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%23417893' d='M11.5 1.5l-9 9v3h3l9-9-3-3zm-7 9l7-7 1.5 1.5-7 7H4.5v-1.5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 20px;
+}
+
+.field-pages .button,
+.field-menus .button,
+.field-events .button {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: var(--button-bg, #79aec8);
+    color: var(--button-fg, #fff);
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+}
+
+.field-pages .button:hover,
+.field-menus .button:hover,
+.field-events .button:hover {
+    background-color: var(--button-hover-bg, #609ab6);
+}
+
+@media (max-width: 768px) {
+    .results {
+        font-size: 0.875rem;
+    }
+    
+    .results table thead th,
+    .results table tbody td {
+        padding: 8px 6px;
+    }
+    
+    .field-pages .button,
+    .field-menus .button,
+    .field-events .button {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+    }
 }
 </style>
 {% endblock %}

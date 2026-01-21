@@ -1,5 +1,7 @@
 import { showToast } from '../components/toast.js';
+// do we need this? convert if needed
 import { makeRequest } from '../utils/subpagesAPI.js';
+import { api } from '../utils/subpagesAPI.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     const business = JSON.parse(document.getElementById('business').textContent);
@@ -45,28 +47,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     contentDiv.classList.toggle('hidden', !isEnabled);
                 }
                 
-                // Get CSRF token
-                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-                
-                // Send update to server
-                const response = await fetch(`/${business}/about/settings/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfToken
-                    },
-                    body: JSON.stringify({
-                        fieldType: 'boolean',
-                        fieldName: section,
-                        value: isEnabled,
-                        page_type: 'about'
-                    })
+                await api.aboutUs.toggleSection(business, {
+                    fieldName: section,
+                    value: isEnabled
                 });
-
-                if (!response.ok) throw new Error('Update failed');
-
-                // Show success message
-                showToast('Changes saved successfully!');
+                
+                // Change this to a temporary message that doesn't interrupt the user
+                showToast(`${section} has been ${isEnabled ? 'enabled' : 'disabled'} successfully!`);
                 
             } catch (error) {
                 console.error('Update failed:', error);
@@ -91,9 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Show loading state
                 this.textContent = 'Saving...';
                 this.disabled = true;
-                
-                // Get CSRF token
-                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
                 
                 // Prepare the data based on section
                 let data = {
@@ -130,21 +114,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         };
                         break;
                 }
+                console.log("data", data);
                 
-                // Send update to server
-                const response = await fetch(`/${business}/about/settings/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfToken
-                    },
-                    body: JSON.stringify(data)
-                });
-    
-                if (!response.ok) throw new Error('Update failed');
-    
-                // Show success message using the toast
-                showToast('Changes saved successfully!');
+                await api.aboutUs.updateSettings(business, data);
+
+                showToast(`${section} has been saved successfully!`);
                 
             } catch (error) {
                 console.error('Save failed:', error);

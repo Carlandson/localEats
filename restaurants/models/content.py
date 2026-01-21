@@ -265,6 +265,9 @@ class HomePage(models.Model):
     show_featured_product = models.BooleanField(default=False)
     show_hours = models.BooleanField(default=False)
     show_map = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.subpage.business.business_name} - Home Page"
     
 class NewsFeed(models.Model):
     home_page = models.ForeignKey(HomePage, on_delete=models.CASCADE, related_name='news_feed')
@@ -281,8 +284,9 @@ class AboutUsPage(models.Model):
     core_values = models.TextField(blank=True)
     show_mission = models.BooleanField(default=False)
     show_values = models.BooleanField(default=False)
+    
     def __str__(self):
-        return f"About Us Page"
+        return f"{self.subpage.business.business_name} - About Us Page"
 
     class Meta:
         verbose_name = "About Us Page"

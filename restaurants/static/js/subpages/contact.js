@@ -1,4 +1,6 @@
 import { showToast } from '../components/toast.js';
+// do we need this? convert if needed
+import { makeRequest } from '../utils/subpagesAPI.js';
 import { api } from '../utils/subpagesAPI.js';
 
 
@@ -51,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     value: isEnabled
                 });
 
-                showToast('Changes saved successfully!');
+                showToast(`${section} has been ${isEnabled ? 'enabled' : 'disabled'} successfully!`);
                 
             } catch (error) {
                 console.error('Update failed:', error);
