@@ -8,7 +8,11 @@ from django.views.decorators.http import require_POST
 import json
 
 # Local imports
-from ..models import SubPage
+from ..models import (SubPage, 
+    Business, HomePage, ContactPage, AboutUsPage, 
+    ProductsPage, ServicesPage, GalleryPage,
+    Event, SpecialsPage, NewsFeed, NewsPost, Comment, ContactMessage
+)
 
 @login_required
 @require_http_methods(["POST"])

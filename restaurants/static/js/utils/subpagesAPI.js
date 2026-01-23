@@ -177,6 +177,9 @@ export const api = {
         },
     },
     gallery: {
+        toggleDescription: async (business, data) => {
+            return makeRequest(`/${business}/gallery/settings/`, 'POST', data);
+        },
         upload: async (business, formData) => {
             return makeRequest(`/${business}/gallery/upload/`, 'POST', formData);
         },

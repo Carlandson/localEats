@@ -320,7 +320,10 @@ class ServicesPage(models.Model):
 class GalleryPage(models.Model):
     subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='gallery_content')
     description = models.TextField(blank=True)
-    show_description = models.BooleanField(default=False)
+    show_description = models.BooleanField(
+        default=False,
+        verbose_name="Show Description"
+    )
     images = GenericRelation(Image)
 
     def get_images(self):

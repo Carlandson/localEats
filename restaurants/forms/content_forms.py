@@ -267,13 +267,17 @@ class GalleryPageForm(forms.ModelForm):
                 'class': 'w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500',
                 'rows': 4
             }),
+            'show_description': forms.CheckboxInput(attrs={
+                'id': 'show-description-checkbox',
+                'class': 'cursor-pointer',
+            }),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False  # Don't generate form tag
+        self.fields['show_description'].label = False
         self.helper.layout = Layout(
-            Field('description', css_class='mb-4'),
-            Field('show_description', css_class='mb-4'),
+            Field('description', css_class='mb-4')
         )

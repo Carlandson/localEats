@@ -6,7 +6,6 @@
 {{ business_details.subdirectory|json_script:"business" }}
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} About Us Content Editor</h1>
-    {% csrf_token %}
     <div class="grid grid-cols-1 gap-6">
         <div id="toast" class="fixed top-5 left-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-[-100%] opacity-0 transition-all duration-300 ease-in-out z-50">
             <span id="toast-message"></span>

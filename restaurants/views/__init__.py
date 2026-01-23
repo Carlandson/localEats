@@ -62,6 +62,9 @@ from .advert_views import seo, advertising
 # Patronage views
 from .patronage_portal_views import patronage_portal
 
+# Upload utils
+from .upload_utils import check_rate_limit, check_gallery_storage_quota
+
 __all__ = [
     # Core views
     'index',

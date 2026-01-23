@@ -1,14 +1,17 @@
+import sys
+import logging
+import magic
+import hashlib
+
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 from PIL import Image as PILImage
 from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
-import sys
-import logging
-import magic
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -19,7 +22,10 @@ class Image(models.Model):
     thumbnail = models.ImageField(upload_to='thumbnails/%Y/%m/%d/', blank=True)
     uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='uploaded_images')
     upload_date = models.DateTimeField(auto_now_add=True)
-    
+
+    #hash
+    file_hash = models.CharField(max_length=32, unique=True, db_index=True, blank=True, null=True)
+
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
@@ -35,6 +41,65 @@ class Image(models.Model):
         'image/gif',
         'image/webp'
     }
+
+    def save(self, *args, **kwargs):
+        check_duplicate = kwargs.pop('check_duplicate', True)
+        allow_duplicate_in_different_location = kwargs.pop('allow_duplicate_in_different_location', False)
+        
+        logger.debug(f"""
+            Saving Image:
+            - Alt Text: {self.alt_text}
+            - Content Type: {self.content_type}
+            - Object ID: {self.object_id}
+            - Check Duplicate: {check_duplicate}
+        """)
+        
+        if not self.id:
+            self.full_clean()
+            self.image = self.compress_image(self.image)
+            self.file_hash = self._calculate_hash(self.image)
+            # Check for duplicate if enabled
+            if check_duplicate and self.file_hash:
+                existing_image = Image.objects.filter(
+                    file_hash=self.file_hash
+                ).exclude(id=self.id if self.id else None).first()
+                
+                if existing_image:
+                    # Check if it's in the same location
+                    is_same_location = (
+                        existing_image.content_type == self.content_type and
+                        existing_image.object_id == self.object_id
+                    )
+                    
+                    if is_same_location:
+                        # Duplicate in same location - raise error
+                        raise ValidationError(
+                            f'This image already exists in this location. '
+                            f'Existing image ID: {existing_image.id}'
+                        )
+                    elif not allow_duplicate_in_different_location:
+                        # Duplicate in different location - optionally raise error
+                        raise ValidationError(
+                            f'This image already exists elsewhere. '
+                            f'Existing image ID: {existing_image.id}'
+                        )
+                    # If allow_duplicate_in_different_location is True, we allow it
+            
+            self.create_thumbnail()
+
+        
+        super(Image, self).save(*args, **kwargs)
+        logger.debug(f"Image Saved - ID: {self.id}")
+
+    @staticmethod
+    def _calculate_hash(file):
+        """Calculate MD5 hash of file content."""
+        file.seek(0)
+        hash_md5 = hashlib.md5()
+        for chunk in file.chunks():
+            hash_md5.update(chunk)
+        file.seek(0)
+        return hash_md5.hexdigest()
 
     def clean(self):
         if self.image:
@@ -76,35 +141,21 @@ class Image(models.Model):
                 raise ValidationError(f'Error processing image: {str(e)}')
             finally:
                 self.image.seek(original_position)
-            
-    def save(self, *args, **kwargs):
-        logger.debug(f"""
-            Saving Image:
-            - Alt Text: {self.alt_text}
-            - Content Type: {self.content_type}
-            - Object ID: {self.object_id}
-            - Content Object: {self.content_object}
-            - Image Path: {self.image.name if self.image else 'No image'}
-        """)
-        if not self.id:
-            self.full_clean()
-            self.image = self.compress_image(self.image)
-            self.create_thumbnail()
-        super(Image, self).save(*args, **kwargs)
-        logger.debug(f"""
-            Image Saved:
-            - ID: {self.id}
-            - Alt Text: {self.alt_text}
-            - Content Type: {self.content_type}
-            - Object ID: {self.object_id}
-        """)
 
     def compress_image(self, uploadedImage):
         try:
+            logger.debug(f"Compressing image: {uploadedImage.name}")
+            uploadedImage.seek(0)
             im = PILImage.open(uploadedImage)
             #verify image format
-            if im.format.upper() not in ['PNG', 'JPEG', 'GIF', 'WEBP']:
-                raise ValidationError('Unsupported image format')
+            if im.format and im.format.upper() == 'MPO':
+                # MPO is JPEG-based, so we can process it
+                # If it's a multi-frame image, PIL will use the first frame
+                logger.debug(f"Processing MPO format image, using first frame")
+            elif not im.format or im.format.upper() not in ['PNG', 'JPEG', 'GIF', 'WEBP']:
+                logger.error(f"Unsupported image format: {im.format}")
+                raise ValidationError(f'Unsupported image format: {im.format or "Unknown"}')
+        
         
             # Convert to RGB if necessary
             if im.mode != 'RGB':
@@ -118,9 +169,11 @@ class Image(models.Model):
             # Convert to WebP
             im_io = BytesIO()
             im.save(im_io, 'WEBP', quality=70, optimize=True)
+            im_io.seek(0)
             new_image = InMemoryUploadedFile(im_io, 'ImageField', "%s.webp" % uploadedImage.name.split('.')[0], 'image/webp', sys.getsizeof(im_io), None)
             return new_image
-        
+        except ValidationError:
+            raise
         except Exception as e:
             logger.error(f"Error processing image: {str(e)}")
             raise ValidationError('Error processing image file')

@@ -6,47 +6,14 @@
 {{ business_details.subdirectory|json_script:"business" }}
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Gallery Page Editor</h1>
-    
-    <!-- Description Section -->
-    <div class="bg-white shadow rounded-lg p-6 mb-8">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold">Page Description</h2>
-            <button type="button" 
-                    id="toggle-description-edit"
-                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
-                Edit Description
-            </button>
-        </div>
-   
-    <!-- Display Description -->
-        <div id="description-display" class="prose max-w-none">
-            {% if gallery_page.description %}
-                {{ gallery_page.description|linebreaks }}
-            {% else %}
-                <p class="text-gray-500 italic">No description added yet.</p>
-            {% endif %}
-        </div>
-
-        <!-- Edit Description Form -->
-        <div id="description-form" class="hidden space-y-4">
-            <form id="description-edit-form">
-                {% csrf_token %}
-                {{ description_form|crispy }}
-                <div class="flex justify-end">
-                    <button type="button" 
-                            data-section="save-description"
-                            class="save-button px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
-                        Save Changes
-                    </button>
-                </div>
-            </form>
-        </div>
+    <div id="toast" class="fixed top-5 left-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-[-100%] opacity-0 transition-all duration-300 ease-in-out z-50">
+        <span id="toast-message"></span>
     </div>
-    <div class="flex flex-col lg:flex-row gap-8">
+    <div class="flex flex-col lg:flex-row gap-8 mb-8">
         <!-- Upload Form Section - Left Side -->
         {% if can_upload %}
         <div class="w-1/3">
-            <div class="bg-white shadow rounded-lg p-6 sticky top-8">
+            <div class="bg-white shadow rounded-lg p-6 w-full flex flex-col">
                 <h2 class="text-xl font-semibold mb-4">Upload New Image</h2>
                 <div class="space-y-2">
                     <label class="block text-sm font-medium text-gray-700">
@@ -58,7 +25,7 @@
                                 <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                <div class="flex flex-col items-center space-y-2">
+                                <div class="flex flex-col items-center space-y-2 top-8">
                                     <label for="gallery-image" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                         <span>Upload a file</span>
                                         <input id="gallery-image" 
@@ -80,15 +47,57 @@
             </div>
         </div>
         {% endif %}
-        <!-- Gallery Section - Right Side -->
-        <div class="w-2/3">
-            <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"> <!-- Added ID -->
-                {% for image in images %}
-                    <div class="gallery-item relative group">
+            <!-- Description Section -->
+        <div class="bg-white shadow rounded-lg p-6 w-2/3">
+            <div class="flex items-center gap-4 mb-4">
+                <h2 class="text-xl font-semibold items-center">Page Description</h2>
+                <label 
+                class="flex items-center gap-2 cursor-pointer">
+                    {{ description_form.show_description }}
+                    <span class="text-sm font-bold text-gray-700">Show Description</span>
+                </label>
+                <button type="button" 
+                        id="toggle-description-edit"
+                        class="ml-auto px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
+                    Edit Description
+                </button>
+            </div>
+        
+        <!-- Display Description -->
+            <div id="description-display" class="prose max-w-none">
+                {% if gallery_page.description %}
+                    {{ gallery_page.description|linebreaks }}
+                {% else %}
+                    <p class="text-gray-500 italic">No description added yet.</p>
+                {% endif %}
+            </div>
+
+            <!-- Edit Description Form -->
+            <div id="description-form" class="hidden space-y-4">
+                <form id="description-edit-form">
+                    {{ description_form.description|as_crispy_field }}
+                    <div class="flex justify-end">
+                        <button type="button" 
+                                data-section="save-description"
+                                class="mt-2 save-button px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Gallery Section - Right Side -->
+    <div>
+        <div id="gallery-grid" class="grid grid-cols-1 lg:grid-cols-4 gap-4 auto-rows-[10px]"> 
+            {% for image in images %}
+                <div class="gallery-item relative group">
+                    <div class="relative">
                         <img src="{{ image.image.url }}" 
-                             alt="{{ image.alt_text }}"
-                             class="h-full w-64 object-cover rounded-lg shadow-md"
-                             loading="lazy">
+                            alt="{{ image.alt_text }}"
+                            class="w-full h-auto object-cover rounded-lg shadow-md"
+                            loading="lazy"
+                            data-aspect-ratio>
                         
                         <button type="button"
                                 data-image-id="{{ image.id }}"
@@ -97,15 +106,15 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
                         </button>
-                        
-                        {% if image.caption %}
-                            <p class="mt-2 text-sm text-gray-600">{{ image.caption }}</p>
-                        {% endif %}
                     </div>
-                {% empty %}
-                    <p class="text-gray-500">No images in the gallery yet.</p>
-                {% endfor %}
-            </div>
+                    
+                    {% if image.caption %}
+                        <p class="mt-2 text-sm text-gray-600">{{ image.caption }}</p>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p class="text-gray-500">No images in the gallery yet.</p>
+            {% endfor %}
         </div>
     </div>
 </div>

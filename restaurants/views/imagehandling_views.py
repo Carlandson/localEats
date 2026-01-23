@@ -1,5 +1,7 @@
 import logging
 import json
+import os
+import uuid
 from django.conf import settings
 # Django core imports
 from django.shortcuts import get_object_or_404
@@ -11,6 +13,8 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
+from django.utils.text import get_valid_filename
+from django.core.cache import cache
 import base64
 import logging
 
@@ -19,6 +23,8 @@ from PIL import Image as PILImage
 
 # Local imports
 from ..models import Business, SubPage, Image
+from .upload_utils import check_rate_limit, check_gallery_storage_quota, check_gallery_image_limit
+
 
 logger = logging.getLogger(__name__)
 
@@ -245,7 +251,12 @@ def remove_hero_image(request, business_subdirectory):
 @login_required
 @require_POST
 def upload_gallery_image(request, business_subdirectory):
-    try:
+    try:   
+        # Rate limiting - reusable utility
+        is_allowed, error_response = check_rate_limit(request.user, action_type='image_upload')
+        if not is_allowed:
+            return error_response
+
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
         if request.user != business.owner:
             return JsonResponse({"error": "Unauthorized"}, status=403)
@@ -261,15 +272,20 @@ def upload_gallery_image(request, business_subdirectory):
         if not file:
             return JsonResponse({"error": "No image provided"}, status=400)
 
+        # Storage quota check - reusable utility
+        is_under_limit, current_count, max_images, error_response = check_gallery_image_limit(business)
+
+
+        sanitized_name = get_valid_filename(os.path.basename(file.name))
+        alt_text = sanitized_name[:255] if sanitized_name else "gallery_image"
         # Create and save single image
         image = Image(
             image=file,
             uploaded_by=request.user,
             content_type=ContentType.objects.get_for_model(gallery_page),
             object_id=gallery_page.id,
-            alt_text=file.name
+            alt_text=alt_text
         )
-        image.full_clean()  # This will validate the image
         image.save()
 
         return JsonResponse({

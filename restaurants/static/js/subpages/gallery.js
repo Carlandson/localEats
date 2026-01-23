@@ -4,6 +4,7 @@ import { api } from '../utils/subpagesAPI.js';
 
 function attachDescriptionHandlers(businessSubdirectory) {
     const toggleDescriptionBtn = document.getElementById('toggle-description-edit');
+    const showDescriptionBtn = document.getElementById('show-description-checkbox');
     const descriptionDisplay = document.getElementById('description-display');
     const descriptionForm = document.getElementById('description-form');
     const descriptionEditForm = document.getElementById('description-edit-form');
@@ -16,7 +17,21 @@ function attachDescriptionHandlers(businessSubdirectory) {
             descriptionForm.classList.toggle('hidden');
         };
     }
+    // show description toggle 
+    // need to check this first
+    showDescriptionBtn.addEventListener('change', async () => {
+        try {
+            await api.gallery.toggleDescription(businessSubdirectory, {
+                fieldName: 'show_description',
+                value: showDescriptionBtn.checked
+            });
+            showToast('Description toggle updated successfully');
 
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Failed to update description toggle. Please try again.');
+        }
+    });
     // Save description - needs async for API call
     if (saveDescriptionBtn && descriptionEditForm) {
         saveDescriptionBtn.onclick = async () => {
@@ -36,19 +51,18 @@ function attachDescriptionHandlers(businessSubdirectory) {
                     
                     descriptionDisplay.classList.remove('hidden');
                     descriptionForm.classList.add('hidden');
-                    showToast('Description updated successfully', 'success');
+                    showToast('Description updated successfully');
                 } else {
                     throw new Error(response.error || 'Failed to update description');
                 }
             } catch (error) {
-                showToast(error.message, 'error');
+                showToast(error.message);
             }
         };
     }
 }
 
 function attachImageHandlers(business) {
-    const fileInput = document.getElementById('gallery-image');
     const dropZone = document.getElementById('drop-zone');
     const originalDropZoneContent = dropZone.innerHTML;
 
@@ -69,13 +83,22 @@ function attachImageHandlers(business) {
         });
     });
 
-    // Handle file selection
-    fileInput?.addEventListener('change', (event) => {
-        if (event.target.files[0]) {
-            handleFile(event.target.files[0], originalDropZoneContent, business);
+    // Function to attach file input handler (can be called multiple times)
+    const attachFileInputHandler = () => {
+        const currentFileInput = document.getElementById('gallery-image');
+        if (currentFileInput) {
+            // Remove any existing listeners by cloning
+            const newFileInput = currentFileInput.cloneNode(true);
+            currentFileInput.parentNode.replaceChild(newFileInput, currentFileInput);
+            
+            newFileInput.addEventListener('change', (event) => {
+                if (event.target.files[0]) {
+                    handleFile(event.target.files[0], originalDropZoneContent, business, attachFileInputHandler);
+                }
+            });
         }
-    });
-
+    };
+    attachFileInputHandler();
     // Handle file drop
     dropZone?.addEventListener('drop', (event) => {
         const file = event.dataTransfer.files[0];
@@ -90,14 +113,15 @@ function attachImageHandlers(business) {
 
 function createImagePreviewHTML(imageUrl, imageId) {
     return `
-        <div class="relative group">
+        <div class="relative">
             <img src="${imageUrl}" 
-                alt="Gallery image" 
-                class="h-full w-64 object-cover rounded-lg shadow-md">
+                alt="Gallery image"
+                class="w-full h-auto object-cover rounded-lg shadow-md"
+                loading="lazy"
+                data-aspect-ratio>
             <button type="button"
                 data-image-id="${imageId}"
-                class="delete-image-btn absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full"
-                title="Remove image">
+                class="delete-image-btn absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
@@ -119,46 +143,44 @@ async function handleImageDelete() {
     
     try {
         const business = JSON.parse(document.getElementById('business').textContent);
-        consol
         const response = await api.gallery.delete(business, imageId);
         
         if (response.success) {
             galleryItem.remove();
-            showToast('Image deleted successfully', 'success');
+            showToast('Image deleted successfully');
         } else {
             throw new Error(response.error || 'Failed to delete image');
         }
     } catch (error) {
-        showToast(error.message, 'error');
+        showToast('error', error.message);
         console.error('Delete error:', error);
     }
 }
 
-function handleFile(file, originalContent, business) {
+function handleFile(file, originalContent, business, reattachHandler) {
     if (!file.type.startsWith('image/')) {
         showToast('Only image files are allowed', 'error');
         return;
     }
 
     const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('gallery-image');
     console.log('DropZone found:', !!dropZone); // Debug log
     
     const reader = new FileReader();
 
     reader.onload = function(e) {
         dropZone.innerHTML = `
-            <div class="relative w-full space-y-4">
+            <div class="relative w-full space-y-4 flex flex-col items-center justify-center">
                 <img src="${e.target.result}" class="h-full w-64 object-cover rounded-lg">
                 <button type="button" class="remove-preview absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full transition-colors duration-200">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
-                <div class="flex justify-end">
-                    <button type="button" id="upload-image-btn" class="upload-btn px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
-                        Upload Image
-                    </button>
-                </div>
+                <button type="button" id="upload-image-btn" class="upload-btn w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out">
+                    Upload Image
+                </button>
             </div>
         `;
 
@@ -170,7 +192,11 @@ function handleFile(file, originalContent, business) {
         // Add click handler for remove button
         dropZone.querySelector('.remove-preview').addEventListener('click', () => {
             dropZone.innerHTML = originalContent;
-            document.getElementById('gallery-image').value = '';
+            fileInput.value = '';
+            // Re-attach file input handler after restoring content
+            if (reattachHandler) {
+                reattachHandler();
+            }
         });
 
         // Add click handler for upload button
@@ -196,18 +222,29 @@ function handleFile(file, originalContent, business) {
                     // Add delete functionality to new image
                     const deleteBtn = newImageElement.querySelector('.delete-image-btn');
                     deleteBtn.addEventListener('click', handleImageDelete);
-        
                     galleryContainer.insertBefore(newImageElement, galleryContainer.firstChild);
-                    
+                    const newImg = newImageElement.querySelector('img');
+                    if (newImg) {
+                        newImg.onload = () => {
+                            calculateItemSpan(newImageElement, newImg, 10, 16);
+                        };
+                        if (newImg.complete) {
+                            calculateItemSpan(newImageElement, newImg, 10, 16);
+                        }
+                    }
                     // Reset the dropzone
                     dropZone.innerHTML = originalContent;
                     document.getElementById('gallery-image').value = '';
+                    if (reattachHandler) {
+                        reattachHandler();
+                    }
                 } else {
+                    showToast(response.error, 'error');
                     throw new Error(response.error || 'Upload failed');
                 }
             } catch (error) {
                 console.error('Upload error:', error);
-                showToast(error.message, 'error');
+                showToast(error.message);
             }
         };
     };
@@ -215,10 +252,80 @@ function handleFile(file, originalContent, business) {
     reader.readAsDataURL(file);
 }
 
+// masonry grid layout logic
+function calculateGridSpans() {
+    const grid = document.getElementById('gallery-grid');
+    if (!grid) return;
+    
+    const items = grid.querySelectorAll('.gallery-item');
+    const rowHeight = 10; // Match auto-rows-[10px]
+    const gap = 16; // Match gap-4 (1rem = 16px)
+    
+    items.forEach(item => {
+        const img = item.querySelector('img');
+        if (!img.complete) {
+            img.onload = () => calculateItemSpan(item, img, rowHeight, gap);
+        } else {
+            calculateItemSpan(item, img, rowHeight, gap);
+        }
+    });
+}
+
+function calculateItemSpan(item, img, rowHeight, gap) {
+    const grid = document.getElementById('gallery-grid');
+    const gridWidth = grid.offsetWidth;
+    const cols = window.innerWidth >= 768 ? 4 : 1;
+    const colWidth = (gridWidth - (gap * (cols - 1))) / cols;
+    console.log(window.innerWidth, cols, colWidth);
+    const naturalHeight = img.naturalHeight;
+    const naturalWidth = img.naturalWidth;
+    const aspectRatio = naturalHeight / naturalWidth;
+    const displayHeight = colWidth * aspectRatio;
+    
+    // Calculate span (height + gap) / rowHeight
+    const span = Math.ceil((displayHeight + gap) / rowHeight);
+    item.style.gridRowEnd = `span ${span}`;
+}
+
+// Progressive image loading
+function setupProgressiveLoading() {
+    const images = document.querySelectorAll('img[data-src]');
+    
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                const placeholder = img.src;
+                const fullImage = new Image();
+                
+                fullImage.onload = () => {
+                    img.src = fullImage.src;
+                    img.classList.remove('blur-sm', 'opacity-50');
+                    img.classList.add('opacity-100');
+                };
+                
+                fullImage.src = img.dataset.src;
+                observer.unobserve(img);
+            }
+        });
+    });
+    
+    images.forEach(img => imageObserver.observe(img));
+}
+
 // Initialize everything when the DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     const business = JSON.parse(document.getElementById('business').textContent);
     attachImageHandlers(business);
+    setupProgressiveLoading();
     attachDescriptionHandlers(business);
-    console.log('gallery.js loaded');
+    if (document.getElementById('gallery-grid')) {
+        calculateGridSpans();
+        // Recalculate on window resize
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(calculateGridSpans, 250);
+        });
+    }
 });
