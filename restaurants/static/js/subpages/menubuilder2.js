@@ -1,5 +1,11 @@
+import { api } from '../utils/subpagesAPI.js';
+import { showToast } from '../components/toast.js';
+import { debounce, throttle } from '../utils/debounce.js';
+
+// initializer
 async function initializeMenuBuilder() {
     try {
+        // remove and replace eventually
         const csrfToken = JSON.parse(document.getElementById('csrf_token').textContent);
 
         // Get required elements
@@ -34,6 +40,7 @@ async function initializeMenuBuilder() {
     }
 }
 
+// initializer
 function initializeAccordions(context) {
     context.accordionTriggers.forEach(trigger => {
         trigger.addEventListener('click', () => {
@@ -58,10 +65,12 @@ function initializeAccordions(context) {
 }
 
 function initializeEventListeners(context) {
-    document.addEventListener('click', (e) => handleClicks(e, context));
+    // Throttle click handler to prevent rapid-fire clicks
+    document.addEventListener('click', throttle((e) => handleClicks(e, context), 500));
 }
 
 function initializeSideOptions(context) {
+    console.log(context.existingCourses);
     for (const course of context.existingCourses) {
         try {
             updateSideOptionsList(course.id, context);
@@ -169,8 +178,7 @@ function getFormHTML(isEdit = false, dishId = '', currentValues = {}) {
                     <input type="file" 
                         class="absolute inset-0 opacity-0 cursor-pointer w-40"
                         accept="image/*"
-                        id="${isEdit ? 'dishImage' + dishId : 'dishImage'}"
-                        onchange="previewImage(this, 'previewImage${dishId}')">
+                        id="${isEdit ? 'dishImage' + dishId : 'dishImage'}">
                 </div>
                 
                 <div class="mt-2 font-semibold flex items-center justify-center gap-1">
@@ -321,13 +329,17 @@ async function addDish(course, context) {
     let formDiv = document.createElement('div');
     formDiv.innerHTML = getFormHTML(false);
     buttonContainer.parentNode.insertBefore(formDiv, buttonContainer);
-
+    const imageInput = formDiv.querySelector('#dishImage');
+    const previewId = 'previewImage';
+    imageInput.addEventListener('change', function() {
+        previewImage(this, previewId);
+    });
     formDiv.querySelector('.cancel-add').addEventListener('click', () => {
         buttonContainer.style.display = '';
         formDiv.remove();
     });
 
-    formDiv.querySelector('#createDish').addEventListener('submit', async (event) => {
+    const submitHandler = throttle(async (event) => {
         event.preventDefault();
         
         const formData = {
@@ -343,19 +355,20 @@ async function addDish(course, context) {
         }
 
         try {
-            const response = await fetch(`/${context.eatery}/menu/add_dish/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': context.csrfToken
-                },
-                body: JSON.stringify(formData)
-            });
+            const data = await api.menu.addDish(context.eatery, formData);
+            // const response = await fetch(`/${context.eatery}/menu/add_dish/`, {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'X-CSRFToken': context.csrfToken
+            //     },
+            //     body: JSON.stringify(formData)
+            // });
 
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.error);
-            }
+            // const data = await response.json();
+            // if (!response.ok) {
+            //     throw new Error(data.error);
+            // }
 
             const newDishArticle = document.createElement('article');
             newDishArticle.id = `o${data.dish_id}`;
@@ -371,7 +384,9 @@ async function addDish(course, context) {
             formDiv.remove();
             alert(error.message || 'Error adding dish. Please try again.');
         }
-    });
+    }, 2000); // Prevent submissions within 2 seconds of each other
+
+    formDiv.querySelector('#createDish').addEventListener('submit', submitHandler);
 }
 
 async function editDish(dishId, context) {
@@ -387,9 +402,9 @@ async function editDish(dishId, context) {
             name: dishElement.querySelector('h3')?.textContent || '',
             price: dishElement.querySelector('.font-semibold')?.textContent.replace('Price: $', '') || '',
             image: dishElement.querySelector('img')?.src || '',
-            description: dishElement.querySelector('[data-dish-description]')?.textContent || '',
+            description: dishElement.querySelector('[data-dish-description]')?.textContent?.trim() || 
+                        dishElement.querySelector('p')?.textContent?.trim() || '',
         };
-
         // Create edit form
         const editDiv = document.createElement('div');
         editDiv.innerHTML = getFormHTML(true, dishId, currentValues);
@@ -399,7 +414,13 @@ async function editDish(dishId, context) {
 
         // Replace dish with form
         dishElement.replaceWith(editDiv);
-            
+
+
+        const imageInput = editDiv.querySelector(`#dishImage${dishId}`);
+        const previewId = `previewImage${dishId}`;
+        imageInput.addEventListener('change', function() {
+            previewImage(this, previewId);
+        });    
         // Add cancel button functionality
         editDiv.querySelector('.cancel-edit').addEventListener('click', () => {
             editDiv.replaceWith(dishElement);
@@ -421,29 +442,26 @@ async function editDish(dishId, context) {
             }
 
             try {
-                const response = await fetch(`/${context.eatery}/menu/edit_dish/${dishId}/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': context.csrfToken
-                    },
-                    body: JSON.stringify(formData)
-                });
+                const data = await api.menu.editDish(context.eatery, dishId, formData);
+                // const response = await fetch(`/${context.eatery}/menu/edit_dish/${dishId}/`, {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //         'X-CSRFToken': context.csrfToken
+                //     },
+                //     body: JSON.stringify(formData)
+                // });
 
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error);
+                // const data = await response.json();
                 editDiv.className = 'border rounded-lg p-4 mb-4 grid md:grid-cols-3 gap-4';
                 editDiv.innerHTML = createDishHTML(dishId, formData, data.image_url);
+                showToast('Dish updated successfully');
             } catch (error) {
                 console.error('Error:', error);
                 alert(error.message || 'Error updating dish. Please try again.');
-                editDiv.innerHTML = originalContent;
-            }
+                }
         });
 
-        form.querySelector('.cancel-edit').addEventListener('click', () => {
-            editDiv.innerHTML = originalContent;
-        });
     } catch (error) {
         console.error('Error:', error);
         alert('Error loading dish data. Please try again.');
@@ -462,16 +480,8 @@ async function deleteDish(dishId, context) {
     }
 
     try {
-        const response = await fetch(`/${context.eatery}/menu/delete_dish/${dishId}/`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRFToken': context.csrfToken,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) throw new Error('Network response was not ok');
-
+        await api.menu.deleteDish(context.eatery, dishId);
+        showToast('Dish deleted successfully');
         dishArticle.style.transition = 'all 0.3s ease-out';
         dishArticle.style.transform = 'translateX(100%)';
         dishArticle.style.opacity = '0';
@@ -491,16 +501,8 @@ async function deleteCourse(courseId, context) {
     }
 
     try {
-        const response = await fetch(`/${context.eatery}/menu/delete_course/${courseId}/`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRFToken': context.csrfToken,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) throw new Error('Network response was not ok');
-
+        await api.menu.deleteCourse(context.eatery, courseId);
+        showToast('Course deleted successfully');
         // Find and remove the course section
         const courseSection = document.querySelector(`[data-course-id="${courseId}"]`).closest('section');
         if (courseSection) {
@@ -550,22 +552,8 @@ async function saveCourseDescription(courseId, context) {
     const newDescription = descriptionDiv.value;
 
     try {
-        const response = await fetch(`/${context.eatery}/menu/update_course_description/${courseId}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': context.csrfToken
-            },
-            body: JSON.stringify({
-                description: newDescription
-            })
-        });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        await response.json();
-        
+        await api.menu.updateCourseDescription(context.eatery, courseId, { description: newDescription });
+        showToast('Course description updated successfully');
         // Create new container
         const containerDiv = document.createElement('div');
         containerDiv.className = 'mb-4';
@@ -662,21 +650,8 @@ async function saveCourseNote(courseId, context) {
     const newNote = noteDiv.value;
 
     try {
-        const response = await fetch(`/${context.eatery}/menu/update_course_note/${courseId}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': context.csrfToken
-            },
-            body: JSON.stringify({
-                note: newNote
-            })
-        });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        await response.json();
+        await api.menu.updateCourseNote(context.eatery, courseId, { note: newNote });
+        showToast('Course note updated successfully');
         
         // Create new container
         const containerDiv = document.createElement('div');
@@ -820,21 +795,10 @@ function showSideOptionForm(courseId, context, sideOption = null) {
         };
 
         try {
-            const url = sideOption ? 
-                `/${context.eatery}/menu/side_options/${sideOption.id}/` :
-                `/${context.eatery}/menu/side_options/${courseId}/`;
-                
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': context.csrfToken
-                },
-                body: JSON.stringify(formData)
-            });
-
-            if (!response.ok) throw new Error('Network response was not ok');
-            
+            console.log("courseId", courseId);
+            console.log("formData", formData);
+            await api.menu.addSideOption(context.eatery, formData);
+            showToast('Side option added successfully');
             // Update the side options list
             await updateSideOptionsList(courseId, context);
             
@@ -853,11 +817,8 @@ function showSideOptionForm(courseId, context, sideOption = null) {
 
 async function editSideOption(sideId, context) {
     try {
-        const response = await fetch(`/${context.eatery}/menu/side_options/${sideId}/`);
-        if (!response.ok) throw new Error('Network response was not ok');
-        
-        const sideOption = await response.json();
-        const courseId = sideOption.course_id;
+        const data = await api.menu.getSideOption(context.eatery, sideId);
+
         
         // Hide the side option element temporarily
         const sideElement = document.getElementById(`sideOption${sideId}`);
@@ -866,12 +827,12 @@ async function editSideOption(sideId, context) {
         }
         
         // Show the edit form
-        showSideOptionForm(courseId, context, {
+        showSideOptionForm(data.course_id, context, {
             id: sideId,
-            name: sideOption.name,
-            description: sideOption.description,
-            is_premium: sideOption.is_premium,
-            price: sideOption.price
+            name: data.name,
+            description: data.description,
+            is_premium: data.is_premium,
+            price: data.price
         });
         
     } catch (error) {
@@ -901,19 +862,8 @@ async function deleteSideOption(sideId, context) {
     buttons.forEach(button => button.disabled = true);
 
     try {
-        const response = await fetch(`/${context.eatery}/menu/side_options/${sideId}/`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRFToken': context.csrfToken,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const result = await response.json();
+        const result = await api.menu.deleteSideOption(context.eatery, sideId);
+        showToast('Side option deleted successfully');
         
         // Animate removal
         sideElement.style.transition = 'all 0.3s ease-out';
@@ -944,7 +894,6 @@ async function updateSideOptionsList(courseId, context) {
         const response = await fetch(`/${context.eatery}/menu/side_options/${courseId}/`)
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
-        
         console.log('Received side options:', data); // Debug log
         
         // Ensure sideOptions is an array

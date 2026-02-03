@@ -3,6 +3,7 @@ import { showToast } from '../components/toast.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     const business = JSON.parse(document.getElementById('business').textContent);
+    
     const formContainer = document.getElementById('event-form-container');
     const addButton = document.getElementById('add-event');
 
@@ -41,11 +42,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     
         try {
-            await api.events.create(business, formData);
+            const response = await api.events.create(business, formData);
     
-            // Success - refresh the events list
-            location.reload();
-    
+            // Instead of location.reload(), update the DOM
+            showToast('Event created successfully!');
+            
+            // Hide form and reset
+            formContainer.classList.add('hidden');
+            addButton.style.display = 'block';
+            form.reset();
+            
+            // Option 1: Fetch and insert the new event
+            await refreshEventList(business);
+            
+            // Option 2: If API returns the created event, insert it directly
+            if (response.event) {
+                insertEventIntoList(response.event);
+            }
         } catch (error) {
             console.error('Error:', error);
             errorDisplay.textContent = 'An unexpected error occurred. Please try again.';

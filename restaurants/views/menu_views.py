@@ -432,7 +432,7 @@ def update_course_note(request, business_subdirectory, course_id):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
     
-@require_http_methods(["GET", "POST", "DELETE"])
+@require_http_methods(["GET", "PATCH", "POST", "DELETE"])
 def side_options(request, business_subdirectory, id=None):
     try:
         business = get_object_or_404(Business, subdirectory=business_subdirectory)
@@ -487,9 +487,40 @@ def side_options(request, business_subdirectory, id=None):
                     'is_premium': side.is_premium
                 } for side in side_options], safe=False)
 
+        # PATCH request handling
+        elif request.method == "PATCH":
+            data = json.loads(request.body)
+            # Update existing side option
+            side = get_object_or_404(
+                SideOption,
+                id=id,
+                course__menu__business=business
+            )
+            side.name = data.get('name', side.name)
+            side.description = data.get('description', side.description)
+            side.is_premium = data.get('is_premium', side.is_premium)
+            side.price = data.get('price', side.price)
+            side.save()
+            course = side.course
+
+            # Get all side options for the course and return them
+            side_options = course.side_options.all()
+            return JsonResponse({
+                'message': 'Side option updated successfully',
+                'course_id': course.id,
+                'side_options': [{
+                    'id': side.id,
+                    'name': side.name,
+                    'description': side.description,
+                    'price': str(side.price),
+                    'is_premium': side.is_premium,
+                    'course_id': course.id
+                } for side in side_options]
+            })
         # POST request handling
         elif request.method == "POST":
             data = json.loads(request.body)
+            side_option_id = data.get('id') 
             try:
                 # Try to get existing side option (update case)
                 # Make sure the side option belongs to this business

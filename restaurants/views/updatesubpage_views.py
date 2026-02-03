@@ -11,8 +11,20 @@ import json
 from ..models import (SubPage, 
     Business, HomePage, ContactPage, AboutUsPage, 
     ProductsPage, ServicesPage, GalleryPage,
-    Event, SpecialsPage, NewsFeed, NewsPost, Comment, ContactMessage
+    Event, EventsPage, SpecialsPage, NewsFeed, 
+    NewsPost, Comment, ContactMessage
 )
+
+PAGE_TYPE_TO_MODEL = {
+    'home': (HomePage, 'home_content'),
+    'about': (AboutUsPage, 'about_us_content'),
+    'contact': (ContactPage, 'contact_content'),
+    'events': (EventsPage, 'events_content'),
+    'products': (ProductsPage, 'products_content'),
+    'services': (ServicesPage, 'services_content'),
+    'gallery': (GalleryPage, 'gallery_content'),
+    'specials': (SpecialsPage, 'specials_content'),
+}
 
 @login_required
 @require_http_methods(["POST"])

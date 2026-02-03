@@ -124,6 +124,10 @@ urlpatterns = [
     path('<slug:business_subdirectory>/', views.business_page, name="business_home"),
     path('<slug:business_subdirectory>/<str:page_type>/', views.business_page, name="business_page"),
 
+    # API v2 endpoints
+    # path('api/v1/<slug:business_subdirectory>/<str:subpage>/add/', views.add_subpage, name='add_subpage'),
+    # path('api/v1/<slug:business_subdirectory>/<str:subpage>/edit/<int:id>/', views.edit_subpage, name='edit_subpage'),
+    # path('api/v1/<slug:business_subdirectory>/<str:subpage>/delete/<int:id>/', views.delete_subpage, name='delete_subpage'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

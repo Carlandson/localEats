@@ -1,6 +1,4 @@
 import { showToast } from '../components/toast.js';
-// do we need this? convert if needed
-import { makeRequest } from '../utils/subpagesAPI.js';
 import { api } from '../utils/subpagesAPI.js';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -68,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
     const saveButtons = document.querySelectorAll('.save-button');
     saveButtons.forEach(button => {
         button.addEventListener('click', async function() {

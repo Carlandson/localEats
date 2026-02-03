@@ -237,7 +237,7 @@
 
 {% if debug %}
     {% block dev_scripts %}
-    <script src="{% static 'js/subpages/menuBuilder2.js' %}"></script>
+    <script type="module" src="{% static 'js/subpages/menuBuilder2.js' %}"></script>
     {% endblock dev_scripts %}
 {% else %}
     {% block prod_scripts %}

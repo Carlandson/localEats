@@ -1,6 +1,11 @@
+import { getCookie } from './cookies.js';
+
 function getCsrfToken() {
-    return JSON.parse(document.getElementById('csrf_token').textContent);
+    return getCookie('csrftoken');
 }
+// function getCsrfToken() {
+//     return JSON.parse(document.getElementById('csrf_token').textContent);
+// }
 
 export async function makeRequest(url, method, data) {
     console.log('Making request:', url, method, data);
@@ -78,6 +83,38 @@ export const api = {
                 ...data
             });
         }
+    },
+    menu: {
+        addDish: async (business, formData) => {
+            return makeRequest(`/${business}/menu/add_dish/`, 'POST', formData);
+        },
+        editDish: async (business, dishId, formData) => {
+            return makeRequest(`/${business}/menu/edit_dish/${dishId}/`, 'POST', formData);
+        },
+        deleteDish: async (business, dishId) => {
+            return makeRequest(`/${business}/menu/delete_dish/${dishId}/`, 'DELETE');
+        },
+        addCourse: async (business, formData) => {
+            return makeRequest(`/${business}/menu/add_course/`, 'POST', formData);
+        },
+        editCourse: async (business, courseId, formData) => {
+            return makeRequest(`/${business}/menu/edit_course/${courseId}/`, 'POST', formData);
+        },
+        deleteCourse: async (business, courseId) => {
+            return makeRequest(`/${business}/menu/delete_course/${courseId}/`, 'DELETE');
+        },
+        getSideOption: async (business, sideOptionId) => {
+            return makeRequest(`/${business}/menu/side_options/${sideOptionId}/`, 'GET');
+        },
+        addSideOption: async (business, formData) => {
+            return makeRequest(`/${business}/menu/side_options/${formData.course_id}/`, 'POST', formData);
+        },
+        editSideOption: async (business, formData) => {
+            return makeRequest(`/${business}/menu/side_options/${formData.sideOptionId}/`, 'PATCH', formData);
+        },
+        deleteSideOption: async (business, sideOptionId) => {
+            return makeRequest(`/${business}/menu/side_options/${sideOptionId}/`, 'DELETE');
+        },
     },
 
     // News posts

@@ -1,3 +1,4 @@
+// initializer
 export function initializeAccordions() {
     const accordionTriggers = document.querySelectorAll('.accordion-trigger');
     
@@ -23,6 +24,7 @@ export function initializeAccordions() {
     });
 }
 
+// template
 export function createAccordionHTML(title, contentId, isOpen = false) {
     return `
         <div class="border rounded-lg mb-4">
