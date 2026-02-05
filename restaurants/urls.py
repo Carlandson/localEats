@@ -73,12 +73,14 @@ urlpatterns = [
     path('<slug:business_subdirectory>/create/<str:page_type>/', views.create_subpage, name="create_subpage"),
 
     # advert.py
-    path('<slug:business_subdirectory>/SEO/', views.seo, name="SEO"),
-    path('<slug:business_subdirectory>/Advertising/', views.advertising, name="Advertising"),
+    path('<slug:business_subdirectory>/portal/', views.portal, name="Portal"),
+    path('<slug:business_subdirectory>/advertising/', views.advertising, name="Advertising"),
 
-    # home_edit.py
+    # home.py
     path('<slug:business_subdirectory>/home/settings/', views.update_home_page_settings, name="update_home_page_settings"),
     path('api/<str:business_subdirectory>/news-post/', views.create_news_post, name='create_news_post'),
+    path('api/<slug:business_subdirectory>/news-post/<int:news_post_id>/', views.edit_news_post, name='edit_news_post'),
+    path('api/<slug:business_subdirectory>/news-post/<int:news_post_id>/', views.delete_news_post, name='delete_news_post'),
 
     # Events Content Editor
     path('<slug:business_subdirectory>/events/add/', views.add_event, name="add_event"),

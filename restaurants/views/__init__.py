@@ -57,10 +57,15 @@ from .customize_views import get_editor_context, create_subpage, update_home_pag
 from .communication_views import submit_contact_form
 
 # Advert views
-from .advert_views import seo, advertising
+from .advert_views import advertising
+
+from .portal_views import portal
 
 # Patronage views
 from .patronage_portal_views import patronage_portal
+
+# News views
+from .news_views import edit_news_post, delete_news_post
 
 # Upload utils
 from .upload_utils import check_rate_limit, check_gallery_storage_quota
@@ -176,6 +181,6 @@ __all__ = [
     'submit_contact_form',
     
     # Advert views
-    'seo',
+    'portal',
     'advertising',
 ]

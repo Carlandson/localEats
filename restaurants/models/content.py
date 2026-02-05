@@ -260,7 +260,6 @@ class HomePage(models.Model):
     show_affiliates = models.BooleanField(default=False)
     show_newsfeed = models.BooleanField(default=False)
     show_upcoming_event = models.BooleanField(default=False)
-    show_daily_special = models.BooleanField(default=False)
     show_featured_service = models.BooleanField(default=False)
     show_featured_product = models.BooleanField(default=False)
     show_hours = models.BooleanField(default=False)

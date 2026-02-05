@@ -1,13 +1,15 @@
 import { showToast } from '../components/toast.js';
-// import { makeRequest } from '../utils/subpagesAPI.js';
+import { api } from '../utils/subpagesAPI.js';
 
-//eventually use makerequest for api
+
 document.addEventListener('DOMContentLoaded', function() {
     const business = JSON.parse(document.getElementById('business').textContent);
-    console.log('🏠 DOM LOADED IN HOME.JS 🏠');
-    // Accordion functionality
+    const toggleWelcomeBtn = document.getElementById('toggle-welcome-edit');
+    const saveWelcomeBtn = document.getElementById('save-welcome-button');
+    const welcomeContentDisplay = document.getElementById('welcome-content-display');
+    const welcomeFormContainer = document.getElementById('welcome-form-container');
     const accordionHeaders = document.querySelectorAll('.accordion-header');
-    
+    const welcomeContent = document.getElementById('welcome-content');
     accordionHeaders.forEach(header => {
         header.addEventListener('click', function(e) {
             // Don't trigger accordion if clicking the toggle switch
@@ -28,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
             icon.style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(180deg)';
         });
     });
-
     // Toggle switch functionality
     const toggles = document.querySelectorAll('input[type="checkbox"]');
     
@@ -45,100 +46,58 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (contentDiv) {
                     contentDiv.classList.toggle('hidden', !isEnabled);
                 }
-                // Get CSRF token
-                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-                
                 // Send update to server
-                const response = await fetch(`/${business}/home/settings/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfToken
-                    },
-                    body: JSON.stringify({
-                        fieldType: 'boolean',
-                        fieldName: section,
-                        value: isEnabled,
-                        page_type: 'home'
-                    })
+                await api.home.toggleSection(business, {
+                    fieldName: section,
+                    value: isEnabled
                 });
 
-                if (!response.ok) throw new Error('Update failed');
-
                 // Show success message
-                showToast('Changes saved successfully!');
+                showToast(`${section} has been ${isEnabled ? 'enabled' : 'disabled'} successfully!`);
                 
             } catch (error) {
                 console.error('Update failed:', error);
-                // Revert the toggle if the update failed
-                this.checked = !this.checked;
-                showNotification('Failed to update setting. Please try again.', 'error');
-                if (contentDiv) {
-                    contentDiv.style.opacity = isEnabled ? '0' : '1';
-                    contentDiv.style.height = isEnabled ? '0' : 'auto';
-                    contentDiv.style.visibility = isEnabled ? 'hidden' : 'visible';
-                }
+                showToast(`Failed to update ${section}. Please try again. test`);
             } finally {
                 this.disabled = false;
             }
         });
     });
-
-    const saveButtons = document.querySelectorAll('.save-button');
-    saveButtons.forEach(button => {
-        button.addEventListener('click', async function() {
-            const section = this.dataset.section;
-            const container = this.closest('div');
-            const originalText = this.textContent;
-            try {
-                // Show loading state
-                this.textContent = 'Saving...';
-                this.disabled = true;
-                
-                // Get CSRF token
-                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-                
-                // Prepare the data based on section
-                let data = {
-                    fieldName: section
-                };
-                
-                // Add section-specific data
-                if (section === 'show_welcome') {
-                    const titleInput = container.querySelector('[name="welcome_title"]');
-                    const messageInput = container.querySelector('[name="welcome_message"]');
-                    data = {
-                        ...data,
-                        welcome_title: titleInput.value,
-                        welcome_message: messageInput.value
-                    };
-                }
-                
-                // Send update to server
-                const response = await fetch(`/${business}/home/settings/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfToken
-                    },
-                    body: JSON.stringify(data)
-                });
-    
-                if (!response.ok) throw new Error('Update failed');
-    
-                // Show success message using the toast
-                showToast('Changes saved successfully!');
-                
-            } catch (error) {
-                console.error('Save failed:', error);
-                showToast('Failed to save changes. Please try again.');
-            } finally {
-                // Reset button state
-                this.textContent = originalText;
-                this.disabled = false;
-            }
-        });
-    });
+    // Welcome section functionality
+    if (toggleWelcomeBtn) {
+        toggleWelcomeBtn.onclick = () => {
+            welcomeContentDisplay.classList.toggle('hidden');
+            welcomeFormContainer.classList.toggle('hidden');
+            saveWelcomeBtn.classList.toggle('hidden');
+        };
+    }
+    saveWelcomeBtn.onclick = async () => {
+        const titleInput = welcomeFormContainer.querySelector('[name="welcome_title"]');
+        const welcomeMessageInput = welcomeFormContainer.querySelector('[name="welcome_message"]');
+        try {
+            this.disabled = true;
+            await api.home.updateSettings(business, {
+                fieldName: 'show_welcome',
+                welcome_title: titleInput.value,
+                welcome_message: welcomeMessageInput.value
+            });
+            showToast('Welcome section has been saved successfully!');
+                            //update the display
+            welcomeContentDisplay.innerHTML = `
+                <h2 class="text-xl font-semibold">${titleInput.value}</h2>
+                <p class="text-gray-600">${welcomeMessageInput.value}</p>
+            `;
+            welcomeContentDisplay.classList.toggle('hidden');
+            welcomeFormContainer.classList.toggle('hidden');
+            saveWelcomeBtn.classList.toggle('hidden');
+        } catch (error) {
+            console.error('Save failed:', error);
+            showToast('Failed to save welcome section. Please try again.');
+        } finally {
+            this.disabled = false;
+        }
+    };
+    // image preview, use gallery for reference
     document.getElementById('id_image').addEventListener('change', function(e) {
         const previewContainer = document.getElementById('image-preview-container');
         const preview = document.getElementById('image-preview');
@@ -211,20 +170,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-// Notification helper function
-function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `fixed top-4 left-5 p-4 rounded-lg shadow-lg ${
-        type === 'success' ? 'bg-green-500' : 'bg-red-500'
-    } text-white`;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    // Remove notification after 3 seconds
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
-}
-

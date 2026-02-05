@@ -122,6 +122,9 @@ export const api = {
         create: async (business, formData) => {
             return makeRequest(`/api/${business}/news-post/`, 'POST', formData);
         },
+        edit: async (business, postId, formData) => {
+            return makeRequest(`/api/${business}/news-post/${postId}/`, 'POST', formData);
+        },
         delete: async (business, postId) => {
             return makeRequest(`/api/${business}/news-post/${postId}/`, 'DELETE');
         }
