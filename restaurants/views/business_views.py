@@ -6,13 +6,17 @@ from django.urls import reverse
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from django.utils import timezone
 
 # Third-party imports
 import googlemaps
 import logging
 
 # Local imports
-from ..models import Business, SubPage
+from ..models import (Business, SubPage, Product,
+    Service, Event, Menu, Course, 
+    Dish, CuisineCategory, AboutUsPage
+)
 from ..forms import BusinessCreateForm
 from .customize_views import get_editor_context
 from .layout_views import get_visitor_context
@@ -129,13 +133,18 @@ def get_business_context(business, user, page_type='home'):
     """Base context for both editor and visitor views"""
     is_dashboard = page_type == 'dashboard'
     is_owner = user == business.owner
-    
+    context = {}
+    if page_type == 'home':
+        context['upcoming_events'] = Event.objects.filter(
+            events_page__subpage__business=business,
+            date__gte=timezone.now()
+        ).order_by('date')
+        #affiliates?
     # Get the requested subpage
     subpage = SubPage.objects.filter(
         business=business, 
         page_type=page_type if not is_dashboard else 'home'
     ).first()
-    print(subpage)
     # Base context needed for both views
     base_context = {
         'business_details': business,
@@ -143,6 +152,7 @@ def get_business_context(business, user, page_type='home'):
         'subpage': subpage,
         'is_owner': is_owner,
         'is_edit_page': is_owner and not is_dashboard,
+        **context
     }
 
     if is_owner:

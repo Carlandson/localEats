@@ -67,6 +67,9 @@ from .patronage_portal_views import patronage_portal
 # News views
 from .news_views import edit_news_post, delete_news_post
 
+# Affiliates views
+from .affiliates_views import affiliates_dashboard
+
 # Upload utils
 from .upload_utils import check_rate_limit, check_gallery_storage_quota
 
@@ -183,4 +186,7 @@ __all__ = [
     # Advert views
     'portal',
     'advertising',
+
+    # Affiliates views
+    'affiliates_dashboard',
 ]

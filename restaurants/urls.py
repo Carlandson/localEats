@@ -59,7 +59,7 @@ urlpatterns = [
     path('<slug:business_subdirectory>/menu/side_options/<int:id>/', views.side_options, name='side_options'),
     path('<slug:business_subdirectory>/menu/add_course/', views.add_course, name="add_course"),
     path('<slug:business_subdirectory>/menu/add_dish/', views.add_dish, name="add_dish"),
-    path('<slug:business_subdirectory>/menu/', views.menu, name="menu"),
+    # path('<slug:business_subdirectory>/menu/', views.menu, name="menu"),
     path("<slug:business_subdirectory>/menu/delete_dish/<int:dishid>/", views.delete_dish, name="delete"),  # Consider making this consistent with other paths
     
     # Menu API endpoints
@@ -120,6 +120,12 @@ urlpatterns = [
     path('<str:business_subdirectory>/merch/toggle-product/<int:product_id>/', merch.toggle_product, name='toggle_product'),
     path('<str:business_subdirectory>/merch/product-templates/', merch.get_product_templates, name='get_product_templates'),
     path('<str:business_subdirectory>/merch/connect-printful/', merch.connect_printful, name='connect_printful'),
+
+    # Affiliates Editor
+    path('<slug:business_subdirectory>/affiliates/', views.affiliates_dashboard, name="affiliates_dashboard"),
+    # path('<slug:business_subdirectory>/affiliates/add/', views.add_affiliate, name="add_affiliate"),
+    # path('<slug:business_subdirectory>/affiliates/edit/<int:affiliate_id>/', views.edit_affiliate, name="edit_affiliate"),
+    # path('<slug:business_subdirectory>/affiliates/delete/<int:affiliate_id>/', views.delete_affiliate, name="delete_affiliate"),
 
     # Business pages (catch-all patterns last)
     path('<slug:business_subdirectory>/dashboard/', views.business_dashboard, name="business_dashboard"),

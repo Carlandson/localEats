@@ -17,7 +17,7 @@ import logging
 
 # Local imports
 from ..models import Business, SubPage, Menu, Course, Dish, CuisineCategory, SideOption
-from ..forms import DishSubmit
+from ..forms import DishSubmit, sideOptionForm
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,6 @@ def menu(request, business_subdirectory):
         'Salads',
         'Desserts',
         'Drinks',
-        'Specials',
         'Dinner',
         'Breakfast',
         'Brunch',
@@ -79,7 +78,8 @@ def menu(request, business_subdirectory):
         "is_verified": business.is_verified,
         "menu": menu,
         "is_edit_page": True,
-        "is_owner": request.user == business.owner
+        "is_owner": request.user == business.owner,
+        "side_option_form": sideOptionForm()
     }
 
     if request.method != "GET":

@@ -8,6 +8,7 @@ class Event(models.Model):
     description = models.TextField()
     date = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
+    featured = models.BooleanField(default=False)
     images = GenericRelation('Image')
 
     def __str__(self):

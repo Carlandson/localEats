@@ -85,6 +85,12 @@ export const api = {
         }
     },
     menu: {
+        updateCourseDescription: async (business, courseId, formData) => {
+            return makeRequest(`/${business}/menu/update_course_description/${courseId}/`, 'POST', formData);
+        },
+        updateCourseNote: async (business, courseId, formData) => {
+            return makeRequest(`/${business}/menu/update_course_note/${courseId}/`, 'POST', formData);
+        },
         addDish: async (business, formData) => {
             return makeRequest(`/${business}/menu/add_dish/`, 'POST', formData);
         },

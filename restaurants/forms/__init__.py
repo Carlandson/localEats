@@ -7,7 +7,7 @@ from .media_forms import ImageUploadForm, BusinessImageForm
 from .product_forms import ProductForm
 from .service_forms import ServiceForm
 from .event_forms import EventForm
-from .menu_forms import DishSubmit
+from .menu_forms import DishSubmit, sideOptionForm
 
 __all__ = [
     'CustomSignupForm',
@@ -30,5 +30,6 @@ __all__ = [
     'ServiceForm',
     'ServicePageForm',
     'ProductPageForm',
-    'GalleryPageForm'
+    'GalleryPageForm',
+    'sideOptionForm'
 ]

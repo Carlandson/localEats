@@ -1,5 +1,5 @@
 from django import forms
-from ..models import Dish
+from ..models import Dish, SideOption
 from django.forms import ModelForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit, Div, HTML
@@ -17,4 +17,16 @@ class DishSubmit(ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'price': forms.NumberInput(attrs={'class': 'form-control'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),  # Changed from URLInput to FileInput
+        }
+
+
+class sideOptionForm(ModelForm):
+    class Meta:
+        model = SideOption
+        fields = ['name', 'description', 'price', 'is_premium']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'is_premium': forms.CheckboxInput(attrs={'class': 'form-control'}),
         }

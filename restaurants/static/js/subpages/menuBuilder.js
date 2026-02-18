@@ -1,15 +1,13 @@
 import { api } from '../utils/subpagesAPI.js';
 import { showToast } from '../components/toast.js';
 import { debounce, throttle } from '../utils/debounce.js';
+// import { showSideOptionForm, editSideOption, deleteSideOption, updateSideOptionsList } from './menuHandlers/sideOptions.js';
 
 // initializer
 async function initializeMenuBuilder() {
     try {
-        // remove and replace eventually
-        const csrfToken = JSON.parse(document.getElementById('csrf_token').textContent);
-
         // Get required elements
-        const kitchenConfig = JSON.parse(document.getElementById('kitchen').textContent);
+        const kitchenConfig = JSON.parse(document.getElementById('business').textContent);
         const existingCourses = JSON.parse(document.getElementById('existing_courses').textContent);
 
         if (!kitchenConfig) {
@@ -21,7 +19,6 @@ async function initializeMenuBuilder() {
             eatery: kitchenConfig,
             accordionTriggers: document.querySelectorAll('.accordion-trigger'),
             existingCourses: existingCourses,
-            csrfToken: csrfToken
         };
 
         // Initialize all handlers
@@ -67,17 +64,6 @@ function initializeAccordions(context) {
 function initializeEventListeners(context) {
     // Throttle click handler to prevent rapid-fire clicks
     document.addEventListener('click', throttle((e) => handleClicks(e, context), 500));
-}
-
-function initializeSideOptions(context) {
-    console.log(context.existingCourses);
-    for (const course of context.existingCourses) {
-        try {
-            updateSideOptionsList(course.id, context);
-        } catch (error) {
-            console.error('Error initializing side options:', error);
-        }
-    }
 }
 
 function handleClicks(e, context) {
@@ -290,25 +276,11 @@ async function addCourse(dishData, context, existingCourses) {
         return;
     }
     try {
-        const response = await fetch(`/${context.eatery}/menu/add_course/`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': context.csrfToken
-            },
-            body: JSON.stringify({
-                course_name: dishData
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        await response.json();
-        location.reload();
+        await api.menu.addCourse(context.eatery, { course_name: dishData });
+        window.location.href = window.location.pathname + '?t=' + Date.now();
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error:');
+        showToast('Error adding course. Please try again.');
     }
 }
 
@@ -504,7 +476,24 @@ async function deleteCourse(courseId, context) {
         await api.menu.deleteCourse(context.eatery, courseId);
         showToast('Course deleted successfully');
         // Find and remove the course section
-        const courseSection = document.querySelector(`[data-course-id="${courseId}"]`).closest('section');
+        const courseSection = document.querySelector(`[data-course-id="${courseId}"]`).closest('.course-container');
+        const courseName = courseSection.querySelector('h2')?.textContent?.trim();
+        if (courseName) {
+            // Remove from in-memory list so "add course" duplicate check allows adding it again
+            if (Array.isArray(context.existingCourses)) {
+                context.existingCourses = context.existingCourses.filter(
+                    c => (typeof c === 'string' ? c : c.name || '').toLowerCase() !== courseName.toLowerCase()
+                );
+            }
+            // Add deleted course back to the "Add a Course" dropdown
+            const addSelect = document.getElementById('addCourse');
+            if (addSelect && !Array.from(addSelect.options).some(o => o.value.toLowerCase() === courseName.toLowerCase())) {
+                const option = document.createElement('option');
+                option.value = courseName;
+                option.textContent = courseName;
+                addSelect.appendChild(option);
+            }
+        }  
         if (courseSection) {
             courseSection.style.transition = 'all 0.3s ease-out';
             courseSection.style.transform = 'translateX(100%)';
@@ -544,79 +533,38 @@ async function editCourseDescription(courseId) {
 
 
 async function saveCourseDescription(courseId, context) {
-    const descriptionDiv = document.querySelector(`#courseDescription${courseId}`);
-    if (!descriptionDiv) {
-        console.error('Could not find description textarea');
+    const formDiv = document.getElementById(`descriptionForm${courseId}`);
+    const displayDiv = document.getElementById(`descriptionDisplay${courseId}`);
+    const textarea = document.getElementById(`courseDescription${courseId}`);
+    if (!formDiv || !textarea) {
+        console.error('Could not find description form or textarea');
         return;
     }
-    const newDescription = descriptionDiv.value;
-
+    const newDescription = textarea.value;
     try {
         await api.menu.updateCourseDescription(context.eatery, courseId, { description: newDescription });
         showToast('Course description updated successfully');
-        // Create new container
-        const containerDiv = document.createElement('div');
-        containerDiv.className = 'mb-4';
-        
-        // Create display div
-        const displayDiv = document.createElement('div');
-        displayDiv.id = `descriptionDisplay${courseId}`;
-        displayDiv.classList.remove('hidden');
-
-        // Create the edit button separately
-        const editButton = document.createElement('button');
-        editButton.className = 'editDescription text-blue-500 hover:text-blue-700 flex-shrink-0';
-        editButton.dataset.courseId = courseId;
-        editButton.innerHTML = `
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-            </svg>
-        `;
-
-        // Add click handler to edit button
-        editButton.addEventListener('click', () => editCourseDescription(courseId, context));
-
-        // Create the display content
-        const displayContent = document.createElement('div');
-        displayContent.className = 'flex justify-between items-start gap-4';
-        displayContent.innerHTML = `
-            <p class="text-gray-600">${newDescription || 'No description added yet.'}</p>
-        `;
-        
-        // Append edit button to display content
-        displayContent.appendChild(editButton);
-        displayDiv.appendChild(displayContent);
-
-        // Create form div (hidden)
-        const formDiv = document.createElement('div');
-        formDiv.id = `descriptionForm${courseId}`;
-        formDiv.className = 'mt-2 hidden';
-        formDiv.innerHTML = `
-            <textarea id="courseDescription${courseId}" 
-                    class="w-full p-2 border rounded"
-                    rows="3"
-                    placeholder="Add a description for this course">${newDescription}</textarea>
-            <button class="saveDescription mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors duration-200"
-                    data-course-id="${courseId}">
-                Save Description
-            </button>
-        `;
-
-        // Add both divs to container
-        containerDiv.appendChild(displayDiv);
-        containerDiv.appendChild(formDiv);
-
-        // Find and replace the parent container
-        const parentContainer = document.getElementById(`descriptionForm${courseId}`);
-        if (!parentContainer) {
-            throw new Error('Could not find description form');
+        // Update display content in place (like home.js welcome)
+        const displayContent = displayDiv.querySelector('.flex.justify-between') || displayDiv;
+        const p = displayDiv.querySelector('p');
+        if (p) {
+            p.textContent = newDescription || 'No description added yet.';
+        } else {
+            displayDiv.innerHTML = `
+                <div class="flex justify-between items-start gap-4">
+                    <p class="text-gray-600">${newDescription || 'No description added yet.'}</p>
+                    <button class="editDescription text-blue-500 hover:text-blue-700 flex-shrink-0" data-course-id="${courseId}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">...</svg>
+                    </button>
+                </div>
+            `;
+            displayDiv.querySelector('.editDescription').addEventListener('click', () => editCourseDescription(courseId, context));
         }
-        parentContainer.parentElement.replaceWith(containerDiv);
-
+        displayDiv.classList.remove('hidden');
+        formDiv.classList.add('hidden');
     } catch (error) {
         console.error('Error:', error);
-        alert('Error saving description. Please try again.');
+        showToast('Error saving description. Please try again.');
     }
 }
 
@@ -642,77 +590,43 @@ function editCourseNote(courseId) {
 }
 
 async function saveCourseNote(courseId, context) {
-    const noteDiv = document.querySelector(`#courseNote${courseId}`);
-    if (!noteDiv) {
-        console.error('Could not find note textarea');
+    const formDiv = document.getElementById(`noteForm${courseId}`);
+    const displayDiv = document.getElementById(`noteDisplay${courseId}`);
+    const textarea = document.getElementById(`courseNote${courseId}`);
+    if (!formDiv || !textarea) {
+        console.error('Could not find note form or textarea');
         return;
     }
-    const newNote = noteDiv.value;
-
+    const newNote = textarea.value;
     try {
         await api.menu.updateCourseNote(context.eatery, courseId, { note: newNote });
         showToast('Course note updated successfully');
-        
-        // Create new container
-        const containerDiv = document.createElement('div');
-        containerDiv.className = 'mb-4';
-        
-        // Create display div
-        const displayDiv = document.createElement('div');
-        displayDiv.id = `noteDisplay${courseId}`;
-        displayDiv.classList.remove('hidden');
-
-        // Create the edit button separately
-        const editButton = document.createElement('button');
-        editButton.className = 'editNote text-blue-500 hover:text-blue-700 flex-shrink-0';
-        editButton.dataset.courseId = courseId;
-        editButton.innerHTML = `
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-            </svg>
-        `;
-
-        // Add click handler to edit button
-        editButton.addEventListener('click', () => editCourseNote(courseId, context));
-
-        // Create the display content
-        const displayContent = document.createElement('div');
-        displayContent.className = 'flex justify-between items-start gap-4';
-        displayContent.innerHTML = `
-            <p class="text-gray-600">${newNote || 'No note added yet.'}</p>
-        `;
-        
-        // Append edit button to display content
-        displayContent.appendChild(editButton);
-        displayDiv.appendChild(displayContent);
-
-        // Create form div (hidden)
-        const formDiv = document.createElement('div');
-        formDiv.id = `noteForm${courseId}`;
-        formDiv.className = 'mt-2 hidden';
-        formDiv.innerHTML = `
-            <textarea id="courseNote${courseId}" 
-                    class="w-full p-2 border rounded"
-                    rows="3"
-                    placeholder="Add a note for this course">${newNote}</textarea>
-            <button class="saveNote mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors duration-200"
-                    data-course-id="${courseId}">
-                Save Note
-            </button>
-        `;
-
-        // Add both divs to container
-        containerDiv.appendChild(displayDiv);
-        containerDiv.appendChild(formDiv);
-
-        // Find and replace the parent container
-        const parentContainer = document.getElementById(`noteForm${courseId}`);
-        if (!parentContainer) {
-            throw new Error('Could not find note form');
+        // Update display content in place (same pattern as welcome / course description)
+        let targetDisplay = displayDiv;
+        if (!displayDiv) {
+            targetDisplay = document.createElement('div');
+            targetDisplay.id = `noteDisplay${courseId}`;
+            targetDisplay.className = 'mt-2';
+            formDiv.parentElement.insertBefore(targetDisplay, formDiv);
         }
-        parentContainer.parentElement.replaceWith(containerDiv);
-
+        const p = targetDisplay.querySelector('p');
+        if (p) {
+            p.textContent = newNote || 'No note added yet.';
+        } else {
+            targetDisplay.innerHTML = `
+                <div class="flex justify-between items-start gap-4">
+                    <p class="text-gray-600">${newNote || 'No note added yet.'}</p>
+                    <button class="editNote text-blue-500 hover:text-blue-700 flex-shrink-0" data-course-id="${courseId}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            targetDisplay.querySelector('.editNote').addEventListener('click', () => editCourseNote(courseId, context));
+        }
+        targetDisplay.classList.remove('hidden');
+        formDiv.classList.add('hidden');
     } catch (error) {
         console.error('Error:', error);
         alert('Error saving note. Please try again.');
@@ -720,8 +634,8 @@ async function saveCourseNote(courseId, context) {
 }
 
 function showSideOptionForm(courseId, context, sideOption = null) {
-    console.log("side option form called");
-    const formDiv = document.getElementById(`sideOptionsform${courseId}`);
+    console.log(courseId, context, sideOption);
+    const formDiv = document.getElementById(`sideOptionsForm${courseId}`);
     formDiv.className = "w-full bg-white p-4 rounded-lg border border-gray-200 mt-2 mb-4";  // Adjust the container
 
     formDiv.innerHTML = `
@@ -795,8 +709,6 @@ function showSideOptionForm(courseId, context, sideOption = null) {
         };
 
         try {
-            console.log("courseId", courseId);
-            console.log("formData", formData);
             await api.menu.addSideOption(context.eatery, formData);
             showToast('Side option added successfully');
             // Update the side options list
@@ -815,17 +727,21 @@ function showSideOptionForm(courseId, context, sideOption = null) {
     });
 }
 
+async function showSideOptionEditForm(sideId, context) {
+    const sideOptionDisplay = document.getElementById(`sideOption${sideId}`);
+    sideOptionDisplay.style.display = 'none';
+    const sideOptionForm = document.getElementById(`editSideOptionForm${sideId}`);
+    sideOptionForm.style.display = 'block';
+}
+
 async function editSideOption(sideId, context) {
     try {
-        const data = await api.menu.getSideOption(context.eatery, sideId);
-
-        
+        const data = await api.menu.editSideOption(context.eatery, sideId);
         // Hide the side option element temporarily
         const sideElement = document.getElementById(`sideOption${sideId}`);
         if (sideElement) {
             sideElement.style.display = 'none';
         }
-        
         // Show the edit form
         showSideOptionForm(data.course_id, context, {
             id: sideId,
@@ -968,6 +884,7 @@ async function updateSideOptionsList(courseId, context) {
         alert('Error updating side options list. Please try again.');
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {

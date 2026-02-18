@@ -4,5 +4,66 @@
 {{ business_details.subdirectory|json_script:"business" }}
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-6 text-center">{{ business_details.business_name }} Portal</h1>
+    <!-- News Feed Section -->
+    <div class="bg-white shadow rounded-lg p-6 {% if not form.show_newsfeed.value %}hidden{% endif %}" data-section="show_newsfeed">
+        <button class="accordion-header w-full flex justify-between items-center mb-4" 
+                data-target="newsfeed-content"
+                data-expanded="{% if form.show_newsfeed.value %}true{% else %}false{% endif %}">
+            <h2 class="text-xl font-semibold">News Feed</h2>
+            <svg class="accordion-icon w-5 h-5 transition-transform duration-200 {% if form.show_newsfeed.value %}rotate-180{% endif %}" 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor">
+                <path stroke-linecap="round" 
+                    stroke-linejoin="round" 
+                    stroke-width="2" 
+                    d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+        <div id="newsfeed-content" 
+            class="space-y-4 transition-all duration-300 ease-in-out overflow-hidden {% if not form.show_newsfeed.value %}hidden{% endif %}">    
+            <!-- News Post Form -->
+            <div class="mt-8 pt-6 border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Add a News Feed post?</h3>
+                <div class="space-y-4">
+                    {{ news_form.title|as_crispy_field }}
+                    {{ news_form.content|as_crispy_field }}
+                    {{ news_form.image|as_crispy_field }}
+                    <div id="image-preview-container" class="hidden mt-4">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">Image Preview</h4>
+                        <div class="relative">
+                            <img id="image-preview" class="max-w-full h-auto rounded-lg shadow-sm" src="" alt="Preview">
+                            <button type="button" 
+                                    id="remove-image" 
+                                    class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 focus:outline-none">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" 
+                            id="save-news-post"
+                            class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+                        Post News
+                    </button>
+                </div>
+            </div>
+            <!-- Existing News Feed Display-->
+            <div class="mb-8">
+                <label for="news-feed-display" class="text-lg font-medium text-gray-900 mb-4">News Feed</label>
+                {% for news_post in news_feed %}
+                    <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                        {% if news_post.image %}
+                            <img src="{{ news_post.image.url }}" alt="{{ news_post.title }}" class="w-full h-auto mb-2">
+                        {% endif %}
+                        <h4 class="text-base font-medium text-gray-900 mb-2">{{ news_post.title }}</h4>
+                        <p class="text-sm text-gray-700">{{ news_post.content }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

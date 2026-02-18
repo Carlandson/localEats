@@ -21,7 +21,8 @@ from .events_views import get_events_context
 # Local imports
 from ..models import (Business, 
     SubPage, HomePage, ServicesPage,
-    Image, AboutUsPage, EventsPage, Event, SpecialsPage,
+    Image, AboutUsPage, EventsPage, 
+    Event, SpecialsPage, Menu, Course, Dish,
     ContactPage, ProductsPage, Product, Service, GalleryPage,
 )
 from ..forms import (HomePageForm, 
@@ -127,13 +128,19 @@ def get_editor_context(base_context, business, subpage, page_type):
         })
 
     elif page_type == 'menu':
-        context['menu_data'] = {
-            'menus': Menu.objects.filter(business=business).prefetch_related(
-                'courses', 
-                'courses__dishes'
-            ),
-            'specials': Dish.objects.filter(menu__business=business, is_special=True),
-        }
+        menu_subpage = get_object_or_404(SubPage, business=business, page_type='menu')
+        context['menu'] = Menu.objects.get(subpage=menu_subpage)
+        context['course_options'] = [
+                'Appetizers', 'Lunch', 'Entrees', 'Main Courses', 'Soup and Salad', 'Salads',
+                'Desserts', 'Drinks', 'Dinner', 'Breakfast', 'Brunch', 
+                'Kids Menu', 'Beverages', 'Vegan', 'Gluten Free', 'Dairy Free', 
+                'Nut Free', 'Halal', 'Kosher'
+            ]
+        context['courses'] = Course.objects.filter(menu=context['menu']).prefetch_related('side_options').order_by('order')
+        context['dishes'] = Dish.objects.filter(menu=context['menu'])
+        context['existing_courses'] = list(context['courses'].values_list('name', flat=True))
+        context['available_course_options'] = [option for option in context['course_options'] 
+                            if option not in context['existing_courses']]
     return context
 
 def create_subpage(request, business_subdirectory, page_type):

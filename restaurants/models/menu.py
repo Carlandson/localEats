@@ -100,7 +100,6 @@ class SideOption(models.Model):
     is_premium = models.BooleanField(default=False)
     available = models.BooleanField(default=True)
 
-
 class SpecialsPage(models.Model):
     subpage = models.OneToOneField(SubPage, on_delete=models.CASCADE, related_name='specials_content')
     happy_hour_start = models.TimeField(null=True, blank=True)
