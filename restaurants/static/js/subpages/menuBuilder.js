@@ -126,7 +126,7 @@ function handleClicks(e, context) {
     // Add Side Option button
     if (e.target.matches('.addSideOption')) {
         const courseId = e.target.dataset.courseId;
-        showSideOptionForm(courseId, context);
+        toggleSideOptionForm(courseId, context);
     }
 
     // Edit Side Option button
@@ -633,45 +633,53 @@ async function saveCourseNote(courseId, context) {
     }
 }
 
-function showSideOptionForm(courseId, context, sideOption = null) {
-    console.log(courseId, context, sideOption);
+function toggleSideOptionForm(courseId, context, sideOption = null) {
     const formDiv = document.getElementById(`sideOptionsForm${courseId}`);
     formDiv.className = "w-full bg-white p-4 rounded-lg border border-gray-200 mt-2 mb-4";  // Adjust the container
-
-    formDiv.innerHTML = `
-        <form id="${sideOption ? 'editSideOption' : 'createSideOption'}" class="grid grid-cols-6 gap-4">
-            <div class="col-span-6">
-                <label class="block text-sm font-medium text-gray-700">Name</label>
-                <input type="text" name="name" value="${sideOption?.name || ''}" 
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required>
-            </div>
-            <div class="col-span-6">
-                <label class="block text-sm font-medium text-gray-700">Description (optional)</label>
-                <textarea name="description" 
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 h-16 resize-none"
-                >${sideOption?.description || ''}</textarea>
-            </div>
-            <div class="col-span-3 flex items-center">
-                <input type="checkbox" name="is_premium" id="is_premium" 
-                       ${sideOption?.is_premium ? 'checked' : ''}
-                       class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
-                <label for="is_premium" class="ml-2 block text-sm text-gray-900">Premium Option</label>
-            </div>
-            <div class="col-span-3 premium-price ${sideOption?.is_premium ? '' : 'hidden'}">
-                <label class="block text-sm font-medium text-gray-700">Additional Price</label>
-                <input type="number" name="price" value="${sideOption?.price || ''}" step="0.01" min="0"
-                       class="mt-1 block w-32 rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
-            </div>
-            <div class="col-span-6 flex justify-end space-x-2 mt-2">
-                <button type="button" class="cancelSideOption px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded transition-colors duration-200">
-                    Cancel
-                </button>
-                <button type="submit" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200">
-                    ${sideOption ? 'Save Changes' : 'Add Side Option'}
-                </button>
-            </div>
-        </form>
-    `;
+    // addSideButtonContainer{{ course.id }}
+    // sideOptionsForm{{ course.id }}
+    const addSideContainer = document.getElementById(`addSideButtonContainer${courseId}`);
+    if (addSideContainer.style.display === 'none') {
+        addSideContainer.style.display = 'block';
+        formDiv.style.display = 'none';
+    } else {
+        addSideContainer.style.display = 'none';
+        formDiv.style.display = 'block';
+    }
+    // formDiv.innerHTML = `
+    //     <form id="${sideOption ? 'editSideOption' : 'createSideOption'}" class="grid grid-cols-6 gap-4">
+    //         <div class="col-span-6">
+    //             <label class="block text-sm font-medium text-gray-700">Name</label>
+    //             <input type="text" name="name" value="${sideOption?.name || ''}" 
+    //                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required>
+    //         </div>
+    //         <div class="col-span-6">
+    //             <label class="block text-sm font-medium text-gray-700">Description (optional)</label>
+    //             <textarea name="description" 
+    //                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 h-16 resize-none"
+    //             >${sideOption?.description || ''}</textarea>
+    //         </div>
+    //         <div class="col-span-3 flex items-center">
+    //             <input type="checkbox" name="is_premium" id="is_premium" 
+    //                    ${sideOption?.is_premium ? 'checked' : ''}
+    //                    class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+    //             <label for="is_premium" class="ml-2 block text-sm text-gray-900">Premium Option</label>
+    //         </div>
+    //         <div class="col-span-3 premium-price ${sideOption?.is_premium ? '' : 'hidden'}">
+    //             <label class="block text-sm font-medium text-gray-700">Additional Price</label>
+    //             <input type="number" name="price" value="${sideOption?.price || ''}" step="0.01" min="0"
+    //                    class="mt-1 block w-32 rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
+    //         </div>
+    //         <div class="col-span-6 flex justify-end space-x-2 mt-2">
+    //             <button type="button" class="cancelSideOption px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded transition-colors duration-200">
+    //                 Cancel
+    //             </button>
+    //             <button type="submit" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded transition-colors duration-200">
+    //                 ${sideOption ? 'Save Changes' : 'Add Side Option'}
+    //             </button>
+    //         </div>
+    //     </form>
+    // `;
 
     // Add the form before the "Add Side" button
     const buttonContainer = document.getElementById(`addSideButtonContainer${courseId}`);
@@ -727,13 +735,6 @@ function showSideOptionForm(courseId, context, sideOption = null) {
     });
 }
 
-async function showSideOptionEditForm(sideId, context) {
-    const sideOptionDisplay = document.getElementById(`sideOption${sideId}`);
-    sideOptionDisplay.style.display = 'none';
-    const sideOptionForm = document.getElementById(`editSideOptionForm${sideId}`);
-    sideOptionForm.style.display = 'block';
-}
-
 async function editSideOption(sideId, context) {
     try {
         const data = await api.menu.editSideOption(context.eatery, sideId);
@@ -743,7 +744,7 @@ async function editSideOption(sideId, context) {
             sideElement.style.display = 'none';
         }
         // Show the edit form
-        showSideOptionForm(data.course_id, context, {
+        toggleSideOptionForm(data.course_id, context, {
             id: sideId,
             name: data.name,
             description: data.description,
